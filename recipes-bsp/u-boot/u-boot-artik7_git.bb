@@ -30,5 +30,5 @@ do_compile() {
 
 do_install_append() {
     echo "${WORKDIR}/git/u-boot.bin" >> ${BASE_WORKDIR}/image_where.txt
-    install ${WORKDIR}/git/u-boot.bin ${DEPLOY_DIR_IMAGE}/u-boot.bin
+#    install ${WORKDIR}/git/u-boot.bin ${DEPLOY_DIR_IMAGE}/u-boot.bin
 }
