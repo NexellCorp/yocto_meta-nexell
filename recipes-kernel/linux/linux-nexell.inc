@@ -32,34 +32,34 @@ UDEV_GE_141 ?= "1"
 #     fi
 # }
 
-# do_configure_prepend() {
+#do_configure_prepend() {
 #     # Clean .config
-# #    echo "" > ${B}/.config
-# #    CONF_SED_SCRIPT=""
+#    echo "" > ${B}/.config
+#    CONF_SED_SCRIPT=""
 
 #     # Set cmdline
 # #    kernel_configure_variable CMDLINE "\"${CMDLINE}\""
 
 #     # Keep this the last line
 #     # Remove all modified configs and add the rest to .config
-# #    sed -e "${CONF_SED_SCRIPT}" < '${WORKDIR}/defconfig' >> '${B}/.config'
+#    sed -e "${CONF_SED_SCRIPT}" < '${WORKDIR}/defconfig' >> '${B}/.config'
 
-# #    yes '' | oe_runmake oldconfig
-# }
+#    yes '' | oe_runmake oldconfig
+#}
 
 # # Automatically depend on lzop-native if CONFIG_KERNEL_LZO is enabled
-# python () {
-#     try:
-#         defconfig = bb.fetch2.localpath('file://defconfig', d)
-#     except bb.fetch2.FetchError:
-#         return
+python () {
+     try:
+         defconfig = bb.fetch2.localpath('file://defconfig', d)
+     except bb.fetch2.FetchError:
+         return
 
-#     try:
-#         configfile = open(defconfig)
-#     except IOError:
-#         return
+     try:
+         configfile = open(defconfig)
+     except IOError:
+         return
 
-#     if 'CONFIG_KERNEL_LZO=y\n' in configfile.readlines():
-#         depends = d.getVar('DEPENDS', False)
-#         d.setVar('DEPENDS', depends + ' lzop-native')
-# }
+     if 'CONFIG_KERNEL_LZO=y\n' in configfile.readlines():
+         depends = d.getVar('DEPENDS', False)
+         d.setVar('DEPENDS', depends + ' lzop-native')
+}

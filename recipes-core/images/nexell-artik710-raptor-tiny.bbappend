@@ -4,7 +4,7 @@ artik7_postprocess_function() {
     ln -sf lib lib64
     rm -rf run
     ln -sf tmp run
-    echo "suker yocto test 20160517 5" > ${IMAGE_ROOTFS}/sukerTest.txt
+    echo "suker yocto test 20160519 5" > ${IMAGE_ROOTFS}/sukerTest.txt
 
     #---bootscript.sh create---
     echo "#!/bin/sh" > ./etc/bootscript.sh

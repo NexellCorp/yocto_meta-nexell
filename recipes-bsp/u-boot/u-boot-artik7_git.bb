@@ -15,9 +15,9 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "artik710-raptor"
 
 
-do_deploy_append() {
-    cp -a ${WORKDIR}/git/u-boot.bin ${DEPLOYDIR}/u-boot.bin
-}
+#do_deploy_append() {
+#    cp -a ${WORKDIR}/git/u-boot.bin ${DEPLOY_DIR_IMAGE}/u-boot.bin
+#}
 
 do_compile() {
     local config="artik710_raptor"
@@ -29,6 +29,6 @@ do_compile() {
 }
 
 do_install_append() {
-    echo -e "\033[44;33m[suker]${WORKDIR}/git/\033[0m" >> ${TOPDIR}/mylog.txt
+    echo "${WORKDIR}/git/u-boot.bin" >> ${BASE_WORKDIR}/image_where.txt
     install ${WORKDIR}/git/u-boot.bin ${DEPLOY_DIR_IMAGE}/u-boot.bin
 }

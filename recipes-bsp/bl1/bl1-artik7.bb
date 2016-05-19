@@ -29,6 +29,7 @@ do_compile () {
 }
 
 do_install_append() {
-    install ${WORKDIR}/git/out/bl1-raptor.bin ${DEPLOY_DIR_IMAGE}/bl1-raptor.bin
+    echo "${WORKDIR}/git/out/bl1-raptor.bin" >> ${BASE_WORKDIR}/image_where.txt
+#   install ${WORKDIR}/git/out/bl1-raptor.bin ${DEPLOY_DIR_IMAGE}/bl1-raptor.bin
 }
 
