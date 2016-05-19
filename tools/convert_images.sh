@@ -2,30 +2,10 @@
 
 set -e
 
-argc=$#
 PARENT_DIR="${PWD%/*}"
-BOARD_NAME=$1
 ROOTDIR="root"
 BOOTDIR="boot"
-BOARD_PURENAME=${BOARD_NAME#*-}
-BOARD_PREFIX=${BOARD_NAME%-*}
 META_NEXELL_TOOLS_DIR="${PARENT_DIR}/meta-nexell/tools"
-
-function check_usage()
-{
-    if [ $argc != 1 ]
-    then
-	echo "Invalid argument check usage please"
-	usage
-	exit
-    fi
-}
-
-function usage()
-{
-    echo "Usage: $0 <board-name>"
-    echo "    ex) $0 artik710-raptor"
-}
 
 function make_dirs()
 {
@@ -73,7 +53,6 @@ function mkbootimg()
     ${META_NEXELL_TOOLS_DIR}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/    
 }
 
-check_usage
 make_dirs
 mkramdisk
 mkbootimg
