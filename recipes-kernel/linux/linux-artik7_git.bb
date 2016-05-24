@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
 DEPENDS += "bl1-artik7"
 DEPENDS += "u-boot-artik7"
-
+LICENSE = "GPLv2"
 LINUX_VERSION ?= "4.1"
 
 SRCREV = "de3c20ee5f02e990000df04fc2938e4beca88970"

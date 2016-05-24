@@ -1,0 +1,16 @@
+# POKY_BBLAYERS_CONF_VERSION is increased each time build/conf/bblayers.conf
+# changes incompatibly
+POKY_BBLAYERS_CONF_VERSION = "2"
+
+BBPATH = "${TOPDIR}"
+BBFILES ?= ""
+
+BBLAYERS ?= " \
+  /home/suker/YoctoPrj/krogoth/poky/meta \
+  /home/suker/YoctoPrj/krogoth/poky/meta-poky \
+  /home/suker/YoctoPrj/krogoth/meta-nexell \
+  /home/suker/YoctoPrj/krogoth/poky/meta-qt5 \
+  /home/suker/YoctoPrj/krogoth/poky/openembedded-core \
+  /home/suker/YoctoPrj/krogoth/poky/meta-openembedded/meta-ruby \
+  /home/suker/YoctoPrj/krogoth/poky/meta-openembedded/meta-oe \
+  "

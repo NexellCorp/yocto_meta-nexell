@@ -33,7 +33,6 @@ do_kernel_configme_prepend() {
     sed -i "/CONFIG_SMP[ =]/d" $config
     echo "CONFIG_SMP=n" >> $config
     sed -i "/CONFIG_CMDLINE[ =]/d" $config
-    echo "CONFIG_CMDLINE=\"console=ttySAC3,115200n8 loglevel=5 root=/dev/ram0 rw initrd=0x49000000,16M ramdisk=16384 sukertest=y\"" >> $config
     
     install -m 0644 ${S}/arch/arm64/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
 }
