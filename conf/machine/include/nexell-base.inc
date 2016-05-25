@@ -13,7 +13,7 @@ XSERVER = " \
 
 KERNEL_IMAGETYPE ?= "Image"
 
-MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen touchscreen alsa bluetooth wifi sdio"
+MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen mouse touchscreen alsa bluetooth wifi sdio"
 
 MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 

@@ -3,6 +3,8 @@ LICENSE = "GPLv2"
 
 inherit core-image populate_sdk_qt5
 
+SPLASH = "psplash-nexell"
+
 IMAGE_FEATURES += "package-management ssh-server-dropbear tools-debug splash"
 
 # Qt Packages
@@ -21,7 +23,13 @@ IMAGE_INSTALL += " \
      qtwebkit-qmlplugins \
      qtsvg \
      qtsvg-plugins \
+     qt3d \
+     qt3d-qmlplugins \
      "
 
 # Example application
-IMAGE_INSTALL += " touchpoints "
+IMAGE_INSTALL += " \
+     touchpoints \
+     qkeytest \
+     qcolorcheck \
+     "

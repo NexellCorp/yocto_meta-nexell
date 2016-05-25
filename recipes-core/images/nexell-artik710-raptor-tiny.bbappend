@@ -4,7 +4,7 @@ artik7_postprocess_function() {
     ln -sf lib lib64
     rm -rf run
     ln -sf tmp run
-    echo "meta-nexell artik710 20160523-1" > ${IMAGE_ROOTFS}/nexell-artik710-raptor-tiny-timeStamp.txt
+    echo "meta-nexell artik710 minimal" > ${IMAGE_ROOTFS}/nexell-artik710-raptor-tiny-timeStamp.txt
 
     #---bootscript.sh create---
     echo "#!/bin/sh" > ./etc/bootscript.sh

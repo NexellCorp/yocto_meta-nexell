@@ -16,8 +16,8 @@ require recipes-qt/qt5/qt5.inc
 
 do_install() {
     install -d ${D}${bindir}
-        install -m 0755 ${B}/qkeytest ${D}${bindir}
-	}
+    install -m 0755 ${B}/qkeytest ${D}${bindir}
+}
 
 FILES_${PN} = "${bindir}"
 
