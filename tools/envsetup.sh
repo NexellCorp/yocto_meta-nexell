@@ -44,9 +44,9 @@ function customize_conf_files()
 
 function customize_recipe_core_files()
 {
-    echo -e "\033[44;33m some recipe files name change in meta-nexell/recipes-core/images/<somefiles> \033[0m"
-    echo -e "\033[44;33m You want revert, just below command >>\033[0m"
-    echo -e "\033[44;33m python ../meta-nexell/tools/recipes-core-filename-change.py revert \033[0m"
+    echo -e "\033[40;33m some recipe files name change in meta-nexell/recipes-core/images/<somefiles> \033[0m"
+    echo -e "\033[40;33m You want revert, just below command                                          \033[0m"
+    echo -e "\033[40;33m python ../meta-nexell/tools/recipes-core-filename-change.py revert           \033[0m"
     if [ "${IMAGE_TYPE}" == "tiny" -o "${IMAGE_TYPE}" == "qt" -o "${IMAGE_TYPE}" == "sato" ]
     then
 	${PARENT_DIR}/meta-nexell/tools/recipes-core-filename-change.py ${IMAGE_TYPE}
