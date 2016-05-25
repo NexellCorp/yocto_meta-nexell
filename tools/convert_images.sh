@@ -2,6 +2,7 @@
 
 set -e
 
+argc=$#
 PARENT_DIR="${PWD%/*}"
 ROOTDIR="root"
 BOOTDIR="boot"
