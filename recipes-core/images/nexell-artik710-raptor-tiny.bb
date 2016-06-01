@@ -1,5 +1,5 @@
 # Base this image on nexell-image-minimal
-include nexell-image-minimal.bb
+include nexell-image-tiny.bb
 
 LICENSE = "LGPLv2.1"
 SPLASH = "psplash-nexell"
