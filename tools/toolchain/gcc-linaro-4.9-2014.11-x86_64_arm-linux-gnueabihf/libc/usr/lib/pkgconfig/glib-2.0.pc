@@ -1,0 +1,16 @@
+prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+exec_prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+glib_genmarshal=glib-genmarshal
+gobject_query=gobject-query
+glib_mkenums=glib-mkenums
+
+Name: GLib
+Description: C Utility Library
+Version: 2.42.0
+Requires.private: libpcre
+Libs: -L${libdir} -lglib-2.0 
+Libs.private: -pthread  -L/home/rohan/devel/nexell/slsiap/android/lollipop-dev/linux/platform/common/fs/buildroot/buildroot-2015.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lpcre      
+Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include 

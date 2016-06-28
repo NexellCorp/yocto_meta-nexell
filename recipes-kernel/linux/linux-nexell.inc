@@ -8,10 +8,7 @@ inherit kernel siteinfo
 require recipes-kernel/linux/linux-yocto.inc
 
 # Enable OABI compat for people stuck with obsolete userspace
-ARM_KEEP_OABI ?= "1"
-
-# Quirk for udev greater or equal 141
-UDEV_GE_141 ?= "1"
+#ARM_KEEP_OABI ?= "1"
 
 # Set the verbosity of kernel messages during runtime
 # You can define CMDLINE_DEBUG in your local.conf or distro.conf to override this behaviour
@@ -32,22 +29,22 @@ UDEV_GE_141 ?= "1"
 #     fi
 # }
 
-#do_configure_prepend() {
-#     # Clean .config
-#    echo "" > ${B}/.config
-#    CONF_SED_SCRIPT=""
+do_configure_prepend() {
+    # Clean .config
+    echo "" > ${B}/.config
+    CONF_SED_SCRIPT=""
 
-#     # Set cmdline
-# #    kernel_configure_variable CMDLINE "\"${CMDLINE}\""
+    # Set cmdline
+    # kernel_configure_variable CMDLINE "\"${CMDLINE}\""
 
-#     # Keep this the last line
-#     # Remove all modified configs and add the rest to .config
-#    sed -e "${CONF_SED_SCRIPT}" < '${WORKDIR}/defconfig' >> '${B}/.config'
+    # Keep this the last line
+    # Remove all modified configs and add the rest to .config
+    sed -e "${CONF_SED_SCRIPT}" < '${WORKDIR}/defconfig' >> '${B}/.config'
 
-#    yes '' | oe_runmake oldconfig
-#}
+    yes '' | oe_runmake oldconfig
+}
 
-# # Automatically depend on lzop-native if CONFIG_KERNEL_LZO is enabled
+# Automatically depend on lzop-native if CONFIG_KERNEL_LZO is enabled
 python () {
      try:
          defconfig = bb.fetch2.localpath('file://defconfig', d)

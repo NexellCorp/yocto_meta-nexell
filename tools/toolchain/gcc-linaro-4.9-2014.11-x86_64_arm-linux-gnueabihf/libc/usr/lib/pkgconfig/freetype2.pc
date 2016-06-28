@@ -1,0 +1,14 @@
+prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+exec_prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+libdir=/usr/lib
+includedir=/usr/include/freetype2
+
+Name: FreeType 2
+URL: http://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 17.4.11
+Requires:
+Requires.private: zlib
+Libs: -L${libdir} -lfreetype
+Libs.private: -lpng16 -L/home/rohan/devel/nexell/slsiap/android/lollipop-dev/linux/platform/common/fs/buildroot/buildroot-2015.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lpng16
+Cflags: -I${includedir}

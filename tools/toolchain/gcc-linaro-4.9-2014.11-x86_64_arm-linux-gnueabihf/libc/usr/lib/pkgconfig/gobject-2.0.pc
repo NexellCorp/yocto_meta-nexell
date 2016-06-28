@@ -1,0 +1,12 @@
+prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+exec_prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: GObject
+Description: GLib Type, Object, Parameter and Signal Library
+Requires: glib-2.0
+Version: 2.42.0
+Libs: -L${libdir} -lgobject-2.0
+Libs.private: -L/home/rohan/devel/nexell/slsiap/android/lollipop-dev/linux/platform/common/fs/buildroot/buildroot-2015.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lffi  
+Cflags:

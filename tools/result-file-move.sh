@@ -21,16 +21,31 @@ function copy_kernel_images_artik710_raptor()
     find ${TOP}/tmp/work/artik710_raptor-poky-linux/linux-artik7/. -name "s5p6818-artik710-raptor-rev01.dtb" -exec cp {} ${RESULT_PATH} \;
 }
 
+function copy_kernel_images_avn()
+{
+    cp ${TOP}/tmp/deploy/images/${BOARD_NAME}/Image ${RESULT_PATH}
+    find ${TOP}/tmp/work/avn-poky-linux-gnueabi/linux-avn/. -name "s5p4418-avn_ref.dtb" -exec cp {} ${RESULT_PATH} \;
+#    find ${TOP}/tmp/work/avn_raptor-poky-linux-gnueabi/linux-avn/. -name "s5p4418-avn-raptor-rev01.dtb" -exec cp {} ${RESULT_PATH} \;
+}
+
 function copy_rootfs_image()
 {
     if [ ${IMAGE_TYPE} == "qt" -o ${IMAGE_TYPE} == "sato" ]
     then
-	cp ${TOP}/../meta-nexell/misc/ramdisk_tiny.gz ${RESULT_PATH}
+        cp ${TOP}/../meta-nexell/tools/${BOARD_NAME}/ramdisk_tiny.gz ${RESULT_PATH}
     fi
     cp ${TOP}/tmp/deploy/images/${BOARD_NAME}/"nexell-${BOARD_NAME}-${IMAGE_TYPE}-${BOARD_NAME}.tar.bz2" ${RESULT_PATH}
     cp ${TOP}/tmp/deploy/images/${BOARD_NAME}/"nexell-${BOARD_NAME}-${IMAGE_TYPE}-${BOARD_NAME}.ext4" ${RESULT_PATH}
 }
 
 copy_bin_files
-copy_kernel_images_artik710_raptor
+
+if [ "${BOARD_NAME}" == "artik710-raptor" ]
+then
+    copy_kernel_images_artik710_raptor
+elif [ "${BOARD_NAME}" == "avn" ]
+then
+    copy_kernel_images_avn
+fi    
+
 copy_rootfs_image

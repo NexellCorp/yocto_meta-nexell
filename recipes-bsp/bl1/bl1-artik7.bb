@@ -1,35 +1,36 @@
 #SECTION = "bootloader"
 LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-#SRCREV = "4ff225bf6fd1c37a2a61aca157c0e497ab6e6d42"
-#SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p6818;protocol=git;branch=artik \
-#"
-
-SRC_URI[md5sum] = "d7572d651449671c8ceba7d634c0fd42"
-SRC_URI[sha256sum] = "7a50508e0a3aa9ea47783dea1f40db1cd7156a210e6c87e4e6363ce776b0dc5b"
-SRCREV = "6b8b1b4ad3b0607e4054af42b7a37e722ed06e89"
-SRC_URI = "git://github.com/kchhero/bl1_test.git"
-
-# Modify these as desired
-#PV = "1.0+git${SRCPV}"
+LIC_FILES_CHKSUM = "file://README;md5=754608f69d5791d96a0a96281ae48814"
+SRCREV = "3e32543bc3cbdac6960b72712005b18a0210d0c8"
+SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p6818;protocol=git;branch=artik"
 
 S = "${WORKDIR}/git"
+PV = "NEXELL"
+PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "artik710-raptor"
+
+TOOLCHAIN_ARCH64_NONE_ELF = "${BASE_WORKDIR}/gcc-linaro-aarch64-none-elf-4.8-2014.04_linux/bin/aarch64-none-elf-"
+TOOLCHAIN_ARCH32_EABI = "${BASE_WORKDIR}/arm-eabi-4.8/bin/"
 
 EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
 
 do_compile () {
-    echo -e "\033[44;33m WORKDIR ==> ${WORKDIR} >>\033[0m"
-    oe_runmake -j 1 BOARD="RAPTOR"
+    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="RAPTOR" -j 1
+}
+
+do_mypatch() {
+    git fetch ssh://suker@59.13.55.140:29418/bl1-artik7 refs/changes/61/2061/1 && git cherry-pick FETCH_HEAD;
+    git fetch ssh://suker@59.13.55.140:29418/bl1-artik7 refs/changes/62/2062/2 && git cherry-pick FETCH_HEAD;
+    git fetch ssh://suker@59.13.55.140:29418/bl1-artik7 refs/changes/33/2133/2 && git cherry-pick FETCH_HEAD
 }
 
 do_install_append() {
     echo "${WORKDIR}/git/out/bl1-raptor.bin" >> ${BASE_WORKDIR}/image_where.txt
-#   install ${WORKDIR}/git/out/bl1-raptor.bin ${DEPLOY_DIR_IMAGE}/bl1-raptor.bin
 }
 
+addtask mypatch after do_unpack before do_patch

@@ -1,0 +1,26 @@
+From 4ee282f150d5cb6f8c50d3f27b91eff6e7918983 Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Fri, 17 Jun 2016 09:16:04 +0900
+Subject: [PATCH] For Yocto temporary commit
+
+Change-Id: Ib71005bcbefd89f3e647dbd55dfc5d1abe02f609
+---
+ mk/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mk/gcc.mk b/mk/gcc.mk
+index fc38c4d..bf6323e 100644
+--- a/mk/gcc.mk
++++ b/mk/gcc.mk
+@@ -12,7 +12,7 @@ nostdinc$(sm)	:= -nostdinc -isystem $(shell $(CC$(sm)) \
+ 			-print-file-name=include 2> /dev/null)
+ 
+ # Get location of libgcc from gcc
+-libgcc$(sm)  	:= $(shell $(CC$(sm)) $(comp-cflags$(sm)) \
++#libgcc$(sm)  	:= $(shell $(CC$(sm)) $(comp-cflags$(sm)) \
+ 			-print-libgcc-file-name 2> /dev/null)
+ 
+ # Define these to something to discover accidental use
+-- 
+2.7.4
+

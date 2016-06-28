@@ -1,0 +1,14 @@
+prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+exec_prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 56.3.100
+Requires: 
+Requires.private: libavfilter >= 5.2.103, libswscale >= 3.1.101, libpostproc >= 53.3.100, libavformat >= 56.15.102, libavcodec >= 56.13.100, libswresample >= 1.1.100, libavutil >= 54.15.100
+Conflicts:
+Libs: -L${libdir}  -lavdevice 
+Libs.private: -lasound -L/home/rohan/devel/nexell/slsiap/android/lollipop-dev/linux/platform/common/fs/buildroot/buildroot-2015.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lfreetype -lfontconfig -L/home/rohan/devel/nexell/slsiap/android/lollipop-dev/linux/platform/common/fs/buildroot/buildroot-2015.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lfreetype -lm -lz -pthread
+Cflags: -I${includedir}

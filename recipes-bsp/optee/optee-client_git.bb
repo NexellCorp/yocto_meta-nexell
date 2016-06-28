@@ -7,7 +7,13 @@ SRCREV = "0b0d237779de6982451f6f5971b7106e459a2958"
 SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_client;protocol=git;branch=artik"
 
 S = "${WORKDIR}/git"
+PV = "NEXELL"
+PR = "0.1"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+COMPATIBLE_MACHINE = "(artik710-raptor|artik530-raptor)"
 
 do_compile() {
-    echo -e "\033[44;33m[suker][optee_client]${WORKDIR}/git/\033[0m" >> ${TOPDIR}/mylog.txt
+    :
 }

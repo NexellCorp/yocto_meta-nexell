@@ -1,3 +1,4 @@
 # artik7 BSP default providers
 
-#IMAGE_BOOT_FILES ?= "bl1-artik7/* ${KERNEL_IMAGETYPE};${SDIMG_KERNELIMAGE}"
+PREFERRED_PROVIDER_virtual/kernel ?= "linux-artik7"
+PREFERRED_VERSION_linux-nexell ?= "4.1.%"

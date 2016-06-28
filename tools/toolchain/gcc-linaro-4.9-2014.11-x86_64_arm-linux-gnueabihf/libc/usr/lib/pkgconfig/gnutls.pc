@@ -1,0 +1,24 @@
+# Process this file with autoconf to produce a pkg-config metadata file.
+
+# Copyright (C) 2004-2012 Free Software Foundation, Inc.
+
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.  This file is offered as-is,
+# without any warranty.
+
+# Author: Simon Josefsson
+
+prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+exec_prefix=/opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: GnuTLS
+Description: Transport Security Layer implementation for the GNU system
+URL: http://www.gnutls.org/
+Version: 3.3.12
+Libs: -L${libdir} -lgnutls
+Libs.private: -L/home/rohan/devel/nexell/slsiap/android/lollipop-dev/linux/platform/common/fs/buildroot/buildroot-2015.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lz        -lgmp
+Requires.private: nettle, hogweed, zlib
+Cflags: -I${includedir}

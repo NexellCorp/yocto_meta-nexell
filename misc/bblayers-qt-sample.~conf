@@ -5,17 +5,19 @@ LCONF_VERSION = "6"
 BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 
+BSPPATH := "${@os.path.abspath(os.path.dirname(d.getVar('FILE', True)) + '/../..')}"
+
 BBLAYERS ?= " \
-  /home/suker/YoctoPrj/jethro/poky/meta \
-  /home/suker/YoctoPrj/jethro/poky/meta-yocto \
-  /home/suker/YoctoPrj/jethro/poky/meta-yocto-bsp \
-  /home/suker/YoctoPrj/jethro/meta-nexell \
-  /home/suker/YoctoPrj/jethro/meta-qt5 \
-  /home/suker/YoctoPrj/jethro/meta-openembedded/meta-multimedia \
-  /home/suker/YoctoPrj/jethro/meta-openembedded/meta-oe \
+  ${BSPPATH}/poky/meta \
+  ${BSPPATH}/poky/meta-yocto \
+  ${BSPPATH}/poky/meta-yocto-bsp \
+  ${BSPPATH}/meta-nexell \
+  ${BSPPATH}/meta-qt5 \
+  ${BSPPATH}/meta-openembedded/meta-multimedia \
+  ${BSPPATH}/meta-openembedded/meta-oe \
   "
 
 BBLAYERS_NON_REMOVABLE ?= " \
-  /home/suker/YoctoPrj/jethro/poky/meta \
-  /home/suker/YoctoPrj/jethro/poky/meta-yocto \
+  ${BSPPATH}/poky/meta \
+  ${BSPPATH}/poky/meta-yocto \
   "

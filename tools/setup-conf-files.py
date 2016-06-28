@@ -16,12 +16,21 @@ CONF_BBLAYER_CHANGE_NEED_LINE = ['poky/meta-yocto-bsp']
 CONF_BBLAYER_CHANGE_KEYWORD = ['meta-nexell']
 
 CONF_BBMASK_APPEND_NOT_USE_QT = ['BBMASK += "|meta-nexell/recipes-qt"']
+CONF_BBMASK_APPEND_USE_QT = ['DISTRO_FEATURES_remove = "x11"', 
+                             'DISTRO_FEATURES_append = " systemd wayland opengl"',
+                             'REQUIRED_DISTRO_FEATURES = "wayland"',
+                             'VIRTUAL-RUNTIME_init_manager = "systemd"',
+                             'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
+                             'PACKAGECONFIG_FB_pn-qtbase = "linuxfb"',
+                             'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility eglfs alsa puseaudio fontconfig gles2 glib examples tools"']
+
 
 class parsingForpokyfiles():
     linuxMark = '/'
     boardName = ''
     imagetype = ''
-    
+    bbmaskL = []
+
     def __init__(self, arg1, arg2) :
         self.boardName = arg1
 	self.imagetype = arg2
@@ -39,9 +48,13 @@ class parsingForpokyfiles():
 
 
 	if self.imagetype!='qt' :
-	    with open(localfilepath, 'a') as file:
-	        for i in CONF_BBMASK_APPEND_NOT_USE_QT :
-	     	    file.write(i)
+            bbmaskL = CONF_BBMASK_APPEND_NOT_USE_QT
+        else :
+            bbmaskL = CONF_BBMASK_APPEND_USE_QT
+
+	with open(localfilepath, 'a') as file :
+	    for i in bbmaskL :
+                file.write(i+"\n")
 
     def bblayerConfChange(self) :
         CONF_DIR_PREFIX = "conf"+self.linuxMark

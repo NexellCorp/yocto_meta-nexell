@@ -38,6 +38,7 @@ function make_result_dir()
 
 function customize_conf_files()
 {
+    cp ${PARENT_DIR}/meta-nexell/misc/bblayers-${IMAGE_TYPE}-sample.~conf ./conf/bblayers.conf
     ${PARENT_DIR}/meta-nexell/tools/setup-conf-files.py ${BOARD_NAME} ${IMAGE_TYPE}
     echo ${RESULT_PATH} > result_path.txt
 }
@@ -55,7 +56,21 @@ function customize_recipe_core_files()
     fi
 }
 
+function copy_build_scripts()
+{
+    #temp ARM 32bit build toolchain copy
+    cp -a ${PARENT_DIR}/meta-nexell/tools/toolchain_setup.sh .
+    ./toolchain_setup.sh
+
+    mkdir -p tmp/work 
+    cp -a ${PARENT_DIR}/meta-nexell/tools/bitbake_pre_operation_${BOARD_NAME}.sh .
+    ./bitbake_pre_operation_${BOARD_NAME}.sh
+
+    touch tmp/work/source_dir_path.txt
+}
+
 check_usage
 make_result_dir
 customize_conf_files
-customize_recipe_core_files
+#customize_recipe_core_files
+copy_build_scripts

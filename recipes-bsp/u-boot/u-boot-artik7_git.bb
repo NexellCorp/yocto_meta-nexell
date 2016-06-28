@@ -1,27 +1,21 @@
-DESCRIPTION = "U-Boot for artik7"
-
-#DEPENDS += "optee-build"
+DESCRIPTION = "U-Boot for artik710-raptor"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://README;md5=587d8d939ae351bb11910921b1eafd42"
 
-SRCREV = "6cb05dd0f0e1eb9abf46e068448720acecde0ce9"
+SRCREV = "3d4ce985752093914607424f967bca558df74fab"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/u-boot/u-boot-2016.01;protocol=git;branch=artik"
 
 S = "${WORKDIR}/git"
+PV = "NEXELL"
+PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 COMPATIBLE_MACHINE = "artik710-raptor"
 
-
-#do_deploy_append() {
-#    cp -a ${WORKDIR}/git/u-boot.bin ${DEPLOY_DIR_IMAGE}/u-boot.bin
-#}
-
 do_compile() {
     local config="artik710_raptor"
-    local sdram_size=
 
     oe_runmake clean
     oe_runmake ${config}_config
@@ -30,5 +24,6 @@ do_compile() {
 
 do_install_append() {
     echo "${WORKDIR}/git/u-boot.bin" >> ${BASE_WORKDIR}/image_where.txt
-#    install ${WORKDIR}/git/u-boot.bin ${DEPLOY_DIR_IMAGE}/u-boot.bin
 }
+
+PROVIDES = "u-boot-artik7"

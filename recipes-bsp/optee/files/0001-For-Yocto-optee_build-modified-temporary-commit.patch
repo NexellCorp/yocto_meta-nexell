@@ -1,0 +1,29 @@
+From ce4b372a1566592e4bb1018ae2025a932b67972f Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Fri, 17 Jun 2016 11:25:56 +0900
+Subject: [PATCH] For Yocto optee_build modified temporary commit
+
+Change-Id: I3a93589220c29c00e7176be5a4bc2084b44b3077
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 2432d04..ff1bce0 100755
+--- a/Makefile
++++ b/Makefile
+@@ -118,9 +118,9 @@ BL33 = u-boot-artik7/u-boot.bin
+ build-bl33:: $(aarch64-linux-gnu-gcc)
+ build-bl33 $(BL33)::
+ 	$(ECHO) '  BUILD   $@'
+-	$(Q)set -e ; cd u-boot ; \
++	$(Q)set -e ; cd u-boot-artik7 ; \
+ 	    $(MAKE) artik710_raptor_config ; \
+-	    $(MAKE) CROSS_COMPILE="$(CROSS_COMPILE)"
++	    $(MAKE) CROSS_COMPILE="$(CROSS_COMPILE)" LDFLAGS="" CC="${CC}"
+ 	$(Q)touch ${BL33}
+ 
+ clean-bl33:
+-- 
+2.7.4
+
