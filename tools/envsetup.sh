@@ -72,5 +72,5 @@ function copy_build_scripts()
 check_usage
 make_result_dir
 customize_conf_files
-#customize_recipe_core_files
+customize_recipe_core_files
 copy_build_scripts
