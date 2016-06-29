@@ -86,7 +86,7 @@ do_make_symlink() {
 }
 
 do_mypatch() {
-    git fetch ssh://suker@59.13.55.140:29418/artik7/optee_build refs/changes/77/2077/4 && git cherry-pick FETCH_HEAD
+    git fetch http://59.13.55.140/gerrit/artik7/optee_build refs/changes/77/2077/4 && git cherry-pick FETCH_HEAD
 }
 
 do_compile() {

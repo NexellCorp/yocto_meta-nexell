@@ -15,8 +15,8 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 COMPATIBLE_MACHINE = "artik710-raptor"
 
-do_mypatch() {
-    git fetch ssh://suker@59.13.55.140:29418/artik7/arm-trusted-firmware refs/changes/70/2070/3 && git cherry-pick FETCH_HEAD
+do_mypatch() { 
+    git fetch http://59.13.55.140/gerrit/artik7/arm-trusted-firmware refs/changes/70/2070/3 && git cherry-pick FETCH_HEAD
 }
 
 do_compile() {
