@@ -3,6 +3,8 @@ include nexell-image-tiny.inc
 inherit nexell-post-process-artik710-raptor
 
 LICENSE = "LGPLv2.1"
-SPLASH = "psplash-nexell"
 
-IMAGE_FEATURES += "ssh-server-dropbear splash"
+IMAGE_INSTALL += " \
+               optee-linuxdriver \
+               optee-build \
+               "
