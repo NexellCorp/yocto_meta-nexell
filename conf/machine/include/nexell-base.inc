@@ -13,4 +13,4 @@ MACHINE_EXTRA_RRECOMMENDS += "kernel-modules kernel-devicetree"
 
 DEFAULTTUNE_artik710-raptor ?= "aarch64"
 DEFAULTTUNE_artik530-raptor ?= "armv7a"
-DEFAULTTUNE_avn ?= "armv7a"
+DEFAULTTUNE_avn-4418 ?= "cortexa9-neon"

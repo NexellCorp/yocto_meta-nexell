@@ -9,8 +9,12 @@ CONF_DIR_PREFIX = ""
 CONF_FILE_LOCAL = "local.conf"
 CONF_FILE_BBLAYER = "bblayers.conf"
 
-CONF_LOCAL_CHANGE_NEED_LINE = ['MACHINE ??= "qemux86"', '#DL_DIR ?= "${TOPDIR}/downloads"', '#SSTATE_DIR ?= "${TOPDIR}/sstate-cache"']
-CONF_LOCAL_CHANGE_KEYWORD = ['MACHINE ??= ', 'DL_DIR ?= "${TOPDIR}/../downloads"', 'SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"']
+CONF_LOCAL_CHANGE_NEED_LINE = ['MACHINE ??= "qemux86"',
+                               '#DL_DIR ?= "${TOPDIR}/downloads"',
+                               '#SSTATE_DIR ?= "${TOPDIR}/sstate-cache"']
+CONF_LOCAL_CHANGE_KEYWORD = ['MACHINE ??= ',
+			     'DL_DIR ?= "${TOPDIR}/../downloads"',
+			     'SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"']
 
 CONF_BBLAYER_CHANGE_NEED_LINE = ['poky/meta-yocto-bsp']
 CONF_BBLAYER_CHANGE_KEYWORD = ['meta-nexell']
@@ -23,7 +27,6 @@ CONF_BBMASK_APPEND_USE_QT = ['DISTRO_FEATURES_remove = "x11"',
                              'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
                              'PACKAGECONFIG_FB_pn-qtbase = "linuxfb"',
                              'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility eglfs alsa puseaudio fontconfig gles2 glib examples tools"']
-
 
 class parsingForpokyfiles():
     linuxMark = '/'
@@ -53,9 +56,10 @@ class parsingForpokyfiles():
             bbmaskL = CONF_BBMASK_APPEND_USE_QT
 
 	with open(localfilepath, 'a') as file :
+	    file.write("#NEXELL appended code\n")
 	    for i in bbmaskL :
                 file.write(i+"\n")
-
+	
     def bblayerConfChange(self) :
         CONF_DIR_PREFIX = "conf"+self.linuxMark
         for line in fileinput.input(CONF_DIR_PREFIX+CONF_FILE_BBLAYER, inplace = 1): 
@@ -68,7 +72,7 @@ class parsingForpokyfiles():
 def main(arg1, arg2):
     parseMain = parsingForpokyfiles(arg1, arg2)
     parseMain.localConfChange()
-    parseMain.bblayerConfChange()
+#   parseMain.bblayerConfChange()
     
 if __name__ == "__main__":
     try : 

@@ -16,8 +16,8 @@ PV = "NEXELL"
 PR = "0.1"
 
 do_mypatch() {
-    git fetch ssh://suker@59.13.55.140:29418/artik7/optee_os refs/changes/76/2076/1 && git cherry-pick FETCH_HEAD;
-    git fetch ssh://suker@59.13.55.140:29418/artik7/optee_os refs/changes/35/2135/1 && git cherry-pick FETCH_HEAD
+    git fetch http://59.13.55.140/gerrit/artik7/optee_os refs/changes/76/2076/1 && git cherry-pick FETCH_HEAD;
+    git fetch http://59.13.55.140/gerrit/artik7/optee_os refs/changes/35/2135/1 && git cherry-pick FETCH_HEAD
 }
 
 do_configure() {

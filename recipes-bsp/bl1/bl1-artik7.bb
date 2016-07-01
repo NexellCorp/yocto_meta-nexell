@@ -23,10 +23,10 @@ do_compile () {
     oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="RAPTOR" -j 1
 }
 
-do_mypatch() {
-    git fetch ssh://suker@59.13.55.140:29418/bl1-artik7 refs/changes/61/2061/1 && git cherry-pick FETCH_HEAD;
-    git fetch ssh://suker@59.13.55.140:29418/bl1-artik7 refs/changes/62/2062/2 && git cherry-pick FETCH_HEAD;
-    git fetch ssh://suker@59.13.55.140:29418/bl1-artik7 refs/changes/33/2133/2 && git cherry-pick FETCH_HEAD
+do_mypatch() {    
+    git fetch http://59.13.55.140/gerrit/bl1-artik7 refs/changes/61/2061/1 && git cherry-pick FETCH_HEAD;
+    git fetch http://59.13.55.140/gerrit/bl1-artik7 refs/changes/62/2062/2 && git cherry-pick FETCH_HEAD;
+    git fetch http://59.13.55.140/gerrit/bl1-artik7 refs/changes/33/2133/2 && git cherry-pick FETCH_HEAD
 }
 
 do_install_append() {

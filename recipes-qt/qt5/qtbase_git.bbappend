@@ -1,4 +1,4 @@
-COMPATIBLE_MACHINE = "(artik710-raptor|artik530-raptor|avn)"
+COMPATIBLE_MACHINE = "(artik710-raptor|artik530-raptor|avn-4418|avn-6818)"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 SRC_URI_append = "file://0001-fix-rasp-build.patch"
