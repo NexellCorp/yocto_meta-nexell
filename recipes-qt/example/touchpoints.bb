@@ -11,7 +11,7 @@ SRC_URI = " \
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
-COMPATIBLE_MACHINE = "(artik710-raptor|artik530-raptor|avn-4418)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref|s5p4418-navi-ref)"
 
 do_install() {
 	install -Dm0644 ${WORKDIR}/touchpoints.qml ${D}/opt/example/touchpoints.qml

@@ -14,7 +14,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(artik710-raptor|artik530-raptor)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
 
 inherit pkgconfig
 DEPENDS = "arm-trusted-firmware l-loader optee-os optee-client optee-test u-boot-artik7 bl1-artik7"

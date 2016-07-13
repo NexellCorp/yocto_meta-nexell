@@ -13,7 +13,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "artik710-raptor"
+COMPATIBLE_MACHINE = "s5p6818-artik710-raptor"
 
 do_mypatch() { 
     git fetch http://59.13.55.140/gerrit/artik7/arm-trusted-firmware refs/changes/70/2070/3 && git cherry-pick FETCH_HEAD

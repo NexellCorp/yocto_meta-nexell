@@ -1,0 +1,33 @@
+From 5f32d49d1e18d45b8549a259d1234a05d189a699 Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Tue, 12 Jul 2016 10:46:40 +0900
+Subject: [PATCH] Yocto bl1 NAVI 4418 Board setting
+
+---
+ config.mak | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/config.mak b/config.mak
+index 60df4ef..a526dc5 100644
+--- a/config.mak
++++ b/config.mak
+@@ -46,14 +46,14 @@ SUPPORT_UART_BOOT		= n
+ 
+ ifeq ($(CHIPNAME), NXP4330)
+ BOARD				= LEPUS
+-#BOARD				= NAVI
++BOARD				= NAVI
+ else
+ #BOARD				= SVT
+ #BOARD				= ASB
+ #BOARD				= DRONE
+ #BOARD				= AVN
+ #BOARD				= LAVENDA
+-BOARD				?= RAPTOR
++#BOARD				?= RAPTOR
+ endif
+ 
+ # cross-tool pre-header
+-- 
+2.7.4
+

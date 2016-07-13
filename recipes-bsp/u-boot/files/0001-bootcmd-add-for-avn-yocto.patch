@@ -1,4 +1,4 @@
-From 629180a9b536b3151a9077fcbb42db699e7746b8 Mon Sep 17 00:00:00 2001
+From 9101122764e51fe0b985e32260e5364ceb8c1936 Mon Sep 17 00:00:00 2001
 From: choonghyun-Jeon <suker@nexell.co.kr>
 Date: Wed, 22 Jun 2016 17:18:59 +0900
 Subject: [PATCH] bootcmd add for avn yocto
@@ -8,7 +8,7 @@ Subject: [PATCH] bootcmd add for avn yocto
  1 file changed, 73 insertions(+), 1 deletion(-)
 
 diff --git a/include/configs/s5p4418_avn_ref.h b/include/configs/s5p4418_avn_ref.h
-index c34dd1e..add3e5d 100644
+index c34dd1e..52a48bb 100644
 --- a/include/configs/s5p4418_avn_ref.h
 +++ b/include/configs/s5p4418_avn_ref.h
 @@ -273,10 +273,82 @@
@@ -78,12 +78,12 @@ index c34dd1e..add3e5d 100644
 +                 "root=/dev/ram0 ${root_rw} initrd=${ramdiskaddr},16M ramdisk=16384 "    \
 +                 "${opts} ${recoverymode} bd_addr=${bd_addr};"           \
 +                 "run boot_cmd_initrd\0"                                 \
-+         "mmcboot_yocto=setenv bootargs ${console} "                     \
++         "mmcboot_sdcard=setenv bootargs ${console} "                     \
 +                 "root=/dev/mmcblk1p1 ${root_rw} init=/sbin/init "    \
 +                 "${opts} bd_addr=${bd_addr} rootwait fb=/dev/fb0;"     \
 +                 "run boot_cmd_initrd\0"                                 \
 +         "mmcboot=setenv bootargs ${console} "                           \
-+                 "root=/dev/mmcblk${rootdev}p${rootpart} ${root_rw} "    \
++                 "root=/dev/mmcblk${rootdev}p${rootpart} init=/sbin/init rootwait ${root_rw} "    \
 +                 "${opts} bd_addr=${bd_addr};"                           \
 +                 "run boot_cmd_initrd\0"                                 \
 +         "recoveryboot=run sdrecovery; setenv recoverymode recovery;"    \

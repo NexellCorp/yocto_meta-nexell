@@ -7,6 +7,9 @@ SPLASH = "psplash-nexell"
 
 IMAGE_FEATURES += "package-management ssh-server-dropbear tools-debug splash"
 
+IMAGE_INSTALL += " \
+        kernel-modules \
+	"
 # Qt Packages
 IMAGE_INSTALL += " \
      qtbase \
@@ -19,13 +22,14 @@ IMAGE_INSTALL += " \
      qtmultimedia \
      qtmultimedia-plugins \
      qtmultimedia-qmlplugins \
-     qtwebkit \
-     qtwebkit-qmlplugins \
-     qtsvg \
-     qtsvg-plugins \
-     qt3d \
-     qt3d-qmlplugins \
      "
+#     qtwebkit \
+#     qtwebkit-qmlplugins \
+#     qtsvg \
+#     qtsvg-plugins \
+#     qt3d \
+#     qt3d-qmlplugins \
+#     "
 
 # Example application
 IMAGE_INSTALL += " \

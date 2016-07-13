@@ -9,7 +9,7 @@ SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_os;protocol=git;bran
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(artik710-raptor|artik530-raptor)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
 
 S = "${WORKDIR}/git"
 PV = "NEXELL"

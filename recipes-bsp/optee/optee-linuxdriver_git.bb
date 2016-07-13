@@ -11,11 +11,11 @@ S = "${WORKDIR}/git"
 PV = "NEXELL"
 PR = "0.1"
 
-DEPENDS = "linux-artik7"
+DEPENDS = "linux-s5p6818-artik710-raptor"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(artik710-raptor|artik530-raptor)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
 
 KERNEL_MODULE_AUTOLOAD += "optee optee_armtz"
 

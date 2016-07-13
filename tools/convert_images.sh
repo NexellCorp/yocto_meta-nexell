@@ -7,11 +7,13 @@ PARENT_DIR="${PWD%/*}"
 ROOTDIR="root"
 BOOTDIR="boot"
 META_NEXELL_TOOLS_DIR="${PARENT_DIR}/meta-nexell/tools"
-BOARD_NAME=$1
 IMAGE_TYPE=$2
 MEM_SIZE=1024
-BOARD_PURENAME=
+MACHINE_NAME=$1
+BOARD_SOCNAME=
+BOARD_NAME=
 BOARD_PREFIX=
+BOARD_POSTFIX=
 
 function check_usage()
 {
@@ -25,17 +27,21 @@ function check_usage()
 
 function usage()
 {
-    echo "Usage: $0 <board name> <image-type>"
-    echo "    ex) $0 artik710-raptor qt"
-    echo "    ex) $0 artik710-raptor tiny"
-    echo "    ex) $0 avn-4418 qt"
-    echo "    ex) $0 avn-4418 tiny"
+    echo "Usage: $0 <machine name> <image type>"
+    echo "    ex) $0 s5p6818-artik710-raptor qt"
+    echo "    ex) $0 s5p6818-artik710-raptor tiny"
+    echo "    ex) $0 s5p4418-avn-ref qt"
+    echo "    ex) $0 s5p4418-avn-ref tiny"
+    echo "    ex) $0 s5p4418-navi-ref qt"
+    echo "    ex) $0 s5p4418-navi-ref tiny"
 }
 
 function get_board_prefix()
 {
-    BOARD_PURENAME=${BOARD_NAME#*-}
-    BOARD_PREFIX=${BOARD_NAME%-*}   
+    BOARD_SOCNAME=${MACHINE_NAME%-*-*}
+    BOARD_NAME=${MACHINE_NAME#*-}
+    BOARD_PREFIX=${BOARD_NAME%-*}
+    BOARD_POSTFIX=${BOARD_NAME#*-}
 }
 
 function make_dirs()
@@ -87,58 +93,37 @@ function make_2ndboot_for_emmc()
 {
     local bl1_source=
     local file_name=
-    local chip_name=
+    local chip_name=${BOARD_SOCNAME}
     local gen_img=bl1-emmcboot.bin
     local aes_out_img=bl1-emmcboot.img
 
     # BINGEN
     if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-        bl1_source=bl1-artik7
+        bl1_source=bl1-${BOARD_POSTFIX}.bin
         file_name=raptor-emmc-32.txt
-	chip_name=s5p6818
-    elif [ "${BOARD_PREFIX}" == "avn" ]; then
-        bl1_source=bl1-avn
-        file_name=nsih_avn_ref_emmc.txt
-	if [ "${BOARD_PURENAME}" == "4418" ]; then
-	    chip_name=s5p4418
-	elif [ "${BOARD_PURENAME}" == "6818" ]; then
-	    chip_name=s5p6818
-	fi
+    else
+        bl1_source=bl1-${BOARD_PREFIX}.bin
+        file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
     fi
 
-    local nsih=${PARENT_DIR}/meta-nexell/tools/${BOARD_NAME}/${file_name}
+    local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
 
-    ${PARENT_DIR}/meta-nexell/tools/BOOT_BINGEN -c ${chip_name} -t 2ndboot -n ${nsih} -i bl1-${BOARD_PREFIX}.bin -o ${gen_img} -l 0xffff0000 -e 0xffff0000
+    ${PARENT_DIR}/meta-nexell/tools/BOOT_BINGEN -c ${chip_name} -t 2ndboot -n ${nsih} -i ${bl1_source} -o ${gen_img} -l 0xffff0000 -e 0xffff0000
 }
 
 function make_3rdboot_for_emmc()
 {
-    local bl1_source=
     local file_name=
-    local inout_image=
-    local chip_name=
+    local inout_image=u-boot
+    local chip_name=${BOARD_SOCNAME}
 
     if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-        bl1_source=bl1-artik7
         file_name=raptor-emmc-32.txt
-	chip_name=s5p6818
-        inout_image=u-boot
-    elif [ "${BOARD_PREFIX}" == "avn" ]; then
-        bl1_source=bl1-avn
-        file_name=nsih_avn_ref_emmc.txt
-	inout_image=u-boot
-	if [ "${BOARD_PURENAME}" == "4418" ]; then
-	    chip_name=s5p4418
-	elif [ "${BOARD_PURENAME}" == "6818" ]; then
-	    chip_name=s5p6818
-	fi
     else
-        bl1_source=bl1-artik530
-        file_name=${BOARD_PURENAME}-emmc.txt
-        inout_image=u-boot
+        file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
     fi
-
-    local nsih=${PARENT_DIR}/meta-nexell/tools/${BOARD_NAME}/${file_name}
+    
+    local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
  
     local load_addr=
     local jump_addr=
@@ -163,6 +148,9 @@ function mkbootimg()
     then
         ${META_NEXELL_TOOLS_DIR}/mkimage -A arm64 -O linux -T kernel -C none -a 0x40080000 -e 0x40080000 -n 'linux-4.1' -d Image ./boot/uImage
     elif [ "${BOARD_PREFIX}" == "avn" ]
+    then
+        ${META_NEXELL_TOOLS_DIR}/mkimage -A arm -O linux -T kernel -C none -a 0x40008000 -e 0x40008000 -n 'linux-4.1' -d Image ./boot/uImage
+    elif [ "${BOARD_PREFIX}" == "navi" ]
     then
         ${META_NEXELL_TOOLS_DIR}/mkimage -A arm -O linux -T kernel -C none -a 0x40008000 -e 0x40008000 -n 'linux-4.1' -d Image ./boot/uImage
     else

@@ -1,0 +1,49 @@
+From 52909d969d53969005e26e57efe5c3389e811f96 Mon Sep 17 00:00:00 2001
+From: Chanho Park <chanho61.park@samsung.com>
+Date: Fri, 1 Jul 2016 16:41:22 +0900
+Subject: [PATCH] arm64: dts: s5p6818: add mali400 utgard dt node
+
+This patch adds mali400 utgard driver device tree node.
+The s5p6818 SoC uses shared interrupt model using one
+interrupt and requires reset control after clock
+enabling.
+
+Change-Id: Id07ec26e41296db48f6f53a0117c39e1eb7cf536
+Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+---
+ arch/arm64/boot/dts/nexell/s5p6818.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/nexell/s5p6818.dtsi b/arch/arm64/boot/dts/nexell/s5p6818.dtsi
+index 4a3cc8a..8e5effb 100644
+--- a/arch/arm64/boot/dts/nexell/s5p6818.dtsi
++++ b/arch/arm64/boot/dts/nexell/s5p6818.dtsi
+@@ -907,5 +907,25 @@
+ 			resets = <&nexell_reset RESET_ID_SCALER>;
+ 			status = "disabled";
+ 		};
++
++		gpu@c0070000 {
++			compatible = "arm,mali-400", "arm,mali-utgard";
++			reg = <PHYS_BASE_VR 0x10000>;
++			interrupts = <0 IRQ_VR 0>, <0 IRQ_VR 0>, <0 IRQ_VR 0>,
++				<0 IRQ_VR 0>, <0 IRQ_VR 0>, <0 IRQ_VR 0>,
++				<0 IRQ_VR 0>, <0 IRQ_VR 0>, <0 IRQ_VR 0>,
++				<0 IRQ_VR 0>, <0 IRQ_VR 0>;
++			interrupt-names = "IRQGP", "IRQGPMMU", "IRQPP0",
++				"IRQPPMMU0", "IRQPP1", "IRQPPMMU1",
++				"IRQPP2", "IRQPPMMU2", "IRQPP3",
++				"IRQPPMMU3", "IRQPMU";
++			pmu_domain_config = <0x1 0x4 0x8 0x10 0x20 0x0 0x0 0x0
++						0x0 0x2 0x0 0x0>;
++			pmu_switch_delay = <0xff>;
++			clocks = <&vr>;
++			clock-names = "clk_mali";
++			resets = <&nexell_reset RESET_ID_VR>;
++			reset-names = "vr-reset";
++		};
+ 	}; /*** soc ***/
+ };
+-- 
+2.7.4
+

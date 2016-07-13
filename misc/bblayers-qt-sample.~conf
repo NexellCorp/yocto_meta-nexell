@@ -15,6 +15,7 @@ BBLAYERS ?= " \
   ${BSPPATH}/meta-qt5 \
   ${BSPPATH}/meta-openembedded/meta-multimedia \
   ${BSPPATH}/meta-openembedded/meta-oe \
+  ${BSPPATH}/openembedded-core/meta \
   "
 
 BBLAYERS_NON_REMOVABLE ?= " \

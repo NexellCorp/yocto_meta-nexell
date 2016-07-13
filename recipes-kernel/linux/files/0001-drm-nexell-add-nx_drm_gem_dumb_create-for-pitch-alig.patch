@@ -1,0 +1,78 @@
+From 28325d4cb31496c7098fc9fda3e1d405e5e2d01f Mon Sep 17 00:00:00 2001
+From: Chanho Park <chanho61.park@samsung.com>
+Date: Wed, 6 Jul 2016 00:23:19 +0900
+Subject: [PATCH] drm/nexell: add nx_drm_gem_dumb_create for pitch align
+
+This patch adds a nx_drm_gem_dumb_create function because
+the pitch should be aligned by 8 bytes due to restriction
+of mali driver.
+
+Change-Id: I82f32c88dc7415ed0a7221d0a438a30720a1e5d7
+Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+---
+ drivers/gpu/drm/nexell/nx_drm_drv.c |  2 +-
+ drivers/gpu/drm/nexell/nx_drm_gem.c | 12 ++++++++++++
+ drivers/gpu/drm/nexell/nx_drm_gem.h |  4 ++++
+ 3 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/nexell/nx_drm_drv.c b/drivers/gpu/drm/nexell/nx_drm_drv.c
+index 006e592..348a2bc 100644
+--- a/drivers/gpu/drm/nexell/nx_drm_drv.c
++++ b/drivers/gpu/drm/nexell/nx_drm_drv.c
+@@ -234,7 +234,7 @@ static struct drm_driver nx_drm_driver = {
+ 	.gem_prime_vunmap = drm_gem_cma_prime_vunmap,
+ 	.gem_prime_mmap = drm_gem_cma_prime_mmap,
+ 
+-	.dumb_create = drm_gem_cma_dumb_create,
++	.dumb_create = nx_drm_gem_dumb_create,
+ 	.dumb_map_offset = drm_gem_cma_dumb_map_offset,
+ 	.dumb_destroy = drm_gem_dumb_destroy,
+ 
+diff --git a/drivers/gpu/drm/nexell/nx_drm_gem.c b/drivers/gpu/drm/nexell/nx_drm_gem.c
+index 5b5f939..baf49c0 100644
+--- a/drivers/gpu/drm/nexell/nx_drm_gem.c
++++ b/drivers/gpu/drm/nexell/nx_drm_gem.c
+@@ -17,6 +17,7 @@
+  */
+ #include <drm/drmP.h>
+ #include <drm/drm_vma_manager.h>
++#include <drm/drm_gem_cma_helper.h>
+ 
+ #include <linux/shmem_fs.h>
+ #include <drm/nexell_drm.h>
+@@ -48,6 +49,17 @@ out:
+ 	return NULL;
+ }
+ 
++int nx_drm_gem_dumb_create(struct drm_file *file_priv,
++			    struct drm_device *drm,
++			    struct drm_mode_create_dumb *args)
++{
++	args->pitch = DIV_ROUND_UP(args->width * args->bpp, 8);
++	/* The pitch should be aligned by 8 */
++	args->pitch = ALIGN(args->pitch, 8);
++
++	return drm_gem_cma_dumb_create_internal(file_priv, drm, args);
++}
++
+ int nx_drm_gem_get_ioctl(struct drm_device *dev, void *data,
+ 			struct drm_file *file_priv)
+ {
+diff --git a/drivers/gpu/drm/nexell/nx_drm_gem.h b/drivers/gpu/drm/nexell/nx_drm_gem.h
+index c9e2b8b..17b4c16 100644
+--- a/drivers/gpu/drm/nexell/nx_drm_gem.h
++++ b/drivers/gpu/drm/nexell/nx_drm_gem.h
+@@ -30,6 +30,10 @@
+ int nx_drm_gem_create_ioctl(struct drm_device *drm, void *data,
+ 			struct drm_file *file_priv);
+ 
++int nx_drm_gem_dumb_create(struct drm_file *file_priv,
++			    struct drm_device *drm,
++			    struct drm_mode_create_dumb *args);
++
+ /* get buffer information to memory region allocated by gem. */
+ int nx_drm_gem_get_ioctl(struct drm_device *drm, void *data,
+ 			struct drm_file *file_priv);
+-- 
+2.7.4
+
