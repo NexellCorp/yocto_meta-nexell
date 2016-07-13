@@ -1,0 +1,13 @@
+# Package Information for pkg-config
+
+prefix=/opt/crosstools/arm-cortex_a9-eabi-4.7-eglibc-2.18/arm-cortex_a9-linux-gnueabi/sysroot/usr
+exec_prefix=/opt/crosstools/arm-cortex_a9-eabi-4.7-eglibc-2.18/arm-cortex_a9-linux-gnueabi/sysroot/usr
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: SQLite
+Description: SQL database engine
+Version: 3.8.0.2
+Libs: -L${libdir} -lsqlite3
+Libs.private: -ldl -lpthread 
+Cflags: -I${includedir}

@@ -1,0 +1,14 @@
+prefix=/opt/crosstools/arm-cortex_a9-eabi-4.7-eglibc-2.18/arm-cortex_a9-linux-gnueabi/sysroot/usr
+exec_prefix=/opt/crosstools/arm-cortex_a9-eabi-4.7-eglibc-2.18/arm-cortex_a9-linux-gnueabi/sysroot/usr
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavformat
+Description: FFmpeg container format library
+Version: 53.5.0
+Requires: 
+Requires.private: libavcodec = 53.8.0
+Conflicts:
+Libs: -L${libdir} -lavformat 
+Libs.private: -lasound -lm -pthread -lz
+Cflags: -I${includedir}
