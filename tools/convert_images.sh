@@ -162,6 +162,26 @@ function mkbootimg()
     ${META_NEXELL_TOOLS_DIR}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/    
 }
 
+function post_process()
+{
+    echo -e "\n\n\033[40;33m  Target download method.....                                                        \033[0m\n"
+    if  [ "${MACHINE_NAME}" == "s5p6818-artik710-raptor" ]; then
+        echo -e "\033[40;33m  <Full download>                                                                        \033[0m"
+        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor.sh -p partmap_emmc.txt -r .  \033[0m"
+        echo -e "\033[40;33m  <kernel only>                                                                          \033[0m"
+        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor_kernel_only.sh               \033[0m"
+        echo -e "\033[40;33m  <rootfs.img>                                                                           \033[0m"
+        echo -e "\033[40;33m      ex) $ sudo fastboot flash rootfs rootfs.img                                            \033[0m\n"
+    else
+        echo -e "\033[40;33m  <Full download>                                                        \033[0m"
+        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p4418.sh -p partmap_emmc.txt -r .  \033[0m"
+        echo -e "\033[40;33m  <bl1, u-boot, kernel only>                                             \033[0m"
+        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p4418_kernel_uboot_bl1_only.sh     \033[0m"
+        echo -e "\033[40;33m  <rootfs.img>                                                           \033[0m"
+        echo -e "\033[40;33m      ex) $ sudo fastboot flash rootfs rootfs.img                            \033[0m\n"
+    fi
+}
+
 check_usage
 get_board_prefix
 make_dirs
@@ -169,3 +189,4 @@ mkramdisk
 mkbootimg
 make_2ndboot_for_emmc
 make_3rdboot_for_emmc
+post_process

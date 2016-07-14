@@ -23,6 +23,9 @@ avn_postprocess_mali_function() {
     ln -sf libGLESv1_CM.so.1.1  libGLESv1_CM.so.1
     ln -sf driver/libGLESv1_CM.so.1.1 libGLESv1_CM.so.1.1
 
+    cd ${IMAGE_ROOTFS}/usr/bin
+    chmod +x start_wayland.sh
+
     cd ${IMAGE_ROOTFS}
     echo "/usr/lib/driver" > etc/ld.so.conf
     mkdir -p etc/ld.so.conf.d
@@ -35,7 +38,6 @@ avn_postprocess_mali_function() {
     
     cd ${IMAGE_ROOTFS}/etc/rc2.d
     ln -s ../init.d/weston S11nexell_mali
-    
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "avn_postprocess_about_qt_touch_function;avn_postprocess_mali_function"

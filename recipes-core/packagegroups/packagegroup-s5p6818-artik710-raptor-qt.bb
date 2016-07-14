@@ -14,3 +14,7 @@ inherit packagegroup
 PACKAGES = " \
     ${PN} \
     "
+
+RDEPENDS_${PN} = " \
+    wayland-drm-s5p6818 \
+    "

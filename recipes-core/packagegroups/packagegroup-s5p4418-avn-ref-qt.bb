@@ -31,4 +31,5 @@ RDEPENDS_${PN} += " \
     nx-gst-meta \
     nx-v4l2 \
     example-libs \
+    wayland-drm-s5p4418 \
     "

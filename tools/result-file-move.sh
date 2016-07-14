@@ -112,14 +112,21 @@ function copy_partmap_file()
     cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/partmap_emmc.txt ${RESULT_PATH}
 }
 
+function post_process()
+{
+    echo -e "\033[40;33m  Maybe you need to convert some binary images                                \033[0m"
+    echo -e "\033[40;33m  You can use below operation                                                 \033[0m"
+    echo -e "\033[40;33m  ex) $ ../meta-nexell/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE}  \033[0m\n"
+}
+
 check_usage
 check_result_dir
 get_board_prefix
 copy_bin_files
 copy_kernel_image
-
 copy_dtb_file
-
 copy_rootfs_image
 copy_params_image
 copy_partmap_file
+
+post_process
