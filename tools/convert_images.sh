@@ -96,6 +96,7 @@ function make_2ndboot_for_emmc()
     local chip_name=${BOARD_SOCNAME}
     local gen_img=bl1-emmcboot.bin
     local aes_out_img=bl1-emmcboot.img
+    local bootbingen=BOOT_BINGEN
 
     # BINGEN
     if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
@@ -108,7 +109,12 @@ function make_2ndboot_for_emmc()
 
     local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
 
-    ${PARENT_DIR}/meta-nexell/tools/BOOT_BINGEN -c ${chip_name} -t 2ndboot -n ${nsih} -i ${bl1_source} -o ${gen_img} -l 0xffff0000 -e 0xffff0000
+    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
+        chip_name="nxp4330"
+        bootbingen=BOOT_BINGEN_NAVI
+    fi
+
+    ${PARENT_DIR}/meta-nexell/tools/${bootbingen} -c ${chip_name} -t 2ndboot -n ${nsih} -i ${bl1_source} -o ${gen_img} -l 0xffff0000 -e 0xffff0000
 }
 
 function make_3rdboot_for_emmc()
@@ -136,6 +142,10 @@ function make_3rdboot_for_emmc()
     else
         load_addr=0x43c00000
         jump_addr=0x43c00000
+    fi
+
+    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
+        chip_name="nxp4330"
     fi
  
     ${PARENT_DIR}/meta-nexell/tools/BOOT_BINGEN -c ${chip_name} -t 3rdboot -n ${nsih} -i ${inout_image}.bin -o singleimage-emmcboot.bin -l ${load_addr} -e ${jump_addr}

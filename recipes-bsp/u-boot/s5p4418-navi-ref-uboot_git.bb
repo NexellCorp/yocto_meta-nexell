@@ -3,9 +3,10 @@ DESCRIPTION = "U-Boot for AVN S5P4418"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://README;md5=587d8d939ae351bb11910921b1eafd42"
 
-SRCREV = "989e8247299ef01d60df992b725df8ea55d7790a"
+SRCREV = "7c2060719c72375f8f1c5be6518e03f6e39a8b9d"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/u-boot/u-boot-2016.01;protocol=git;branch=nexell \
-           file://0001-yocto-bootcmd-add-for-navi.patch"
+           file://0001-bootcmd-add-for-navi-yocto.patch \
+           "
 
 S = "${WORKDIR}/git"
 PV = "NEXELL"
@@ -24,7 +25,7 @@ EXTRA_OEMAKE = "\
 
 do_compile() {
     oe_runmake clean
-    oe_runmake ARCH=arm s5p4418_navi_ref_config
+    oe_runmake ARCH=arm s5p4418_navi_ref_defconfig
     oe_runmake ARCH=arm CROSS_COMPILE="${TOOLCHAIN_CORTEXA9_BIN}arm-cortex_a9-linux-gnueabi-"
 }
 

@@ -1,14 +1,14 @@
-From f2f7b7215c0eaa3d557db3e98c0811f8d5cfd4d0 Mon Sep 17 00:00:00 2001
+From 794800d577d7ead5428a6decad617da385dbc911 Mon Sep 17 00:00:00 2001
 From: choonghyun-Jeon <suker@nexell.co.kr>
-Date: Tue, 12 Jul 2016 11:01:57 +0900
-Subject: [PATCH] yocto bootcmd add for navi
+Date: Mon, 18 Jul 2016 18:57:56 +0900
+Subject: [PATCH] bootcmd add for navi yocto
 
 ---
  include/configs/s5p4418_navi_ref.h | 74 +++++++++++++++++++++++++++++++++++++-
  1 file changed, 73 insertions(+), 1 deletion(-)
 
 diff --git a/include/configs/s5p4418_navi_ref.h b/include/configs/s5p4418_navi_ref.h
-index 10f5748..8067e04 100644
+index 10f5748..3a76f37 100644
 --- a/include/configs/s5p4418_navi_ref.h
 +++ b/include/configs/s5p4418_navi_ref.h
 @@ -273,10 +273,82 @@
@@ -43,11 +43,11 @@ index 10f5748..8067e04 100644
 +                                 "number=0$loop; "                       \
 +                         "else number=$loop; "                           \
 +                         "fi; "                                          \
-+                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-avn_ref.dtb && setexpr success 1; " \
++                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-navi_ref-rev00.dtb && setexpr success 1; " \
 +                         "setexpr loop $loop - 1; "                      \
 +                         "done; "                                        \
 +                 "if test $success -eq 0; then "                         \
-+                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-avn_ref.dtb;"   \
++                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-navi_ref-rev00.dtb;"   \
 +                 "fi; \0"                                                \
 +         "console=" CONFIG_DEFAULT_CONSOLE                               \
 +         "consoleon=set console=" CONFIG_DEFAULT_CONSOLE                 \

@@ -1,4 +1,4 @@
-From 9101122764e51fe0b985e32260e5364ceb8c1936 Mon Sep 17 00:00:00 2001
+From 19456f2901834bd4fa425143b3fe8ca5cba2e3dd Mon Sep 17 00:00:00 2001
 From: choonghyun-Jeon <suker@nexell.co.kr>
 Date: Wed, 22 Jun 2016 17:18:59 +0900
 Subject: [PATCH] bootcmd add for avn yocto
@@ -8,7 +8,7 @@ Subject: [PATCH] bootcmd add for avn yocto
  1 file changed, 73 insertions(+), 1 deletion(-)
 
 diff --git a/include/configs/s5p4418_avn_ref.h b/include/configs/s5p4418_avn_ref.h
-index c34dd1e..52a48bb 100644
+index c34dd1e..85144ef 100644
 --- a/include/configs/s5p4418_avn_ref.h
 +++ b/include/configs/s5p4418_avn_ref.h
 @@ -273,10 +273,82 @@
@@ -43,11 +43,11 @@ index c34dd1e..52a48bb 100644
 +                                 "number=0$loop; "                       \
 +                         "else number=$loop; "                           \
 +                         "fi; "                                          \
-+                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-avn_ref.dtb && setexpr success 1; " \
++                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-avn_ref-rev00.dtb && setexpr success 1; " \
 +                         "setexpr loop $loop - 1; "                      \
 +                         "done; "                                        \
 +                 "if test $success -eq 0; then "                         \
-+                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-avn_ref.dtb;"   \
++                         "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-avn_ref-rev00.dtb;"   \
 +                 "fi; \0"                                                \
 +         "console=" CONFIG_DEFAULT_CONSOLE                               \
 +         "consoleon=set console=" CONFIG_DEFAULT_CONSOLE                 \

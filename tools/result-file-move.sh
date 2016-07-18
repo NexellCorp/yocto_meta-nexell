@@ -102,6 +102,12 @@ function copy_rootfs_image()
     cp ${RESULT_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
 }
 
+function copy_2ndboot_images_navi_only()
+{
+    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi.bin ${RESULT_PATH}
+    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+}
+
 function copy_params_image()
 {
     cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/params.bin ${RESULT_PATH}
@@ -130,3 +136,8 @@ copy_params_image
 copy_partmap_file
 
 post_process
+
+#temporary
+if [ ${BOARD_PREFIX} == "navi" ]; then
+    copy_2ndboot_images_navi_only
+fi
