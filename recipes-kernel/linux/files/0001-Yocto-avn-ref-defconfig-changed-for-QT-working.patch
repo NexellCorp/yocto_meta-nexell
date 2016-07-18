@@ -1,0 +1,55 @@
+From 0765ec4216235edba4aff8337ee83f01d1383f81 Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Fri, 15 Jul 2016 14:43:21 +0900
+Subject: [PATCH] Yocto avn ref defconfig changed for QT working
+
+---
+ arch/arm/configs/s5p4418_avn_ref_defconfig | 35 ++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/arch/arm/configs/s5p4418_avn_ref_defconfig b/arch/arm/configs/s5p4418_avn_ref_defconfig
+index 414c4fa..7ec9e35 100644
+--- a/arch/arm/configs/s5p4418_avn_ref_defconfig
++++ b/arch/arm/configs/s5p4418_avn_ref_defconfig
+@@ -118,3 +118,38 @@ CONFIG_DEBUG_USER=y
+ CONFIG_DEBUG_LL=y
+ CONFIG_EARLY_PRINTK=y
+ CONFIG_CRC_CCITT=y
++# BELOW YOCTO systemd
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=y
++CONFIG_NTFS_FS=y
++CONFIG_NTFS_RW=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_CGROUPS=y
++CONFIG_CGROUP_DEBUG=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_CGROUP_HUGETLB=y
++CONFIG_UNIX=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FHANDLE=y
++CONFIG_AUDIT=y
++CONFIG_AUDITSYSCALL=y
++CONFIG_IPV6=y
++CONFIG_IPV6_ROUTER_PREF=y
++CONFIG_IPV6_ROUTE_INFO=y
++CONFIG_IPV6_OPTIMISTIC_DAD=y
++CONFIG_IPV6_MIP6=y
++# CONFIG_IPV6_SIT is not set
++CONFIG_IPV6_MULTIPLE_TABLES=y
++CONFIG_FANOTIFY=y
++CONFIG_NET=y
++CONFIG_HUGETLBFS=y
++CONFIG_IFB=m
++CONFIG_EMBEDDED=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
+-- 
+2.7.4
+

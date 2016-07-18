@@ -9,12 +9,17 @@ IMAGE_FEATURES += "package-management ssh-server-dropbear tools-debug splash"
 
 IMAGE_INSTALL += " \
         kernel-modules \
-	"
-# Qt Packages
-IMAGE_INSTALL += " \
+        "
+
+WAYLAND_IMAGE_INSTALL = "${@base_contains('DISTRO_FEATURES', 'wayland', \
+    'qtwayland \
+     qtwayland-plugins', '', d)}"
+
+QT_IMAGE_INSTALL_common = " \
      qtbase \
      qtbase-plugins \
      qtbase-fonts \
+     qtbase-examples \
      qtdeclarative \
      qtdeclarative-plugins \
      qtdeclarative-qmlplugins \
@@ -22,22 +27,34 @@ IMAGE_INSTALL += " \
      qtmultimedia \
      qtmultimedia-plugins \
      qtmultimedia-qmlplugins \
+     ${WAYLAND_IMAGE_INSTALL} \
+     glmark2 \
      "
-#     qtwebkit \
-#     qtwebkit-qmlplugins \
-#     qtsvg \
-#     qtsvg-plugins \
-#     qt3d \
-#     qt3d-qmlplugins \
-#     "
 
-# Example application
-IMAGE_INSTALL += " \
+QT_IMAGE_INSTALL_qtwebkit = " \
+     qtwebkit \
+     qtwebkit-qmlplugins \
+     qtsvg \
+     qtsvg-plugins \
+     "
+
+QT_IMAGE_INSTALL_qt3d = "qt3d qt3d-qmlplugins qt3d-examples cinematicexperience"
+
+EXAMPLE_IMAGE_INSTALL = " \
      touchpoints \
      qkeytest \
      qcolorcheck \
+     "
+TOUCH_IMAGE_INSTALL = " \
      tslib \
      tslib-conf \
      tslib-tests \
      tslib-calibrate \
+     "
+
+IMAGE_INSTALL += " \
+     ${QT_IMAGE_INSTALL_common} \
+     ${QT_IMAGE_INSTALL_qt3d} \
+     ${EXAMPLE_IMAGE_INSTALL} \
+     ${TOUCH_IMAGE_INSTALL} \
      "

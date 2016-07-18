@@ -23,4 +23,3 @@ do_install () {
 INSANE_SKIP_${PN} = "already-stripped debug-files"
 PACKAGES = "${PN} libMali.so"
 FILES_${PN} += "${libdir}/driver ${bindir}"
-#ALLOW_EMPTY_${PN} = "1"

@@ -25,8 +25,8 @@ CONF_BBMASK_APPEND_USE_QT = ['DISTRO_FEATURES_remove = "x11"',
                              'REQUIRED_DISTRO_FEATURES = "wayland"',
                              'VIRTUAL-RUNTIME_init_manager = "systemd"',
                              'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
-                             'PACKAGECONFIG_FB_pn-qtbase = "linuxfb"',
-                             'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility eglfs alsa puseaudio fontconfig gles2 glib examples tools openssl"',
+                             'PACKAGECONFIG_FB_pn-qtbase = "kms"',
+                             'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility alsa fontconfig tslib gles2 glib examples tools openssl"',
 			     'LICENSE_FLAGS_WHITELIST = "commercial"']
 
 class parsingForpokyfiles():

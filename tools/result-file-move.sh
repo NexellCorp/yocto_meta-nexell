@@ -77,7 +77,7 @@ function copy_dtb_file()
     else
 	kernel_image_path="${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}"
 	if [ ${BOARD_PREFIX} == "avn" ]; then
-	    file_name_dtb_rev0="s5p4418-avn_ref.dtb"
+	    file_name_dtb_rev0="s5p4418-avn_ref-rev00.dtb"
 	elif [ ${BOARD_PREFIX} == "navi" ]; then
 	    file_name_dtb_rev0="s5p4418-navi_ref-rev00.dtb"
 	fi
