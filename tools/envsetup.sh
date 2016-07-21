@@ -35,6 +35,7 @@ function usage()
     echo "    ex) $0 s5p4418-avn-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
+    echo "    ex) $0 s5p4418-navi-ref tinyui"
 }
 
 function make_result_dir()
@@ -58,7 +59,7 @@ function customize_conf_files()
 
 function customize_recipe_core_files()
 {
-    if [ "${IMAGE_TYPE}" == "tiny" -o "${IMAGE_TYPE}" == "qt" -o "${IMAGE_TYPE}" == "sato" ]
+    if [ "${IMAGE_TYPE}" == "tiny" -o "${IMAGE_TYPE}" == "qt" -o "${IMAGE_TYPE}" == "sato" -o "${IMAGE_TYPE}" == "tinyui" ]
     then
 	${PARENT_DIR}/meta-nexell/tools/recipes-core-filename-change.py ${MACHINE_NAME} ${IMAGE_TYPE}
     else

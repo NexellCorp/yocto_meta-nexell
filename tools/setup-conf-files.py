@@ -20,12 +20,12 @@ CONF_BBLAYER_CHANGE_NEED_LINE = ['poky/meta-yocto-bsp']
 CONF_BBLAYER_CHANGE_KEYWORD = ['meta-nexell']
 
 CONF_BBMASK_APPEND_NOT_USE_QT = ['BBMASK += "|meta-nexell/recipes-qt"']
-CONF_BBMASK_APPEND_USE_QT = ['DISTRO_FEATURES_remove = "x11"', 
-                             'DISTRO_FEATURES_append = " systemd wayland opengl"',
-                             'REQUIRED_DISTRO_FEATURES = "wayland"',
-                             'VIRTUAL-RUNTIME_init_manager = "systemd"',
-                             'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
-                             'PACKAGECONFIG_FB_pn-qtbase = "kms"',
+CONF_BBMASK_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = "x11"', 
+                               'DISTRO_FEATURES_append = " systemd wayland opengl"',
+                               'REQUIRED_DISTRO_FEATURES = "wayland"',
+                               'VIRTUAL-RUNTIME_init_manager = "systemd"',
+                               'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"']
+CONF_BBMASK_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
                              'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility alsa fontconfig tslib gles2 glib examples tools openssl"',
 			     'LICENSE_FLAGS_WHITELIST = "commercial"']
 
@@ -53,8 +53,12 @@ class parsingForpokyfiles():
 
 	if self.imagetype!='qt' :
             bbmaskL = CONF_BBMASK_APPEND_NOT_USE_QT
+            if self.imagetype == 'tinyui' :
+                bbmaskL += CONF_BBMASK_APPEND_USE_WSWL
+
         else :
             bbmaskL = CONF_BBMASK_APPEND_USE_QT
+            bbmaskL += CONF_BBMASK_APPEND_USE_WSWL
 
 	with open(localfilepath, 'a') as file :
 	    file.write("#NEXELL appended code\n")
@@ -69,7 +73,6 @@ class parsingForpokyfiles():
     def getDirMark(self) :
         return self.linuxMark
        
-# end of class EasyRamdumpParserRunner
 def main(arg1, arg2):
     parseMain = parsingForpokyfiles(arg1, arg2)
     parseMain.localConfChange()

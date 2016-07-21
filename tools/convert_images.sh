@@ -34,6 +34,7 @@ function usage()
     echo "    ex) $0 s5p4418-avn-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
+    echo "    ex) $0 s5p4418-navi-ref tinyui"
 }
 
 function get_board_prefix()
@@ -60,7 +61,7 @@ function find_loop_device()
 
 function mkramdisk()
 {
-    if [ ${IMAGE_TYPE} == "qt" -o ${IMAGE_TYPE} == "sato" ]
+    if [ ${IMAGE_TYPE} != "tiny" ]
     then
 	mv ramdisk_tiny.gz ramdisk.gz
     else

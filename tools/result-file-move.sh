@@ -44,6 +44,7 @@ function usage()
     echo "    ex) $0 s5p4418-avn-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
+    echo "    ex) $0 s5p4418-navi-ref tinyui"
 }
 
 function get_board_prefix()
@@ -94,7 +95,7 @@ function copy_dtb_file()
 
 function copy_rootfs_image()
 {
-    if [ ${IMAGE_TYPE} == "qt" -o ${IMAGE_TYPE} == "sato" ]; then
+    if [ ${IMAGE_TYPE} != "tiny" ]; then
         cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}
     fi
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
