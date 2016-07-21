@@ -2,6 +2,7 @@ DESCRIPTION = "Extend core-image by adding Qt5"
 LICENSE = "GPLv2"
 
 inherit core-image populate_sdk_qt5
+require recipes-graphics/images/core-image-weston.bb
 
 SPLASH = "psplash-nexell"
 

@@ -11,4 +11,4 @@ navi_postprocess_common_function() {
     echo "mount -t sysfs none /sys" >> etc/bootscript.sh
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "navi_postprocess_common_function; "
+ROOTFS_POSTPROCESS_COMMAND += "navi_postprocess_common_function;"

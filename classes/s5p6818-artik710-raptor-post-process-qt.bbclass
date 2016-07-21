@@ -10,40 +10,10 @@ artik7_postprocess_about_qt_touch_function() {
     echo "-1960739 66973 -304 -2840406 1011 65956 65536" > etc/pointercal
 }
 
-artik7_postprocess_mali_function() {
-    cd ${IMAGE_ROOTFS}/usr/lib/driver
-    ln -sf libMali.so libEGL.so.1.4; ln -sf libEGL.so.1.4 libEGL.so.1; ln -sf libEGL.so.1 libEGL.so; \
-    ln -sf libMali.so libGLESv1_CM.so.1.1; ln -sf libGLESv1_CM.so.1.1 libGLESv1_CM.so.1; ln -sf libGLESv1_CM.so.1 libGLESv1_CM.so; \
-    ln -sf libMali.so libGLESv2.so.2.0; ln -sf libGLESv2.so.2.0 libGLESv2.so.2; ln -sf libGLESv2.so.2 libGLESv2.so; \
-
-    ln -sf libMali.so libgbm.so.1; ln -sf libgbm.so.1 libgbm.so; \
-    ln -sf libMali.so libwayland-egl.so.1; ln -sf libwayland-egl.so.1 libwayland-egl.so; \
-
-    cd ${IMAGE_ROOTFS}/usr/lib
-    ln -sf libGLESv1_CM.so.1.1  libGLESv1_CM.so.1
-    ln -sf driver/libGLESv1_CM.so.1.1 libGLESv1_CM.so.1.1
-
-    cd ${IMAGE_ROOTFS}/usr/bin
-    chmod +x start_wayland.sh
-
-    cd ${IMAGE_ROOTFS}
-    echo "/usr/lib/driver" > etc/ld.so.conf
-    mkdir -p etc/ld.so.conf.d
-    echo "/usr/lib/driver" > etc/ld.so.conf.d/mali.conf
-
-    cd ${IMAGE_ROOTFS}/etc/init.d
-    echo "#!/bin/sh" > nexell_mali
-    echo "/sbin/ldconfig > /dev/null 2>&1" >> nexell_mali
-    chmod +x nexell_mali
-    
-    cd ${IMAGE_ROOTFS}/etc/rc2.d
-    ln -s ../init.d/weston S11nexell_mali
-}
-
 artik7_postprocess_kernel_module_list_update() {
     cd ${IMAGE_ROOTFS}/etc/modules-load.d
     echo "mali" > modname.conf
     
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "artik7_postprocess_about_qt_touch_function;artik7_postprocess_mali_function;artik7_postprocess_kernel_module_list_update;"
+ROOTFS_POSTPROCESS_COMMAND += "artik7_postprocess_about_qt_touch_function;artik7_postprocess_kernel_module_list_update;"

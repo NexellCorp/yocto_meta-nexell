@@ -35,4 +35,7 @@ RDEPENDS_${PN} += " \
 
 RDEPENDS_${PN} += " \
     wayland-drm-s5p4418 \
+    weston-conf \
+    mx-1.0 \
+    mx-tests \
     "
