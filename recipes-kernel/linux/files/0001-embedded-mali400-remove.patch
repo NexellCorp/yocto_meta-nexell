@@ -1,0 +1,23 @@
+From 9d957a2f1e2a0f5f3214ad29bf59747dbaaa1350 Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Wed, 27 Jul 2016 14:31:53 +0900
+Subject: [PATCH] embedded mali400 remove
+
+---
+ drivers/gpu/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/Makefile b/drivers/gpu/Makefile
+index 66386b4..e9ed439 100644
+--- a/drivers/gpu/Makefile
++++ b/drivers/gpu/Makefile
+@@ -2,5 +2,5 @@
+ # taken to initialize them in the correct order. Link order is the only way
+ # to ensure this currently.
+ obj-$(CONFIG_TEGRA_HOST1X)	+= host1x/
+-obj-y			+= drm/ vga/ arm/
++obj-y			+= drm/ vga/
+ obj-$(CONFIG_IMX_IPUV3_CORE)	+= ipu-v3/
+-- 
+2.7.4
+
