@@ -57,7 +57,13 @@ function get_board_prefix()
 
 function copy_bin_files()
 {
-    python ${PARENT_DIR}/meta-nexell/tools/result-file-move.py "${TOP}/tmp/work/image_where.txt"
+    if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-raptor.bin ${RESULT_PATH}
+    else
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
+    fi
+    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/u-boot.bin ${RESULT_PATH}
+#    python ${PARENT_DIR}/meta-nexell/tools/result-file-move.py "${TOP}/tmp/work/image_where.txt"
 }
 
 function copy_kernel_image()
@@ -121,9 +127,10 @@ function copy_partmap_file()
 
 function post_process()
 {
-    echo -e "\033[40;33m  Maybe you need to convert some binary images                                \033[0m"
-    echo -e "\033[40;33m  You can use below operation                                                 \033[0m"
-    echo -e "\033[40;33m  ex) $ ../meta-nexell/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE}  \033[0m\n"
+    echo -e "\n  Copy Done!"
+    echo -e "\033[40;33m  Maybe you need to convert some binary images                               \033[0m"
+    echo -e "\033[40;33m  You can use below operation                                                \033[0m"
+    echo -e "\033[40;33m  ex) $ ../meta-nexell/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE} \033[0m\n"
 }
 
 check_usage
@@ -138,7 +145,7 @@ copy_partmap_file
 
 post_process
 
-#temporary
+#temporary because bl1 binary size problem
 if [ ${BOARD_PREFIX} == "navi" ]; then
     copy_2ndboot_images_navi_only
 fi

@@ -23,14 +23,11 @@ do_compile () {
     oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="RAPTOR" -j 1
 }
 
-do_mypatch() {    
-    git fetch http://59.13.55.140/gerrit/bl1-artik7 refs/changes/61/2061/1 && git cherry-pick FETCH_HEAD;
-    git fetch http://59.13.55.140/gerrit/bl1-artik7 refs/changes/62/2062/2 && git cherry-pick FETCH_HEAD;
-    git fetch http://59.13.55.140/gerrit/bl1-artik7 refs/changes/33/2133/2 && git cherry-pick FETCH_HEAD
+inherit deploy
+
+do_deploy () {
+    install -d ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/bl1-raptor.bin ${DEPLOY_DIR_IMAGE}
 }
 
-do_install_append() {
-    echo "${WORKDIR}/git/out/bl1-raptor.bin" >> ${BASE_WORKDIR}/image_where.txt
-}
-
-#addtask mypatch after do_unpack before do_patch
+addtask deploy after do_install

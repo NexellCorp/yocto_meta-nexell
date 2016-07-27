@@ -22,6 +22,11 @@ do_compile() {
     oe_runmake CROSS_COMPILE=aarch64-poky-linux- LDFLAGS="" CC="$CC"
 }
 
-do_install_append() {
-    echo "${WORKDIR}/git/u-boot.bin" >> ${BASE_WORKDIR}/image_where.txt
+inherit deploy
+
+do_deploy () {
+    install -d ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/u-boot.bin ${DEPLOY_DIR_IMAGE}
 }
+
+addtask deploy after do_install

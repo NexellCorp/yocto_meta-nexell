@@ -19,21 +19,28 @@ CONF_LOCAL_CHANGE_KEYWORD = ['MACHINE ??= ',
 CONF_BBLAYER_CHANGE_NEED_LINE = ['poky/meta-yocto-bsp']
 CONF_BBLAYER_CHANGE_KEYWORD = ['meta-nexell']
 
-CONF_BBMASK_APPEND_NOT_USE_QT = ['BBMASK += "|meta-nexell/recipes-qt"']
-CONF_BBMASK_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = "x11"', 
-                               'DISTRO_FEATURES_append = " systemd wayland opengl"',
-                               'REQUIRED_DISTRO_FEATURES = "wayland"',
-                               'VIRTUAL-RUNTIME_init_manager = "systemd"',
-                               'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"']
-CONF_BBMASK_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
-                             'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility alsa fontconfig tslib gles2 glib examples tools openssl"',
-			     'LICENSE_FLAGS_WHITELIST = "commercial"']
+CONF_BBMASK = "BBMASK += "
+#Not use QT recipes
+CONF_BBMASK_NOT_USE_QT = "|meta-nexell/recipes-qt"
+#Not use weston & wayland recipes
+CONF_BBMASK_NOT_USE_WSWL = "|meta-nexell/recipes-graphics|meta-nexell/recipes-benchmark"
+#Use QT recipes
+CONF_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
+                      'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility alsa fontconfig tslib gles2 glib examples tools openssl"',
+                      'LICENSE_FLAGS_WHITELIST = "commercial"']
+#Use weston & wayland recipes
+CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = "x11"',
+                        'DISTRO_FEATURES_append = " systemd wayland opengl"',
+                        'REQUIRED_DISTRO_FEATURES = "wayland"',
+                        'VIRTUAL-RUNTIME_init_manager = "systemd"',
+                        'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"']
 
 class parsingForpokyfiles():
     linuxMark = '/'
     boardName = ''
     imagetype = ''
-    bbmaskL = []
+    confBBmask = ''
+    confAppend = []
 
     def __init__(self, arg1, arg2) :
         self.boardName = arg1
@@ -51,18 +58,25 @@ class parsingForpokyfiles():
             print line.replace(CONF_LOCAL_CHANGE_NEED_LINE[2], CONF_LOCAL_CHANGE_KEYWORD[2]),
 
 
-	if self.imagetype!='qt' :
-            bbmaskL = CONF_BBMASK_APPEND_NOT_USE_QT
-            if self.imagetype == 'tinyui' :
-                bbmaskL += CONF_BBMASK_APPEND_USE_WSWL
-
+	if self.imagetype == 'tiny' :
+            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_WSWL + '"'
+            confAppend = []
+        elif self.imagetype == 'qt' :
+            confBBmask = ''
+            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL
+        elif self.imagetype == 'tinyui' :
+            confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + '"'
+            confAppend = CONF_APPEND_USE_WSWL
+        elif self.imagetype == 'sato' :
+            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_WSWL + '"'
+            confAppend = []
         else :
-            bbmaskL = CONF_BBMASK_APPEND_USE_QT
-            bbmaskL += CONF_BBMASK_APPEND_USE_WSWL
+            pass
 
 	with open(localfilepath, 'a') as file :
-	    file.write("#NEXELL appended code\n")
-	    for i in bbmaskL :
+	    file.write("\n#NEXELL appended code\n")
+	    file.write(confBBmask+"\n")
+            for i in confAppend :
                 file.write(i+"\n")
 	
     def bblayerConfChange(self) :

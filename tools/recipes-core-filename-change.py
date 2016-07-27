@@ -17,11 +17,13 @@ class setup_recipes():
           os.chdir('../meta-nexell/recipes-core/images')
 
       def file_name_change(self):
+          splitFileNameL = []
           for root, dirs, files in os.walk('./') :
-              for f in files :
-    	          if self.boardname in f and self.imagetype in f :
+              for f in files:
+                  splitFileNameL = os.path.splitext(f)[0].split('-')
+                  if self.boardname in f and self.imagetype in splitFileNameL :
 	      	      pass
-		  elif "nexell-image" in f and self.imagetype in f :
+		  elif "nexell-image" in f and self.imagetype in splitFileNameL :
 		      pass
 	      	  else :
 		      temp = os.path.splitext(f)

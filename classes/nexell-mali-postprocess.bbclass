@@ -29,4 +29,4 @@ mali_postprocess_function() {
     ln -s ../init.d/weston S11nexell_mali   
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "mali_postprocess_function"
+ROOTFS_POSTPROCESS_COMMAND += "mali_postprocess_function;"

@@ -24,6 +24,11 @@ do_compile () {
     oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="AVN" -j 1
 }
 
-do_install_append() {
-    echo "${WORKDIR}/git/out/bl1-avn.bin" >> ${BASE_WORKDIR}/image_where.txt
+inherit deploy
+
+do_deploy () {
+    install -d ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/bl1-avn.bin ${DEPLOY_DIR_IMAGE}
 }
+
+addtask deploy after do_install

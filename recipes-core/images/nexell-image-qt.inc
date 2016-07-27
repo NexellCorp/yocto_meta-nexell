@@ -28,6 +28,10 @@ QT_IMAGE_INSTALL_common = " \
      qtmultimedia \
      qtmultimedia-plugins \
      qtmultimedia-qmlplugins \
+     qtquick1 \
+     qtquickcontrols \
+     qtquickcontrols2 \
+     qtgraphicaleffects \
      ${WAYLAND_IMAGE_INSTALL} \
      glmark2 \
      "
@@ -39,6 +43,10 @@ QT_IMAGE_INSTALL_qtwebkit = " \
      qtsvg-plugins \
      "
 
+QT_IMAGE_INSTALL_qtwebengine = " \
+     qtwebengine \
+     "
+     
 QT_IMAGE_INSTALL_qt3d = "qt3d qt3d-qmlplugins qt3d-examples cinematicexperience"
 
 EXAMPLE_IMAGE_INSTALL = " \
@@ -56,6 +64,8 @@ TOUCH_IMAGE_INSTALL = " \
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qt3d} \
+     ${QT_IMAGE_INSTALL_qtwebkit} \
+     ${QT_IMAGE_INSTALL_qtwebengine} \
      ${EXAMPLE_IMAGE_INSTALL} \
      ${TOUCH_IMAGE_INSTALL} \
      "
