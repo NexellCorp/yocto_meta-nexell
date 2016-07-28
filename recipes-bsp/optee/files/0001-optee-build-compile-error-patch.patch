@@ -1,0 +1,37 @@
+From e3d7d05d48f4c1f12c58bd19b473977cf53ea0fc Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Thu, 21 Jul 2016 14:22:10 +0900
+Subject: [PATCH] optee build compile error patch
+
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 2ec5c87..3c0c059 100755
+--- a/Makefile
++++ b/Makefile
+@@ -120,7 +120,7 @@ build-bl33 $(BL33)::
+ 	$(ECHO) '  BUILD   $@'
+ 	$(Q)set -e ; cd u-boot-artik7 ; \
+ 	    $(MAKE) artik710_raptor_config ; \
+-	    $(MAKE) CROSS_COMPILE="$(CROSS_COMPILE)"
++	    $(MAKE) CROSS_COMPILE="$(CROSS_COMPILE)" LDFLAGS="" CC="${CC}"
+ 	$(Q)touch ${BL33}
+ 
+ clean-bl33:
+@@ -365,9 +365,9 @@ endif
+ 
+ .PHONY: build-singleimage
+ build-singleimage:: $(singleimage-deps)
+-build-singleimage:: optee_build/gen_singleimage.sh
++build-singleimage:: ./gen_singleimage.sh
+ 	$(ECHO) "  GEN    $(SINGLE_IMG)"
+-	$(Q)optee_build/gen_singleimage.sh $(SINGLE_PARAM)
++	$(Q)./gen_singleimage.sh $(SINGLE_PARAM)
+ 
+ clean-singleimage:
+ 	$(ECHO) "  CLEAN  $@"
+-- 
+2.7.4
+

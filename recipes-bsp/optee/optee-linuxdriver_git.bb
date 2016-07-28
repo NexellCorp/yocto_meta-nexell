@@ -1,4 +1,4 @@
-DESCRIPTION = "OPTEE LINUXDRIVER for artik7"
+DESCRIPTION = "OPTEE LINUXDRIVER"
 inherit nexell-optee-preprocess
 
 LICENSE = "GPLv2+"
@@ -22,7 +22,7 @@ KERNEL_MODULE_AUTOLOAD += "optee optee_armtz"
 OPTEE_LINUXDRIVER_FLAGS = "ARCH=arm64 CROSS_COMPILE=${TARGET_PREFIX} LOCALVERSION= "
 
 PATH_OPTEE_LINUXDRIVER = "${@env_setup(d,"optee-linuxdriver")}"
-PATH_KBUILD_OUTPUT = "${@env_setup(d,"-standard-build")}"
+PATH_KBUILD_OUTPUT = "${@env_setup_kernel(d,"-standard-build")}"
 
 do_compile() {
     export LDFLAGS="-O1 --hash-style=gnu --as-needed"

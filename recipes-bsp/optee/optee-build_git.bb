@@ -1,35 +1,32 @@
-DESCRIPTION = "OPTEE BUILD for artik7"
+DESCRIPTION = "OPTEE BUILD"
 inherit nexell-optee-preprocess
+include optee-secure.inc
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://README.md;md5=871e3be979e189da85a03fe6ba47bbe2"
 
-SRCREV = "9e859b45b131d07f5076d0d77d6b3a65f384b4e3"
+SRCREV = "16ce9bbae832d1e08430e77f2e34f9fe7accb3a6"
 SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_build;protocol=git;branch=artik \
-           file://0001-For-Yocto-optee_build-modified-temporary-commit.patch"
+           file://0001-optee-build-compile-error-patch.patch"
 
 S = "${WORKDIR}/git"
 PV = "NEXELL"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+OPTEE_BUILD_TARGET_MACHINE="s5p6818-artik710-raptor"
 
 COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
 
 inherit pkgconfig
-DEPENDS = "arm-trusted-firmware l-loader optee-os optee-client optee-test u-boot-artik7 bl1-artik7"
+DEPENDS = "arm-trusted-firmware l-loader optee-os optee-client optee-test s5p6818-artik710-raptor-uboot s5p6818-artik710-raptor-bl1"
 
 TOOLCHAIN_32 = "${BASE_WORKDIR}/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-"
 TOOLCHAIN_32_BIN_PATH = "${BASE_WORKDIR}/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin"
 TOOLCHAIN_32_LIB_PATH = "${BASE_WORKDIR}/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/lib"
 TOOLCHAIN_32_LIB_FLAGS = "-L${TOOLCHAIN_32_LIB_PATH}"
 
-COMMON_FLAGS = "PLAT_DRAM_SIZE=1024 PLAT_UART_BASE=0xc00a3000"
-
-OPTEE_BUILD_FLAGS = "${COMMON_FLAGS} CROSS_COMPILE=${TARGET_PREFIX} CROSS_COMPILE32=${TOOLCHAIN_32}"
-OPTEE_OS_FLAGS = "${COMMON_FLAGS} CROSS_COMPILE32=${TOOLCHAIN_32} CROSS_COMPILE=${TARGET_PREFIX}"
-LLOADER_BUILD_FLAGS = "${COMMON_FLAGS} CROSS_COMPILE=${TOOLCHAIN_32}"
-
+COMMON_FLAGS = "PLAT_DRAM_SIZE=1024 PLAT_UART_BASE=0xc00a3000 ${SECURE-OPTEE} CROSS_COMPILE=${TARGET_PREFIX} CROSS_COMPILE32=${TOOLCHAIN_32}"
 
 PATH_OPTEE_BUILD = "${@env_setup(d,"optee-build")}"
 PATH_OPTEE_OS = "${@env_setup(d,"optee-os")}"
@@ -38,13 +35,11 @@ PATH_OPTEE_LINUXDRIVER = "${@env_setup(d,"optee-linuxdriver")}"
 PATH_OPTEE_TEST = "${@env_setup(d,"optee-test")}"
 PATH_ATF = "${@env_setup(d,"arm-trusted-firmware")}"
 PATH_L-LOADER = "${@env_setup(d,"l-loader")}"
-PATH_U-BOOT = "${@env_setup(d,"u-boot-artik7")}"
-PATH_BL1 = "${@env_setup(d,"bl1-artik7")}"
+PATH_U-BOOT = "${@env_setup(d,"${OPTEE_BUILD_TARGET_MACHINE}-uboot")}"
+PATH_BL1 = "${@env_setup(d,"${OPTEE_BUILD_TARGET_MACHINE}-bl1")}"
 PATH_KERNEL_SRC = "${@env_setup(d,"kernel-source")}"
 PATH_KERNEL_BUILD = "${@env_setup(d,"kernel-build-artifacts")}"
 
-
-#To Avoid, async source_dir_path.txt create time each build time
 python do_make_source_dir_pathfile() {
     import commands
     
@@ -59,13 +54,13 @@ python do_make_source_dir_pathfile() {
     recipes_optee_paths = ["optee-build", "optee-os", "optee-client", "optee-linuxdriver", "optee-test"]
     recipes_lloader_paths = ["l-loader"]
     recipes_atf_paths = ["arm-trusted-firmware"]
-    recipes_others = ["bl1-artik7", "u-boot-artik7", "linux-artik7"]
+    recipes_others = ["${OPTEE_BUILD_TARGET_MACHINE}-bl1", "${OPTEE_BUILD_TARGET_MACHINE}-uboot", "linux-${OPTEE_BUILD_TARGET_MACHINE}"]
     
     recipes_all = recipes_optee_paths + recipes_lloader_paths + recipes_atf_paths + recipes_others
 
-    commands.getoutput('echo %s > %s/source_dir_path.txt' % ("For Yocto artik7 optee build",base_workdir))
+    commands.getoutput('echo %s > %s/source_dir_path.txt' % ("For Yocto ${MACHINE_ARCH} optee build",base_workdir))
     for dirname in recipes_all :
-        if dirname == "linux-artik7" :
+        if dirname == "linux-${OPTEE_BUILD_TARGET_MACHINE}" :
             commands.getoutput('echo %s >> %s/source_dir_path.txt' % (kernel_src_path, base_workdir))
             commands.getoutput('echo %s >> %s/source_dir_path.txt' % (kernel_build_path, base_workdir))
         else :
@@ -85,26 +80,24 @@ do_make_symlink() {
     ln -sf "${PATH_KERNEL_BUILD}" ${S}/linux-artik7
 }
 
-do_mypatch() {
-    git fetch http://59.13.55.140/gerrit/artik7/optee_build refs/changes/77/2077/4 && git cherry-pick FETCH_HEAD
-}
-
 do_compile() {
     export PATH=${TOOLCHAIN_32_BIN_PATH}:$PATH
+    export LDFLAGS=""
     
     oe_runmake -f ${WORKDIR}/git/Makefile clean
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_BUILD_FLAGS} LDFLAGS="" CC="$CC" build-bl1 -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${LLOADER_BUILD_FLAGS} build-lloader -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile build-bl1 -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-lloader -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_OS_FLAGS} LDFLAGS="" CC="$CC" build-bl32 -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl32 -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_BUILD_FLAGS} LDFLAGS="" CC="$CC" build-fip -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_BUILD_FLAGS} LDFLAGS="" CC="$CC" build-fip-loader -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_BUILD_FLAGS} LDFLAGS="" CC="$CC" build-fip-secure -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_BUILD_FLAGS} LDFLAGS="" CC="$CC" build-fip-nonsecure -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-loader -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-secure -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-nonsecure -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_BUILD_FLAGS} LDFLAGS="" CC="$CC" build-optee-client
-    oe_runmake -f ${WORKDIR}/git/Makefile ${OPTEE_BUILD_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" CFLAGS="" build-optee-test
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-optee-client
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" CFLAGS="" build-optee-test
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-singleimage -j8
 }
 
 do_install() {
@@ -115,15 +108,23 @@ do_install() {
 
     install -d ${D}/usr/bin
     install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/bin/tee-supplicant ${D}/usr/bin
-    install -m 0755 ${PATH_OPTEE_TEST}/out/xtest/xtest ${D}/usr/bin
+#    install -m 0755 ${PATH_OPTEE_TEST}/out/xtest/xtest ${D}/usr/bin
 
     install -d ${D}/usr/lib
     install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/lib/* ${D}/usr/lib        
-    
 
     cd ${PATH_OPTEE_TEST}/out/ta
-    find . -name "*.ta" -exec cp {} ${D}/lib/optee_armtz \;
-    chmod 444 ${D}/lib/optee_armtz/*.ta    
+#    find . -name "*.ta" -exec cp {} ${D}/lib/optee_armtz \;
+#    chmod 444 ${D}/lib/optee_armtz/*.ta    
+}
+
+inherit deploy
+
+do_deploy () {
+    install -d ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/optee_build/result/fip-loader.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/optee_build/result/fip-nonsecure.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/optee_build/result/fip-secure.bin ${DEPLOY_DIR_IMAGE}
 }
 
 FILES_${PN} += " \
@@ -134,4 +135,4 @@ FILES_${PN} += " \
 
 addtask make_source_dir_pathfile before do_configure
 addtask make_symlink after do_configure before do_compile
-addtask mypatch after do_unpack before do_patch
+addtask deploy after do_install

@@ -69,6 +69,8 @@ function customize_recipe_core_files()
 
 function copy_build_scripts()
 {
+    local secure=
+    
     #temp ARM 32bit build toolchain copy
     cp -a ${PARENT_DIR}/meta-nexell/tools/toolchain_setup.sh .
     ./toolchain_setup.sh
@@ -77,7 +79,35 @@ function copy_build_scripts()
     cp -a ${PARENT_DIR}/meta-nexell/tools/bitbake_pre_operation_${MACHINE_NAME}.sh .
     ./bitbake_pre_operation_${MACHINE_NAME}.sh
 
+#    #for secure boot support
+    if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then	
+#	while :
+#	do
+#	    if [ "$ERR_MSG" != "" ]; then
+#		echo "Error: $ERR_MSG"
+#		echo ""
+#	    fi
+
+#	    echo -e "\033[40;33m Artik710-raptor board support secure boot, Please select build option  \033[0m"
+#	    echo -e "\033[40;33m     1:       Secure build  \033[0m"
+#	    echo -e "\033[40;33m     2:   Non-Secure build  \033[0m"
+#	    ERR_MSG=""
+
+#	    read -p " Select : " SEL
+#	    case $SEL in
+#		1) echo "SECURE ON" > secure.cfg; secure="ON"; break ;;
+#		2) echo "SECURE OFF" > secure.cfg; secure="OFF"; break ;;
+#		*) ERR_MSG="Please enter a valid option!"
+#	    esac
+#   	done
+	# default secure off
+        echo "SECURE OFF" > secure.cfg; secure="OFF"
+        python ${PARENT_DIR}/meta-nexell/tools/secure-setup.py ${secure} ${MACHINE_NAME}
+
+    fi
+
     touch tmp/work/source_dir_path.txt
+    touch tmp/work/source_kernel_dir_path.txt
 
     echo -e "\033[40;33m                                                        \033[0m"
     echo -e "\033[40;33m You are now ready to run the bitbake command for NEXELL\033[0m"

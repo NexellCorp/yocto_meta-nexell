@@ -20,11 +20,11 @@ EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
 
-inherit deploy
-
 do_compile () {
     oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="NAVI" CHIPNAME="NXP4330" -j 1
 }
+
+inherit deploy
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}

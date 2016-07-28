@@ -1,0 +1,25 @@
+From b2fb9ddc54d951b6b4e0238696942d2c08800dde Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Tue, 26 Jul 2016 10:58:04 +0900
+Subject: [PATCH] ATF SECURE_ON flags setting
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index eef998f..189d3f4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -254,7 +254,7 @@ CFLAGS			+=	-DPLAT_DRAM_SIZE=${PLAT_DRAM_SIZE}
+ ASFLAGS			+=	-DPLAT_DRAM_SIZE=${PLAT_DRAM_SIZE}
+ endif
+ 
+-ifneq (${SECURE_ON},)
++ifeq (${SECURE_ON},1)
+ CFLAGS			+=	-DSECURE_ON
+ endif
+ 
+-- 
+2.7.4
+

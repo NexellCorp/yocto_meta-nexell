@@ -3,7 +3,7 @@ DESCRIPTION = "U-Boot for artik710-raptor"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://README;md5=587d8d939ae351bb11910921b1eafd42"
 
-SRCREV = "3d4ce985752093914607424f967bca558df74fab"
+SRCREV = "8b025dab7cbeb53bb5f5fdb9e396335c3cc4dee3"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/u-boot/u-boot-2016.01;protocol=git;branch=artik"
 
 S = "${WORKDIR}/git"

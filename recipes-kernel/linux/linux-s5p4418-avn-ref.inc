@@ -55,5 +55,5 @@ do_compile() {
     oe_runmake ${KERNEL_COMMON_FLAGS} dtbs
     oe_runmake ${KERNEL_COMMON_FLAGS} modules -j8
     
-    oe_runmake ${KERNEL_COMMON_FLAGS} modules_install INSTALL_MOD_PATH=${D}/lib/modules INSTALL_MOD_STRIP=1
+    oe_runmake ${KERNEL_COMMON_FLAGS} modules_install INSTALL_MOD_PATH=${D} INSTALL_MOD_STRIP=1
 }

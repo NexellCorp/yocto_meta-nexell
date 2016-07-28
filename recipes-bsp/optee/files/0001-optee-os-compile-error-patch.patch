@@ -1,9 +1,8 @@
-From 4ee282f150d5cb6f8c50d3f27b91eff6e7918983 Mon Sep 17 00:00:00 2001
+From 3895fb9d5866bbd0acefb93ce6c796b9e45c9ff7 Mon Sep 17 00:00:00 2001
 From: choonghyun-Jeon <suker@nexell.co.kr>
-Date: Fri, 17 Jun 2016 09:16:04 +0900
-Subject: [PATCH] For Yocto temporary commit
+Date: Thu, 21 Jul 2016 14:25:23 +0900
+Subject: [PATCH] optee os compile error patch
 
-Change-Id: Ib71005bcbefd89f3e647dbd55dfc5d1abe02f609
 ---
  mk/gcc.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

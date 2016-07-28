@@ -3,7 +3,7 @@ DESCRIPTION = "l-loader for artik7"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=e8c1458438ead3c34974bc0be3a03ed6"
 
-SRCREV = "8f662c7f65cd88be89876325d0cc7b2c6c60014e"
+SRCREV = "65e8ffa03db8eb9955ba3e986ed6d6a31459ea52"
 SRC_URI = "git://git.nexell.co.kr/nexell/secure/l-loader;protocol=git;branch=artik"
 
 S = "${WORKDIR}/git"
@@ -16,12 +16,8 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
 
-do_mypatch() {
-    git fetch http://59.13.55.140/gerrit/artik7/l-loader refs/changes/34/2134/1 && git cherry-pick FETCH_HEAD
-}
-
 do_compile() {
     :
 }
 
-addtask mypatch after do_unpack before do_patch
+#addtask mypatch after do_unpack before do_patch

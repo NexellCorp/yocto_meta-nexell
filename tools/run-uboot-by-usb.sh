@@ -39,10 +39,10 @@ function get_board_prefix()
 
 function run_by_usb()
 {
-    if [ ${MACHINE_NAME} == "s5p6818-artik710-raptor" ]; then
-	sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-64.txt -b bl1-raptor.bin
+    if [ ${BOARD_SOCNAME} == "s5p6818" ]; then	
+	sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-32.txt -b bl1-raptor.bin
         sleep 1
-        sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-64.txt -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+        sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-32.txt -f u-boot.bin -a 0x43c00000 -j 0x43c00000
     else
 	if [ ${BOARD_PREFIX} == "avn" ]; then
 	    sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt -b bl1-${BOARD_PREFIX}.bin

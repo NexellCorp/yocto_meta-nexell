@@ -1,8 +1,9 @@
-#SECTION = "bootloader"
+include bl1-secure.inc
+
 LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://README;md5=754608f69d5791d96a0a96281ae48814"
-SRCREV = "3e32543bc3cbdac6960b72712005b18a0210d0c8"
+SRCREV = "80f53f95bcac3813d0ed7c7897b858753eeaa772"
 SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p6818;protocol=git;branch=artik"
 
 S = "${WORKDIR}/git"
@@ -20,7 +21,7 @@ EXTRA_OEMAKE = "\
 "
 
 do_compile () {
-    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="RAPTOR" -j 1
+    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="RAPTOR" ${SECURE-BL1} -j 1
 }
 
 inherit deploy

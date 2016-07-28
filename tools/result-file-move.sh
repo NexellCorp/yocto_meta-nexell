@@ -59,6 +59,9 @@ function copy_bin_files()
 {
     if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-raptor.bin ${RESULT_PATH}
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-loader.bin ${RESULT_PATH}
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-nonsecure.bin ${RESULT_PATH}
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-secure.bin ${RESULT_PATH}	
     else
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
     fi
@@ -127,10 +130,13 @@ function copy_partmap_file()
 
 function post_process()
 {
-    echo -e "\n  Copy Done!"
-    echo -e "\033[40;33m  Maybe you need to convert some binary images                               \033[0m"
-    echo -e "\033[40;33m  You can use below operation                                                \033[0m"
-    echo -e "\033[40;33m  ex) $ ../meta-nexell/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE} \033[0m\n"
+    if [ -f secure.cfg ]; then
+	cp secure.cfg ${RESULT_PATH}
+    fi
+	echo -e "\n  Copy Done!"
+    echo -e "\033[40;33m  Maybe you need to convert some binary images                                \033[0m"
+    echo -e "\033[40;33m  You can use below operation                                                 \033[0m"
+    echo -e "\033[40;33m  ex) $ ../meta-nexell/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE}  \033[0m\n"
 }
 
 check_usage
@@ -139,6 +145,7 @@ get_board_prefix
 copy_bin_files
 copy_kernel_image
 copy_dtb_file
+#copy_modules_image
 copy_rootfs_image
 copy_params_image
 copy_partmap_file
