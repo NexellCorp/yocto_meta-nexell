@@ -16,7 +16,7 @@ SRC_URI = "file://mx-tests.tar.bz2"
 
 S = "${WORKDIR}/mx-tests"
 
-COMPATIBLE_MACHINE = "s5p4418-navi-ref"
+COMPATIBLE_MACHINE = "(s5p4418-navi-ref|s5p4418-avn-ref)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 FILES_${PN} += " \

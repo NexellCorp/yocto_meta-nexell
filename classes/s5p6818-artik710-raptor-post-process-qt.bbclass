@@ -6,8 +6,6 @@ artik7_postprocess_about_qt_touch_function() {
     echo "export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/plugins/platforms" >> etc/profile.d/tslib.sh
     echo "export TSLIB_CALIBFILE=/etc/pointercal" >> etc/profile.d/tslib.sh
     echo "export POINTERCAL_FILE=/etc/pointercal" >> etc/profile.d/tslib.sh
-
-    echo "-1960739 66973 -304 -2840406 1011 65956 65536" > etc/pointercal
 }
 
 artik7_postprocess_kernel_module_list_update() {

@@ -1,8 +1,0 @@
-  /home/suker/YoctoPrj/jethro_qt/meta-nexell/recipes-graphics/examples-gst:
-  합계 24
-  drwxrwxr-x 2 suker suker 4096  7월 20 13:35 .
-  drwxrwxr-x 9 suker suker 4096  7월 20 20:40 ..
-  -rw-rw-r-- 1 suker suker 1688  7월 28 11:40 gst-plugins-camera_git.bb
-  -rw-rw-r-- 1 suker suker  946  7월 20 13:35 nx-drm-allocator_git.bb
-  -rw-rw-r-- 1 suker suker  966  7월 20 13:35 nx-gst-meta_git.bb
-  -rw-rw-r-- 1 suker suker 1061  7월 20 13:35 nx-v4l2_git.bb

@@ -1,4 +1,4 @@
-DESCRIPTION = "gst-plugins-camera-s5p6818"
+DESCRIPTION = "gst-plugins-camera"
 
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=85c196593bd0c183d13480e405a91969"

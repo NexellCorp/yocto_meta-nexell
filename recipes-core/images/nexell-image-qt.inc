@@ -59,6 +59,7 @@ TOUCH_IMAGE_INSTALL = " \
      tslib-conf \
      tslib-tests \
      tslib-calibrate \
+     tslib-nexell \
      "
 
 IMAGE_INSTALL += " \
