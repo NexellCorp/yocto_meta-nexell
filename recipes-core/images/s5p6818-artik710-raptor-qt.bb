@@ -1,10 +1,11 @@
 # Base this image on nexell-image-qt
-include nexell-image-qt.inc
+require nexell-image-qt.inc
+inherit nexell-mali-postprocess
 inherit s5p6818-artik710-raptor-post-process
 inherit s5p6818-artik710-raptor-post-process-qt
-inherit nexell-mali-postprocess
 
-LICENSE = "LGPLv2.1"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d690"
 
 IMAGE_INSTALL += " \
                optee-linuxdriver \

@@ -14,8 +14,7 @@ inherit packagegroup
 PACKAGES = " \
     ${PN} \
     "
-
-RDEPENDS_${PN} = " \
+RDEPENDS_${PN} += " \
     wayland-drm-s5p6818 \
     weston-conf \
     mx-1.0 \

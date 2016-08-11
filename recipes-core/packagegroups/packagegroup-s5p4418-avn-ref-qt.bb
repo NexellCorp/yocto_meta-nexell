@@ -26,7 +26,7 @@ RDEPENDS_${PN} = " \
 RDEPENDS_${PN} += " \
     helloworld-nexell \
     helloworld-nexell-module \
-    gst-plugins-camera-s5p6818 \
+    gst-plugins-camera \
     nx-drm-allocator \
     nx-gst-meta \
     nx-v4l2 \
