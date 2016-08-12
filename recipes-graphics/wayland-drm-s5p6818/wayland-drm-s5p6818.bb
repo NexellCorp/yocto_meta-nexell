@@ -9,7 +9,7 @@ SRC_URI += " \
 
 S = "${WORKDIR}"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_install () {

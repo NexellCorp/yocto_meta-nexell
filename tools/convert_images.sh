@@ -145,7 +145,7 @@ function mkbootimg()
     echo "mkbootimg"
     echo "================================================="
 
-    if [ "${BOARD_NAME}" == "artik710-raptor" ]
+    if [ "${BOARD_SOCNAME}" == "s5p6818" ]
     then
         ${META_NEXELL_TOOLS_DIR}/mkimage -A arm64 -O linux -T kernel -C none -a 0x40080000 -e 0x40080000 -n 'linux-4.1' -d Image ./boot/uImage
     elif [ "${BOARD_PREFIX}" == "avn" ]
@@ -245,7 +245,7 @@ function make_3rdboot_for_emmc()
  
     local load_addr=
     local jump_addr=
-    if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+    if [ "${BOARD_NAME}" == "s5p6818" ]; then
         case "${MEM_SIZE}" in
             512)  load_addr=0x5fc00000; jump_addr=0x5fe00000 ;;
             1024) load_addr=0x7fc00000; jump_addr=0x7fe00000 ;;
@@ -342,7 +342,11 @@ function gen_loader() {
     local file_name=
 
     if [ "${chip_name}" == "s5p6818" ]; then
-	file_name=raptor-64-secure.txt
+        if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+	    file_name=raptor-64-secure.txt
+	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+	    file_name=avn-64-secure.txt
+	fi
     else
 	echo "error! is not s5p6818"
 	#temporary
@@ -428,7 +432,11 @@ function gen_secure() {
     local bl1_source=
     local file_name=
     if [ "${chip_name}" == "s5p6818" ]; then
-	file_name=${BOARD_POSTFIX}-64.txt
+	if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+	    file_name=${BOARD_POSTFIX}-64.txt
+	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+	    file_name=avn-64.txt
+	fi
     else
 	echo "error! is not s5p6818"
 	#temporary
@@ -489,7 +497,11 @@ function gen_nonsecure() {
     local bl1_source=
     local file_name=
     if [ "${chip_name}" == "s5p6818" ]; then
-	file_name=${BOARD_POSTFIX}-64.txt
+	if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+	    file_name=${BOARD_POSTFIX}-64.txt
+	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+	    file_name=avn-64.txt
+	fi
     else
 	echo "error! is not s5p6818"
 	#temporary

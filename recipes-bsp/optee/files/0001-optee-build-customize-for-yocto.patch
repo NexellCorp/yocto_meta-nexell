@@ -1,0 +1,59 @@
+From eacf7f328981721a8e413b8eaec59bf14b2625d9 Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Fri, 12 Aug 2016 14:31:11 +0900
+Subject: [PATCH] optee build customize for yocto
+
+Change-Id: Ie271e4609514a631549ec8e1d02b3ba222f957cf
+---
+ Makefile | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 2ec5c87..657c72d 100755
+--- a/Makefile
++++ b/Makefile
+@@ -9,6 +9,9 @@ PLAT_UART_BASE ?= 0xC00A3000
+ PLAT_DRAM_SIZE ?= 1024
+ BL31_ON_SRAM = 1
+ 
++YOCTO_DEFCONFIG =
++YOCTO_DTB =
++
+ ifeq ($(V),1)
+   Q :=
+   ECHO := @:
+@@ -119,8 +122,8 @@ build-bl33:: $(aarch64-linux-gnu-gcc)
+ build-bl33 $(BL33)::
+ 	$(ECHO) '  BUILD   $@'
+ 	$(Q)set -e ; cd u-boot-artik7 ; \
+-	    $(MAKE) artik710_raptor_config ; \
+-	    $(MAKE) CROSS_COMPILE="$(CROSS_COMPILE)"
++	    $(MAKE) ${YOCTO_DEFCONFIG} ; \
++	    $(MAKE) CROSS_COMPILE="$(CROSS_COMPILE)" LDFLAGS="" CC="${CC}"
+ 	$(Q)touch ${BL33}
+ 
+ clean-bl33:
+@@ -265,7 +268,7 @@ clean-lloader:
+ # each time it is run
+ 
+ LINUX = linux/arch/arm64/boot/Image
+-DTB = nexell/s5p6818-artik710-raptor.dtb
++DTB = nexell/${YOCTO_DTB}
+ DTB2 = linux/arch/arm64/boot/dts/$(DTB)
+ # Config fragments to merge with the default kernel configuration
+ KCONFIGS += linux/arch/arm64/configs/s5p6818_drone_defconfig
+@@ -365,9 +368,9 @@ endif
+ 
+ .PHONY: build-singleimage
+ build-singleimage:: $(singleimage-deps)
+-build-singleimage:: optee_build/gen_singleimage.sh
++build-singleimage:: ./gen_singleimage.sh
+ 	$(ECHO) "  GEN    $(SINGLE_IMG)"
+-	$(Q)optee_build/gen_singleimage.sh $(SINGLE_PARAM)
++	$(Q)./gen_singleimage.sh $(SINGLE_PARAM)
+ 
+ clean-singleimage:
+ 	$(ECHO) "  CLEAN  $@"
+-- 
+2.7.4
+

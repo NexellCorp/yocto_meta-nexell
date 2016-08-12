@@ -70,14 +70,12 @@ function customize_recipe_core_files()
 function copy_build_scripts()
 {
     local secure=
+
+    mkdir -p tmp/work
     
     #temp ARM 32bit build toolchain copy
     cp -a ${PARENT_DIR}/meta-nexell/tools/toolchain_setup.sh .
     ./toolchain_setup.sh
-
-    mkdir -p tmp/work 
-    cp -a ${PARENT_DIR}/meta-nexell/tools/bitbake_pre_operation_${MACHINE_NAME}.sh .
-    ./bitbake_pre_operation_${MACHINE_NAME}.sh
 
 #    #for secure boot support
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then	
@@ -108,6 +106,9 @@ function copy_build_scripts()
 
     touch tmp/work/source_dir_path.txt
     touch tmp/work/source_kernel_dir_path.txt
+    
+    cp -a ${PARENT_DIR}/meta-nexell/tools/bitbake_pre_operation_${MACHINE_NAME}.sh .
+    ./bitbake_pre_operation_${MACHINE_NAME}.sh
 
     echo -e "\033[40;33m                                                        \033[0m"
     echo -e "\033[40;33m You are now ready to run the bitbake command for NEXELL\033[0m"

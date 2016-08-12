@@ -1,4 +1,4 @@
-DESCRIPTION = "l-loader for artik7"
+DESCRIPTION = "l-loader for s5p6818"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=e8c1458438ead3c34974bc0be3a03ed6"
@@ -14,7 +14,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref)"
 
 do_compile() {
     :

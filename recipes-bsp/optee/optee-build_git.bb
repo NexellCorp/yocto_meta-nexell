@@ -6,8 +6,9 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://README.md;md5=871e3be979e189da85a03fe6ba47bbe2"
 
 SRCREV = "16ce9bbae832d1e08430e77f2e34f9fe7accb3a6"
-SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_build;protocol=git;branch=artik \
-           file://0001-optee-build-compile-error-patch.patch"
+SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_build;protocol=git;branch=nexell \
+           file://0001-optee-build-customize-for-yocto.patch \
+          "
 
 S = "${WORKDIR}/git"
 PV = "NEXELL"
@@ -16,17 +17,20 @@ PR = "0.1"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 OPTEE_BUILD_TARGET_MACHINE=""
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref)"
 
 inherit pkgconfig
-DEPENDS = "arm-trusted-firmware l-loader optee-os optee-client optee-test s5p6818-artik710-raptor-uboot s5p6818-artik710-raptor-bl1"
+DEPENDS = "arm-trusted-firmware l-loader optee-os optee-client optee-test ${OPTEE_BUILD_TARGET_MACHINE}-uboot ${OPTEE_BUILD_TARGET_MACHINE}-bl1"
 
 TOOLCHAIN_32 = "${BASE_WORKDIR}/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-"
 TOOLCHAIN_32_BIN_PATH = "${BASE_WORKDIR}/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin"
 TOOLCHAIN_32_LIB_PATH = "${BASE_WORKDIR}/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/lib"
 TOOLCHAIN_32_LIB_FLAGS = "-L${TOOLCHAIN_32_LIB_PATH}"
 
-COMMON_FLAGS = "PLAT_DRAM_SIZE=1024 PLAT_UART_BASE=0xc00a3000 ${SECURE-OPTEE} CROSS_COMPILE=${TARGET_PREFIX} CROSS_COMPILE32=${TOOLCHAIN_32}"
+OPTEE_KERNEL_DEFCONFIG-s5p6818-avn-ref ?= "s5p6818_arm64_avn_ref_defconfig"
+OPTEE_KERNEL_DEFCONFIG-s5p6818-artik710-raptor ?= "artik710_raptor_defconfig"
+
+COMMON_FLAGS = "PLAT_DRAM_SIZE=1024 PLAT_UART_BASE=0xc00a3000 ${SECURE-OPTEE} CROSS_COMPILE=${TARGET_PREFIX} CROSS_COMPILE32=${TOOLCHAIN_32} YOCTO_DTB=${OPTEE_BUILD_TARGET_MACHINE}.dtb YOCTO_DEFCONFIG=${OPTEE_KERNEL_DEFCONFIG-${OPTEE_BUILD_TARGET_MACHINE}}"
 
 PATH_OPTEE_BUILD = "${@env_setup(d,"optee-build")}"
 PATH_OPTEE_OS = "${@env_setup(d,"optee-os")}"
@@ -84,8 +88,8 @@ do_compile() {
     export PATH=${TOOLCHAIN_32_BIN_PATH}:$PATH
     export LDFLAGS=""
     
-    oe_runmake -f ${WORKDIR}/git/Makefile clean
-    oe_runmake -f ${WORKDIR}/git/Makefile build-bl1 -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} clean
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl1 -j8
     oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-lloader -j8
 
     oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl32 -j8

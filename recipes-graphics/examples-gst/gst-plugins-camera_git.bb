@@ -12,7 +12,7 @@ PV = "NEXELL"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref|s5p6818-avn-ref|s5p4418-navi-ref)"
 
 DEPENDS = "nx-v4l2 nx-drm-allocator nx-gst-meta gstreamer1.0 gstreamer1.0-plugins-base glib-2.0"
 

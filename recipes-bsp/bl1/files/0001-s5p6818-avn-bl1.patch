@@ -1,0 +1,43 @@
+From b9038ba9a6e66243cbd72b695f839e44e7514777 Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Fri, 12 Aug 2016 13:46:11 +0900
+Subject: [PATCH] s5p6818 avn bl1
+
+Change-Id: I5f084c9eedaf27db395d928986dda69d1469621f
+---
+ config.mak       | 4 ++--
+ src/secondboot.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/config.mak b/config.mak
+index 4f253ff..bea2de1 100644
+--- a/config.mak
++++ b/config.mak
+@@ -49,9 +49,9 @@ SUPPORT_UART_BOOT		= n
+ #BOARD				= SVT
+ #BOARD				= ASB
+ #BOARD				= DRONE
+-#BOARD				= AVN
++BOARD				?= AVN
+ #BOARD				= BF700
+-BOARD				?= RAPTOR
++#BOARD				?= RAPTOR
+ 
+ # secure boot
+ SECURE_ON			?= 0
+diff --git a/src/secondboot.c b/src/secondboot.c
+index 96d6c23..6c5eaa8 100644
+--- a/src/secondboot.c
++++ b/src/secondboot.c
+@@ -158,7 +158,7 @@ void BootMain(U32 CPUID)
+ 	U32 signature, isResume = 0;
+ 	U32 debugCH = 0;
+ 
+-#ifdef RAPTOR_PMIC_INIT
++#if 1
+ 	debugCH = 3;
+ #endif
+ 
+-- 
+2.7.4
+

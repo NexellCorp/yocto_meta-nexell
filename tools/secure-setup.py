@@ -6,12 +6,18 @@ import os
 import fileinput
 
 OPTEE_BUILD_BB_FILE = "../meta-nexell/recipes-bsp/optee/optee-build_git.bb"
+OPTEE_LINUXDRIVER_BB_FILE = "../meta-nexell/recipes-bsp/optee/optee-linuxdriver_git.bb"
 OPTEE_SECURE_INC_FILE = "../meta-nexell/recipes-bsp/optee/optee-secure.inc"
 BL1_SECURE_INC_FILE = "../meta-nexell/recipes-bsp/bl1/bl1-secure.inc"
 
 def optee_build_setup(machineName) :
-    for line in fileinput.input(OPTEE_BUILD_BB_FILE, inplace = 1): 
-        print line.replace("OPTEE_BUILD_TARGET_MACHINE=\"\"", "OPTEE_BUILD_TARGET_MACHINE=\""+machineName+"\""),
+    temp = "OPTEE_BUILD_TARGET_MACHINE=\""+machineName+"\""
+    os.system('sed -i "/OPTEE_BUILD_TARGET_MACHINE=/d" ' + OPTEE_BUILD_BB_FILE)
+    f = open(OPTEE_BUILD_BB_FILE,'a')
+    f.write(temp)
+    f.close()
+    #    for line in fileinput.input(OPTEE_BUILD_BB_FILE, inplace = 1): 
+    #        print line.replace("OPTEE_BUILD_TARGET_MACHINE=\"\"", "OPTEE_BUILD_TARGET_MACHINE=\""+machineName+"\""),
 
 def optee_secure_setup(option) :
     if option == "ON":

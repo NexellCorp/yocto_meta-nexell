@@ -12,6 +12,6 @@ MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 MACHINE_EXTRA_RRECOMMENDS += "kernel-modules kernel-devicetree"
 
 DEFAULTTUNE_s5p6818-artik710-raptor ?= "aarch64"
-#DEFAULTTUNE_artik530-raptor ?= "armv7a"
+DEFAULTTUNE_s5p6818-avn-ref ?= "aarch64"
 DEFAULTTUNE_s5p4418-avn-ref ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p4418-navi-ref ?= "cortexa9hf-neon"

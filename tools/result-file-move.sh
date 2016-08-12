@@ -57,8 +57,12 @@ function get_board_prefix()
 
 function copy_bin_files()
 {
-    if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-raptor.bin ${RESULT_PATH}
+    if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
+        if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+	    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-raptor.bin ${RESULT_PATH}
+	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+	    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-avn.bin ${RESULT_PATH}
+	fi
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-loader.bin ${RESULT_PATH}
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-nonsecure.bin ${RESULT_PATH}
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-secure.bin ${RESULT_PATH}	
@@ -80,10 +84,13 @@ function copy_dtb_file()
     local file_name_dtb_rev1=
     local kernel_image_path=
     
-    if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+    if [ "${MACHINE_NAME}" == "s5p6818-artik710-raptor" ]; then
 	file_name_dtb_rev0="s5p6818-artik710-raptor-rev00.dtb"
 	file_name_dtb_rev1="s5p6818-artik710-raptor-rev01.dtb"
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}
+    elif [ "${MACHINE_NAME}" == "s5p6818-avn-ref" ]; then
+	file_name_dtb_rev0="s5p6818-avn-ref*.dtb"
+	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}    
     else
 	kernel_image_path="${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}"
 	if [ ${BOARD_PREFIX} == "avn" ]; then
