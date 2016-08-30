@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=df9b0758c6dcd94963adedfa6f9f0580"
 
 SRCREV = "d14636e5d15a9de74710b0c05781813a863cb5df"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-drm-allocator;protocol=git;branch=artik"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-drm-allocator;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
 
@@ -12,7 +12,6 @@ PV = "NEXELL"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref|s5p6818-avn-ref|s5p4418-navi-ref)"
 
 inherit autotools
 

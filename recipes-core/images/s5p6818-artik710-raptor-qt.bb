@@ -12,4 +12,7 @@ IMAGE_INSTALL += " \
                optee-build \
                "
 
-IMAGE_INSTALL_append = "packagegroup-s5p6818-artik710-raptor-qt"
+IMAGE_INSTALL += "\    
+    packagegroup-nexell-common \
+    packagegroup-s5p6818-artik710-raptor-qt \
+    "

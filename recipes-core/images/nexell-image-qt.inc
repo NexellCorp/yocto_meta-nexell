@@ -6,7 +6,7 @@ require recipes-graphics/images/core-image-weston.bb
 
 SPLASH = "psplash-nexell"
 
-IMAGE_FEATURES += "package-management ssh-server-dropbear tools-debug splash"
+IMAGE_FEATURES += "package-management ssh-server-dropbear splash"
 
 IMAGE_INSTALL += " \
         kernel-modules \

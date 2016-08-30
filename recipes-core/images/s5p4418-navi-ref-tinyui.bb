@@ -5,4 +5,7 @@ inherit nexell-mali-postprocess
 
 LICENSE = "LGPLv2.1"
 
-IMAGE_INSTALL_append = "packagegroup-s5p4418-navi-ref-tinyui"
+IMAGE_INSTALL += "\    
+    packagegroup-nexell-common \
+    packagegroup-s5p4418-navi-ref-tinyui \
+    "

@@ -1,0 +1,24 @@
+From 58c92582674872dee361faca7e4b2f2af0df33a1 Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Wed, 17 Aug 2016 14:45:01 +0900
+Subject: [PATCH] nx-video-api install error fix
+
+Change-Id: I23be64d7f44b6fca2f111b82fe27846649a7509d
+---
+ src/Makefile.am | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index b4a51ed..18908f5 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -16,5 +16,4 @@ libnx_video_apiincludedir = ${includedir}
+ libnx_video_apiinclude_HEADERS = \
+ 	include/linux/videodev2_nxp_media.h	\
+ 	nx_video_alloc.h	\
+-	nx_video_api.h	\
+-	mm_types.h
++	nx_video_api.h	
+-- 
+2.7.4
+
