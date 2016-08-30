@@ -71,12 +71,16 @@ do_compile() {
 do_install_append() {
     echo "${KBUILD_OUTPUT}" > ${BASE_WORKDIR}/source_kernel_dir_path.txt
 
-    cp -a ${PATH_KERNEL_BUILD}/.config ${PATH_KERNEL_SRC}
-    cp -a ${PATH_KERNEL_BUILD}/* ${PATH_KERNEL_SRC}
+    rm -rf ${BASE_WORKDIR}/temp_kernel_out
+    mkdir -p ${BASE_WORKDIR}/temp_kernel_out
 
-    cp -a ${PATH_KERNEL_SRC}/Makefile ${KBUILD_OUTPUT}
-    cp -a ${PATH_KERNEL_SRC}/scripts ${KBUILD_OUTPUT}
-    cp -a ${PATH_KERNEL_SRC}/arch/arm ${KBUILD_OUTPUT}/arch
-    cp -a ${PATH_KERNEL_SRC}/arch/arm64 ${KBUILD_OUTPUT}/arch
-    cp -a ${PATH_KERNEL_SRC}/include ${KBUILD_OUTPUT}
+    cp -an ${KBUILD_OUTPUT}/* ${BASE_WORKDIR}/temp_kernel_out
+
+    cp -a ${PATH_KERNEL_BUILD}/.config ${BASE_WORKDIR}/temp_kernel_out
+    cp -a ${PATH_KERNEL_BUILD}/* ${BASE_WORKDIR}/temp_kernel_out
+    cp -a ${PATH_KERNEL_SRC}/Makefile ${BASE_WORKDIR}/temp_kernel_out
+    cp -a ${PATH_KERNEL_SRC}/scripts ${BASE_WORKDIR}/temp_kernel_out
+    cp -a ${PATH_KERNEL_SRC}/arch/arm ${BASE_WORKDIR}/temp_kernel_out/arch
+    cp -a ${PATH_KERNEL_SRC}/arch/arm64 ${BASE_WORKDIR}/temp_kernel_out/arch
+    cp -a ${PATH_KERNEL_SRC}/include ${BASE_WORKDIR}/temp_kernel_out
 }

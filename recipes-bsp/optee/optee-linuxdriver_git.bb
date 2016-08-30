@@ -27,8 +27,11 @@ PATH_KBUILD_OUTPUT = "${@env_setup_kernel(d,"-standard-build")}"
 do_compile() {
     export LDFLAGS="-O1 --hash-style=gnu --as-needed"
 
-    oe_runmake -C ${PATH_KBUILD_OUTPUT} ${OPTEE_LINUXDRIVER_FLAGS} M=${PATH_OPTEE_LINUXDRIVER} clean
-    oe_runmake -C ${PATH_KBUILD_OUTPUT} ${OPTEE_LINUXDRIVER_FLAGS} M=${PATH_OPTEE_LINUXDRIVER} modules
+#    oe_runmake -C ${PATH_KBUILD_OUTPUT} ${OPTEE_LINUXDRIVER_FLAGS} M=${PATH_OPTEE_LINUXDRIVER} clean
+#    oe_runmake -C ${PATH_KBUILD_OUTPUT} ${OPTEE_LINUXDRIVER_FLAGS} M=${PATH_OPTEE_LINUXDRIVER} modules
+    oe_runmake -C ${BASE_WORKDIR}/temp_kernel_out ${OPTEE_LINUXDRIVER_FLAGS} M=${PATH_OPTEE_LINUXDRIVER} clean
+    oe_runmake -C ${BASE_WORKDIR}/temp_kernel_out ${OPTEE_LINUXDRIVER_FLAGS} M=${PATH_OPTEE_LINUXDRIVER} modules
+    
 }
 
 do_install() {
