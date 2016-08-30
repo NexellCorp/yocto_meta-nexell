@@ -289,21 +289,21 @@ function post_process()
         make_3rdboot_for_emmc
     fi
     
-    echo -e "\n\n\033[40;33m  Target download method.....                                                                \033[0m\n"
+    echo -e "\n\n\033[0;33m  Target download method.....                                                                \033[0m\n"
     if  [ "${MACHINE_NAME}" == "s5p6818-artik710-raptor" ]; then
-        echo -e "\033[40;33m  <Full download>                                                                            \033[0m"
-        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor.sh -p partmap_emmc.txt -r .  \033[0m"
-        echo -e "\033[40;33m  <kernel only>                                                                              \033[0m"
-        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor_kernel_only.sh               \033[0m"
-        echo -e "\033[40;33m  <rootfs.img>                                                                               \033[0m"
-        echo -e "\033[40;33m      ex) $ sudo fastboot flash rootfs rootfs.img                                            \033[0m\n"
+        echo -e "\033[0;33m  <Full download>                                                                            \033[0m"
+        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor.sh -p partmap_emmc.txt -r .  \033[0m"
+        echo -e "\033[0;33m  <kernel only>                                                                              \033[0m"
+        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor_kernel_only.sh               \033[0m"
+        echo -e "\033[0;33m  <rootfs.img>                                                                               \033[0m"
+        echo -e "\033[0;33m      ex) $ sudo fastboot flash rootfs rootfs.img                                            \033[0m\n"
     else
-        echo -e "\033[40;33m  <Full download>                                                            \033[0m"
-        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p4418.sh -p partmap_emmc.txt -r .  \033[0m"
-        echo -e "\033[40;33m  <bl1, u-boot, kernel only>                                                 \033[0m"
-        echo -e "\033[40;33m      ex) $ ../meta-nexell/tools/update_s5p4418_kernel_uboot_bl1_only.sh     \033[0m"
-        echo -e "\033[40;33m  <rootfs.img>                                                               \033[0m"
-        echo -e "\033[40;33m      ex) $ sudo fastboot flash rootfs rootfs.img                            \033[0m\n"
+        echo -e "\033[0;33m  <Full download>                                                            \033[0m"
+        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p4418.sh -p partmap_emmc.txt -r .  \033[0m"
+        echo -e "\033[0;33m  <bl1, u-boot, kernel only>                                                 \033[0m"
+        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p4418_kernel_uboot_bl1_only.sh     \033[0m"
+        echo -e "\033[0;33m  <rootfs.img>                                                               \033[0m"
+        echo -e "\033[0;33m      ex) $ sudo fastboot flash rootfs rootfs.img                            \033[0m\n"
     fi
 }
 
@@ -333,8 +333,8 @@ function gen_loader() {
     local private_key=${3}
     local aes_key=${6}
 
-    local load_addr=0x7fdce000
-    local jump_addr=0x7fe00800
+    local load_addr=0x7fcc0000 #0x7fdce000
+    local jump_addr=0x7fd00800 #0x7fe00800
     local bootdev=${4}
     local portnum=${5}
 
@@ -394,9 +394,13 @@ function gen_loader() {
     echo "[fip-loader] bootdev: ${bootdev}"
     echo "[fip-loader] out_img: ${out_img}"
 
-    dev_offset_opts="-m 0x50200 -b ${bootdev} -p ${portnum} \                                                           
-                -m 0x110200 -b ${bootdev} -p ${portnum}"
+#    dev_offset_opts="-m 0x50200 -b ${bootdev} -p ${portnum} \                                                           
+#                -m 0x110200 -b ${bootdev} -p ${portnum}"
 
+     # 0x60200 : MBR (0x200) + 2ndboot (0x10000) + FIP-LOADER size (0x50000)
+     # 0x1E0200 : 0x50200 + FIP-SECURE size(0x180000)
+     dev_offset_opts="-m 0x60200 -b ${bootdev} -p ${portnum} -m 0x1E0200 -b ${bootdev} -p ${portnum}"
+    
     # BINGEN
     ${SECURE_TOOL} -c ${chip_name} -t 3rdboot -n ${nsih} \
 		   -i ${result_dir}/${in_img} \
@@ -426,7 +430,7 @@ function gen_secure() {
     local hash_name="${in_img}".hash
     local private_key=${3}
 
-    local load_addr=0x7fd00000
+    local load_addr=0x7fb00000 #0x7fd00000
     local jump_addr=0x00000000
 
     local bl1_source=
@@ -491,7 +495,7 @@ function gen_nonsecure() {
     local hash_name="${in_img}".hash
     local private_key=${3}
 
-    local load_addr=0x7fb00000
+    local load_addr=0x7df00000 #0x7fb00000
     local jump_addr=0x00000000
 
     local bl1_source=

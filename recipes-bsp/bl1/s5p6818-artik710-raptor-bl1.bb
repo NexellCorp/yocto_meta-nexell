@@ -3,8 +3,8 @@ include bl1-secure.inc
 LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://README;md5=754608f69d5791d96a0a96281ae48814"
-SRCREV = "80f53f95bcac3813d0ed7c7897b858753eeaa772"
-SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p6818;protocol=git;branch=artik"
+SRCREV = "e66b58f7badffb8b41240072b73519c40660e0e4"
+SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p6818;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
 PV = "NEXELL"
