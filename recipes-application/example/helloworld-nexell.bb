@@ -23,7 +23,5 @@ do_install() {
 
 
 #NEXELL appended code
-
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref)"
 FILES_${PN} = "${bindir}"

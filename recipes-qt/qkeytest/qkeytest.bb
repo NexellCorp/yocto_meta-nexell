@@ -13,7 +13,6 @@ SRC_URI = "git://github.com/scottellis/qkeytest.git"
 S = "${WORKDIR}/git"
 
 require recipes-qt/qt5/qt5.inc
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref|s5p4418-navi-ref|s5p6818-avn-ref)"
 
 do_install() {
     install -d ${D}${bindir}

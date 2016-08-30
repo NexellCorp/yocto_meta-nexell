@@ -13,7 +13,6 @@ SRC_URI += " \
 
 S = "${WORKDIR}/git"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_install () {
