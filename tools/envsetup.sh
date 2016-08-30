@@ -2,8 +2,9 @@
 
 set -e
 
+TOP=`pwd`
 argc=$#
-RESULT_DIR="result-$1"
+RESULT_DIR="result-$1-$2"
 PARENT_DIR="${PWD%/*}"
 RESULT_PATH="${PARENT_DIR}/${RESULT_DIR}"
 IMAGE_TYPE=$2
@@ -75,6 +76,7 @@ function copy_build_scripts()
     
     #temp ARM 32bit build toolchain copy
     cp -a ${PARENT_DIR}/meta-nexell/tools/toolchain_setup.sh .
+    echo -e "\033[0;33m #########  Start toolchain copy to tmp/work/ ########## \033[0m"
     ./toolchain_setup.sh
 
 #    #for secure boot support
@@ -108,12 +110,26 @@ function copy_build_scripts()
     touch tmp/work/source_kernel_dir_path.txt
     
     cp -a ${PARENT_DIR}/meta-nexell/tools/bitbake_pre_operation_${MACHINE_NAME}.sh .
-    ./bitbake_pre_operation_${MACHINE_NAME}.sh
+    echo -e "\033[0;33m                                                                    \033[0m"
+    echo -e "\033[0;33m #########  Start bitbake pre operateion for optee & ATF ########## \033[0m"
+    echo -e "\033[0;33m                                                                    \033[0m"
 
-    echo -e "\033[40;33m                                                        \033[0m"
-    echo -e "\033[40;33m You are now ready to run the bitbake command for NEXELL\033[0m"
-    echo -e "\033[40;33m                                                        \033[0m"
-    echo -e "\033[40;33m  ex) $ bitbake ${MACHINE_NAME}-${IMAGE_TYPE}           \033[0m\n\n"
+    #-----------------------------------------------
+    # bitbake pre-tasks process related optee & atf
+    #-----------------------------------------------
+    exec < ${PARENT_DIR}/meta-nexell/tools/optee_status.cfg
+    read optee status
+    if [ $status == 'NOK' ];then        
+	./bitbake_pre_operation_${MACHINE_NAME}.sh
+	echo 'OPTEE_DO_PRE_TASKS OK' > ${PARENT_DIR}/meta-nexell/tools/optee_status.cfg
+    else
+	echo -e "\033[0;33m #########  Already Done, optee & ATF pre-fetch & pre-unpack ########## \033[0m"
+    fi
+
+    echo -e "\033[0;33m                                                        \033[0m"
+    echo -e "\033[0;33m You are now ready to run the bitbake command for NEXELL\033[0m"
+    echo -e "\033[0;33m                                                        \033[0m"
+    echo -e "\033[0;33m  ex) $ bitbake ${MACHINE_NAME}-${IMAGE_TYPE}           \033[0m\n\n"
 }
 
 check_usage

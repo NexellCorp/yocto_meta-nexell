@@ -4,7 +4,7 @@ set -e
 
 argc=$#
 TOP=`pwd`
-RESULT_DIR="result-$1"
+RESULT_DIR="result-$1-$2"
 PARENT_DIR="${PWD%/*}"
 RESULT_PATH="${PARENT_DIR}/${RESULT_DIR}"
 IMAGE_TYPE=$2

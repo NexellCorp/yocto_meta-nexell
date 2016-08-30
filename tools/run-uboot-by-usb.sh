@@ -25,6 +25,7 @@ function usage()
 {
     echo "Usage: $0 <machine-name>"
     echo "    ex) $0 s5p6818-artik710-raptor"
+    echo "    ex) $0 s5p6818-avn-ref"
     echo "    ex) $0 s5p4418-avn-ref"
     echo "    ex) $0 s5p4418-navi-ref"
 }
@@ -41,9 +42,9 @@ function run_by_usb()
 {
     if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
 	if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-32.txt -b bl1-raptor.bin
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-64.txt -b ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/bl1-raptor-64.bin
             sleep 1
-            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-32.txt -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-64.txt -f u-boot.bin -a 0x43c00000 -j 0x43c00000
 	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
 	    sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_avn_ref_usb-64.txt -b ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/bl1-avn-64.bin
             sleep 1
