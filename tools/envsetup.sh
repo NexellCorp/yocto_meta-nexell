@@ -117,11 +117,9 @@ function copy_build_scripts()
     #-----------------------------------------------
     # bitbake pre-tasks process related optee & atf
     #-----------------------------------------------
-    exec < ${PARENT_DIR}/meta-nexell/tools/optee_status.cfg
-    read optee status
-    if [ $status == 'NOK' ];then        
+    if [ ! -e OPTEE_PRE_OPERATION_DONE ];then
 	./bitbake_pre_operation_${MACHINE_NAME}.sh
-	echo 'OPTEE_DO_PRE_TASKS OK' > ${PARENT_DIR}/meta-nexell/tools/optee_status.cfg
+	touch OPTEE_PRE_OPERATION_DONE
     else
 	echo -e "\033[0;33m #########  Already Done, optee & ATF pre-fetch & pre-unpack ########## \033[0m"
     fi
