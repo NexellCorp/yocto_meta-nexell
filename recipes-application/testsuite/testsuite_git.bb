@@ -4,7 +4,7 @@ SECTION = "application"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile;md5=d5743c4d7fa2b466a875bac2c6176aa1"
 
-SRCREV = "abb7ed23bacd99c22e6474418cd61064498e38fa"
+SRCREV = "92d91d29409ae9f3cfb7bcfa5bc8fd7e218f454c"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/testsuite;protocol=git;branch=nexell"
 
 DEPENDS = "nx-drm-allocator nx-v4l2 nx-renderer nx-scaler nx-gst-meta nx-video-api libdrm-nx libomxil-nx"
@@ -15,6 +15,7 @@ PV = "NEXELL"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+INHIBIT_PACKAGE_STRIP = "1"
 
 inherit autotools
 
@@ -57,6 +58,16 @@ do_compile() {
     cd ${S}/scaler_test
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libdrm -I${STAGING_INCDIR}/libkms" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+
+    #dp_clipper_decimator_test
+    cd ${S}/dp_clipper_decimator_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libdrm -I${STAGING_INCDIR}/nexell" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+
+    #dp_decimator_test
+    cd ${S}/dp_decimator_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libdrm -I${STAGING_INCDIR}/nexell" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 
     #  ==> soft/hard floating problem... can't compile
     # #libnx_video_alloc
@@ -117,6 +128,12 @@ do_install() {
 
     #scaler_test
     install -m 0755 ${S}/scaler_test/nx-scaler-test ${D}${bindir}
+
+    #dp_clipper_decimator_test
+    install -m 0755 ${S}/dp_clipper_decimator_test/dp-clipper-decimator-test ${D}${bindir}
+    
+    #dp_decimator_test
+    install -m 0755 ${S}/dp_decimator_test/dp-decimator-test ${D}${bindir}
 
     #video_aapi_test
 #    install -m 0755 ${S}/video_api_test/src/video_api_test ${D}${bindir}
