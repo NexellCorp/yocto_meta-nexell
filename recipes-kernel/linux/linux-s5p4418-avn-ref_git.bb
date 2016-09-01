@@ -3,8 +3,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 LICENSE = "GPLv2"
 LINUX_VERSION ?= "4.1"
 
-SRCREV = "442f61d2c56837cea9c9905f0ba9a0edbc11cffb"
-#2a0121dbc7c6c93ce9bfde6edfba8a8ff0e238cf"
+SRCREV = "4ec31eecfbd260f83e9c91c399eece4036cf05ba"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7" 
 
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/kernel/kernel-4.1.15;protocol=git;branch=nexell \           
