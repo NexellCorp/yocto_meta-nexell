@@ -37,3 +37,11 @@ def split_overlays(d, out):
         overlays = oe.utils.str_filter('\S+\-overlay\.dtb$', dts, d)
 
     return overlays
+
+def get_kernel_arch(d, a):
+     import re
+
+     if 'aarch64' in a :
+         return 'arm64'
+     else:
+         return 'arm32'
