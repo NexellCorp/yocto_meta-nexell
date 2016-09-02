@@ -8,7 +8,6 @@ inherit packagegroup
 NEXELL_EXAMPLES = " \
     helloworld-nexell \
     helloworld-nexell-module \
-    example-libs \
     "
 WESTON_CONF = " \
     weston-conf \
@@ -50,4 +49,5 @@ RDEPENDS_${PN} = " \
     ${MX} \
     ${NEXELL_LIBS} \
     ${NEXELL_TESTSUITE} \
+    ${GSTREAMER10} \
     "
