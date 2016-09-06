@@ -70,12 +70,19 @@ function copy_bin_files()
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
     fi
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/u-boot.bin ${RESULT_PATH}
+    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/default_envs.txt ${RESULT_PATH}
 #    python ${PARENT_DIR}/meta-nexell/tools/result-file-move.py "${TOP}/tmp/work/image_where.txt"
 }
 
 function copy_kernel_image()
 {
-    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/Image ${RESULT_PATH}
+    if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/Image ${RESULT_PATH}
+    elif [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/zImage ${RESULT_PATH}
+    else
+	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/Image ${RESULT_PATH}
+    fi
 }
 
 function copy_dtb_file()
@@ -85,34 +92,30 @@ function copy_dtb_file()
     local kernel_image_path=
     
     if [ "${MACHINE_NAME}" == "s5p6818-artik710-raptor" ]; then
-	file_name_dtb_rev0="s5p6818-artik710-raptor-rev00.dtb"
-	file_name_dtb_rev1="s5p6818-artik710-raptor-rev01.dtb"
+	file_name_dtb="s5p6818-artik710-raptor*.dtb"
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}
     elif [ "${MACHINE_NAME}" == "s5p6818-avn-ref" ]; then
-	file_name_dtb_rev0="s5p6818-avn-ref*.dtb"
+	file_name_dtb="s5p6818-avn-ref*.dtb"
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}    
     else
 	kernel_image_path="${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}"
 	if [ ${BOARD_PREFIX} == "avn" ]; then
-	    file_name_dtb_rev0="s5p4418-avn_ref-rev00.dtb"
+	    file_name_dtb="s5p4418-avn_ref*.dtb"
 	elif [ ${BOARD_PREFIX} == "navi" ]; then
-	    file_name_dtb_rev0="s5p4418-navi_ref-rev00.dtb"
+	    file_name_dtb="s5p4418-navi_ref*.dtb"
 	fi
     fi
 
-    if [ ! -z "$file_name_dtb_rev0" -a "$file_name_dtb_rev0"!=" " ]; then
-	find ${TOP}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb_rev0} -exec cp {} ${RESULT_PATH} \;
-    fi
-
-    if [ ! -z "$file_name_dtb_rev1" -a "$file_name_dtb_rev1"!=" " ]; then
-	find ${TOP}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb_rev1} -exec cp {} ${RESULT_PATH} \;
+    if [ ! -z "$file_name_dtb" -a "$file_name_dtb"!=" " ]; then
+	find ${TOP}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
     fi
 }
 
 function copy_rootfs_image()
 {
     if [ ${IMAGE_TYPE} != "tiny" ]; then
-        cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}
+	cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
+	#cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}	
     fi
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
@@ -154,7 +157,7 @@ copy_kernel_image
 copy_dtb_file
 #copy_modules_image
 copy_rootfs_image
-copy_params_image
+#copy_params_image
 copy_partmap_file
 
 post_process

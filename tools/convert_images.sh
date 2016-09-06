@@ -20,6 +20,8 @@ BOARD_NAME=
 BOARD_PREFIX=
 BOARD_POSTFIX=
 
+ARM_ARCH=
+
 DEVID_USB=0
 DEVID_SPI=1
 DEVID_NAND=2
@@ -72,6 +74,12 @@ function convert_env_setup()
     BOARD_PREFIX=${BOARD_NAME%-*}
     BOARD_POSTFIX=${BOARD_NAME#*-}
 
+    if [ ${BOARD_SOCNAME} == 's5p6818' ]; then
+	ARM_ARCH="arm64"
+    else
+	ARM_ARCH="arm"
+    fi
+    
     if [ -a secure.cfg ]; then
         exec < secure.cfg
         read KEY VAL
@@ -109,34 +117,30 @@ function mkramdisk()
     echo "build mkramdisk"
     echo "================================================="
     
-    if [ ${IMAGE_TYPE} != "tiny" ]
-    then
-	mv ramdisk_tiny.gz ramdisk.gz
+    if [ ${IMAGE_TYPE} != "tiny" ]; then	
+            cp -a uInitrd ./boot
     else
-	mv *.tar.bz2 ${ROOTDIR}
+	cp -a *.tar.bz2 ${ROOTDIR}
 	cd ${ROOTDIR}
 	tar -xvf *.tar.bz2
 	rm *.tar.bz2
-	rm -rf ./boot
+	rm -rf ./boot  # mean that {rootfs_dir}/boot
 	cd ..
-	
-	dd if=/dev/zero of=$ROOTDIR.img bs=1M count=16
-	sudo losetup -f $ROOTDIR.img
-	LOOP_DEVICE=$(find_loop_device)
-	sudo mkfs.ext2 ${LOOP_DEVICE}
-	sleep 1
-	mkdir -p mnt
-	sudo mount -t ext2 -o loop ${LOOP_DEVICE} mnt
-	sudo cp -a $ROOTDIR/* mnt/
-	sleep 1
-	sudo umount mnt
-	sleep 1
-	sudo losetup -d ${LOOP_DEVICE}
-	rm -rf mnt
-	gzip -9 $ROOTDIR.img
 
-	mv root.img.gz ramdisk.gz
+        pushd ${ROOTDIR}
+        find . | cpio -o -H newc | gzip > ${result_dir}/initrd.gz
+        popd
+
+        ${META_NEXELL_TOOLS_DIR}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
+			             -C none -a 0 -e 0 -n uInitrd -d ${result_dir}/initrd.gz \
+	                             ${result_dir}/boot/uInitrd
+        rm -f ${result_dir}/initrd.gz	    
     fi
+}
+
+function mkparams()
+{
+    ${META_NEXELL_TOOLS_DIR}/mkenvimage -s 16384 -o params.bin default_envs.txt
 }
 
 function mkbootimg()
@@ -145,21 +149,15 @@ function mkbootimg()
     echo "mkbootimg"
     echo "================================================="
 
-    if [ "${BOARD_SOCNAME}" == "s5p6818" ]
-    then
-        ${META_NEXELL_TOOLS_DIR}/mkimage -A arm64 -O linux -T kernel -C none -a 0x40080000 -e 0x40080000 -n 'linux-4.1' -d Image ./boot/uImage
-    elif [ "${BOARD_PREFIX}" == "avn" ]
-    then
-        ${META_NEXELL_TOOLS_DIR}/mkimage -A arm -O linux -T kernel -C none -a 0x40008000 -e 0x40008000 -n 'linux-4.1' -d Image ./boot/uImage
-    elif [ "${BOARD_PREFIX}" == "navi" ]
-    then
-        ${META_NEXELL_TOOLS_DIR}/mkimage -A arm -O linux -T kernel -C none -a 0x40008000 -e 0x40008000 -n 'linux-4.1' -d Image ./boot/uImage
+    if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
+        cp -a Image ./boot
+    elif [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
+        cp -a zImage ./boot
     else
-        echo -e "error"
+        echo -e "Not supported Yet!!"
     fi
-
-    mv ramdisk.gz ./boot
-    mv *.dtb ./boot
+    
+    cp -a *.dtb ./boot
     ${META_NEXELL_TOOLS_DIR}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/    
 }
 
@@ -624,6 +622,7 @@ check_usage
 convert_env_setup
 make_dirs
 mkramdisk
+mkparams
 mkbootimg
 post_process
 #make_modules

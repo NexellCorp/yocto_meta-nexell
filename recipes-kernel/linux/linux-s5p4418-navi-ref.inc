@@ -56,7 +56,7 @@ do_compile() {
     sed -i -e 's/\(\/memreserve\/[[:blank:]]\+\)\([[:alnum:]]\+[[:blank:]]\+\)\([[:alnum:]]\+\)/\1'"${memreserve_size}"' \3/' ${dts_file} 
     sed -i -e 's/\(^[[:blank:]]\+reg = <0x40000000 \)[[:alnum:]]\+>/\1'"${reg_size}"'>/' ${dts_file}   
 
-    oe_runmake ${KERNEL_COMMON_FLAGS} Image -j8
+    oe_runmake ${KERNEL_COMMON_FLAGS} zImage -j8
     oe_runmake ${KERNEL_COMMON_FLAGS} dtbs
     oe_runmake ${KERNEL_COMMON_FLAGS} modules -j8
     

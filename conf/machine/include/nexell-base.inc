@@ -3,7 +3,10 @@ SOC_FAMILY = "Nexell"
 
 IMAGE_FSTYPES ?= "tar.bz2 ext4"
 
-KERNEL_IMAGETYPE ?= "Image"
+KERNEL_IMAGETYPE_s5p6818-artik710-raptor ?= "Image"
+KERNEL_IMAGETYPE_s5p6818-avn-ref ?= "Image"
+KERNEL_IMAGETYPE_s5p4418-navi-ref ?= "zImage"
+KERNEL_IMAGETYPE_s5p4418-avn-ref ?= "zImage"
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen mouse touchscreen alsa bluetooth wifi sdio"
 
