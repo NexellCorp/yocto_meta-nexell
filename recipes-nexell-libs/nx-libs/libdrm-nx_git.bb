@@ -13,7 +13,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base glib-2.0 libomxil-nx"
+DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base glib-2.0 libomxil-nx libdrm"
 
 inherit autotools pkgconfig
 
@@ -66,24 +66,24 @@ do_compile() {
 
 do_install() {
     cd ${S}
-    install -d ${D}${bindir}
     install -d ${D}${libdir}/nexell
     install -d ${D}${includedir}/nexell
-    oe_runmake install DESTDIR=${D}
+    install -d ${D}/lib/nexell
+#    oe_runmake install DESTDIR=${D}
 
-    # install -m 0644 ${S}/nexell/nexell_drm.h ${D}${includedir}/nexell
-    # install -m 0644 ${S}/nexell/nexell_drmif.h ${D}${includedir}/nexell	
+    install -m 0644 ${S}/nexell/nexell_drm.h ${D}${includedir}/nexell
+    install -m 0644 ${S}/nexell/nexell_drmif.h ${D}${includedir}/nexell	
 
-    # install -m 0755 ${S}/nexell/.libs/libdrm_nexell.so.1.0.0 ${D}${libdir}
-    # install -m 0755 ${S}/nexell/libdrm_nexell.la ${D}${libdir}
+    install -m 0755 ${S}/nexell/.libs/libdrm_nexell.so.1.0.0 ${D}/lib/nexell
+    install -m 0755 ${S}/nexell/libdrm_nexell.la ${D}/lib/nexell
+#    ${STAGING_BASELIBDIR}										
 
-    # cd ${D}/lib
-    # ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so
-    # ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so.1
+    cd ${D}/lib
+    ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so
+    ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so.1
 }
 
-#PREFERRED_PROVIDER_libdrm = "libdrm-nx"
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files"
-FILES_${PN} = "${bindir} ${libdir} ${includedir}"
+FILES_${PN} = "${libdir} ${includedir} lib lib/nexell"
 ALLOW_EMPTY_${PN} = "1"
 PROVIDES = "libdrm-nx"

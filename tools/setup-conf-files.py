@@ -33,8 +33,7 @@ CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = "x11"',
                         'DISTRO_FEATURES_append = " systemd wayland opengl"',
                         'REQUIRED_DISTRO_FEATURES = "wayland"',
                         'VIRTUAL-RUNTIME_init_manager = "systemd"',
-                        'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
-                        'PREFERRED_PROVIDER_libdrm = "libdrm-nx"' ]
+                        'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"']
 
 class parsingForpokyfiles():
     linuxMark = '/'
