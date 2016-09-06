@@ -28,7 +28,7 @@ ARCH_TYPE = "${@get_kernel_arch(d,"${TARGET_PREFIX}")}"
 EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
     "
-
+   
 do_configure() {
     #video_api_test
     cd ${S}/video_api_test
@@ -145,8 +145,8 @@ do_install() {
     install -m 0755 ${S}/dp_decimator_test/dp-decimator-test ${D}${bindir}
 
     #libnx_video_alloc
-    install -m 0644 ${S}/libnx_video_alloc/src/libnx_video_alloc.a ${D}${libdir}
-    install -m 0755 ${S}/libnx_video_alloc/test/test_video_alloc ${D}${bindir}
+#    install -m 0644 ${S}/libnx_video_alloc/src/libnx_video_alloc.a ${D}${libdir}
+#    install -m 0755 ${S}/libnx_video_alloc/test/test_video_alloc ${D}${bindir}
     
     #video_api_test
     install -m 0755 ${S}/video_api_test/src/video_api_test ${D}${bindir}

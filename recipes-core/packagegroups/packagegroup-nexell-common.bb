@@ -24,9 +24,6 @@ GSTREAMER10 = " \
     gstreamer1.0-plugins-bad \
     gstreamer1.0-plugins-ugly \
     "
-NEXELL_TESTSUITE = " \
-    testsuite \
-    "
 NEXELL_LIBS = " \
     gst-plugins-camera \
     gst-plugins-renderer \
@@ -49,5 +46,5 @@ RDEPENDS_${PN} = " \
     ${WESTON_CONF} \
     ${MX} \
     ${NEXELL_LIBS} \
-    ${NEXELL_TESTSUITE} \
+    ${GSTREAMER10} \
     "

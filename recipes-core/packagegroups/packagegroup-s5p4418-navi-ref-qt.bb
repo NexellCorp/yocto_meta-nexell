@@ -13,4 +13,5 @@ inherit packagegroup
 
 RDEPENDS_${PN} = " \
     wayland-drm-s5p4418 \
+    testsuite-s5p4418 \
     "

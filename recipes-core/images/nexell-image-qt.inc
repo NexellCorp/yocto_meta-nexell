@@ -66,7 +66,6 @@ IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qt3d} \
      ${QT_IMAGE_INSTALL_qtwebkit} \
-	 ${WAYLAND_IMAGE_INSTALL} \
      ${QT_IMAGE_INSTALL_qtwebengine} \
      ${EXAMPLE_IMAGE_INSTALL} \
      ${TOUCH_IMAGE_INSTALL} \
