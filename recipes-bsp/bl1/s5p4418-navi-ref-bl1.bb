@@ -3,7 +3,7 @@ LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://README;md5=c48cff868868eb40f73e510f7bae7710"
 SRCREV = "1d2a94728488125a5c9346f7d347f10d4f01cca5"
-SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p4418;protocol=git;branch=nexell \
+SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p4418;protocol=git;branch=yocto-dmc \
            file://0001-NAVI-NSP4330-Bl1-Board-SETTING.patch \
           "
 
