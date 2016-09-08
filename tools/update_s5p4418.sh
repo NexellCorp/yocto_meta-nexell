@@ -226,3 +226,4 @@ update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
 # update_system ${RESULT_DIR}/system.img
 # update_data ${RESULT_DIR}/user.img
+sudo fastboot reboot
