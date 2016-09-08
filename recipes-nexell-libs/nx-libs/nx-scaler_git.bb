@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=e5a392bc8627d4e7a7a28a76203e8239"
 
 SRCREV = "819ce2969ab6ee3e1fa8cafdd5ae6569fb1f4c8e"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-scaler;protocol=git;branch=nexell"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-scaler;protocol=git;branch=yocto-dmc"
 
 S = "${WORKDIR}/git"
 
