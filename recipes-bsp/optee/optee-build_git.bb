@@ -6,7 +6,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://README.md;md5=871e3be979e189da85a03fe6ba47bbe2"
 
 SRCREV = "075e6fb639727076089377068ea9462a8f3dcbfc"
-SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_build;protocol=git;branch=nexell \
+SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_build;protocol=git;branch=yocto-dmc \
            file://0001-optee-build-customize-for-yocto.patch \
           "
 
