@@ -97,7 +97,7 @@ index 10f5748..e7ae51a 100644
 +	"load_args=run factory_load; setenv bootargs ${console} "	\
 +		"root=/dev/mmcblk${rootdev}p${rootpart} ${root_rw} "	\
 +		"rootfstype=${rootfs_type} ${opts} ${recoverymode} "	\
-+		"drm_panel=$lcd_panel\0"				\
++		"nx_drm.fb_bgr nx_drm.fb_buffers=2 nx_drm.fb_vblank\0"				\
 +	"load_kernel=ext4load mmc ${rootdev}:${bootpart} $kerneladdr $kernel_file\0" \
 +	"load_initrd=ext4load mmc ${rootdev}:${bootpart} $ramdiskaddr $ramdisk_file\0" \
 +	"boot_cmd_initrd="						\
