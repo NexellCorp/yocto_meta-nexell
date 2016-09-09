@@ -98,7 +98,7 @@ function copy_dtb_file()
 	file_name_dtb="s5p6818-avn-ref*.dtb"
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}    
     else
-	kernel_image_path="${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}"
+	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}
 	if [ ${BOARD_PREFIX} == "avn" ]; then
 	    file_name_dtb="s5p4418-avn_ref*.dtb"
 	elif [ ${BOARD_PREFIX} == "navi" ]; then
@@ -108,6 +108,10 @@ function copy_dtb_file()
 
     if [ ! -z "$file_name_dtb" -a "$file_name_dtb"!=" " ]; then
 	find ${TOP}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
+	#For local kernel source using
+	exec < ${TOP}/tmp/work/source_kernel_dir_path.txt
+	read externalKernelPath
+	find $externalKernelPath/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
     fi
 }
 
