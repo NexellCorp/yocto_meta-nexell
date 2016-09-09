@@ -62,6 +62,23 @@ TOUCH_IMAGE_INSTALL = " \
      tslib-nexell \
      "
 
+QT_ALSA_IMAGE_INSTALL = " \
+     alsa-utils \
+     alsa-lib \
+     "
+QT_ALSA_EXTRA_IMAGE_INSTALL = " \
+     alsa-utils-alsamixer \
+     alsa-utils-midi \
+     alsa-utils-aplay \
+     alsa-utils-amixer \
+     alsa-utils-aconnect \
+     alsa-utils-iecset \
+     alsa-utils-speakertest \
+     alsa-utils-aseqnet \
+     alsa-utils-aseqdump \
+     alsa-utils-alsactl \
+     "
+
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qt3d} \
@@ -69,4 +86,6 @@ IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_qtwebengine} \
      ${EXAMPLE_IMAGE_INSTALL} \
      ${TOUCH_IMAGE_INSTALL} \
+     ${QT_ALSA_IMAGE_INSTALL} \
+     ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
      "
