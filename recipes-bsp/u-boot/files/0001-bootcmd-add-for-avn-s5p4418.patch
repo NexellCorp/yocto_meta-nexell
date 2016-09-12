@@ -1,18 +1,36 @@
-From 26af0bfb1a086b47f849eecc03366196f183cdf6 Mon Sep 17 00:00:00 2001
+From 06eaf9422b49ba772f7343bd0c7b1f9499329324 Mon Sep 17 00:00:00 2001
 From: choonghyun-Jeon <suker@nexell.co.kr>
-Date: Mon, 5 Sep 2016 17:17:57 +0900
+Date: Mon, 12 Sep 2016 17:50:21 +0900
 Subject: [PATCH] bootcmd add for avn s5p4418
 
-Change-Id: Ida72de0cff2d6178bcef4f59394ecc049fd910c5
+Change-Id: I0c84d0c556b19dc4a29c5c65529f7d7b28f7d4ba
 ---
- include/configs/s5p4418_avn_ref.h | 83 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 81 insertions(+), 2 deletions(-)
+ include/configs/s5p4418_avn_ref.h | 87 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 84 insertions(+), 3 deletions(-)
 
 diff --git a/include/configs/s5p4418_avn_ref.h b/include/configs/s5p4418_avn_ref.h
-index c34dd1e..c7a6dbe 100644
+index c34dd1e..90c45eb 100644
 --- a/include/configs/s5p4418_avn_ref.h
 +++ b/include/configs/s5p4418_avn_ref.h
-@@ -276,7 +276,86 @@
+@@ -135,6 +135,8 @@
+ #define	CONFIG_CMDLINE_TAG			/* use bootargs commandline */
+ #undef	CONFIG_BOOTM_NETBSD
+ #undef	CONFIG_BOOTM_RTEMS
++#define CONFIG_INITRD_TAG
++#define CONFIG_CMD_BOOTZ
+
+ /*-----------------------------------------------------------------------
+  * serial console configuration
+@@ -204,7 +206,7 @@
+ #define CONFIG_SYS_MMC_ENV_DEV		2
+ #define	CONFIG_ENV_OFFSET		(CONFIG_FIP_OFFSET +\
+					 CONFIG_FIP_SIZE)
+-#define CONFIG_ENV_SIZE			(4*1024)	/* env size */
++#define CONFIG_ENV_SIZE			(16*1024)	/* env size */
+ #endif
+
+ #if defined(CONFIG_MMC)
+@@ -276,7 +278,86 @@
  /*-----------------------------------------------------------------------
   * ENV
   */
