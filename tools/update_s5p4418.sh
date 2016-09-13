@@ -222,8 +222,5 @@ update_bl1 ${RESULT_DIR}/bl1-emmcboot.bin
 update_bootloader ${RESULT_DIR}/singleimage-emmcboot.bin
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
-#update_modules ${RESULT_DIR}/modules.img
 update_root ${RESULT_DIR}/rootfs.img
-# update_system ${RESULT_DIR}/system.img
-# update_data ${RESULT_DIR}/user.img
 sudo fastboot reboot

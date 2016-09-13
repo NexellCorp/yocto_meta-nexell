@@ -5,13 +5,13 @@ Subject: [PATCH] bootcmd add for navi yocto
 
 Change-Id: Id12f091bd55766c6bbf5ac66e146ba1a003a5457
 ---
- include/configs/s5p4418_navi_ref.h | 86 ++++++++++++++++++++++++++++++++++++--
+ include/configs/s5p4418_cluster_ref.h | 86 ++++++++++++++++++++++++++++++++++++--
  1 file changed, 83 insertions(+), 3 deletions(-)
 
-diff --git a/include/configs/s5p4418_navi_ref.h b/include/configs/s5p4418_navi_ref.h
+diff --git a/include/configs/s5p4418_cluster_ref.h b/include/configs/s5p4418_cluster_ref.h
 index 10f5748..e7ae51a 100644
---- a/include/configs/s5p4418_navi_ref.h
-+++ b/include/configs/s5p4418_navi_ref.h
+--- a/include/configs/s5p4418_cluster_ref.h
++++ b/include/configs/s5p4418_cluster_ref.h
 @@ -135,6 +135,8 @@
  #define	CONFIG_CMDLINE_TAG			/* use bootargs commandline */
  #undef	CONFIG_BOOTM_NETBSD
@@ -63,11 +63,11 @@ index 10f5748..e7ae51a 100644
 +				"number=0$loop; "			\
 +			"else number=$loop; "				\
 +			"fi; "						\
-+			"ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-navi_ref-rev00.dtb && setexpr success 1; " \
++			"ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-cluster_ref-rev00.dtb && setexpr success 1; " \
 +			"setexpr loop $loop - 1; "			\
 +			"done; "					\
 +		"if test $success -eq 0; then "				\
-+			"ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-navi_ref-rev00.dtb;"	\
++			"ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-cluster_ref-rev00.dtb;"	\
 +		"fi; "							\
 +		"else ext4load mmc $rootdev:$bootpart $fdtaddr $fdtfile; "      \
 +		"fi; \0"						\
@@ -97,7 +97,7 @@ index 10f5748..e7ae51a 100644
 +	"load_args=run factory_load; setenv bootargs ${console} "	\
 +		"root=/dev/mmcblk${rootdev}p${rootpart} ${root_rw} "	\
 +		"rootfstype=${rootfs_type} ${opts} ${recoverymode} "	\
-+		"drm_panel=$lcd_panel\0"				\
++		"nx_drm.fb_bgr nx_drm.fb_buffers=2 nx_drm.fb_vblank\0"				\
 +	"load_kernel=ext4load mmc ${rootdev}:${bootpart} $kerneladdr $kernel_file\0" \
 +	"load_initrd=ext4load mmc ${rootdev}:${bootpart} $ramdiskaddr $ramdisk_file\0" \
 +	"boot_cmd_initrd="						\
@@ -112,7 +112,7 @@ index 10f5748..e7ae51a 100644
 +	"recoveryboot=run recovery_cmd; run ramfsboot\0"		\
 +	"hwtestboot=setenv rootdev 1;"					\
 +		"setenv opts rootfstype=ext4 rootwait loglevel=7;"	\
-+		"setenv fdtfile s5p4418-navi_ref-explorer.dtb;"		\
++		"setenv fdtfile s5p4418-cluster_ref-explorer.dtb;"		\
 +		"run mmcboot\0"						\
 +	"hwtest_recoveryboot=run recovery_cmd; run hwtestboot\0"        \
 +	"bootcmd=run mmcboot\0"

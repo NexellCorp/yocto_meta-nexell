@@ -9,7 +9,7 @@ SRC_URI += " \
 
 S = "${WORKDIR}"
 
-COMPATIBLE_MACHINE = "(s5p4418-navi-ref|s5p4418-avn-ref)"
+COMPATIBLE_MACHINE = "(s5p4418-navi-ref|s5p4418-avn-ref|s5p4418-cluster-ref)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_install () {

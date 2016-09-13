@@ -45,6 +45,9 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-cluster-ref qt"
+    echo "    ex) $0 s5p4418-cluster-ref tiny"
+    echo "    ex) $0 s5p4418-cluster-ref tinyui"
 }
 
 function get_board_prefix()
@@ -103,6 +106,8 @@ function copy_dtb_file()
 	    file_name_dtb="s5p4418-avn_ref*.dtb"
 	elif [ ${BOARD_PREFIX} == "navi" ]; then
 	    file_name_dtb="s5p4418-navi_ref*.dtb"
+	elif [ ${BOARD_PREFIX} == "cluster" ]; then
+	    file_name_dtb="s5p4418-cluster_ref*.dtb"
 	fi
     fi
 
@@ -126,6 +131,12 @@ function copy_2ndboot_images_navi_only()
 {
     cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi.bin ${RESULT_PATH}
     cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+}
+
+function copy_2ndboot_images_cluster_only()
+{
+    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-cluster.bin ${RESULT_PATH}
+    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-cluster-usb.bin ${RESULT_PATH}
 }
 
 function copy_params_image()
@@ -165,4 +176,7 @@ post_process
 #temporary because bl1 binary size problem
 if [ ${BOARD_PREFIX} == "navi" ]; then
     copy_2ndboot_images_navi_only
+fi
+if [ ${BOARD_PREFIX} == "cluster" ]; then
+    copy_2ndboot_images_cluster_only
 fi
