@@ -36,6 +36,7 @@ do_kernel_configme_prepend() {
 
     sed -i "/CONFIG_CMA_SIZE_MBYTES[ =]/d" $config
     echo "CONFIG_CMA_SIZE_MBYTES=256" >> $config
+	echo "CONFIG_MALI400=m" >> $config
 
     install -m 0644 ${S}/arch/arm/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
 }
