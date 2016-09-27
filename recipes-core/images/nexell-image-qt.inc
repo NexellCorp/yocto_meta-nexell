@@ -79,6 +79,19 @@ QT_ALSA_EXTRA_IMAGE_INSTALL = " \
      alsa-utils-alsactl \
      "
 
+SYSTEMD_INSTALL = " \
+     systemd-compat-units \
+     systemd-speed-hacks \
+     udev-systemd \
+     rsyslog-systemd \
+     "
+
+SYSV_INSTALL = " \
+    udev \
+    sysvinit \
+    initscripts \
+    "
+
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qt3d} \
@@ -88,4 +101,5 @@ IMAGE_INSTALL += " \
      ${TOUCH_IMAGE_INSTALL} \
      ${QT_ALSA_IMAGE_INSTALL} \
      ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
+     ${@base_contains("MACHINE_FEATURES", "systemd", "${SYSTEMD_INSTALL}", "${SYSV_INSTALL}", d)} \
      "
