@@ -1,15 +1,14 @@
-From 05e29471154c7f1a00e91049c741f42e2f370d11 Mon Sep 17 00:00:00 2001
+From 69627d3e791d2b21d941d74acd1b0eee2decfe72 Mon Sep 17 00:00:00 2001
 From: choonghyun-Jeon <suker@nexell.co.kr>
-Date: Mon, 5 Sep 2016 17:02:00 +0900
+Date: Tue, 27 Sep 2016 19:03:13 +0900
 Subject: [PATCH] bootcmd add for navi yocto
 
-Change-Id: Id12f091bd55766c6bbf5ac66e146ba1a003a5457
 ---
- include/configs/s5p4418_navi_ref.h | 86 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 83 insertions(+), 3 deletions(-)
+ include/configs/s5p4418_navi_ref.h | 88 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 85 insertions(+), 3 deletions(-)
 
 diff --git a/include/configs/s5p4418_navi_ref.h b/include/configs/s5p4418_navi_ref.h
-index 10f5748..e7ae51a 100644
+index 10f5748..50e21ad 100644
 --- a/include/configs/s5p4418_navi_ref.h
 +++ b/include/configs/s5p4418_navi_ref.h
 @@ -135,6 +135,8 @@
@@ -30,7 +29,7 @@ index 10f5748..e7ae51a 100644
  #endif
  
  #if defined(CONFIG_MMC)
-@@ -276,7 +278,85 @@
+@@ -276,7 +278,87 @@
  /*-----------------------------------------------------------------------
   * ENV
   */
@@ -104,10 +103,12 @@ index 10f5748..e7ae51a 100644
 +		"run load_fdt; run load_kernel; run load_initrd;"	\
 +		"bootz $kerneladdr $ramdiskaddr $fdtaddr\0"		\
 +	"boot_cmd_mmcboot="						\
-+		"run load_fdt; run load_kernel;"			\
++                "ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-navi_ref-rev00.dtb;" \
++		"run load_kernel;"	   		                \
 +		"bootz $kerneladdr - $fdtaddr\0"			\
++        "bootargs=console=ttyAMA3,115200n8 root=/dev/mmcblk0p3 rw rootfstype=ext4 loglevel=4 rootwait quiet printk.time=1\0" \
 +	"ramfsboot=run load_args; run boot_cmd_initrd\0"		\
-+	"mmcboot=run load_args; run boot_cmd_mmcboot\0"			\
++	"mmcboot=run boot_cmd_mmcboot\0"			        \
 +	"recovery_cmd=run sdrecovery; setenv recoverymode recovery\0"	\
 +	"recoveryboot=run recovery_cmd; run ramfsboot\0"		\
 +	"hwtestboot=setenv rootdev 1;"					\
@@ -115,9 +116,9 @@ index 10f5748..e7ae51a 100644
 +		"setenv fdtfile s5p4418-navi_ref-explorer.dtb;"		\
 +		"run mmcboot\0"						\
 +	"hwtest_recoveryboot=run recovery_cmd; run hwtestboot\0"        \
-+	"bootcmd=run ramfsboot\0"
++	"bootcmd=run mmcboot\0"
  
  #endif /* __CONFIG_H__ */
 -- 
-2.7.4
+1.9.1
 
