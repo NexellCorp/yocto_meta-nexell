@@ -27,12 +27,14 @@ CONF_BBMASK_NOT_USE_WSWL = "|meta-nexell/recipes-graphics|meta-nexell/recipes-be
 #Use QT recipes
 CONF_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
                       'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility alsa fontconfig tslib gles2 glib examples tools openssl"',
+                      'PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"',
                       'LICENSE_FLAGS_WHITELIST = "commercial"']
 #Use weston & wayland recipes
 CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = "x11"',
                         'DISTRO_FEATURES_append = " systemd wayland opengl"',
                         'REQUIRED_DISTRO_FEATURES = "wayland"',
                         'VIRTUAL-RUNTIME_init_manager = "systemd"',
+                        'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',
                         'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"']
 
 class parsingForpokyfiles():
