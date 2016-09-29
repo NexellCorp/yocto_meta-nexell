@@ -69,6 +69,7 @@ do_install() {
     install -d ${D}${libdir}/nexell
     install -d ${D}${includedir}/nexell
     install -d ${D}/lib/nexell
+    install -d ${D}${bindir}
 #    oe_runmake install DESTDIR=${D}
 
     install -m 0644 ${S}/nexell/nexell_drm.h ${D}${includedir}/nexell
@@ -81,9 +82,11 @@ do_install() {
     cd ${D}/lib
     ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so
     ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so.1
+
+    install -m 0755 ${S}/tests/modetest/.libs/modetest ${D}${bindir}
 }
 
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files"
-FILES_${PN} = "${libdir} ${includedir} lib lib/nexell"
+FILES_${PN} = "${libdir} ${includedir} lib lib/nexell ${bindir}"
 ALLOW_EMPTY_${PN} = "1"
 PROVIDES = "libdrm-nx"
