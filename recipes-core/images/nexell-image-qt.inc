@@ -19,7 +19,6 @@ WAYLAND_IMAGE_INSTALL = "${@base_contains('DISTRO_FEATURES', 'wayland', \
 QT_IMAGE_INSTALL_common = " \
      qtbase \
      qtbase-plugins \
-     qtbase-fonts \
      qtbase-examples \
      qtdeclarative \
      qtdeclarative-plugins \
@@ -94,12 +93,11 @@ SYSV_INSTALL = " \
 
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
-     ${QT_IMAGE_INSTALL_qt3d} \
      ${QT_IMAGE_INSTALL_qtwebkit} \
-     ${QT_IMAGE_INSTALL_qtwebengine} \
      ${EXAMPLE_IMAGE_INSTALL} \
      ${TOUCH_IMAGE_INSTALL} \
      ${QT_ALSA_IMAGE_INSTALL} \
      ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
      ${@base_contains("MACHINE_FEATURES", "systemd", "${SYSTEMD_INSTALL}", "${SYSV_INSTALL}", d)} \
+     podonamu \
      "

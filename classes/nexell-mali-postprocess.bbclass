@@ -23,6 +23,7 @@ mali_postprocess_function() {
     echo "#!/bin/sh" > nexell_mali
     echo "/sbin/ldconfig > /dev/null 2>&1" >> nexell_mali
     echo "export DBUS_SESSION_BUS_ADDRESS='unix:path=/var/run/dbus/system_bus_socket'" >> nexell_mali
+
     chmod +x nexell_mali
     
     cd ${IMAGE_ROOTFS}/etc/rc2.d
