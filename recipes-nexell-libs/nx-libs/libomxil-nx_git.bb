@@ -3,7 +3,7 @@ DESCRIPTION = "nexell libomxil-nx"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile;md5=d8309eef6670499b1b0924f0f648b17c"
 
-SRCREV = "04dd11988503efa11c405abda935a1fd331032c2"
+SRCREV = "04465d3d574298c847c83c31f42f6811b3f9eacc"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/libomxil-nx;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"

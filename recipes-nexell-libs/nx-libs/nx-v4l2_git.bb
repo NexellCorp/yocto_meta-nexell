@@ -3,7 +3,7 @@ DESCRIPTION = "nx-v4l2"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=50caa96ef586a321a3228191e14a18ea"
 
-SRCREV = "07b95ba3cf5abdc7441a0934c893533832095435"
+SRCREV = "8c524af5350d0f7fc9d6eb5b3985c198adebecfb"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-v4l2;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"

@@ -3,7 +3,7 @@ DESCRIPTION = "nx-gst-meta"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
-SRCREV = "5ec4c79e245b17bbb27991eccf09692ced8023bb"
+SRCREV = "8b46746c94c4b60c8323a6dfb5aa0d2e05bbe3d3"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-gst-meta;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
