@@ -80,8 +80,6 @@ QT_ALSA_EXTRA_IMAGE_INSTALL = " \
 
 SYSTEMD_INSTALL = " \
      systemd-compat-units \
-     systemd-speed-hacks \
-     udev-systemd \
      rsyslog-systemd \
      "
 
@@ -98,6 +96,7 @@ IMAGE_INSTALL += " \
      ${TOUCH_IMAGE_INSTALL} \
      ${QT_ALSA_IMAGE_INSTALL} \
      ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
-     ${@base_contains("MACHINE_FEATURES", "systemd", "${SYSTEMD_INSTALL}", "${SYSV_INSTALL}", d)} \
+     ${SYSTEMD_INSTALL} \
      podonamu \
      "
+#     ${@base_contains("MACHINE_FEATURES", "systemd", "${SYSTEMD_INSTALL}", "${SYSV_INSTALL}", d)} \
