@@ -3,7 +3,7 @@ HOMEPAGE = "http://www.podovat.com"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS += "qtbase qtquickcontrols2 qtmultimedia qtwebkit qtwayland"
+DEPENDS += "qtbase qtquickcontrols2 qtmultimedia qtwebkit qtwayland systemd"
 
 PR = "r1"
 
@@ -32,7 +32,9 @@ do_install() {
     done
 
     chmod -R 775 ${D}/podo
-    install -Dm0644 ${S}/podonamu.service ${D}${systemd_unitdir}/system//podonamu.service
+    install -d ${D}${systemd_unitdir}/system/ ${D}${systemd_unitdir}/system/multi-user.target.wants/
+    install -Dm0644 ${S}/podonamu.service ${D}${systemd_unitdir}/system/
+    ln -sf ${D}${systemd_unitdir}/system/podonamu.service ${D}${systemd_unitdir}/system/multi-user.target.wants/podonamu.service
 }
 
 FILES_${PN} = "podo ${systemd_system_unitdir}"
@@ -42,4 +44,4 @@ RDEPENDS_${PN} = "qtbase-plugins"
 
 SYSTEMD_SERVICE_${PN} = "podonamu.service"
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_AUTO_ENABLE = "enable"
+SYSTEMD_AUTO_ENABLE_${PN} = "enable"
