@@ -46,4 +46,5 @@ RDEPENDS_${PN} = " \
     ${WESTON_CONF} \
     ${MX} \
     ${NEXELL_LIBS} \
+    ${GSTREAMER10} \
     "
