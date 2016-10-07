@@ -10,6 +10,7 @@ IMAGE_FEATURES += "package-management ssh-server-dropbear splash"
 
 IMAGE_INSTALL += " \
         kernel-modules \
+        android-tools \
         "
 
 WAYLAND_IMAGE_INSTALL = "${@base_contains('DISTRO_FEATURES', 'wayland', \
