@@ -37,6 +37,8 @@ do_install() {
     ln -sf ${D}${systemd_unitdir}/system/podonamu.service ${D}${systemd_unitdir}/system/multi-user.target.wants/podonamu.service
 }
 
+PARALLEL_MAKE="-j 1"
+
 FILES_${PN} = "podo ${systemd_system_unitdir}"
 
 INSANE_SKIP_${PN} = "host-user-contaminated debug-files"
