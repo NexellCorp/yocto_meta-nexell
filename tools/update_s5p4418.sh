@@ -39,18 +39,14 @@ RESULT_DIR=
 
 function usage()
 {
-	echo "Usage: $0 -p <partmap-file> -r <result-dir> [-t bl1 -t bootloader -t env -t boot -t modules -t root -t system -t data -v]"
+	echo "Usage: $0 -p <partmap-file> -r <result-dir> [-t bl1 -t uboot -t env -t kernel -t rootfs]"
 	echo -e '\n -p <partmap-file> : partmap file path'
 	echo " -r <result-dir> : result dir path"
 	echo " -t bl1\t: if you want to update only bl1, specify this, default no"
-	echo " -t bootloader\t: if you want to update only bootloader, specify this, default no"
+	echo " -t uboot\t: if you want to update only bootloader, specify this, default no"
 	echo " -t env\t: if you want to update only env, specify this, default no"
-	echo " -t boot\t: if you want to update only boot partition, specify this, default no"
-	echo " -t modules\t: if you want to update only modules partition, specify this, default no"
-	echo " -t root\t: if you want to update only root partition, specify this, default no"
-	echo " -t system\t: if you want to update only system partition, specify this, default no"
-	echo " -t data\t: if you want to update only data partition, specify this, default no"
-	echo " -v : if you want to view verboase build log message, specify this, default no"
+	echo " -t kernel\t: if you want to update only boot partition, specify this, default no"
+	echo " -t rootfs\t: if you want to update only root partition, specify this, default no"
 }
 
 function vmsg()
@@ -63,29 +59,26 @@ function vmsg()
 
 function parse_args()
 {
-	TEMP=`getopt -o "p:r:t:hv" -- "$@"`
-	eval set -- "$TEMP"
+    ARGS=$(getopt -o p:r:t:h -- "$@");
+    eval set -- "$ARGS";
 
-	while true; do
-		case "$1" in
-			-p ) PARTMAP=$2; shift 2 ;;
-			-r ) RESULT_DIR=$2; shift 2 ;;
-			-t ) case "$2" in
-				bl1    ) UPDATE_ALL=false; UPDATE_BL1=true ;;
-				bootloader ) UPDATE_ALL=false; UPDATE_BOOTLOADER=true ;;
-				env  ) UPDATE_ALL=false; UPDATE_ENV=true ;;
-				boot ) UPDATE_ALL=false; UPDATE_BOOT=true ;;
-				modules ) UPDATE_ALL=false; UPDATE_MODULES=true ;;
-				system   ) UPDATE_ALL=false; UPDATE_SYSTEM=true ;;
-				data ) UPDATE_ALL=false; UPDATE_DATA=true ;;
-				root ) UPDATE_ALL=false; UPDATE_ROOT=true ;;
-			     esac
-			     shift 2 ;;
-			-h ) usage; exit 1 ;;
-			-v ) VERBOSE=true; shift 1 ;;
-			-- ) break ;;
-		esac
-	done
+    while true; do
+	case "$1" in
+            -p ) PARTMAP=$2; shift 2 ;;
+            -r ) RESULT_DIR=$2; shift 2 ;;
+            -t ) case "$2" in
+                    bl1    ) UPDATE_ALL=false; UPDATE_BL1=true ;;
+                    uboot  ) UPDATE_ALL=false; UPDATE_BOOTLOADER=true ;;
+                    env    ) UPDATE_ALL=false; UPDATE_ENV=true ;;
+                    kernel ) UPDATE_ALL=false; UPDATE_BOOT=true ;;
+                    rootfs ) UPDATE_ALL=false; UPDATE_ROOT=true ;;
+		    *      ) usage; exit 1 ;;
+                 esac
+                 shift 2 ;;
+            -h ) usage; exit 1 ;;
+            -- ) break ;;
+        esac
+    done
 }
 
 function print_args()
@@ -115,12 +108,6 @@ function print_args()
 		fi
 		if [ ${UPDATE_ROOT} == "true" ]; then
 			vmsg -e "Update:\t\t\troot"
-		fi
-		if [ ${UPDATE_SYSTEM} == "true" ]; then
-			vmsg -e "Update:\t\t\tsystem"
-		fi
-		if [ ${UPDATE_DATA} == "true" ]; then
-			vmsg -e "Update:\t\t\tdata"
 		fi
 	fi
 	vmsg
@@ -222,7 +209,4 @@ update_bl1 ${RESULT_DIR}/bl1-emmcboot.bin
 update_bootloader ${RESULT_DIR}/singleimage-emmcboot.bin
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
-#update_modules ${RESULT_DIR}/modules.img
 update_root ${RESULT_DIR}/rootfs.img
-# update_system ${RESULT_DIR}/system.img
-# update_data ${RESULT_DIR}/user.img
