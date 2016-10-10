@@ -46,8 +46,13 @@ function make_result_dir()
     BOARD_PREFIX=${BOARD_NAME%-*}
     BOARD_POSTFIX=${BOARD_NAME#*-}
 
-    sudo rm -rf "${PARENT_DIR}/${RESULT_DIR}"
-    sudo mkdir -m 777 "${PARENT_DIR}/${RESULT_DIR}"
+    #sudo rm -rf "${PARENT_DIR}/${RESULT_DIR}"
+    if [ ! -d ${PARENT_DIR}/${RESULT_DIR} ];then
+	sudo mkdir -m 777 "${PARENT_DIR}/${RESULT_DIR}"
+    else
+	sudo rm -rf ${PARENT_DIR}/${RESULT_DIR}/boot
+	sudo rm -rf ${PARENT_DIR}/${RESULT_DIR}/root
+    fi
 }
 
 function customize_conf_files()

@@ -15,6 +15,8 @@ BOARD_NAME=
 BOARD_PREFIX=
 BOARD_POSTFIX=
 
+BUILD_ALL=$3
+
 function check_result_dir()
 {
     if [ -d "${RESULT_PATH}" ]
@@ -27,7 +29,7 @@ function check_result_dir()
 
 function check_usage()
 {
-    if [ $argc != 2 ]
+    if [ $argc != 3 ]
     then
 	echo "Invalid argument check usage please"
 	usage
@@ -115,12 +117,16 @@ function copy_dtb_file()
     fi
 }
 
-function copy_rootfs_image()
+function copy_ramdisk_image()
 {
     if [ ${IMAGE_TYPE} != "tiny" ]; then
 	cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
 	#cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}	
     fi
+}
+
+function copy_rootfs_image()
+{
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
     cp ${RESULT_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
@@ -160,7 +166,10 @@ copy_bin_files
 copy_kernel_image
 copy_dtb_file
 #copy_modules_image
-copy_rootfs_image
+copy_ramdisk_image
+if [ ${BUILD_ALL} == "true" ];then
+    copy_rootfs_image
+fi
 #copy_params_image
 copy_partmap_file
 
