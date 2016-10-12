@@ -21,9 +21,9 @@ CONF_BBLAYER_CHANGE_KEYWORD = ['meta-nexell']
 
 CONF_BBMASK = "BBMASK += "
 #Not use QT recipes
-CONF_BBMASK_NOT_USE_QT = "|meta-nexell/recipes-qt"
+CONF_BBMASK_NOT_USE_QT = " /meta-nexell/recipes-qt"
 #Not use weston & wayland recipes
-CONF_BBMASK_NOT_USE_WSWL = "|meta-nexell/recipes-graphics|meta-nexell/recipes-benchmark"
+CONF_BBMASK_NOT_USE_WSWL = " /meta-nexell/recipes-graphics /meta-nexell/recipes-benchmark"
 #Use QT recipes
 CONF_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
                       'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"',
