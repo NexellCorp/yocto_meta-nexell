@@ -29,11 +29,14 @@ function check_result_dir()
 
 function check_usage()
 {
-    if [ $argc != 3 ]
-    then
-	echo "Invalid argument check usage please"
-	usage
-	exit
+    if [ $argc -lt 3 ];then
+	BUILD_ALL=true
+    elif [ $argc -eq 3 ];then
+        echo "Run at $PWD"
+    else
+        echo "Invalid argument check usage please"
+        usage
+        exit
     fi
 }
 
