@@ -177,8 +177,3 @@ fi
 copy_partmap_file
 
 post_process
-
-#temporary because bl1 binary size problem
-if [ ${BOARD_PREFIX} == "navi" ]; then
-    copy_2ndboot_images_navi_only
-fi
