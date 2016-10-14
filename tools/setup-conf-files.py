@@ -35,7 +35,8 @@ CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
                         'REQUIRED_DISTRO_FEATURES = "wayland"',
                         'VIRTUAL-RUNTIME_init_manager = "systemd"',
                         'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',
-                        'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"']
+                        'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
+                        'CORE_IMAGE_EXTRA_INSTALL += "iputils"']
 
 class parsingForpokyfiles():
     linuxMark = '/'
