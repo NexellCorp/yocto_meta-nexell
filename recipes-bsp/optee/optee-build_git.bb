@@ -55,16 +55,20 @@ python do_make_source_dir_pathfile() {
     pv = bb.data.getVar("PV", d, True)
     pr = bb.data.getVar("PR", d, True)
 
+    uboot_name = bb.data.getVar("OPTEE_BUILD_TARGET_MACHINE", d, True)+"-uboot"
+    bl1_name = bb.data.getVar("OPTEE_BUILD_TARGET_MACHINE", d, True)+"-bl1"
+    kernel_name = "linux-"+bb.data.getVar("OPTEE_BUILD_TARGET_MACHINE", d, True)
+
     recipes_optee_paths = ["optee-build", "optee-os", "optee-client", "optee-linuxdriver", "optee-test"]
     recipes_lloader_paths = ["l-loader"]
     recipes_atf_paths = ["arm-trusted-firmware"]
-    recipes_others = ["${OPTEE_BUILD_TARGET_MACHINE}-bl1", "${OPTEE_BUILD_TARGET_MACHINE}-uboot", "linux-${OPTEE_BUILD_TARGET_MACHINE}"]
+    recipes_others = [bl1_name, uboot_name, kernel_name]
     
     recipes_all = recipes_optee_paths + recipes_lloader_paths + recipes_atf_paths + recipes_others
 
     commands.getoutput('echo %s > %s/source_dir_path.txt' % ("For Yocto ${MACHINE_ARCH} optee build",base_workdir))
     for dirname in recipes_all :
-        if dirname == "linux-${OPTEE_BUILD_TARGET_MACHINE}" :
+        if dirname == kernel_name :
             commands.getoutput('echo %s >> %s/source_dir_path.txt' % (kernel_src_path, base_workdir))
             commands.getoutput('echo %s >> %s/source_dir_path.txt' % (kernel_build_path, base_workdir))
         else :
@@ -81,7 +85,12 @@ do_make_symlink() {
     ln -sf "${PATH_L-LOADER}" ${S}/l-loader
     ln -sf "${PATH_U-BOOT}" ${S}/u-boot-artik7
     ln -sf "${PATH_BL1}" ${S}/bl1-artik7
-    ln -sf "${PATH_KERNEL_BUILD}" ${S}/linux-artik7
+
+    if [ ${LOCAL_KERNEL_SOURCE_USING} = "true" ];then
+        ln -sf "${PATH_KERNEL_SRC}" ${S}/linux-artik7
+    else
+        ln -sf "${PATH_KERNEL_BUILD}" ${S}/linux-artik7
+    fi
 }
 
 do_compile() {
@@ -100,7 +109,7 @@ do_compile() {
     oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-nonsecure -j8
 
     oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-optee-client
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" CFLAGS="" build-optee-test
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" build-optee-test
     oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-singleimage -j8
 }
 
@@ -136,6 +145,7 @@ FILES_${PN} += " \
         ${libdir}/* \
         /lib/optee_armtz \
         "
+INSANE_SKIP_${PN}-dev += "dev-elf"
 
 addtask make_source_dir_pathfile before do_configure
 addtask make_symlink after do_configure before do_compile
