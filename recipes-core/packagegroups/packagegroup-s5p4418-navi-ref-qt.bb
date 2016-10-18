@@ -11,8 +11,15 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
+NEXELL_EXAMPLES = " \
+    helloworld-nexell \
+    helloworld-nexell-module \
+    example-libs \
+    "
+
 RDEPENDS_${PN} = " \
     wayland-drm-s5p4418 \
     testsuite-s5p4418 \
-    rtl-8188eus \
+    rtl-8188eus-32 \
+    ${NEXELL_EXAMPLES} \
     "

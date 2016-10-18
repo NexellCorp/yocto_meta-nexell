@@ -5,11 +5,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
  
-NEXELL_EXAMPLES = " \
-    helloworld-nexell \
-    helloworld-nexell-module \
-    example-libs \
-    "
 WESTON_CONF = " \
     weston-conf \
     "
@@ -42,7 +37,6 @@ NEXELL_LIBS = " \
     "
  
 RDEPENDS_${PN} = " \
-    ${NEXELL_EXAMPLES} \
     ${WESTON_CONF} \
     ${MX} \
     ${NEXELL_LIBS} \

@@ -14,4 +14,5 @@ inherit packagegroup
 RDEPENDS_${PN} = " \
     wayland-drm-s5p6818 \
     testsuite-s5p6818 \
+    rtl-8188eus-64 \
     "
