@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: CP949 -*-
 #
 
 import sys
@@ -38,11 +37,18 @@ CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
                         'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
                         'CORE_IMAGE_EXTRA_INSTALL += "iputils"']
 
+CONF_BBMASK_RECIPES_CORE = " /meta-nexell/recipes-core/images"
+CONF_BBMASK_S5P4418_NAVI_REF = "/s5p4418-navi-ref"
+CONF_BBMASK_S5P4418_AVN_REF = "/s5p4418-avn-ref"
+CONF_BBMASK_S5P6818_ARTIK710_RAPTOR = "/s5p6818-artik710-raptor"
+CONF_BBMASK_S5P6818_AVN_REF = "/s5p6818-avn-ref"
+
 class parsingForpokyfiles():
     linuxMark = '/'
     boardName = ''
     imagetype = ''
     confBBmask = ''
+    confBBmask_core = ''
     confAppend = []
 
     def __init__(self, arg1, arg2) :
@@ -61,6 +67,7 @@ class parsingForpokyfiles():
             print line.replace(CONF_LOCAL_CHANGE_NEED_LINE[2], CONF_LOCAL_CHANGE_KEYWORD[2]),
 
 
+        #related QT, wayland/weston
 	if self.imagetype == 'tiny' :
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_WSWL + '"'
             confAppend = []
@@ -76,9 +83,30 @@ class parsingForpokyfiles():
         else :
             pass
 
+        #related recipes-core
+        if self.boardName == 's5p4418-navi-ref' :
+            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'
+        elif self.boardName == 's5p4418-avn-ref' :
+            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_NAVI_REF + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'
+        elif self.boardName == 's5p6818-artik710-raptor' :
+            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_NAVI_REF + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'            
+        elif self.boardName == 's5p6818-avn-ref' :
+            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_NAVI_REF + '"\n'
+        else :
+            pass
+
 	with open(localfilepath, 'a') as file :
 	    file.write("\n#NEXELL appended code\n")
 	    file.write(confBBmask+"\n")
+            file.write(confBBmask_core+"\n")
             for i in confAppend :
                 file.write(i+"\n")
 	

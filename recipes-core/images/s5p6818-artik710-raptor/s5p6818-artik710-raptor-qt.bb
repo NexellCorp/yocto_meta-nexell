@@ -1,5 +1,5 @@
 # Base this image on nexell-image-qt
-require nexell-image-qt.inc
+require ../nexell-image-qt.inc
 inherit nexell-mali-postprocess
 inherit s5p6818-artik710-raptor-post-process
 inherit s5p6818-artik710-raptor-post-process-qt

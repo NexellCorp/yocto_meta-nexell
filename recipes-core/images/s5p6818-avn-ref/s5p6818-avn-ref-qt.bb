@@ -1,5 +1,5 @@
 # Base this image on nexell-image-qt
-require nexell-image-qt.inc
+require ../nexell-image-qt.inc
 inherit nexell-mali-postprocess
 inherit s5p6818-avn-ref-post-process
 inherit s5p6818-avn-ref-post-process-qt
