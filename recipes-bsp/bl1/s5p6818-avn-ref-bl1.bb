@@ -3,7 +3,7 @@ include bl1-secure.inc
 LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://README;md5=754608f69d5791d96a0a96281ae48814"
-SRCREV = "e66b58f7badffb8b41240072b73519c40660e0e4"
+SRCREV = "976cf325fef42aecd967d771b6a9bb7525a750a8"
 SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p6818;protocol=git;branch=nexell \
            file://0001-s5p6818-avn-bl1.patch \
           "
