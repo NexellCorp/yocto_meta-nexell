@@ -15,13 +15,9 @@ COMPATIBLE_MACHINE = "s5p4418-avn-ref"
 DEPENDS = "s5p4418-avn-ref-bl1 s5p4418-avn-ref-uboot"
 
 PE = "1"
-PV = "4.1.15"
+PV = "${LINUX_VERSION}"
 
 KERNEL_DEFCONFIG_s5p4418-avn-ref ?= "s5p4418_avn_ref_defconfig"
-
-#UDEV_GE_141 ?= "1"
-KERNEL_MODULE_AUTOLOAD += "${@bb.utils.contains("MACHINE_FEATURES", "pitft28r", "stmpe-ts", "", d)}"
-
 KERNEL_COMMON_FLAGS = "ARCH=arm CROSS_COMPILE=${TARGET_PREFIX}"
 
 ARM_ARCH = "arm"
@@ -31,30 +27,14 @@ BOARD_PREFIX = "avn_ref"
 do_kernel_configme_prepend() {
     config=${S}/arch/arm/configs/${KERNEL_DEFCONFIG}
 
-    sed -i "/CONFIG_MEDIA_SUBDRV_AUTOSELECT[ =]/d" $config
-    echo "CONFIG_MEDIA_SUBDRV_AUTOSELECT=n" >> $config
-
-    sed -i "/CONFIG_CMA_SIZE_MBYTES[ =]/d" $config
-    echo "CONFIG_CMA_SIZE_MBYTES=256" >> $config
-
-    echo "CONFIG_MALI400=m" >> $config
-
     install -m 0644 ${S}/arch/arm/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
 }
 
 do_compile() {
-    oe_runmake ARCH=arm distclean
+    #oe_runmake ARCH=arm distclean
     local dts_file=${S}/arch/${ARM_ARCH}/boot/dts/${CHIP_NAME}-${BOARD_PREFIX}-rev00.dts
 
     oe_runmake ARCH=${ARM_ARCH} ${KERNEL_DEFCONFIG}
-
-    export LDFLAGS="-O1 --hash-style=gnu --as-needed"
-
-    local memreserve_size=0x7ed00000
-    local reg_size=0x3ee00000
-
-    sed -i -e 's/\(\/memreserve\/[[:blank:]]\+\)\([[:alnum:]]\+[[:blank:]]\+\)\([[:alnum:]]\+\)/\1'"${memreserve_size}"' \3/' ${dts_file} 
-    sed -i -e 's/\(^[[:blank:]]\+reg = <0x40000000 \)[[:alnum:]]\+>/\1'"${reg_size}"'>/' ${dts_file}   
 
     oe_runmake ${KERNEL_COMMON_FLAGS} zImage -j8
     oe_runmake ${KERNEL_COMMON_FLAGS} dtbs

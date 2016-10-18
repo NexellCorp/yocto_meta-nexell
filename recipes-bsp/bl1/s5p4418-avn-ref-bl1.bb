@@ -2,7 +2,7 @@
 LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://README;md5=c48cff868868eb40f73e510f7bae7710"
-SRCREV = "1d2a94728488125a5c9346f7d347f10d4f01cca5"
+SRCREV = "d222bc78c966b52aab93a6037a1ae0c82adbc929"
 SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p4418;protocol=git;branch=nexell \
            file://0001-bl1-AVN.patch \
           "
