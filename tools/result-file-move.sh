@@ -72,6 +72,9 @@ function copy_bin_files()
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-nonsecure.bin ${RESULT_PATH}
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-secure.bin ${RESULT_PATH}	
     else
+        if [ "${BOARD_NAME}" == "navi-ref" ]; then
+            cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+        fi
 	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
     fi
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/u-boot.bin ${RESULT_PATH}
@@ -133,12 +136,6 @@ function copy_rootfs_image()
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
     cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
     cp ${RESULT_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
-}
-
-function copy_2ndboot_images_navi_only()
-{
-    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi.bin ${RESULT_PATH}
-    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
 }
 
 function copy_params_image()

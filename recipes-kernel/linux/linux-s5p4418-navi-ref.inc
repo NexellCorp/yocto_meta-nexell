@@ -27,9 +27,6 @@ BOARD_PREFIX = "navi_ref"
 do_kernel_configme_prepend() {
     config=${S}/arch/${ARM_ARCH}/configs/${KERNEL_DEFCONFIG}
 
-    sed -i "/CONFIG_CMA_SIZE_MBYTES[ =]/d" $config
-    echo "CONFIG_CMA_SIZE_MBYTES=256" >> $config
-
     install -m 0644 ${S}/arch/${ARM_ARCH}/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
 }
 
