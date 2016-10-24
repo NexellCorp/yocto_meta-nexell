@@ -1,0 +1,51 @@
+require linux-nexell.inc
+inherit linux-nexell-base
+
+DESCRIPTION = "Linux Kernel for HS IOT"
+SECTION = "kernel"
+LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+
+SRC_URI += " \
+        file://defconfig \
+        "
+
+COMPATIBLE_MACHINE = "s5p4418-hs-iot"
+
+DEPENDS = "s5p4418-hs-iot-uboot s5p4418-hs-iot-bl1"
+
+PE = "1"
+PV = "${LINUX_VERSION}"
+
+KERNEL_DEFCONFIG_s5p4418-hs-iot ?= "s5p4418_hs_iot_defconfig"
+KERNEL_COMMON_FLAGS = "ARCH=arm CROSS_COMPILE=${TARGET_PREFIX}"
+
+ARM_ARCH = "arm"
+CHIP_NAME = "s5p4418"
+BOARD_PREFIX = "hs_iot"
+
+do_kernel_configme_prepend() {
+    config=${S}/arch/${ARM_ARCH}/configs/${KERNEL_DEFCONFIG}
+
+    sed -i "/CONFIG_CMA_SIZE_MBYTES[ =]/d" $config
+    echo "CONFIG_CMA_SIZE_MBYTES=256" >> $config
+
+    install -m 0644 ${S}/arch/${ARM_ARCH}/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
+}
+
+do_compile() {
+#    oe_runmake ARCH=${ARM_ARCH} distclean
+    local dts_file=${S}/arch/${ARM_ARCH}/boot/dts/${CHIP_NAME}-${BOARD_PREFIX}-rev00.dts
+
+    oe_runmake ARCH=${ARM_ARCH} ${KERNEL_DEFCONFIG}
+
+    oe_runmake ${KERNEL_COMMON_FLAGS} zImage
+    oe_runmake ${KERNEL_COMMON_FLAGS} dtbs
+    oe_runmake ${KERNEL_COMMON_FLAGS} modules
+    
+    oe_runmake ${KERNEL_COMMON_FLAGS} modules_install INSTALL_MOD_PATH=${D} INSTALL_MOD_STRIP=1
+}
+
+do_install_append() {
+    echo "${KBUILD_OUTPUT}" > ${BASE_WORKDIR}/source_kernel_dir_path.txt
+}

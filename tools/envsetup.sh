@@ -37,6 +37,9 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-hs-iot qt"
+    echo "    ex) $0 s5p4418-hs-iot tiny"
+    echo "    ex) $0 s5p4418-hs-iot tinyui"
 }
 
 function make_result_dir()

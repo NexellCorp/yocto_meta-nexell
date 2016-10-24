@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
 SRCREV = "8b46746c94c4b60c8323a6dfb5aa0d2e05bbe3d3"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-gst-meta;protocol=git;branch=nexell"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-gst-meta;protocol=git;branch=yocto-hs-iot"
 
 S = "${WORKDIR}/git"
 
@@ -12,7 +12,7 @@ PV = "NEXELL"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-#COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref|s5p6818-avn-ref|s5p4418-navi-ref)"
+#COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p4418-avn-ref|s5p6818-avn-ref|s5p4418-navi-ref|s5p4418-hs-iot)"
 
 DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base glib-2.0"
 

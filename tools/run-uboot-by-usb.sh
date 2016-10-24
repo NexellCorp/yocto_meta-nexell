@@ -28,6 +28,7 @@ function usage()
     echo "    ex) $0 s5p6818-avn-ref"
     echo "    ex) $0 s5p4418-avn-ref"
     echo "    ex) $0 s5p4418-navi-ref"
+    echo "    ex) $0 s5p4418-hs-iot"
 }
 
 function get_board_prefix()
@@ -59,6 +60,10 @@ function run_by_usb()
 	    sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt -b bl1-${BOARD_PREFIX}-usb.bin
 	    sleep 1
 	    sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+	elif [ ${BOARD_PREFIX} == "hs" ]; then
+	    sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_iot_usb.txt -b bl1-${BOARD_PREFIX}-iot-usb.bin
+	    sleep 1
+	    sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_iot_usb.txt -f u-boot.bin -a 0x43c00000 -j 0x43c00000
 	else
 	    echo "Not supported board type"
 	fi

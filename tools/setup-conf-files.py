@@ -38,6 +38,7 @@ CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
                         'CORE_IMAGE_EXTRA_INSTALL += "iputils"']
 
 CONF_BBMASK_RECIPES_CORE = " /meta-nexell/recipes-core/images"
+CONF_BBMASK_S5P4418_HS_IOT = "/s5p4418-hs-iot"
 CONF_BBMASK_S5P4418_NAVI_REF = "/s5p4418-navi-ref"
 CONF_BBMASK_S5P4418_AVN_REF = "/s5p4418-avn-ref"
 CONF_BBMASK_S5P6818_ARTIK710_RAPTOR = "/s5p6818-artik710-raptor"
@@ -84,7 +85,12 @@ class parsingForpokyfiles():
             pass
 
         #related recipes-core
-        if self.boardName == 's5p4418-navi-ref' :
+        if self.boardName == 's5p4418-hs-iot' :
+            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_NAVI_REF + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
+            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'
+        elif self.boardName == 's5p4418-navi-ref' :
             confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
             confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
             confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'

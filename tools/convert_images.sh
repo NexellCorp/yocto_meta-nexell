@@ -61,6 +61,9 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-hs-iot qt"
+    echo "    ex) $0 s5p4418-hs-iot tiny"
+    echo "    ex) $0 s5p4418-hs-iot tinyui"
 }
 
 function convert_env_setup()
@@ -194,6 +197,9 @@ function make_2ndboot_for_emmc()
     if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
         bl1_source=bl1-raptor.bin
         file_name=raptor-emmc-32.txt
+    elif [ "${MACHINE_NAME}" == "s5p4418-hs-iot" ]; then
+        bl1_source=bl1-${BOARD_PREFIX}.bin
+        file_name=nsih_${BOARD_PREFIX}_iot_emmc.txt
     else
         bl1_source=bl1-${BOARD_PREFIX}.bin
         file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
@@ -202,6 +208,9 @@ function make_2ndboot_for_emmc()
     local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
 
     if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
+        chip_name="nxp4330"
+        bootbingen=BOOT_BINGEN_NAVI
+    elif [ "${MACHINE_NAME}" == "s5p4418-hs-iot" ]; then
         chip_name="nxp4330"
         bootbingen=BOOT_BINGEN_NAVI
     fi
@@ -235,6 +244,8 @@ function make_3rdboot_for_emmc()
 
     if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
         file_name=raptor-emmc-32.txt
+    elif [ "${MACHINE_NAME}" == "s5p4418-hs-iot" ]; then
+        file_name=nsih_${BOARD_PREFIX}_iot_emmc.txt
     else
         file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
     fi
@@ -255,6 +266,8 @@ function make_3rdboot_for_emmc()
     fi
 
     if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
+        chip_name="nxp4330"
+    elif [ "${MACHINE_NAME}" == "s5p4418-hs-iot" ]; then
         chip_name="nxp4330"
     fi
  

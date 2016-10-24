@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=ce23c541b32b443603093d2be5f59a24"
 
 SRCREV = "1b75d235fccd0c227e921ff4e86dcb0733260e27"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/gst-plugins-camera;protocol=git;branch=nexell"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/gst-plugins-camera;protocol=git;branch=yocto-hs-iot"
 
 S = "${WORKDIR}/git"
 

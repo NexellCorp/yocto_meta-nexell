@@ -7,6 +7,7 @@ KERNEL_IMAGETYPE_s5p6818-artik710-raptor ?= "Image"
 KERNEL_IMAGETYPE_s5p6818-avn-ref ?= "Image"
 KERNEL_IMAGETYPE_s5p4418-navi-ref ?= "zImage"
 KERNEL_IMAGETYPE_s5p4418-avn-ref ?= "zImage"
+KERNEL_IMAGETYPE_s5p4418-hs-iot ?= "zImage"
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen mouse touchscreen alsa bluetooth wifi sdio"
 
@@ -18,3 +19,4 @@ DEFAULTTUNE_s5p6818-artik710-raptor ?= "aarch64"
 DEFAULTTUNE_s5p6818-avn-ref ?= "aarch64"
 DEFAULTTUNE_s5p4418-avn-ref ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p4418-navi-ref ?= "cortexa9hf-neon"
+DEFAULTTUNE_s5p4418-hs-iot ?= "cortexa9hf-neon"

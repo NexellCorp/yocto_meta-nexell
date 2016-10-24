@@ -50,6 +50,9 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-hs-iot qt"
+    echo "    ex) $0 s5p4418-hs-iot tiny"
+    echo "    ex) $0 s5p4418-hs-iot tinyui"
 }
 
 function get_board_prefix()
@@ -108,6 +111,8 @@ function copy_dtb_file()
 	    file_name_dtb="s5p4418-avn_ref*.dtb"
 	elif [ ${BOARD_PREFIX} == "navi" ]; then
 	    file_name_dtb="s5p4418-navi_ref*.dtb"
+	elif [ ${BOARD_PREFIX} == "hs" ]; then
+	    file_name_dtb="s5p4418-hs_iot*.dtb"
 	fi
     fi
 
@@ -139,6 +144,12 @@ function copy_2ndboot_images_navi_only()
 {
     cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi.bin ${RESULT_PATH}
     cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+}
+
+function copy_2ndboot_images_hs_only()
+{
+    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-hs-emmc.bin ${RESULT_PATH}
+    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-hs-usb.bin ${RESULT_PATH}
 }
 
 function copy_params_image()

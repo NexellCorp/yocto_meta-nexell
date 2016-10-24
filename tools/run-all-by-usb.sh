@@ -50,6 +50,7 @@ function usage()
     echo "    ex) $0 s5p6818-artik710-raptor"
     echo "    ex) $0 s5p4418-avn-ref"
     echo "    ex) $0 s5p4418-navi-ref"
+    echo "    ex) $0 s5p4418-hs-iot"
 }
 
 function get_board_prefix()
