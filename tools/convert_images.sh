@@ -36,6 +36,8 @@ PORTS=("emmc" "sd")
 # aes key
 AES_KEY=
 PRIVATE_KEY=${META_NEXELL_TOOLS_DIR}/private_key.pem
+FIP_SEC_SIZE=
+FIP_NONSEC_SIZE=
 
 SECURE_BOOT="false"
 
@@ -282,6 +284,7 @@ function post_process()
         gen_loader_sd ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
         gen_secure ${result_dir} fip-secure.bin ${PRIVATE_KEY}
         gen_nonsecure ${result_dir} fip-nonsecure.bin ${PRIVATE_KEY}
+	gen_loader_usb ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
     else
 	make_2ndboot_for_emmc
         make_3rdboot_for_emmc
@@ -315,7 +318,22 @@ function gen_loader_sd() {
     gen_loader ${1} ${2} ${3} ${DEVID_SDMMC} ${PORT_SD} ${4}
 }
 
-# fip-loader.bin
+function gen_loader_usb() {
+    gen_loader ${1} ${2} ${3} ${DEVID_USB} 0 ${4}
+
+    pushd ${1}
+    cat fip-secure.img >> fip-loader-usb.img
+    cat fip-nonsecure.img >> fip-loader-usb.img
+    popd
+}
+
+# args
+# 1; result_dir
+# 2: input fip-loader.bin
+# 3: rsa key
+# 4: boot device number
+# 5: port
+# 6: aes key
 function gen_loader() {
     local result_dir=${1}
     local chip_name=${BOARD_SOCNAME}
@@ -386,24 +404,24 @@ function gen_loader() {
 	else
 	    devname="sd"
 	fi
+
+	dev_offset_opts="-m 0x60200 -b ${bootdev} -p ${portnum} \
+		-m 0x1E0200 -b ${bootdev} -p ${portnum}"
+    elif [ ${bootdev} == ${DEVID_USB} ]; then
+	dev_offset_opts="-u -m 0x7fb00000 -z ${FIP_SEC_SIZE} \
+		-m 0x7df00000 -z ${FIP_NONSEC_SIZE}"
     fi
     out_img="fip-loader-${devname}.img"
     aes_out_img="${out_img}"
     echo "[fip-loader] bootdev: ${bootdev}"
     echo "[fip-loader] out_img: ${out_img}"
 
-#    dev_offset_opts="-m 0x50200 -b ${bootdev} -p ${portnum} \                                                           
-#                -m 0x110200 -b ${bootdev} -p ${portnum}"
-
-     # 0x60200 : MBR (0x200) + 2ndboot (0x10000) + FIP-LOADER size (0x50000)
-     # 0x1E0200 : 0x50200 + FIP-SECURE size(0x180000)
-     dev_offset_opts="-m 0x60200 -b ${bootdev} -p ${portnum} -m 0x1E0200 -b ${bootdev} -p ${portnum}"
-    
     # BINGEN
     ${SECURE_TOOL} -c ${chip_name} -t 3rdboot -n ${nsih} \
 		   -i ${result_dir}/${in_img} \
 		   -o ${result_dir}/${gen_img} \
 		   -l ${load_addr} -e ${jump_addr} \
+		   -k ${bootdev} \
 		   ${dev_offset_opts}
 
     if [ ${SECURE_BOOT} == "true" ]; then	
@@ -479,6 +497,8 @@ function gen_secure() {
     fi
     
     cp ${gen_img} ${out_img}
+
+    FIP_SEC_SIZE=`stat --printf="%s" ${out_img}`
 }
 
 # fip-nonsecure.bin
@@ -544,6 +564,8 @@ function gen_nonsecure() {
     fi
     
     cp ${gen_img} ${out_img}
+
+    FIP_NONSEC_SIZE=`stat --printf="%s" ${out_img}`
 }
 
 #write_hash_rsa ${gen_img} ${in_img}.pub ${in_img}.sig
