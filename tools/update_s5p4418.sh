@@ -210,4 +210,4 @@ update_bootloader ${RESULT_DIR}/singleimage-emmcboot.bin
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
-sudo fastboot reboot
+
