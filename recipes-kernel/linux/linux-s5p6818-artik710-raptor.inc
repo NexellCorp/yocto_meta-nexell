@@ -3,20 +3,10 @@ inherit linux-nexell-base
 inherit nexell-optee-preprocess
 
 DESCRIPTION = "Linux Kernel for nexell artik710-raptor"
-SECTION = "kernel"
-LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
-
-SRC_URI += " \
-        file://defconfig \
-        "
 
 COMPATIBLE_MACHINE = "s5p6818-artik710-raptor"
 
 DEPENDS = "optee-build"
-
-PE = "1"
-PV = "4.1.15"
 
 PROVIDES += "virtual/kernel kernel kernel-base kernel-image kernel-dev kernel-vmlinux kernel-misc kernel-modules"
 

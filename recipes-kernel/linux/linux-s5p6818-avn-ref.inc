@@ -3,20 +3,10 @@ inherit linux-nexell-base
 inherit nexell-optee-preprocess
 
 DESCRIPTION = "Linux Kernel for nexell avn-ref"
-SECTION = "kernel"
-LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
-
-SRC_URI += " \
-        file://defconfig \
-        "
 
 COMPATIBLE_MACHINE = "s5p6818-avn-ref"
 
 DEPENDS = "optee-build"
-
-PE = "1"
-PV = "${LINUX_VERSION}"
 
 PROVIDES += "virtual/kernel kernel kernel-base kernel-image kernel-dev kernel-vmlinux kernel-misc kernel-modules"
 

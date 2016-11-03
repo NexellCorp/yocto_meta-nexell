@@ -2,20 +2,10 @@ require linux-nexell.inc
 inherit linux-nexell-base
 
 DESCRIPTION = "Linux Kernel for nexell NAVI"
-SECTION = "kernel"
-LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
-
-SRC_URI += " \
-        file://defconfig \
-        "
 
 COMPATIBLE_MACHINE = "s5p4418-navi-ref"
 
 DEPENDS = "s5p4418-navi-ref-uboot s5p4418-navi-ref-bl1"
-
-PE = "1"
-PV = "${LINUX_VERSION}"
 
 KERNEL_DEFCONFIG_s5p4418-navi-ref ?= "s5p4418_navi_ref_defconfig"
 KERNEL_COMMON_FLAGS = "ARCH=arm CROSS_COMPILE=${TARGET_PREFIX}"

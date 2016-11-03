@@ -1,33 +1,25 @@
-DESCRIPTION = "Linux Kernel"
+DESCRIPTION ?= "Linux Kernel"
 SECTION = "kernel"
 LICENSE = "GPLv2"
 
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+
+LICENSE = "GPLv2"
+LINUX_VERSION ?= "4.4.19"
+
+SRC_URI[md5sum] = "dbb4a2b9d337a90a304d3e30b86b8d27"
+SRC_URI[sha256sum] = "421ddaca0fa29bf8be2affea6fb020ab5bcfb67f368d8f7bba8d8cfd8c88a61f"
+
+SRCREV = "9db2c167307268e6423472662ef8611c85079ac4"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/kernel/kernel-4.1.15;protocol=git;branch=nexell"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+
+PE = "1"
+PV = "${LINUX_VERSION}"
 
 inherit kernel siteinfo
 require recipes-kernel/linux/linux-yocto.inc
-
-# Enable OABI compat for people stuck with obsolete userspace
-#ARM_KEEP_OABI ?= "1"
-
-# Set the verbosity of kernel messages during runtime
-# You can define CMDLINE_DEBUG in your local.conf or distro.conf to override this behaviour
-#CMDLINE_DEBUG ?= '${@base_conditional("DISTRO_TYPE", "release", "quiet", "debug", d)}'
-#CMDLINE_append = " ${CMDLINE_DEBUG}"
-
-# # Set a variable in .configure
-# # $1 - Configure variable to be set
-# # $2 - value [n/y/value]
-# kernel_configure_variable() {
-#     # Remove the config
-#     CONF_SED_SCRIPT="$CONF_SED_SCRIPT /CONFIG_$1[ =]/d;"
-#     if test "$2" = "n"
-#     then
-#         echo "# CONFIG_$1 is not set" >> ${B}/.config
-#     else
-#         echo "CONFIG_$1=$2" >> ${B}/.config
-#     fi
-# }
 
 do_configure_prepend() {
     # Clean .config
