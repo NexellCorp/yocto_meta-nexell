@@ -1,16 +1,8 @@
+require nexell-uboot-common.inc
+
 DESCRIPTION = "U-Boot for AVN S5P4418"
 
-LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://README;md5=587d8d939ae351bb11910921b1eafd42"
-
-SRCREV = "cb3dd133e2d07166e9ceb30da86e17880059ad9b"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/u-boot/u-boot-2016.01;protocol=git;branch=nexell"
-
-S = "${WORKDIR}/git"
-PV = "NEXELL"
-PR = "0.1"
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
+#SRC_URI += "file://"
 
 COMPATIBLE_MACHINE = "s5p4418-avn-ref"
 
