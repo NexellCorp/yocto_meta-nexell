@@ -1,17 +1,5 @@
-#SECTION = "bootloader"
-LICENSE = "GPLv2"
+require nexell-bl1-s5p4418-common.inc
 
-LIC_FILES_CHKSUM = "file://README;md5=c48cff868868eb40f73e510f7bae7710"
-SRCREV = "d222bc78c966b52aab93a6037a1ae0c82adbc929"
-SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p4418;protocol=git;branch=nexell \
-           file://0001-bl1-AVN.patch \
-          "
-
-S = "${WORKDIR}/git"
-PV = "NEXELL"
-PR = "0.1"
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "s5p4418-avn-ref"
 
 TOOLCHAIN_ARCH32_EABI = "${BASE_WORKDIR}/arm-eabi-4.8/bin/"

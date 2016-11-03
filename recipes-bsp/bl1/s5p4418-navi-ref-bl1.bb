@@ -1,17 +1,5 @@
-#SECTION = "bootloader"
-LICENSE = "GPLv2"
+require nexell-bl1-s5p4418-common.inc
 
-LIC_FILES_CHKSUM = "file://README;md5=c48cff868868eb40f73e510f7bae7710"
-SRCREV = "825774988455c50c4911012cd21e2100edcae654"
-SRC_URI = "git://git.nexell.co.kr/nexell/bl1/bl1-s5p4418;protocol=git;branch=nexell \
-           file://0001-NAVI-NSP4330-Bl1-Board-SETTING.patch \
-          "
-
-S = "${WORKDIR}/git"
-PV = "NEXELL"
-PR = "0.1"
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "s5p4418-navi-ref"
 
 TOOLCHAIN_ARCH32_EABI = "${BASE_WORKDIR}/arm-eabi-4.8/bin/"
