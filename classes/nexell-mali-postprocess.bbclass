@@ -1,15 +1,15 @@
 mali_postprocess_function() {
-    cd ${IMAGE_ROOTFS}/usr/lib/driver
-    ln -sf libMali.so libEGL.so.1.4; ln -sf libEGL.so.1.4 libEGL.so.1; ln -sf libEGL.so.1 libEGL.so; \
-    ln -sf libMali.so libGLESv1_CM.so.1.1; ln -sf libGLESv1_CM.so.1.1 libGLESv1_CM.so.1; ln -sf libGLESv1_CM.so.1 libGLESv1_CM.so; \
-    ln -sf libMali.so libGLESv2.so.2.0; ln -sf libGLESv2.so.2.0 libGLESv2.so.2; ln -sf libGLESv2.so.2 libGLESv2.so; \
+    # cd ${IMAGE_ROOTFS}/usr/lib/driver
+    # ln -sf libMali.so libEGL.so.1.4; ln -sf libEGL.so.1.4 libEGL.so.1; ln -sf libEGL.so.1 libEGL.so; \
+    # ln -sf libMali.so libGLESv1_CM.so.1.1; ln -sf libGLESv1_CM.so.1.1 libGLESv1_CM.so.1; ln -sf libGLESv1_CM.so.1 libGLESv1_CM.so; \
+    # ln -sf libMali.so libGLESv2.so.2.0; ln -sf libGLESv2.so.2.0 libGLESv2.so.2; ln -sf libGLESv2.so.2 libGLESv2.so; \
 
-    ln -sf libMali.so libgbm.so.1; ln -sf libgbm.so.1 libgbm.so; \
-    ln -sf libMali.so libwayland-egl.so.1; ln -sf libwayland-egl.so.1 libwayland-egl.so; \
+    # ln -sf libMali.so libgbm.so.1; ln -sf libgbm.so.1 libgbm.so; \
+    # ln -sf libMali.so libwayland-egl.so.1; ln -sf libwayland-egl.so.1 libwayland-egl.so; \
 
-    cd ${IMAGE_ROOTFS}/usr/lib
-    ln -sf libGLESv1_CM.so.1.1  libGLESv1_CM.so.1
-    ln -sf driver/libGLESv1_CM.so.1.1 libGLESv1_CM.so.1.1
+    # cd ${IMAGE_ROOTFS}/usr/lib
+    # ln -sf libGLESv1_CM.so.1.1  libGLESv1_CM.so.1
+    # ln -sf driver/libGLESv1_CM.so.1.1 libGLESv1_CM.so.1.1
 
     cd ${IMAGE_ROOTFS}/usr/bin
     chmod +x start_wayland.sh
@@ -30,4 +30,4 @@ mali_postprocess_function() {
     ln -s ../init.d/weston S11nexell_mali   
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "mali_postprocess_function;"
+#ROOTFS_POSTPROCESS_COMMAND += "mali_postprocess_function;"
