@@ -39,9 +39,13 @@ def split_overlays(d, out):
     return overlays
 
 def get_kernel_arch(d, a):
-     import re
+    if 'aarch64' in a :
+        return 'arm64'
+    else:
+        return 'arm32'
 
-     if 'aarch64' in a :
-         return 'arm64'
-     else:
-         return 'arm32'
+def get_kernel_arch_num(d, a):
+    if 'aarch64' in a :
+        return '64'
+    else :
+        return '32'
