@@ -22,8 +22,8 @@
 
 set -e
 
-TOP=`pwd`
-export TOP
+CURRENT_PATH=`dirname $0`
+TOOLS_PATH=`readlink -ev $CURRENT_PATH`
 
 PARTMAP=
 UPDATE_ALL=true
@@ -36,6 +36,10 @@ UPDATE_ROOT=false
 UPDATE_SYSTEM=false
 UPDATE_DATA=false
 RESULT_DIR=
+
+MACHINE_NAME=
+BOARD_SOCNAME=
+BOARD_NAME=
 
 function usage()
 {
@@ -79,6 +83,15 @@ function parse_args()
             -- ) break ;;
         esac
     done
+
+    local RESULT_ABS_DIR=`readlink -ev $RESULT_DIR`
+    local RESULT_DIR_NAME=${RESULT_ABS_DIR##/*/}
+    local T_BOARD_NAME=
+    
+    MACHINE_NAME=${RESULT_DIR_NAME#*-}
+    BOARD_SOCNAME=${MACHINE_NAME%-*-*-*}
+    T_BOARD_NAME=${MACHINE_NAME%-*}
+    BOARD_NAME=${T_BOARD_NAME#*-}
 }
 
 function print_args()
@@ -95,7 +108,11 @@ function print_args()
 			vmsg -e "Update:\t\t\tbl1"
 		fi
 		if [ ${UPDATE_BOOTLOADER} == "true" ]; then
+		    if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
 			vmsg -e "Update:\t\t\tbootloader(fip files)"
+		    else
+			vmag -e "Update:\t\t\tbootloader(singleimage)"
+		    fi
 		fi
 		if [ ${UPDATE_ENV} == "true" ]; then
 			vmsg -e "Update:\t\t\tenv"
@@ -207,7 +224,10 @@ function update_root()
 	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_ROOT} == "true" ]; then
 		local file=${1}
 		vmsg "update rootfs: ${file}"
-		flash rootfs ${file}
+		
+		sudo fastboot flash setenv ${CURRENT_PATH}/partition.txt
+		sudo fastboot -S 0 flash rootfs ${file}
+		#flash rootfs ${file}
 	fi
 }
 
@@ -232,10 +252,17 @@ function update_data()
 parse_args $@
 print_args
 update_partmap ${PARTMAP}
-update_bl1 ${RESULT_DIR}/bl1-emmcboot.img
-update_fip1 ${RESULT_DIR}/fip-loader-emmc.img
-update_fip2 ${RESULT_DIR}/fip-secure.img
-update_fip3 ${RESULT_DIR}/fip-nonsecure.img
+
+if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
+    update_bl1 ${RESULT_DIR}/bl1-emmcboot.img
+    update_fip1 ${RESULT_DIR}/fip-loader-emmc.img
+    update_fip2 ${RESULT_DIR}/fip-secure.img
+    update_fip3 ${RESULT_DIR}/fip-nonsecure.img
+else
+    update_bl1 ${RESULT_DIR}/bl1-emmcboot.bin
+    update_bootloader ${RESULT_DIR}/singleimage-emmcboot.bin
+fi
+
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
