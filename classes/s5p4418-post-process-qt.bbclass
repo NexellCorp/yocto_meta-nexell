@@ -1,4 +1,4 @@
-navi_postprocess_about_qt_touch_function() {
+postprocess_about_qt_touch_function() {
     cd ${IMAGE_ROOTFS}
     #echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=\"rotate=180\":tslib:/dev/input/touchscreen0:invertx" >> etc/profile.d/tslib.sh
     
@@ -8,4 +8,4 @@ navi_postprocess_about_qt_touch_function() {
     echo "export POINTERCAL_FILE=/etc/pointercal" >> etc/profile.d/tslib.sh
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "navi_postprocess_about_qt_touch_function;"
+ROOTFS_POSTPROCESS_COMMAND += "postprocess_about_qt_touch_function;"

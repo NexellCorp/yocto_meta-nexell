@@ -1,6 +1,7 @@
-avn_postprocess_common_function() {
+postprocess_common_function() {
     cd ${IMAGE_ROOTFS}    
     ln -sf bin/busybox linuxrc
+    ln -sf lib lib64
     rm -rf run
     ln -sf tmp run
 
@@ -11,4 +12,4 @@ avn_postprocess_common_function() {
     echo "mount -t sysfs none /sys" >> etc/bootscript.sh
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "avn_postprocess_common_function; "
+ROOTFS_POSTPROCESS_COMMAND += "postprocess_common_function;"
