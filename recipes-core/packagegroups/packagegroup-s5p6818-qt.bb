@@ -12,7 +12,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 RDEPENDS_${PN} = " \
-    wayland-drm-s5p6818 \
+    nexell-drm-mali \
     testsuite-s5p6818 \
     rtl-8188eus-64 \
     "

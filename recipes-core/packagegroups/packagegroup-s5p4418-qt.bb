@@ -18,7 +18,7 @@ NEXELL_EXAMPLES = " \
     "
 
 RDEPENDS_${PN} = " \
-    wayland-drm-s5p4418 \
+    nexell-drm-mali \
     testsuite-s5p4418 \
     rtl-8188eus-32 \
     ${NEXELL_EXAMPLES} \
