@@ -49,3 +49,8 @@ recipes-nexell-libs/nx-libs/nx-renderer_%.bbappend
 recipes-nexell-libs/nx-libs/nx-scaler_%.bbappend
 recipes-nexell-libs/nx-libs/nx-v4l2_%.bbappend
 recipes-nexell-libs/nx-libs/nx-video-api_%.bbappend
+
+
+#related GENIVI
+recipes-qt/qt5/qtwayland/*
+recipes-qt/qt5/qtwayland_%.bbappend
