@@ -38,12 +38,12 @@ do_install () {
         ln ${D}${libdir}/libMali.so ${D}${libdir}/libgbm.so
         ln ${D}${libdir}/libMali.so ${D}${libdir}/libwayland-egl.so
     else
-        ln -sf ${D}${libdir}/libMali.so ${D}${libdir}/libEGL.so
-        ln -sf ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv1_CM.so
-        ln -sf ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv2.so
-        ln -sf ${D}${libdir}/libMali.so ${D}${libdir}/libOpenCL.so
-        ln -sf ${D}${libdir}/libMali.so ${D}${libdir}/libgbm.so
-        ln -sf ${D}${libdir}/libMali.so ${D}${libdir}/libwayland-egl.so
+        ln -sf libMali.so ${D}${libdir}/libEGL.so
+        ln -sf libMali.so ${D}${libdir}/libGLESv1_CM.so
+        ln -sf libMali.so ${D}${libdir}/libGLESv2.so
+        ln -sf libMali.so ${D}${libdir}/libOpenCL.so
+        ln -sf libMali.so ${D}${libdir}/libgbm.so
+        ln -sf libMali.so ${D}${libdir}/libwayland-egl.so
     fi
 }
 
