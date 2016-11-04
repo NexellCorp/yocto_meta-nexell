@@ -1,6 +1,6 @@
 # Base this image on nexell-image-minimal
 require ../nexell-image-tiny.inc
-inherit s5p6818-avn-ref-post-process
+inherit s5p6818-post-process
 
 LICENSE = "LGPLv2.1"
 
