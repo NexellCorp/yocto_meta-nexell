@@ -12,8 +12,8 @@ CONF_LOCAL_CHANGE_NEED_LINE = ['MACHINE ??= "qemux86"',
                                '#DL_DIR ?= "${TOPDIR}/downloads"',
                                '#SSTATE_DIR ?= "${TOPDIR}/sstate-cache"']
 CONF_LOCAL_CHANGE_KEYWORD = ['MACHINE ??= ',
-			     'DL_DIR ?= "${TOPDIR}/../downloads"',
-			     'SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"']
+			     'DL_DIR ?= "${TOPDIR}/downloads"',
+			     'SSTATE_DIR ?= "${TOPDIR}/sstate-cache"']
 
 CONF_BBLAYER_CHANGE_NEED_LINE = ['poky/meta-yocto-bsp']
 CONF_BBLAYER_CHANGE_KEYWORD = ['meta-nexell']
@@ -48,15 +48,15 @@ class parsingForpokyfiles():
     boardName = ''
     imagetype = ''
     confBBmask = ''
-    confBBmask_core = ''
     confAppend = []
 
-    def __init__(self, arg1, arg2) :
-        self.boardName = arg1
-	self.imagetype = arg2
+    def __init__(self, arg1, arg2, arg3) :
+        self.currpath = arg1
+        self.boardName = arg2
+	self.imagetype = arg3
         
     def localConfChange(self) :
-        localfilepath = "conf"+self.linuxMark + CONF_FILE_LOCAL
+        localfilepath = self.currpath + "/conf"+self.linuxMark + CONF_FILE_LOCAL
         for line in fileinput.input(localfilepath, inplace = 1): 
             print line.replace(CONF_LOCAL_CHANGE_NEED_LINE[0], CONF_LOCAL_CHANGE_KEYWORD[0]+'"'+self.boardName+'"'),
 	    
@@ -83,48 +83,27 @@ class parsingForpokyfiles():
         else :
             pass
 
-        #related recipes-core
-        if self.boardName == 's5p4418-navi-ref' :
-            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'
-        elif self.boardName == 's5p4418-avn-ref' :
-            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_NAVI_REF + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'
-        elif self.boardName == 's5p6818-artik710-raptor' :
-            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_NAVI_REF + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_AVN_REF + '"\n'            
-        elif self.boardName == 's5p6818-avn-ref' :
-            confBBmask_core  = CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_AVN_REF + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P6818_ARTIK710_RAPTOR + '"\n'
-            confBBmask_core += CONF_BBMASK + '"' + CONF_BBMASK_RECIPES_CORE + CONF_BBMASK_S5P4418_NAVI_REF + '"\n'
-        else :
-            pass
-
 	with open(localfilepath, 'a') as file :
 	    file.write("\n#NEXELL appended code\n")
 	    file.write(confBBmask+"\n")
-            file.write(confBBmask_core+"\n")
             for i in confAppend :
                 file.write(i+"\n")
 	
     def bblayerConfChange(self) :
-        CONF_DIR_PREFIX = "conf"+self.linuxMark
+        CONF_DIR_PREFIX = self.currpath + "/conf"+self.linuxMark
         for line in fileinput.input(CONF_DIR_PREFIX+CONF_FILE_BBLAYER, inplace = 1): 
             print line.replace(CONF_BBLAYER_CHANGE_NEED_LINE[0], CONF_BBLAYER_CHANGE_KEYWORD[0]),
 
     def getDirMark(self) :
         return self.linuxMark
        
-def main(arg1, arg2):
-    parseMain = parsingForpokyfiles(arg1, arg2)
+def main(arg1, arg2, arg3):
+    parseMain = parsingForpokyfiles(arg1, arg2, arg3)
     parseMain.localConfChange()
 #   parseMain.bblayerConfChange()
     
 if __name__ == "__main__":
     try : 
-        main(sys.argv[1], sys.argv[2])
+        main(sys.argv[1], sys.argv[2], sys.argv[3])
     finally : 
         pass

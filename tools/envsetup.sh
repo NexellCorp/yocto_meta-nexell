@@ -2,7 +2,9 @@
 
 set -e
 
-TOP=`pwd`
+CURRENT_PATH=`dirname $0`
+TOOLS_PATH=`readlink -ev $CURRENT_PATH`
+
 argc=$#
 RESULT_DIR="result-$1-$2"
 PARENT_DIR="${PWD%/*}"
@@ -16,9 +18,21 @@ BOARD_NAME=
 BOARD_PREFIX=
 BOARD_POSTFIX=
 
+META_NEXELL_PATH=
+NEXELL_BUILD_PATH=./
+
+declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref")
+
 function check_usage()
 {
-    if [ $argc != 2 ]
+    if [ ${IMAGE_TYPE} == "genivi" ]; then
+	echo "Invalid argument image type!!"
+	echo "This script does not support GENIVI"
+	echo "You must be using envsetup_genivi.sh"
+        exit
+    fi
+   
+    if [ $argc -lt 2 ]
     then
 	echo "Invalid argument check usage please"
 	usage
@@ -39,35 +53,74 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref tinyui"
 }
 
-function make_result_dir()
+function split_args()
 {
     BOARD_SOCNAME=${MACHINE_NAME%-*-*}
     BOARD_NAME=${MACHINE_NAME#*-}
     BOARD_PREFIX=${BOARD_NAME%-*}
     BOARD_POSTFIX=${BOARD_NAME#*-}
+}
 
-    #sudo rm -rf "${PARENT_DIR}/${RESULT_DIR}"
-    if [ ! -d ${PARENT_DIR}/${RESULT_DIR} ];then
-	sudo mkdir -m 777 "${PARENT_DIR}/${RESULT_DIR}"
+function path_setup()
+{
+    META_NEXELL_PATH=`readlink -ev ${TOOLS_PATH}/..`
+    if ! [ -d ${META_NEXELL_PATH}/../build-${MACHINE_NAME}-${IMAGE_TYPE} ]; then
+	echo "Warning, please check -  source poky/oe-init-build-env build-<machine_name>-<image_type>"
+        exit
     else
-	sudo rm -rf ${PARENT_DIR}/${RESULT_DIR}/boot
-	sudo rm -rf ${PARENT_DIR}/${RESULT_DIR}/root
+	NEXELL_BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../build-${MACHINE_NAME}-${IMAGE_TYPE}`
     fi
 }
 
 function customize_conf_files()
 {
-    cp ${PARENT_DIR}/meta-nexell/misc/local.conf.org ./conf/local.conf
-    cp ${PARENT_DIR}/meta-nexell/misc/bblayers-${IMAGE_TYPE}-sample.~conf ./conf/bblayers.conf
-    ${PARENT_DIR}/meta-nexell/tools/setup-conf-files.py ${MACHINE_NAME} ${IMAGE_TYPE}
+    #genivi overrided files remove
+    if [ -d ${META_NEXELL_PATH}/recipes-qt/qt5/qtwayland ];then
+	rm -rf ${META_NEXELL_PATH}/recipes-qt/qt5/qtwayland
+	rm -rf ${META_NEXELL_PATH}/recipes-qt/qt5/qtwayland_%.bbappend
+    fi
+	
+    cp ${META_NEXELL_PATH}/misc/local.conf.org ${NEXELL_BUILD_PATH}/conf/local.conf
+    cp ${META_NEXELL_PATH}/misc/bblayers-${IMAGE_TYPE}-sample.~conf ${NEXELL_BUILD_PATH}/conf/bblayers.conf
+    ${META_NEXELL_PATH}/tools/setup-conf-files.py ${NEXELL_BUILD_PATH} ${MACHINE_NAME} ${IMAGE_TYPE}
+
+    #bbmask & PREFERRED_PROVIDER append
+    local_conf_append
+    
     echo ${RESULT_PATH} > result_path.txt
+}
+
+function local_conf_append()
+{
+    #local conf bbmasking append
+    for i in ${targets[@]}
+    do
+	echo "BBMASK += \" /meta-nexell/recipes-core/images/$i\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    done
+
+    sed -i "/\/meta-nexell\/recipes-core\/images\/${MACHINE_NAME}/d" ${NEXELL_BUILD_PATH}/conf/local.conf
+
+    #genivi override file remove
+    echo "BBMASK += \" /meta-nexell/recipes-core/packagegroups/packagegroup-gdp-qt5.bbappend\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "BBMASK += \" /meta-nexell/recipes-dev-platform/images/genivi-dev-platform.bbappend\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+
+    #dependancy MACHINE NAME so setup-conf_file.py can't included
+    if [ ${IMAGE_TYPE} != "tiny" ]; then
+        echo "PREFERRED_PROVIDER_virtual/libgles1 = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/libgles2 = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/egl = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/libopencl = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/libgl = \"mesa\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/mesa = \"mesa\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_libgbm = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_libgbm-dev = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    fi
 }
 
 function customize_recipe_core_files()
 {
-    if [ "${IMAGE_TYPE}" == "tiny" -o "${IMAGE_TYPE}" == "qt" -o "${IMAGE_TYPE}" == "sato" -o "${IMAGE_TYPE}" == "tinyui" ]
-    then
-	${PARENT_DIR}/meta-nexell/tools/recipes-core-filename-change.py ${MACHINE_NAME} ${IMAGE_TYPE}
+    if [ "${IMAGE_TYPE}" == "tiny" -o "${IMAGE_TYPE}" == "qt" -o "${IMAGE_TYPE}" == "sato" -o "${IMAGE_TYPE}" == "tinyui" ];then
+	${META_NEXELL_PATH}/tools/recipes-core-filename-change.py ${MACHINE_NAME} ${IMAGE_TYPE}
     else
 	usage
     fi
@@ -76,13 +129,15 @@ function customize_recipe_core_files()
 function copy_build_scripts()
 {
     local secure=
+    local TMP_WORK_PATH=${NEXELL_BUILD_PATH}/tmp/work
 
-    mkdir -p tmp/work
+    if ! [ -d $TMP_WORK_PATH ];then
+	mkdir -p $TMP_WORK_PATH
+    fi
     
     #temp ARM 32bit build toolchain copy
-    cp -a ${PARENT_DIR}/meta-nexell/tools/toolchain_setup.sh .
     echo -e "\033[0;33m #########  Start toolchain copy to tmp/work/ ########## \033[0m"
-    ./toolchain_setup.sh
+    ${META_NEXELL_PATH}/tools/toolchain/toolchain_setup.sh ${META_NEXELL_PATH} ${TMP_WORK_PATH}
 
 #    #for secure boot support
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then	
@@ -106,15 +161,15 @@ function copy_build_scripts()
 #	    esac
 #   	done
 	# default secure off
-        echo "SECURE OFF" > secure.cfg; secure="OFF"
-        python ${PARENT_DIR}/meta-nexell/tools/secure-setup.py ${secure} ${MACHINE_NAME}
+        echo "SECURE OFF" > ${NEXELL_BUILD_PATH}/secure.cfg; secure="OFF"
+        python ${META_NEXELL_PATH}/tools/secure_tools/secure-setup.py ${secure} ${MACHINE_NAME} ${META_NEXELL_PATH}
 
     fi
 
-    touch tmp/work/source_dir_path.txt
-    touch tmp/work/source_kernel_dir_path.txt
-    
-    cp -a ${PARENT_DIR}/meta-nexell/tools/bitbake_pre_operation_${MACHINE_NAME}.sh .
+    touch ${TMP_WORK_PATH}/source_dir_path.txt
+    touch ${TMP_WORK_PATH}/source_kernel_dir_path.txt
+
+    cp -a ${META_NEXELL_PATH}/tools/bitbake_pre_operation.sh ${NEXELL_BUILD_PATH}
     echo -e "\033[0;33m                                                                    \033[0m"
     echo -e "\033[0;33m #########  Start bitbake pre operateion for optee & ATF ########## \033[0m"
     echo -e "\033[0;33m                                                                    \033[0m"
@@ -122,20 +177,16 @@ function copy_build_scripts()
     #-----------------------------------------------
     # bitbake pre-tasks process related optee & atf
     #-----------------------------------------------
-    if [ ! -e OPTEE_PRE_OPERATION_DONE ];then
-	./bitbake_pre_operation_${MACHINE_NAME}.sh
-	touch OPTEE_PRE_OPERATION_DONE
+    if [ ! -e ${NEXELL_BUILD_PATH}/OPTEE_PRE_OPERATION_DONE ];then
+	${NEXELL_BUILD_PATH}/bitbake_pre_operation.sh ${MACHINE_NAME}
+	touch ${NEXELL_BUILD_PATH}/OPTEE_PRE_OPERATION_DONE
     else
 	echo -e "\033[0;33m #########  Already Done, optee & ATF pre-fetch & pre-unpack ########## \033[0m"
     fi
-
-    echo -e "\033[0;33m                                                        \033[0m"
-    echo -e "\033[0;33m You are now ready to run the bitbake command for NEXELL\033[0m"
-    echo -e "\033[0;33m                                                        \033[0m"
-    echo -e "\033[0;33m  ex) $ bitbake ${MACHINE_NAME}-${IMAGE_TYPE}           \033[0m\n\n"
 }
-
+    
 check_usage
-make_result_dir
+split_args
+path_setup
 customize_conf_files
 copy_build_scripts
