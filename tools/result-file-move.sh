@@ -3,10 +3,11 @@
 set -e
 
 argc=$#
-TOP=`pwd`
+CURRENT_PATH=`dirname $0`
+TOOLS_PATH=`readlink -ev $CURRENT_PATH`
+
 RESULT_DIR="result-$1-$2"
-PARENT_DIR="${PWD%/*}"
-RESULT_PATH="${PARENT_DIR}/${RESULT_DIR}"
+RESULT_PATH=
 IMAGE_TYPE=$2
 
 MACHINE_NAME=$1
@@ -17,15 +18,9 @@ BOARD_POSTFIX=
 
 BUILD_ALL=$3
 
-function check_result_dir()
-{
-    if [ -d "${RESULT_PATH}" ]
-    then
-        echo ""
-    else    
-        mkdir -p ${RESULT_PATH}	
-    fi
-}
+META_NEXELL_PATH=`readlink -ev ${TOOLS_PATH}/..`
+BUILD_PATH=
+TMP_DEPLOY_PATH=
 
 function check_usage()
 {
@@ -50,9 +45,10 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-navi-ref genivi"
 }
 
-function get_board_prefix()
+function split_args()
 {
     BOARD_SOCNAME=${MACHINE_NAME%-*-*}
     BOARD_NAME=${MACHINE_NAME#*-}
@@ -60,36 +56,53 @@ function get_board_prefix()
     BOARD_POSTFIX=${BOARD_NAME#*-}
 }
 
+function path_setup()
+{
+    BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../build-${MACHINE_NAME}-${IMAGE_TYPE}`
+    RESULT_PATH=${BUILD_PATH}/../${RESULT_DIR}
+    TMP_DEPLOY_PATH=${BUILD_PATH}/tmp/deploy/images/${MACHINE_NAME}
+}
+
+function cleanup_dirs()
+{
+    #sudo rm -rf "${PARENT_DIR}/${RESULT_DIR}"
+    if [ ! -d ${RESULT_PATH} ];then
+	sudo mkdir -m 777 ${RESULT_PATH}
+    else
+	sudo rm -rf ${RESULT_PATH}/boot
+	sudo rm -rf ${RESULT_PATH}/root
+    fi
+}
+
 function copy_bin_files()
 {
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
         if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-	    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-raptor.bin ${RESULT_PATH}
+	    cp ${TMP_DEPLOY_PATH}/bl1-raptor.bin ${RESULT_PATH}
 	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
-	    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-avn.bin ${RESULT_PATH}
+	    cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
 	fi
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-loader.bin ${RESULT_PATH}
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-nonsecure.bin ${RESULT_PATH}
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/fip-secure.bin ${RESULT_PATH}	
+	cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
+	cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
+	cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}	
     else
         if [ "${BOARD_NAME}" == "navi-ref" ]; then
-            cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+            cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
         fi
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
+	cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
     fi
-    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/u-boot.bin ${RESULT_PATH}
-    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/default_envs.txt ${RESULT_PATH}
-#    python ${PARENT_DIR}/meta-nexell/tools/result-file-move.py "${TOP}/tmp/work/image_where.txt"
+    cp ${TMP_DEPLOY_PATH}/u-boot.bin ${RESULT_PATH}
+    cp ${TMP_DEPLOY_PATH}/default_envs.txt ${RESULT_PATH}
 }
 
 function copy_kernel_image()
 {
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/Image ${RESULT_PATH}
+	cp ${TMP_DEPLOY_PATH}/Image ${RESULT_PATH}
     elif [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/zImage ${RESULT_PATH}
+	cp ${TMP_DEPLOY_PATH}/zImage ${RESULT_PATH}
     else
-	cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/Image ${RESULT_PATH}
+	cp ${TMP_DEPLOY_PATH}/Image ${RESULT_PATH}
     fi
 }
 
@@ -115,9 +128,11 @@ function copy_dtb_file()
     fi
 
     if [ ! -z "$file_name_dtb" -a "$file_name_dtb"!=" " ]; then
-	find ${TOP}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
+	find ${BUILD_PATH}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
+	
 	#For local kernel source using
-	exec < ${TOP}/tmp/work/source_kernel_dir_path.txt
+	exec < ${BUILD_PATH}/tmp/work/source_kernel_dir_path.txt
+	
 	read externalKernelPath
 	find $externalKernelPath/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
     fi
@@ -126,42 +141,50 @@ function copy_dtb_file()
 function copy_ramdisk_image()
 {
     if [ ${IMAGE_TYPE} != "tiny" ]; then
-	cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
-	#cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}	
+	cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
+	#cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}	
     fi
 }
 
 function copy_rootfs_image()
 {
-    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
-    cp ${TOP}/tmp/deploy/images/${MACHINE_NAME}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
-    cp ${RESULT_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
+    if [ "${IMAGE_TYPE}" == "genivi" ];then
+	cp ${TMP_DEPLOY_PATH}/"genivi-dev-platform-${MACHINE_NAME}.ext4" ${RESULT_PATH}
+	cp ${RESULT_PATH}/"genivi-dev-platform-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
+    else
+	cp ${TMP_DEPLOY_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
+        cp ${TMP_DEPLOY_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
+        cp ${RESULT_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
+    fi
+
+    cp ${META_NEXELL_PATH}/tools/partition.txt ${RESULT_PATH}
 }
 
 function copy_params_image()
 {
-    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/params.bin ${RESULT_PATH}
+    cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/params.bin ${RESULT_PATH}
 }
 
 function copy_partmap_file()
 {
-    cp ${TOP}/../meta-nexell/tools/${MACHINE_NAME}/partmap_emmc.txt ${RESULT_PATH}
+    cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/partmap_emmc.txt ${RESULT_PATH}
 }
 
 function post_process()
 {
     if [ -f secure.cfg ]; then
 	cp secure.cfg ${RESULT_PATH}
-    fi
-	echo -e "\n  Copy Done!"
+        echo -e "\n secure.cfg file copy Done!"
+    fi    
     echo -e "\033[40;33m  Maybe you need to convert some binary images                                \033[0m"
     echo -e "\033[40;33m  You can use below operation                                                 \033[0m"
-    echo -e "\033[40;33m  ex) $ ../meta-nexell/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE}  \033[0m\n"
+    echo -e "\033[40;33m  ex) ${META_NEXELL_PATH}/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE}  \033[0m\n"
 }
 
 check_usage
-check_result_dir
-get_board_prefix
+split_args
+path_setup
+cleanup_dirs
 copy_bin_files
 copy_kernel_image
 copy_dtb_file

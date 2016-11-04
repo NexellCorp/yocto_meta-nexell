@@ -7,10 +7,10 @@ argc=$#
 PARENT_DIR="${PWD%/*}"
 ROOTDIR="root"
 BOOTDIR="boot"
-META_NEXELL_TOOLS_DIR="${PARENT_DIR}/meta-nexell/tools"
+META_NEXELL_TOOLS_PATH="${PARENT_DIR}/meta-nexell/tools"
 
-SECURE_TOOL=${META_NEXELL_TOOLS_DIR}/SECURE_BINGEN
-RSA_SIGN_TOOL=${META_NEXELL_TOOLS_DIR}/rsa_sign_pss
+SECURE_TOOL=${META_NEXELL_TOOLS_PATH}/secure_tools/SECURE_BINGEN
+RSA_SIGN_TOOL=${META_NEXELL_TOOLS_PATH}/secure_tools/rsa_sign_pss
 
 IMAGE_TYPE=$2
 MEM_SIZE=1024
@@ -35,7 +35,7 @@ PORTS=("emmc" "sd")
 
 # aes key
 AES_KEY=
-PRIVATE_KEY=${META_NEXELL_TOOLS_DIR}/private_key.pem
+PRIVATE_KEY=${META_NEXELL_TOOLS_PATH}/secure_tools/private_key.pem
 FIP_SEC_SIZE=
 FIP_NONSEC_SIZE=
 
@@ -133,7 +133,7 @@ function mkramdisk()
         find . | cpio -o -H newc | gzip > ${result_dir}/initrd.gz
         popd
 
-        ${META_NEXELL_TOOLS_DIR}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
+        ${META_NEXELL_TOOLS_PATH}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
 			             -C none -a 0 -e 0 -n uInitrd -d ${result_dir}/initrd.gz \
 	                             ${result_dir}/boot/uInitrd
         rm -f ${result_dir}/initrd.gz	    
@@ -142,7 +142,7 @@ function mkramdisk()
 
 function mkparams()
 {
-    ${META_NEXELL_TOOLS_DIR}/mkenvimage -s 16384 -o params.bin default_envs.txt
+    ${META_NEXELL_TOOLS_PATH}/mkenvimage -s 16384 -o params.bin default_envs.txt
 }
 
 function mkbootimg()
@@ -160,7 +160,7 @@ function mkbootimg()
     fi
     
     cp -a *.dtb ./boot
-    ${META_NEXELL_TOOLS_DIR}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/    
+    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/    
 }
 
 function make_2ndboot_for_emmc()
@@ -636,7 +636,7 @@ function make_modules() {
     cd modules
     tar -xvzf modules*.tgz
     cd ..
-    ${META_NEXELL_TOOLS_DIR}/make_ext4fs -b 4096 -L modules -l ${MODULES_PATITION_SIZE} modules.img modules
+    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L modules -l ${MODULES_PATITION_SIZE} modules.img modules
     
 }
 
