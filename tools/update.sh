@@ -111,7 +111,7 @@ function print_args()
 		    if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
 			vmsg -e "Update:\t\t\tbootloader(fip files)"
 		    else
-			vmag -e "Update:\t\t\tbootloader(singleimage)"
+			vmsg -e "Update:\t\t\tbootloader(singleimage)"
 		    fi
 		fi
 		if [ ${UPDATE_ENV} == "true" ]; then
