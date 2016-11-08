@@ -4,14 +4,17 @@ LICENSE = "MIT"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
- 
+
+
 WESTON_CONF = " \
     weston-conf \
     "
+
 MX = " \
     mx-1.0 \
     mx-tests \
     "
+
 GSTREAMER10 = " \
     gstreamer1.0 \
     gstreamer1.0-plugins-base \
@@ -19,6 +22,7 @@ GSTREAMER10 = " \
     gstreamer1.0-plugins-bad \
     gstreamer1.0-plugins-ugly \
     "
+
 NEXELL_LIBS = " \
     gst-plugins-camera \
     gst-plugins-renderer \
@@ -35,7 +39,7 @@ NEXELL_LIBS = " \
     nx-v4l2 \
     nx-video-api \
     "
- 
+
 RDEPENDS_${PN} = " \
     ${WESTON_CONF} \
     ${MX} \

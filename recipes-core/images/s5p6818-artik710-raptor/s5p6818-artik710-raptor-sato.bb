@@ -1,9 +1,11 @@
 # Base this image on nexell-image-sato
 require ../nexell-image-sato.inc
+require ../nexell-image-common.inc
 inherit s5p6818-post-process
 
 LICENSE = "LGPLv2.1"
+
 IMAGE_INSTALL += " \
-               optee-linuxdriver \
-               optee-build \
-               "
+    optee-linuxdriver \
+    optee-build \
+    "

@@ -11,6 +11,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
+#helloworld-nexell-module is only 32bit make support
 NEXELL_EXAMPLES = " \
     helloworld-nexell \
     helloworld-nexell-module \

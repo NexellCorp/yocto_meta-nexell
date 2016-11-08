@@ -4,15 +4,6 @@ LICENSE = "GPLv2"
 inherit core-image populate_sdk_qt5
 require recipes-graphics/images/core-image-weston.bb
 
-SPLASH = "psplash-nexell"
-
-IMAGE_FEATURES += "package-management ssh-server-dropbear splash"
-
-IMAGE_INSTALL += " \
-        kernel-modules \
-        android-tools \
-        "
-
 WAYLAND_IMAGE_INSTALL = "${@base_contains('DISTRO_FEATURES', 'wayland', \
     'qtwayland \
      qtwayland-plugins', '', d)}"
@@ -79,17 +70,6 @@ QT_ALSA_EXTRA_IMAGE_INSTALL = " \
      alsa-utils-alsactl \
      "
 
-SYSTEMD_INSTALL = " \
-     systemd-compat-units \
-     rsyslog-systemd \
-     "
-
-SYSV_INSTALL = " \
-    udev \
-    sysvinit \
-    initscripts \
-    "
-
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qtwebkit} \
@@ -97,7 +77,6 @@ IMAGE_INSTALL += " \
      ${TOUCH_IMAGE_INSTALL} \
      ${QT_ALSA_IMAGE_INSTALL} \
      ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
-     ${SYSTEMD_INSTALL} \
      podonamu \
      "
-#     ${@base_contains("MACHINE_FEATURES", "systemd", "${SYSTEMD_INSTALL}", "${SYSV_INSTALL}", d)} \
+
