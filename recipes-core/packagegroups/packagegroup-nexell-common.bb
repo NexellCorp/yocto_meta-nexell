@@ -5,22 +5,13 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
-
-WESTON_CONF = " \
-    weston-conf \
-    "
-
-MX = " \
-    mx-1.0 \
-    mx-tests \
-    "
-
 GSTREAMER10 = " \
     gstreamer1.0 \
     gstreamer1.0-plugins-base \
     gstreamer1.0-plugins-good \
     gstreamer1.0-plugins-bad \
     gstreamer1.0-plugins-ugly \
+    gstreamer1.0-libav \
     "
 
 NEXELL_LIBS = " \
@@ -41,8 +32,6 @@ NEXELL_LIBS = " \
     "
 
 RDEPENDS_${PN} = " \
-    ${WESTON_CONF} \
-    ${MX} \
     ${NEXELL_LIBS} \
     ${GSTREAMER10} \
     "

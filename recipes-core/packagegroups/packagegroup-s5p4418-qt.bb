@@ -11,6 +11,15 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
+WESTON_CONF = " \
+    weston-conf \
+    "
+
+MX = " \
+    mx-1.0 \
+    mx-tests \
+    "
+
 #helloworld-nexell-module is only 32bit make support
 NEXELL_EXAMPLES = " \
     helloworld-nexell \
@@ -23,4 +32,6 @@ RDEPENDS_${PN} = " \
     testsuite-s5p4418 \
     rtl-8188eus-32 \
     ${NEXELL_EXAMPLES} \
+    ${WESTON_CONF} \
+    ${MX} \
     "

@@ -11,8 +11,19 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
+WESTON_CONF = " \
+    weston-conf \
+    "
+
+MX = " \
+    mx-1.0 \
+    mx-tests \
+    "
+
 RDEPENDS_${PN} = " \
     nexell-drm-mali \
     testsuite-s5p6818 \
     rtl-8188eus-64 \
+    ${WESTON_CONF} \
+    ${MX} \
     "
