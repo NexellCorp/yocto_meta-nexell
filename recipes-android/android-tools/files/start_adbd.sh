@@ -50,7 +50,7 @@ fi
 #Start adbd application
 /usr/bin/adbd&
 echo $! > /run/adbd.pid
-sleep 8
+sleep 2
 
 if [ "`cat ${GADGET_DIR}/UDC`" == "c0040000.dwc2otg" ]; then
 	echo "" > ${GADGET_DIR}/UDC

@@ -17,6 +17,7 @@ SRC_URI = " \
     file://android-tools.tar.gz \
     file://android-tools-adbd.service \
     file://start_adbd.sh \
+    file://stop_adbd.sh \
     "
 
 S = "${WORKDIR}/android-tools"
@@ -54,6 +55,7 @@ do_install() {
     install -m 0644 ${WORKDIR}/android-tools-adbd.service ${D}${systemd_unitdir}/system
 
     install -m 0755 ${WORKDIR}/start_adbd.sh ${D}${bindir}
+    install -m 0755 ${WORKDIR}/stop_adbd.sh ${D}${bindir}
 }
 
 FILES_${PN} = "${bindir} "
