@@ -18,3 +18,5 @@ DEFAULTTUNE_s5p6818-artik710-raptor ?= "aarch64"
 DEFAULTTUNE_s5p6818-avn-ref ?= "aarch64"
 DEFAULTTUNE_s5p4418-avn-ref ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p4418-navi-ref ?= "cortexa9hf-neon"
+
+DEFAULT_TIMEZONE="Asia/Seoul"

@@ -8,6 +8,7 @@ IMAGE_FEATURES += "package-management ssh-server-dropbear splash"
 TOOLS = " \
     perf \
     udev-extraconf \
+    tzdata \
     "
 
 SYSTEMD_INSTALL = " \
