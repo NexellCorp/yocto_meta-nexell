@@ -94,7 +94,8 @@ function customize_conf_files()
     echo "    \" " >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.bblayers.conf
     #cp -a ${GENIVI_BUILD_PATH}/conf/templates/${MACHINE_NAME}.bblayers.conf ${GENIVI_BUILD_PATH}/conf/bblayers.conf
 
-    #*.local.inc	
+    #*.local.inc
+    cp -a ${META_NEXELL_PATH}/misc/GENIVI/nexell-common.local.inc ${GENIVI_BUILD_PATH}/conf/templates/nexell-common.local.inc
     cp -a ${META_NEXELL_PATH}/misc/GENIVI/${BOARD_SOCNAME}-sample.local.inc ${GENIVI_BUILD_PATH}/conf/templates/${MACHINE_NAME}.local.inc
     genivi_bbmasking
 }
