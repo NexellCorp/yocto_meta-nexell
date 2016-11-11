@@ -24,7 +24,6 @@ QT_IMAGE_INSTALL_common = " \
      qtquickcontrols2 \
      qtgraphicaleffects \
      ${WAYLAND_IMAGE_INSTALL} \
-     glmark2 \
      "
 
 QT_IMAGE_INSTALL_qtwebkit = " \
