@@ -11,6 +11,8 @@ BBLAYERS ?= " \
   ${BSPPATH}/poky/meta \
   ${BSPPATH}/poky/meta-yocto \
   ${BSPPATH}/meta-nexell \
+  ${BSPPATH}/meta-openembedded/meta-multimedia \
+  ${BSPPATH}/meta-openembedded/meta-oe \
   "
 
 BBLAYERS_NON_REMOVABLE ?= " \

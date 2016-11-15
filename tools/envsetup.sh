@@ -49,6 +49,7 @@ function usage()
     echo "    ex) $0 s5p4418-avn-ref qt"
     echo "    ex) $0 s5p4418-avn-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref qt"
+    echo "    ex) $0 s5p4418-navi-ref sato"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
 }
@@ -79,26 +80,29 @@ function customize_conf_files()
 	rm -rf ${META_NEXELL_PATH}/recipes-qt/qt5/qtwayland
 	rm -rf ${META_NEXELL_PATH}/recipes-qt/qt5/qtwayland_%.bbappend
     fi
-	
+
     cp ${META_NEXELL_PATH}/misc/local.conf.org ${NEXELL_BUILD_PATH}/conf/local.conf
     cp ${META_NEXELL_PATH}/misc/bblayers-${IMAGE_TYPE}-sample.~conf ${NEXELL_BUILD_PATH}/conf/bblayers.conf
-    ${META_NEXELL_PATH}/tools/setup-conf-files.py ${NEXELL_BUILD_PATH} ${MACHINE_NAME} ${IMAGE_TYPE}
 
     #bbmask & PREFERRED_PROVIDER append
     local_conf_append
-    
+
     echo ${RESULT_PATH} > result_path.txt
 }
 
 function local_conf_append()
 {
     #local conf bbmasking append
+    echo "#NEXELL appended code" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+
     for i in ${targets[@]}
     do
 	echo "BBMASK += \" /meta-nexell/recipes-core/images/$i\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     done
 
     sed -i "/\/meta-nexell\/recipes-core\/images\/${MACHINE_NAME}/d" ${NEXELL_BUILD_PATH}/conf/local.conf
+
+    ${META_NEXELL_PATH}/tools/setup-conf-files.py ${NEXELL_BUILD_PATH} ${MACHINE_NAME} ${IMAGE_TYPE} ${META_NEXELL_PATH}
 
     #genivi override file remove
     echo "BBMASK += \" /meta-nexell/recipes-core/packagegroups/packagegroup-gdp-qt5.bbappend\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
@@ -120,7 +124,7 @@ function local_conf_append()
 function customize_recipe_core_files()
 {
     if [ "${IMAGE_TYPE}" == "tiny" -o "${IMAGE_TYPE}" == "qt" -o "${IMAGE_TYPE}" == "sato" -o "${IMAGE_TYPE}" == "tinyui" ];then
-	${META_NEXELL_PATH}/tools/recipes-core-filename-change.py ${MACHINE_NAME} ${IMAGE_TYPE}
+	${META_NEXELL_PATH}/tools/recipes-core-filename-change.py ${META_NEXELL_PATH} ${MACHINE_NAME} ${IMAGE_TYPE}
     else
 	usage
     fi
