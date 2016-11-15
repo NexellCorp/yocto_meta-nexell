@@ -22,9 +22,14 @@ SYSV_INSTALL = " \
     initscripts \
     "
 
+NEXELL_LIBS_EXT = " \
+    nx-vidtex \
+    "
+
 IMAGE_INSTALL += " \
     kernel-modules \
     android-tools \
     ${SYSTEMD_INSTALL} \
     ${TOOLS} \
+    ${NEXELL_LIBS_EXT} \
     "
