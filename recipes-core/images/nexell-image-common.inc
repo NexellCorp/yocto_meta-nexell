@@ -9,6 +9,7 @@ TOOLS = " \
     perf \
     udev-extraconf \
     tzdata \
+    glibc-utils \
     "
 
 SYSTEMD_INSTALL = " \
