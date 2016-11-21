@@ -21,7 +21,7 @@ BOARD_POSTFIX=
 META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
 
-declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref")
+declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-cluster-ref")
 
 function check_usage()
 {
@@ -31,7 +31,7 @@ function check_usage()
 	echo "You must be using envsetup_genivi.sh"
         exit
     fi
-   
+
     if [ $argc -lt 2 ]
     then
 	echo "Invalid argument check usage please"
@@ -52,6 +52,10 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref sato"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-cluster-ref qt"
+    echo "    ex) $0 s5p4418-cluster-ref sato"
+    echo "    ex) $0 s5p4418-cluster-ref tiny"
+    echo "    ex) $0 s5p4418-cluster-ref tinyui"
 }
 
 function split_args()

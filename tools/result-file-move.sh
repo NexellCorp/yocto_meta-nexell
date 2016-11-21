@@ -46,6 +46,10 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
     echo "    ex) $0 s5p4418-navi-ref genivi"
+    echo "    ex) $0 s5p4418-cluster-ref qt"
+    echo "    ex) $0 s5p4418-cluster-ref tiny"
+    echo "    ex) $0 s5p4418-cluster-ref tinyui"
+    echo "    ex) $0 s5p4418-cluster-ref genivi"
 }
 
 function split_args()
@@ -84,11 +88,15 @@ function copy_bin_files()
 	fi
 	cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
 	cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
-	cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}	
+	cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
     else
         if [ "${BOARD_NAME}" == "navi-ref" ]; then
             cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+        elif
+         [ "${BOARD_NAME}" == "cluster-ref" ]; then
+            cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-cluster-usb.bin ${RESULT_PATH}
         fi
+
 	cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
     fi
     cp ${TMP_DEPLOY_PATH}/u-boot.bin ${RESULT_PATH}
@@ -111,28 +119,30 @@ function copy_dtb_file()
     local file_name_dtb_rev0=
     local file_name_dtb_rev1=
     local kernel_image_path=
-    
+
     if [ "${MACHINE_NAME}" == "s5p6818-artik710-raptor" ]; then
 	file_name_dtb="s5p6818-artik710-raptor*.dtb"
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}
     elif [ "${MACHINE_NAME}" == "s5p6818-avn-ref" ]; then
 	file_name_dtb="s5p6818-avn-ref*.dtb"
-	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}    
+	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}
     else
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}
 	if [ ${BOARD_PREFIX} == "avn" ]; then
 	    file_name_dtb="s5p4418-avn_ref*.dtb"
 	elif [ ${BOARD_PREFIX} == "navi" ]; then
 	    file_name_dtb="s5p4418-navi_ref*.dtb"
+	elif [ ${BOARD_PREFIX} == "cluster" ]; then
+	    file_name_dtb="s5p4418-cluster_ref*.dtb"
 	fi
     fi
 
     if [ ! -z "$file_name_dtb" -a "$file_name_dtb"!=" " ]; then
 	find ${BUILD_PATH}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
-	
+
 	#For local kernel source using
 	exec < ${BUILD_PATH}/tmp/work/source_kernel_dir_path.txt
-	
+
 	read externalKernelPath
 	find $externalKernelPath/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
     fi
@@ -142,7 +152,7 @@ function copy_ramdisk_image()
 {
     if [ ${IMAGE_TYPE} != "tiny" ]; then
 	cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
-	#cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}	
+	#cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}
     fi
 }
 

@@ -63,6 +63,9 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-cluster-ref qt"
+    echo "    ex) $0 s5p4418-cluster-ref tiny"
+    echo "    ex) $0 s5p4418-cluster-ref tinyui"
 }
 
 function convert_env_setup()
@@ -70,7 +73,7 @@ function convert_env_setup()
     echo "================================================="
     echo "convert_env_setup"
     echo "================================================="
-    
+
     BOARD_SOCNAME=${MACHINE_NAME%-*-*}
     BOARD_NAME=${MACHINE_NAME#*-}
     BOARD_PREFIX=${BOARD_NAME%-*}
@@ -206,23 +209,26 @@ function make_2ndboot_for_emmc()
     if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
         chip_name="nxp4330"
         bootbingen=BOOT_BINGEN_NAVI
+	elif [ "${MACHINE_NAME}" == "s5p4418-cluster-ref" ]; then
+        chip_name="nxp4330"
+        bootbingen=BOOT_BINGEN_NAVI
     fi
 
     ${PARENT_DIR}/meta-nexell/tools/${bootbingen} -c ${chip_name} -t 2ndboot -n ${nsih} -i ${bl1_source} -o ${gen_img} -l 0xffff0000 -e 0xffff0000
 
     # SECURE
-    if [ "${chip_name}" == "s5p6818" ]; then        
+    if [ "${chip_name}" == "s5p6818" ]; then
 	if [ ${SECURE_BOOT} == "true" ]; then
             gen_hash_rsa ${gen_img} "" ${PRIVATE_KEY}
             dd if=${gen_img}.pub of=${gen_img} ibs=256 count=1 obs=512 seek=1 conv=notrunc
-	    # AES encrypt	    
+	    # AES encrypt
 	    echo "SECURE BOOT not support Yocto build.\nIf you need to secure build, please contact us."
 	    exit 1
 	    aes_encrypt ${aes_out_img} ${aes_in_img} ${aes_key}
 	else
 	    cp ${gen_img} ${aes_out_img}
        fi
-    fi    
+    fi
 }
 
 function make_3rdboot_for_emmc()
@@ -258,8 +264,10 @@ function make_3rdboot_for_emmc()
 
     if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
         chip_name="nxp4330"
+    elif [ "${MACHINE_NAME}" == "s5p4418-cluster-ref" ]; then
+        chip_name="nxp4330"
     fi
- 
+
     ${PARENT_DIR}/meta-nexell/tools/BOOT_BINGEN -c ${chip_name} -t 3rdboot -n ${nsih} -i ${inout_image}.bin -o singleimage-emmcboot.bin -l ${load_addr} -e ${jump_addr}
 }
 
