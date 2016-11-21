@@ -11,13 +11,18 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
+GSTREAMER10_X11 = " \
+    gstreamer1.0-meta-base \
+    "
+
 NEXELL_EXAMPLES = " \
     helloworld-nexell \
     helloworld-nexell-module \
     example-libs \
     "
 
-RDEPENDS_${PN} = " \
+OARDEPENDS_${PN} = " \
+    ${GSTREAMER10_X11} \
     nexell-drm-mali \
     testsuite-s5p4418 \
     rtl-8188eus-32 \
