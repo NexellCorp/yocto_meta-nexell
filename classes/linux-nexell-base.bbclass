@@ -49,3 +49,30 @@ def get_kernel_arch_num(d, a):
         return '64'
     else :
         return '32'
+
+#a1 ==> Distinguish string, DEPLOY_DIR
+#a2 ==> Validate feed string, MACHINE_ARCH
+def get_image_type(d, a1, a2):
+    dist = []
+    dist = a1.split('/')
+    validate = a2.split('_')
+    for i in dist:
+        cnt = 0
+        for j in validate:
+            if j in i :
+                cnt += 1
+
+        #board soc name & board prefix & board postfix matched!
+        if cnt == 3:
+            if 'sato' in i :
+                return 'sato'
+            elif 'qt' in i :
+                return 'qt'
+            elif 'genivi' in i :
+                return 'genivi'
+            elif 'agl' in i :
+                return 'agl'
+            elif 'tinyui' in i :
+                return 'tinyui'
+            else :
+                return 'tiny'
