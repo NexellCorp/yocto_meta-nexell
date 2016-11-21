@@ -1,0 +1,31 @@
+# Copyright (C) 2015 Romain Perier <romain.perier@gmail.com>
+# Released under the MIT license (see COPYING.MIT for the terms)
+require recipes-graphics/xorg-driver/xorg-driver-video.inc
+
+DESCRIPTION = "X.org graphics driver for ARM graphics - Nexell"
+LICENSE = "GPL-2.0"
+LIC_FILES_CHKSUM = "file://COPYING;md5=10ce5de3b111315ea652a5f74ec0c602"
+
+SRCREV = "fc58d08413ae87aa98907bf2cfb83f037ba8f32c"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/xf86-video-armsoc;protocol=git;branch=nexell \
+          "
+
+SRC_URI_append = " \
+        file://20-armsoc.conf \
+        file://99-calibration-s5p4418_navi_ref.conf \
+        file://99-calibration-s5p6818_artik710_raptor.conf \
+        "
+
+PV = "r7"
+
+RDEPENDS_${PN} += "xserver-xorg-module-exa"
+
+S = "${WORKDIR}/git"
+
+do_install_append() {
+    install -d ${D}/etc/X11/xorg.conf.d
+    install -m 644 ${WORKDIR}/20-armsoc.conf ${D}/etc/X11/xorg.conf.d
+    install -m 644 ${WORKDIR}/99-calibration-${MACHINE_ARCH}.conf ${D}/etc/X11/xorg.conf.d/99-calibration.conf
+}
+
+FILES_${PN} += "${sysconfdir}"
