@@ -46,7 +46,8 @@ CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
                         'CORE_IMAGE_EXTRA_INSTALL += "iputils"']
 
 #Use weston & wayland recipes
-CONF_APPEND_USE_X11 = ['DISTRO_FEATURES_append = " systemd x11"',
+CONF_APPEND_USE_X11 = ['DISTRO_FEATURES_remove = " wayland"',
+                       'DISTRO_FEATURES_append = " systemd x11 opengl glx"',
                        'REQUIRED_DISTRO_FEATURES = "x11"',
                        'VIRTUAL-RUNTIME_init_manager = "systemd"',
                        'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',

@@ -6,8 +6,8 @@ SECTION = "libs"
 
 TYPE = "mali-nexell"
 
-SRC_URI += "file://bin \
-            file://lib \
+SRC_URI = "file://bin \
+           file://lib \
            "
 
 S = "${WORKDIR}"
@@ -17,6 +17,7 @@ PROVIDES += "virtual/egl virtual/libgles1 virtual/libgles2 virtual/libopencl vir
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 ARCH_TYPE_NUM = "${@get_kernel_arch_num(d,"${TARGET_PREFIX}")}"
+CURRENT_IMAGE_TYPE = "${@get_image_type(d,"${DEPLOY_DIR}","${MACHINE_ARCH}")}"
 
 do_install () {
     install -d ${D}${bindir}
@@ -24,7 +25,14 @@ do_install () {
 
     install -m 0755 ${S}/bin/egl_api_main_suite_20-${ARCH_TYPE_NUM} ${D}${bindir}/egl_api_main_suite_20
     install -m 0755 ${S}/bin/gles2_api_suite-${ARCH_TYPE_NUM} ${D}${bindir}/gles2_api_suite
-    install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM} ${D}${libdir}/libMali.so
+
+    if [ "${CURRENT_IMAGE_TYPE}" = "sato" ]; then
+        touch ${D}${libdir}/libMali_for_X11
+        install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM}-X11 ${D}${libdir}/libMali.so
+    else
+        touch ${D}${libdir}/libMali_for_wayland
+        install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM} ${D}${libdir}/libMali.so
+    fi
 
     # install -m 0644 ${S}/bin/* ${D}${bindir}
     # install -m 0644 ${S}/lib/* ${D}${libdir}
