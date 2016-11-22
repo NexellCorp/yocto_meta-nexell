@@ -9,7 +9,17 @@ TOOLS = " \
     perf \
     udev-extraconf \
     tzdata \
+    "
+
+GLIBC_INSTALL = " \
     glibc-utils \
+    glibc-localedata-i18n \
+    glibc-gconv-ibm850 \
+    glibc-gconv-cp1252 \
+    glibc-gconv-iso8859-1 \
+    glibc-gconv-iso8859-15 \
+    glibc-gconv-euc-kr \
+    locale-base-en-gb \
     "
 
 SYSTEMD_INSTALL = " \
@@ -33,4 +43,5 @@ IMAGE_INSTALL += " \
     ${SYSTEMD_INSTALL} \
     ${TOOLS} \
     ${NEXELL_LIBS_EXT} \
+    ${GLIBC_INSTALL} \
     "
