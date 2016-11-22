@@ -34,6 +34,7 @@ CONF_BBMASK_NOT_USE_BENCHMARK = " /meta-nexell/recipes-benchmark"
 CONF_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
                       'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"',
                       'PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"',
+                      'DISTRO_FEATURES_append = " zeroconf"',
                       'LICENSE_FLAGS_WHITELIST = "commercial"']
 
 #Use weston & wayland recipes
@@ -45,9 +46,9 @@ CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
                         'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
                         'CORE_IMAGE_EXTRA_INSTALL += "iputils"']
 
-#Use weston & wayland recipes
+#xorg/xserver(X11)
 CONF_APPEND_USE_X11 = ['DISTRO_FEATURES_remove = " wayland"',
-                       'DISTRO_FEATURES_append = " systemd x11 opengl glx"',
+                       'DISTRO_FEATURES_append = " systemd x11 opengl glx zeroconf"',
                        'REQUIRED_DISTRO_FEATURES = "x11"',
                        'VIRTUAL-RUNTIME_init_manager = "systemd"',
                        'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',
