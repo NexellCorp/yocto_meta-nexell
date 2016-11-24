@@ -10,9 +10,9 @@ echo -e "\033[0;33m     ARM 32bit tool chain copy to tmp/work, It need to be opt
 echo -e "\033[0;33m     please wait...\033[0m"
 cp -an ${SRC_PATH}/tools/toolchain/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf ${DEST_PATH}
 
-echo -e "\033[0;33m     ARM 64bit non-elf tool chain copy to tmp/work, It need to be bl1-artik7 build \033[0m"
-echo -e "\033[0;33m     please wait...\033[0m"
-cp -an ${SRC_PATH}/tools/toolchain/gcc-linaro-aarch64-none-elf-4.8-2014.04_linux ${DEST_PATH}
+#echo -e "\033[0;33m     ARM 64bit non-elf tool chain copy to tmp/work, It need to be bl1-artik7 build \033[0m"
+#echo -e "\033[0;33m     please wait...\033[0m"
+#cp -an ${SRC_PATH}/tools/toolchain/gcc-linaro-aarch64-none-elf-4.8-2014.04_linux ${DEST_PATH}
 
 echo -e "\033[0;33m     arm-eabi- tool chain copy to tmp/work, It need to be bl1-artik7 build \033[0m"
 echo -e "\033[0;33m     please wait...\033[0m"

@@ -3,7 +3,6 @@ require nexell-bl1-s5p6818-common.inc
 
 COMPATIBLE_MACHINE = "s5p6818-artik710-raptor"
 
-TOOLCHAIN_ARCH64_NONE_ELF = "${BASE_WORKDIR}/gcc-linaro-aarch64-none-elf-4.8-2014.04_linux/bin/aarch64-none-elf-"
 TOOLCHAIN_ARCH32_EABI = "${BASE_WORKDIR}/arm-eabi-4.8/bin/"
 
 EXTRA_OEMAKE = "\
