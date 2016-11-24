@@ -118,6 +118,13 @@ function local_conf_append()
         echo "PREFERRED_PROVIDER_virtual/mesa = \"mesa\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_libgbm = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_libgbm-dev = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    else
+        if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
+            echo "SERIAL_CONSOLE = \"115200 ttySAC3\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        else
+            echo "SERIAL_CONSOLE = \"115200 ttyAMA3\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        fi
+        echo "USE_VT = \"1\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     fi
 }
 
