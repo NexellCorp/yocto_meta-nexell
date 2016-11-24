@@ -9,6 +9,7 @@ TOOLS = " \
     perf \
     udev-extraconf \
     tzdata \
+    net-tools \
     "
 
 GLIBC_INSTALL = " \
