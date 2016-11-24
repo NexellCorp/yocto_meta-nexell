@@ -22,22 +22,19 @@ CHIP_NAME = "s5p6818"
 BOARD_PREFIX = "artik710"
 
 do_kernel_configme_prepend() {
+    config=${S}/arch/arm64/configs/${KERNEL_DEFCONFIG}
+
+    echo "CONFIG_ARTIK_TRUSTZONE_DRIVER=n" >> $config
+
     install -m 0644 ${S}/arch/${ARM_ARCH}/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
 }
 
 do_compile() {
-    oe_runmake ARCH=arm64 distclean
     local dts_file=${S}/arch/${ARM_ARCH}/boot/dts/nexell/${CHIP_NAME}-${BOARD_PREFIX}.dtsi
 
     oe_runmake ARCH=${ARM_ARCH} ${KERNEL_DEFCONFIG}
 
     export LDFLAGS="-O1 --hash-style=gnu --as-needed"
-
-    local memreserve_size=0x7ed00000
-    local reg_size=0x3ee00000
-
-    sed -i -e 's/\(\/memreserve\/[[:blank:]]\+\)\([[:alnum:]]\+[[:blank:]]\+\)\([[:alnum:]]\+\)/\1'"${memreserve_size}"' \3/' ${dts_file} 
-    sed -i -e 's/\(^[[:blank:]]\+reg = <0x40000000 \)[[:alnum:]]\+>/\1'"${reg_size}"'>/' ${dts_file}   
 
     oe_runmake ${KERNEL_COMMON_FLAGS} Image -j8
     oe_runmake ${KERNEL_COMMON_FLAGS} dtbs
@@ -50,23 +47,12 @@ do_compile() {
 do_install_append() {
     echo "${KBUILD_OUTPUT}" > ${BASE_WORKDIR}/source_kernel_dir_path.txt
 
-    # cp -a ${PATH_KERNEL_BUILD}/.config ${PATH_KERNEL_SRC}
-    # cp -a ${PATH_KERNEL_BUILD}/* ${PATH_KERNEL_SRC}
-
-    # cp -a ${PATH_KERNEL_SRC}/Makefile ${KBUILD_OUTPUT}
-    # cp -a ${PATH_KERNEL_SRC}/scripts ${KBUILD_OUTPUT}
-    # cp -a ${PATH_KERNEL_SRC}/arch/arm ${KBUILD_OUTPUT}/arch
-    # cp -a ${PATH_KERNEL_SRC}/arch/arm64 ${KBUILD_OUTPUT}/arch
-    # cp -a ${PATH_KERNEL_SRC}/include ${KBUILD_OUTPUT}
     rm -rf ${BASE_WORKDIR}/temp_kernel_out
     mkdir -p ${BASE_WORKDIR}/temp_kernel_out
 
     cp -an ${KBUILD_OUTPUT}/* ${BASE_WORKDIR}/temp_kernel_out
-#    cp -an ${KBUILD_OUTPUT}/.* ${BASE_WORKDIR}/temp_kernel_out
-    
     cp -a ${PATH_KERNEL_BUILD}/.config ${BASE_WORKDIR}/temp_kernel_out
     cp -a ${PATH_KERNEL_BUILD}/* ${BASE_WORKDIR}/temp_kernel_out
-
     cp -a ${PATH_KERNEL_SRC}/Makefile ${BASE_WORKDIR}/temp_kernel_out
     cp -a ${PATH_KERNEL_SRC}/scripts ${BASE_WORKDIR}/temp_kernel_out
     cp -a ${PATH_KERNEL_SRC}/arch/arm ${BASE_WORKDIR}/temp_kernel_out/arch
