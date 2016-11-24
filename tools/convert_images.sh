@@ -290,22 +290,13 @@ function post_process()
         make_3rdboot_for_emmc
     fi
     
-    echo -e "\n\n\033[0;33m  Target download method.....                                                                \033[0m\n"
-    if  [ "${MACHINE_NAME}" == "s5p6818-artik710-raptor" ]; then
-        echo -e "\033[0;33m  <Full download>                                                                            \033[0m"
-        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor.sh -p partmap_emmc.txt -r .  \033[0m"
-        echo -e "\033[0;33m  <kernel only>                                                                              \033[0m"
-        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p6818_artik710-raptor_kernel_only.sh               \033[0m"
-        echo -e "\033[0;33m  <rootfs.img>                                                                               \033[0m"
-        echo -e "\033[0;33m      ex) $ sudo fastboot flash rootfs rootfs.img                                            \033[0m\n"
-    else
-        echo -e "\033[0;33m  <Full download>                                                            \033[0m"
-        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p4418.sh -p partmap_emmc.txt -r .  \033[0m"
-        echo -e "\033[0;33m  <bl1, u-boot, kernel only>                                                 \033[0m"
-        echo -e "\033[0;33m      ex) $ ../meta-nexell/tools/update_s5p4418_kernel_uboot_bl1_only.sh     \033[0m"
-        echo -e "\033[0;33m  <rootfs.img>                                                               \033[0m"
-        echo -e "\033[0;33m      ex) $ sudo fastboot flash rootfs rootfs.img                            \033[0m\n"
-    fi
+    echo -e "\n\n\033[0;33m  Target download method.....                                                            \033[0m\n"
+    echo -e "\033[0;33m  <Full download>                                                                            \033[0m"
+    echo -e "\033[0;33m      ex) $ ${META_NEXELL_TOOLS_PATH}/update.sh -p partmap_emmc.txt -r .                     \033[0m"
+    echo -e "\033[0;33m  <kernel only>                                                                              \033[0m"
+    echo -e "\033[0;33m      ex) $ ${META_NEXELL_TOOLS_PATH}/update.sh -p partmap_emmc.txt -r . -t kernel           \033[0m"
+    echo -e "\033[0;33m  <rootfs.img>                                                                               \033[0m"
+    echo -e "\033[0;33m      ex) $ sudo fastboot flash rootfs rootfs.img                                            \033[0m\n"
 }
 
 #1-result dir 2-in_img 3-private_key 4-aes_key
