@@ -37,12 +37,8 @@ recipes-kernel/linux/linux-s5p6818-avn-ref_%.bbappend
 recipes-nexell-libs/gst-plugins/gst-plugins-camera_%.bbappend
 recipes-nexell-libs/gst-plugins/gst-plugins-renderer_%.bbappend
 recipes-nexell-libs/gst-plugins/gst-plugins-scaler_%.bbappend
-recipes-nexell-libs/gst-plugins/gst-plugins-video-dec_%.bbappend
-recipes-nexell-libs/gst-plugins/gst-plugins-video-enc_%.bbappend
-recipes-nexell-libs/gst-plugins/gst-plugins-video-sink_%.bbappend
 
 recipes-nexell-libs/nx-libs/libdrm-nx_%.bbappend
-recipes-nexell-libs/nx-libs/libomxil-nx_%.bbappend
 recipes-nexell-libs/nx-libs/nx-drm-allocator_%.bbappend
 recipes-nexell-libs/nx-libs/nx-gst-meta_%.bbappend
 recipes-nexell-libs/nx-libs/nx-renderer_%.bbappend
