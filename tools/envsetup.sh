@@ -10,6 +10,7 @@ RESULT_DIR="result-$1-$2"
 PARENT_DIR="${PWD%/*}"
 RESULT_PATH="${PARENT_DIR}/${RESULT_DIR}"
 IMAGE_TYPE=$2
+SDK_RELEASE=$3
 NEXELL_CODE_MASK="NEXELL appended code"
 
 MACHINE_NAME=$1
@@ -43,6 +44,7 @@ function check_usage()
 function usage()
 {
     echo "Usage: $0 <machine-name> <image-type>"
+    echo "Usage: $0 <machine-name> <image-type> <sdk:true or false>"
     echo "    ex) $0 s5p6818-artik710-raptor tiny"
     echo "    ex) $0 s5p6818-artik710-raptor sato"
     echo "    ex) $0 s5p6818-artik710-raptor qt"
@@ -52,6 +54,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref sato"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-navi-ref qt sdk"
 }
 
 function split_args()
@@ -126,15 +129,16 @@ function local_conf_append()
         fi
         echo "USE_VT = \"1\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     fi
+
+    #sdk related code clean for rebuild time
+    if [ ${SDK_RELEASE} == "false" ]; then
+        echo "BBMASK += \" /meta-nexell/recipes-core/images/meta-environment.bbappend\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    fi
 }
 
 function customize_recipe_core_files()
 {
-    if [ "${IMAGE_TYPE}" == "tiny" -o "${IMAGE_TYPE}" == "qt" -o "${IMAGE_TYPE}" == "sato" -o "${IMAGE_TYPE}" == "tinyui" ];then
-	${META_NEXELL_PATH}/tools/recipes-core-filename-change.py ${META_NEXELL_PATH} ${MACHINE_NAME} ${IMAGE_TYPE}
-    else
-	usage
-    fi
+    ${META_NEXELL_PATH}/tools/recipes-core-filename-change.py ${META_NEXELL_PATH} ${MACHINE_NAME} ${IMAGE_TYPE}
 }
 
 function copy_build_scripts()
