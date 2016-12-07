@@ -28,12 +28,6 @@ ARCH_TYPE = "${@get_kernel_arch(d,"${TARGET_PREFIX}")}"
 EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
     "
-
-#----------------------------------------------------------------
-#If need to enable iPodService on boot time, below comment unset
-#inherit systemd
-#SYSTEMD_SERVICE_${PN} = "iPodServiceApp.service"
-#----------------------------------------------------------------
    
 do_configure() {
     #video_api_test
@@ -114,10 +108,6 @@ do_compile() {
                                            -lnx_video_api          \
                                            -lnx_drm_allocator      \
                                            -lnx_v4l2"
-
-    # iPodService
-    cd ${S}/iPodService
-    oe_runmake CROSSNAME=${TARGET_PREFIX} INCLUDE_EXT="-I${STAGING_INCDIR}" LIBRARY_EXT="-L${STAGING_LIBDIR}" CC="$CC"
 }
 
 do_install() {
@@ -163,14 +153,6 @@ do_install() {
     cp -a ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.* ${D}${libdir}
     #install -m 0644 ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.so ${D}${libdir}
     #install -m 0644 ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.so.* ${D}${libdir}
-
-    # iPodService
-    install -m 0755 ${S}/iPodService/start_iap2.sh ${D}${bindir}
-    install -m 0755 ${S}/iPodService/stop_iap2.sh ${D}${bindir}
-    #----------------- systemd service for iPodService -----------------------
-    #install -d ${D}${systemd_unitdir}/system
-    #install -m 0644 ${S}/iPodServiceApp.service ${D}${systemd_unitdir}/system
-    install -m 0755 ${S}/iPodService/ipod_service ${D}${bindir}
 }
 
 PREFERRED_VERSION_libavcodec = "56.60.100"
