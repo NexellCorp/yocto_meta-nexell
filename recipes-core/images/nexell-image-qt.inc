@@ -69,6 +69,11 @@ QT_ALSA_EXTRA_IMAGE_INSTALL = " \
      alsa-utils-alsactl \
      "
 
+NEXELL_QT_APPS_INSTALL = " \    
+    NxAudioPlayer \
+    NxQuickRearCam \
+    "
+
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qtwebkit} \
@@ -77,5 +82,6 @@ IMAGE_INSTALL += " \
      ${QT_ALSA_IMAGE_INSTALL} \
      ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
      podonamu \
+     ${NEXELL_QT_APPS_INSTALL} \
      "
 
