@@ -15,16 +15,17 @@ S = "${WORKDIR}/git"
 require recipes-qt/qt5/qt5.inc
 do_install() {
     install -d ${D}/podo
-    cp -r ${B}/apps/ ${D}/podo
-    cp ${D}/podo/apps/pdwindowcompositor/pdwindowcompositor ${D}/podo
+    cp -a ${B}/apps/ ${D}/podo
+    cp -a ${B}/core/podo ${D}/podo
+
     rm ${D}/podo/apps/*/*.cpp
     rm ${D}/podo/apps/*/*.o
     rm ${D}/podo/apps/*/*.h
     rm ${D}/podo/apps/*/Makefile
-    cp -a -r ${S}/apps/pdhelloweb/ ${D}/podo/apps/
-    cp -r ${S}/*.sh ${D}/podo
+    cp -a ${S}/apps/pdhelloweb/ ${D}/podo/apps/
+    cp -a ${S}/*.sh ${D}/podo
     rm ${D}/podo/install.sh
-    APPS="pdhellocpp pdhelloqml pdimageview pdsetting textures"
+    APPS="pdhellocpp pdhelloqml pdimageview pdsetting textures pdapreceiver pdapsender"
     for i in $APPS
     do
           echo "Copying $i..."
