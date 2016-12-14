@@ -24,7 +24,6 @@ MX = " \
 NEXELL_EXAMPLES = " \
     helloworld-nexell \
     helloworld-nexell-module \
-    example-libs \
     "
 
 RDEPENDS_${PN} = " \

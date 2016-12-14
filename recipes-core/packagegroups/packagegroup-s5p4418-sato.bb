@@ -18,7 +18,6 @@ GSTREAMER10_X11 = " \
 NEXELL_EXAMPLES = " \
     helloworld-nexell \
     helloworld-nexell-module \
-    example-libs \
     "
 
 OARDEPENDS_${PN} = " \
