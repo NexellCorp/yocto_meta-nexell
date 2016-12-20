@@ -65,12 +65,11 @@ function path_setup()
 
 function cleanup_dirs()
 {
-    #sudo rm -rf "${PARENT_DIR}/${RESULT_DIR}"
     if [ ! -d ${RESULT_PATH} ];then
-	sudo mkdir -m 777 ${RESULT_PATH}
+	mkdir -m 777 ${RESULT_PATH}
     else
-	sudo rm -rf ${RESULT_PATH}/boot
-	sudo rm -rf ${RESULT_PATH}/root
+	rm -rf ${RESULT_PATH}/boot
+	rm -rf ${RESULT_PATH}/root
     fi
 }
 
