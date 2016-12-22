@@ -72,6 +72,7 @@ QT_ALSA_EXTRA_IMAGE_INSTALL = " \
 NEXELL_QT_APPS_INSTALL = " \    
     NxAudioPlayer \
     NxQuickRearCam \
+    NxVideoPlayer \
     "
 
 IMAGE_INSTALL += " \
