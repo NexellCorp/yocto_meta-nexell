@@ -74,17 +74,19 @@ function customize_conf_files()
     elif ! [ -a ${META_NEXELL_PATH}/misc/GENIVI/nexell.bblayers.conf ];then
 	echo "nexell.bblayers.conf not exist"
 	exit
-    fi    
+    fi
 
     #bblayers.inc overwrite
     cp -a ${META_NEXELL_PATH}/misc/GENIVI/bblayers.inc ${GENIVI_BUILD_PATH}/conf/templates/
 
     #init.sh overwrite
     cp -a ${META_NEXELL_PATH}/misc/GENIVI/init.sh ${GENIVI_PATH}
-	
+
     #*.local.conf
     echo "include templates/${MACHINE_NAME}.local.inc" > ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
     echo "MACHINE = \"${MACHINE_NAME}\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
+    echo "ALLOW_EMPTY_${MACHINE_NAME}-bl1 = \"1\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
+    echo "ALLOW_EMPTY_${MACHINE_NAME}-uboot = \"1\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
     #cp -a ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf ${GENIVI_BUILD_PATH}/conf/local.conf
 
     #*.bblayers.conf
