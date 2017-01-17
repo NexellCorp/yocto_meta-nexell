@@ -20,9 +20,9 @@ NEXELL_EXAMPLES = " \
     helloworld-nexell-module \
     "
 
-OARDEPENDS_${PN} = " \
+RDEPENDS_${PN} = " \
     ${GSTREAMER10_X11} \
-    nexell-drm-mali \
+    nexell-drm-mali-sato \
     testsuite-s5p4418 \
     rtl-8188eus-32 \
     ${NEXELL_EXAMPLES} \

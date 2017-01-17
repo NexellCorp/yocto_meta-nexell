@@ -12,25 +12,19 @@ SRC_URI = "file://bin \
 
 S = "${WORKDIR}"
 
-DEPENDS += "${@base_contains("DISTRO_FEATURES", "wayland", " mesa", " ", d)}"
-PROVIDES += "virtual/egl virtual/libgles1 virtual/libgles2 virtual/libopencl virtual/libwayland-egl"
+PROVIDES += "virtual/egl virtual/libgles1 virtual/libgles2 virtual/libopencl"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 ARCH_TYPE_NUM = "${@get_kernel_arch_num(d,"${TARGET_PREFIX}")}"
+#sato? or qt
 CURRENT_IMAGE_TYPE = "${@get_image_type(d,"${DEPLOY_DIR}","${MACHINE_ARCH}")}"
 
 do_install () {
     install -d ${D}${bindir}
     install -d ${D}${libdir}
 
-    install -m 0755 ${S}/bin/egl_api_main_suite_20-${ARCH_TYPE_NUM} ${D}${bindir}/egl_api_main_suite_20
-    install -m 0755 ${S}/bin/gles2_api_suite-${ARCH_TYPE_NUM} ${D}${bindir}/gles2_api_suite
-
-    touch ${D}${libdir}/libMali_for_wayland
-    install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM} ${D}${libdir}/libMali.so
-
-    # install -m 0644 ${S}/bin/* ${D}${bindir}
-    # install -m 0644 ${S}/lib/* ${D}${libdir}
+    touch ${D}${libdir}/libMali_for_X11
+    install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM}-X11 ${D}${libdir}/libMali.so
 
     # Create MALI manifest
     if [ "${ARCH_TYPE_NUM}" -eq "64" ]; then
@@ -39,14 +33,12 @@ do_install () {
         ln ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv2.so
         ln ${D}${libdir}/libMali.so ${D}${libdir}/libOpenCL.so
         ln ${D}${libdir}/libMali.so ${D}${libdir}/libgbm.so
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libwayland-egl.so
     else
         ln -sf libMali.so ${D}${libdir}/libEGL.so
         ln -sf libMali.so ${D}${libdir}/libGLESv1_CM.so
         ln -sf libMali.so ${D}${libdir}/libGLESv2.so
         ln -sf libMali.so ${D}${libdir}/libOpenCL.so
         ln -sf libMali.so ${D}${libdir}/libgbm.so
-        ln -sf libMali.so ${D}${libdir}/libwayland-egl.so
     fi
 }
 
@@ -56,5 +48,5 @@ FILES_${PN} += "${bindir} ${libdir}"
 
 RREPLACES_${PN} = " libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
 RPROVIDES_${PN} = " libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
-RPROVIDES_${PN} += " libGLESv2.so libEGL.so libgbm.so libwayland-egl.so libGLESv1_CM.so"
+RPROVIDES_${PN} += " libGLESv2.so libEGL.so libgbm.so libGLESv1_CM.so"
 RCONFLICTS_${PN} = " libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"

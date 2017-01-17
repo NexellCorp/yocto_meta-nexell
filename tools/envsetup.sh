@@ -113,14 +113,18 @@ function local_conf_append()
 
     #dependancy MACHINE NAME so setup-conf_file.py can't included
     if [ ${IMAGE_TYPE} != "tiny" ]; then
-        echo "PREFERRED_PROVIDER_virtual/libgles1 = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-        echo "PREFERRED_PROVIDER_virtual/libgles2 = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-        echo "PREFERRED_PROVIDER_virtual/egl = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-        echo "PREFERRED_PROVIDER_virtual/libopencl = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        local imgtype=
+        if [ ${IMAGE_TYPE} == "sato" ]; then
+            imgtype="-sato"
+        fi
+        echo "PREFERRED_PROVIDER_virtual/libgles1 = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/libgles2 = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/egl = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_virtual/libopencl = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_virtual/libgl = \"mesa\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_virtual/mesa = \"mesa\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-        echo "PREFERRED_PROVIDER_libgbm = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-        echo "PREFERRED_PROVIDER_libgbm-dev = \"nexell-drm-mali\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_libgbm = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        echo "PREFERRED_PROVIDER_libgbm-dev = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     else
         if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
             echo "SERIAL_CONSOLE = \"115200 ttySAC3\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
