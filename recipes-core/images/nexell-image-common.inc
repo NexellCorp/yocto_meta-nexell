@@ -38,6 +38,10 @@ NEXELL_LIBS_EXT = " \
     nx-vidtex \
     "
 
+NEXELL_MULTIMEDIA = " \
+    tinyalsa \
+    "
+
 IMAGE_INSTALL += " \
     kernel-modules \
     android-tools \
@@ -45,4 +49,5 @@ IMAGE_INSTALL += " \
     ${TOOLS} \
     ${NEXELL_LIBS_EXT} \
     ${GLIBC_INSTALL} \
+    ${NEXELL_MULTIMEDIA} \
     "

@@ -61,6 +61,10 @@ QT_MULTIMEDIA = " \
     qtmultimedia-qmlplugins \
     "
 
+NEXELL_MULTIMEDIA = " \
+    tinyalsa \
+    "
+
 IMAGE_INSTALL_append = " \
     ${NEXELL_COMMON_INSTALL} \
     ${TOUCH_IMAGE_INSTALL} \
@@ -68,4 +72,5 @@ IMAGE_INSTALL_append = " \
     ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
     ${QT_MULTIMEDIA} \
     packagegroup-nexell-common \
+    ${NEXELL_MULTIMEDIA} \
     "
