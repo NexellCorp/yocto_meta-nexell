@@ -17,6 +17,9 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit autotools pkgconfig
 require recipes-qt/qt5/qt5.inc
 
+inherit linux-nexell-base
+ARCH_TYPE_NUM = "${@get_kernel_arch_num(d,"${TARGET_PREFIX}")}"
+
 #HOST_SYS ==> arm-poky-linux-gnueabi
 #oe_runconf is run at WORKDIR, so can't use oe_runconf. If want use oe_runconf, configure file has to located WORKDIR
 
@@ -32,7 +35,11 @@ do_install() {
     install -d ${D}${libdir}
     install -m 0644 ${S}/Package/* ${D}/podo/apps/NxVideoPlayer
     install ${B}/NxVideoPlayer/NxVideoPlayer ${D}/podo/apps/NxVideoPlayer
-	install -m -644 ${B}/libnxplayer/lib/32bit/*.so ${D}${libdir}
+    if [ "${ARCH_TYPE_NUM}" -eq "32" ]; then
+        install -m -644 ${B}/libnxplayer/lib/32bit/*.so ${D}${libdir}
+    else
+        echo "64bit libnxsubtitle todo"
+    fi
 }
 
 addtask videoPlayer_precompile before do_compile after do_configure
