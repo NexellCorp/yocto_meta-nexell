@@ -9,7 +9,7 @@ EXTRA_OEMAKE = "\
 "
 
 do_compile () {
-    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="NAVI" CHIPNAME="NXP4330" -j 1
+    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="NAVI" SECURE="NO" CHIPNAME="NXP4330" -j 1
 }
 
 inherit deploy
