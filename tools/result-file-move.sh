@@ -83,12 +83,17 @@ function copy_bin_files()
 	fi
 	cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
 	cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
-	cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}	
+	cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
     else
         if [ "${BOARD_NAME}" == "navi-ref" ]; then
             cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
         fi
-	cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
+        if [ "${BOARD_NAME}" == "smart-voice" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-smart_voice.bin ${RESULT_PATH}
+            cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-smart-voice-usb.bin ${RESULT_PATH}
+        else
+            cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
+        fi
     fi
     cp ${TMP_DEPLOY_PATH}/u-boot.bin ${RESULT_PATH}
     cp ${TMP_DEPLOY_PATH}/default_envs.txt ${RESULT_PATH}
@@ -123,15 +128,17 @@ function copy_dtb_file()
 	    file_name_dtb="s5p4418-avn_ref*.dtb"
 	elif [ ${BOARD_PREFIX} == "navi" ]; then
 	    file_name_dtb="s5p4418-navi_ref*.dtb"
-	fi
+        elif [ ${BOARD_PREFIX} == "smart" ]; then
+            file_name_dtb="s5p4418-smart_voice*.dtb"
+        fi
     fi
 
     if [ ! -z "$file_name_dtb" -a "$file_name_dtb"!=" " ]; then
 	find ${BUILD_PATH}/tmp/work/${kernel_image_path}/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
-	
+
 	#For local kernel source using
 	exec < ${BUILD_PATH}/tmp/work/source_kernel_dir_path.txt
-	
+
 	read externalKernelPath
 	find $externalKernelPath/. -name ${file_name_dtb} -exec cp {} ${RESULT_PATH} \;
     fi
@@ -140,8 +147,8 @@ function copy_dtb_file()
 function copy_ramdisk_image()
 {
     if [ ${IMAGE_TYPE} != "tiny" ]; then
-	cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
-	#cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}	
+        cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
+        #cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}
     fi
 }
 

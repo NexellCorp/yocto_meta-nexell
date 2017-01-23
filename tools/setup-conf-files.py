@@ -46,6 +46,13 @@ CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
                         'CORE_IMAGE_EXTRA_INSTALL += "wayland weston"',
                         'CORE_IMAGE_EXTRA_INSTALL += "iputils"']
 
+CONF_APPEND_USE_SMARTVOICE = ['DISTRO_FEATURES_remove = " x11"',
+                              'DISTRO_FEATURES_append = " systemd wayland opengl"',
+                              'REQUIRED_DISTRO_FEATURES = "wayland"',
+                              'VIRTUAL-RUNTIME_init_manager = "systemd"',
+                              'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',
+                              'CORE_IMAGE_BASE_INSTALL += "weston weston-init"',
+                              'IMAGE_FEATURES += "splash package-management ssh-server-dropbear hwcodecs"']
 #xorg/xserver(X11)
 CONF_APPEND_USE_X11 = ['DISTRO_FEATURES_remove = " wayland"',
                        'DISTRO_FEATURES_append = " systemd x11 opengl glx zeroconf"',
@@ -60,6 +67,7 @@ CONF_BBMASK_S5P4418_NAVI_REF = "/s5p4418-navi-ref"
 CONF_BBMASK_S5P4418_AVN_REF = "/s5p4418-avn-ref"
 CONF_BBMASK_S5P6818_ARTIK710_RAPTOR = "/s5p6818-artik710-raptor"
 CONF_BBMASK_S5P6818_AVN_REF = "/s5p6818-avn-ref"
+CONF_BBMASK_S5P4418_SMART_VOICE = "/s5p4418-smart-voice"
 
 class parsingForpokyfiles():
     linuxMark = '/'
@@ -90,6 +98,9 @@ class parsingForpokyfiles():
 	if self.imagetype == 'tiny' :
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
             confAppend = []
+        elif self.imagetype == 'smartvoice' :
+            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
+            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE
         elif self.imagetype == 'qt' :
             confBBmask = ''
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL

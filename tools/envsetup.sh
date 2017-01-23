@@ -22,7 +22,7 @@ BOARD_POSTFIX=
 META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
 
-declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref")
+declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-smart-voice")
 declare -a targets_sdk=("s5p4418-qt-sdk" "s5p4418-sato-sdk" "s5p4418-tiny-sdk" "s5p6818-qt-sdk" "s5p6818-tiny-sdk")
 
 function check_usage()
@@ -70,10 +70,10 @@ function path_setup()
 {
     META_NEXELL_PATH=`readlink -ev ${TOOLS_PATH}/..`
     if ! [ -d ${META_NEXELL_PATH}/../build-${MACHINE_NAME}-${IMAGE_TYPE} ]; then
-	echo "Warning, please check -  source poky/oe-init-build-env build-<machine_name>-<image_type>"
+        echo "Warning, please check -  source poky/oe-init-build-env build-<machine_name>-<image_type>"
         exit
     else
-	NEXELL_BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../build-${MACHINE_NAME}-${IMAGE_TYPE}`
+        NEXELL_BUILD_PATH=`readlink -ev ${META_NEXELL_PATH}/../build-${MACHINE_NAME}-${IMAGE_TYPE}`
     fi
 }
 
@@ -112,7 +112,14 @@ function local_conf_append()
     echo "BBMASK += \" /meta-nexell/recipes-dev-platform/images/genivi-dev-platform.bbappend\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
 
     #dependancy MACHINE NAME so setup-conf_file.py can't included
-    if [ ${IMAGE_TYPE} != "tiny" ]; then
+    if [ ${IMAGE_TYPE} == "tiny" ]; then
+        if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
+            echo "SERIAL_CONSOLE = \"115200 ttySAC3\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        else
+            echo "SERIAL_CONSOLE = \"115200 ttyAMA3\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+        fi
+        echo "USE_VT = \"1\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    else
         local imgtype=
         if [ ${IMAGE_TYPE} == "sato" ]; then
             imgtype="-sato"
@@ -125,13 +132,6 @@ function local_conf_append()
         echo "PREFERRED_PROVIDER_virtual/mesa = \"mesa\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_libgbm = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_libgbm-dev = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-    else
-        if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
-            echo "SERIAL_CONSOLE = \"115200 ttySAC3\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-        else
-            echo "SERIAL_CONSOLE = \"115200 ttyAMA3\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
-        fi
-        echo "USE_VT = \"1\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     fi
 
     #-----------------------------------------------------------------
@@ -147,6 +147,25 @@ function local_conf_append()
         done
         sed -i "/\/meta-nexell\/recipes-core\/images\/nexell-sdk\/${BOARD_SOCNAME}-${IMAGE}-sdk/d" ${NEXELL_BUILD_PATH}/conf/local.conf
     fi
+
+    #smart voice
+#    if [ ${IMAGE_TYPE} == "smartvoice" ]; then
+#        smart_voice_license_flags_whitelist_set
+#    fi
+}
+
+function smart_voice_license_flags_whitelist_set()
+{
+    echo "LICENSE_FLAGS_WHITELIST = \" \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_gstreamer1.0-plugins-base \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_gstreamer1.0-plugins-good \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_gstreamer1.0-plugins-bad \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_gstreamer1.0-plugins-ugly \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_gstreamer1.0-libav \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_lame \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_libmad \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    commercial_mpeg2dec \\" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    echo "    \"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
 }
 
 function customize_recipe_core_files()

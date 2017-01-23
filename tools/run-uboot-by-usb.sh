@@ -40,43 +40,52 @@ function get_board_prefix()
 
 function run_by_usb()
 {
-	if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
-		if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-				-n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-32.txt \
-				-b bl1-raptor.bin
-			sleep 1
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-				-f fip-loader-usb.img -m
-		elif [ "${BOARD_NAME}" == "avn-ref" ]; then
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-				-n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_avn_ref_usb.txt \
-				-b bl1-avn.bin
-			sleep 1
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-				-f fip-loader-usb.img -m
-		fi
-	else
-		if [ ${BOARD_PREFIX} == "avn" ]; then
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-				-n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-				-b bl1-${BOARD_PREFIX}.bin
-			sleep 1
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-				-n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-				-f u-boot.bin -a 0x43c00000 -j 0x43c00000
-		elif [ ${BOARD_PREFIX} == "navi" ]; then
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-				-n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-				-b bl1-${BOARD_PREFIX}-usb.bin
-			sleep 1
-			sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-				-n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-				-f u-boot.bin -a 0x43c00000 -j 0x43c00000
-		else
-			echo "Not supported board type"
-		fi
-	fi
+    if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
+        if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-32.txt \
+                -b bl1-raptor.bin
+            sleep 1
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -f fip-loader-usb.img -m
+        elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_avn_ref_usb.txt \
+                -b bl1-avn.bin
+            sleep 1
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -f fip-loader-usb.img -m
+        fi
+    else
+        if [ ${BOARD_PREFIX} == "avn" ]; then
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
+                -b bl1-${BOARD_PREFIX}.bin
+            sleep 1
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
+                -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+        elif [ ${BOARD_PREFIX} == "navi" ]; then
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
+                -b bl1-${BOARD_PREFIX}-usb.bin
+            sleep 1
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
+                -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+        elif [ ${BOARD_PREFIX} == "smart" ]; then
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_voice_usb.txt \
+                -b bl1-${BOARD_PREFIX}-voice-usb.bin
+            sleep 1
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
+                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_voice_usb.txt \
+                -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+
+        else
+            echo "Not supported board type"
+        fi
+    fi
 }
 
 check_usage

@@ -63,6 +63,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-smart-voice smartvoice"
 }
 
 function convert_env_setup()
@@ -70,7 +71,7 @@ function convert_env_setup()
     echo "================================================="
     echo "convert_env_setup"
     echo "================================================="
-    
+
     BOARD_SOCNAME=${MACHINE_NAME%-*-*}
     BOARD_NAME=${MACHINE_NAME#*-}
     BOARD_PREFIX=${BOARD_NAME%-*}
@@ -118,9 +119,9 @@ function mkramdisk()
     echo "================================================="
     echo "build mkramdisk"
     echo "================================================="
-    
-    if [ ${IMAGE_TYPE} != "tiny" ]; then	
-            cp -a uInitrd ./boot
+
+    if [ ${IMAGE_TYPE} != "tiny" ]; then
+        cp -a uInitrd ./boot
     else
 	cp -a *.tar.bz2 ${ROOTDIR}
 	cd ${ROOTDIR}
@@ -158,9 +159,13 @@ function mkbootimg()
     else
         echo -e "Not supported Yet!!"
     fi
-    
+
     cp -a *.dtb ./boot
-    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/    
+
+    if [ "${BOARD_NAME}" == "smart-voice" ]; then
+        cp ${META_NEXELL_TOOLS_PATH}/s5p4418-smart-voice/nxc100_ver_01.bin ./boot
+    fi
+    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/
 }
 
 function make_2ndboot_for_emmc()
@@ -168,7 +173,7 @@ function make_2ndboot_for_emmc()
     echo "================================================="
     echo "make_2ndboot_for_emmc"
     echo "================================================="
-    
+
     local bl1_source=
     local file_name=
     local chip_name=${BOARD_SOCNAME}
@@ -182,7 +187,7 @@ function make_2ndboot_for_emmc()
 	    aes_key=${1}
 	    echo -e "Yocto build not support aes encrypt! Something wrong!"
 	    exit 1
-	fi	    
+        fi
 	gen_img=bl1-emmcboot.bin.gen
 	aes_in_img=${gen_img}
 	aes_out_img=bl1-emmcboot.img
@@ -191,11 +196,14 @@ function make_2ndboot_for_emmc()
     else
 	gen_img=bl1-emmcboot.img
     fi
-	
+
     # BINGEN
     if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
         bl1_source=bl1-raptor.bin
         file_name=raptor-emmc-32.txt
+    elif [ "${BOARD_NAME}" == "smart-voice" ]; then
+        bl1_source=bl1-smart_voice.bin
+        file_name=nsih_smart_voice_emmc.txt
     else
         bl1_source=bl1-${BOARD_PREFIX}.bin
         file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
@@ -203,7 +211,7 @@ function make_2ndboot_for_emmc()
 
     local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
 
-    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
+    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" -o "${MACHINE_NAME}" == "s5p4418-smart-voice" ]; then
         chip_name="nxp4330"
         bootbingen=BOOT_BINGEN_NAVI
     fi
@@ -211,18 +219,18 @@ function make_2ndboot_for_emmc()
     ${PARENT_DIR}/meta-nexell/tools/${bootbingen} -c ${chip_name} -t 2ndboot -n ${nsih} -i ${bl1_source} -o ${gen_img} -l 0xffff0000 -e 0xffff0000
 
     # SECURE
-    if [ "${chip_name}" == "s5p6818" ]; then        
+    if [ "${chip_name}" == "s5p6818" ]; then
 	if [ ${SECURE_BOOT} == "true" ]; then
             gen_hash_rsa ${gen_img} "" ${PRIVATE_KEY}
             dd if=${gen_img}.pub of=${gen_img} ibs=256 count=1 obs=512 seek=1 conv=notrunc
-	    # AES encrypt	    
+            # AES encrypt
 	    echo "SECURE BOOT not support Yocto build.\nIf you need to secure build, please contact us."
 	    exit 1
 	    aes_encrypt ${aes_out_img} ${aes_in_img} ${aes_key}
 	else
 	    cp ${gen_img} ${aes_out_img}
        fi
-    fi    
+    fi
 }
 
 function make_3rdboot_for_emmc()
@@ -230,7 +238,7 @@ function make_3rdboot_for_emmc()
     echo "================================================="
     echo "make_3rdboot_for_emmc"
     echo "================================================="
-    
+
     local file_name=
     local inout_image=u-boot
     local chip_name=${BOARD_SOCNAME}
@@ -256,10 +264,10 @@ function make_3rdboot_for_emmc()
         jump_addr=0x43c00000
     fi
 
-    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" ]; then
+    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" -o "${MACHINE_NAME}" == "s5p4418-smart-voice" ]; then
         chip_name="nxp4330"
     fi
- 
+
     ${PARENT_DIR}/meta-nexell/tools/BOOT_BINGEN -c ${chip_name} -t 3rdboot -n ${nsih} -i ${inout_image}.bin -o singleimage-emmcboot.bin -l ${load_addr} -e ${jump_addr}
 }
 

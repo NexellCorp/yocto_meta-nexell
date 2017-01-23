@@ -1,0 +1,9 @@
+[Unit]
+Description=amixer conf
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/amixer-conf.sh
+
+[Install]
+WantedBy=multi-user.target

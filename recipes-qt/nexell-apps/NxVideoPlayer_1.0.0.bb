@@ -2,7 +2,7 @@ SUMMARY = "Qt5 APP LIBS, NEXELL"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS = "qtbase qtquickcontrols2 qtmultimedia qtwebkit qtwayland nx-video-api nx-v4l2 libdrm nx-vidtex "
+DEPENDS = "qtbase qtquickcontrols2 qtmultimedia qtwayland nx-video-api nx-v4l2 libdrm nx-vidtex ffmpeg"
 
 SRCREV = "bee9d7bf3443068ccaf15ca801393965c1e640fe"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/QT/NxVideoPlayer;protocol=git;branch=master"
@@ -36,7 +36,7 @@ do_install() {
     install -m 0644 ${S}/Package/* ${D}/podo/apps/NxVideoPlayer
     install ${B}/NxVideoPlayer/NxVideoPlayer ${D}/podo/apps/NxVideoPlayer
     if [ "${ARCH_TYPE_NUM}" -eq "32" ]; then
-        install -m -644 ${B}/libnxplayer/lib/32bit/*.so ${D}${libdir}
+        install -m 0644 ${B}/libnxplayer/lib/32bit/*.so ${D}${libdir}
     else
         echo "64bit libnxsubtitle todo"
     fi
@@ -48,3 +48,4 @@ FILES_${PN} = "podo ${libdir}"
 RDEPENDS_${PN} = "qtbase-plugins"
 INSANE_SKIP_${PN}-dev = "dev-elf"
 ERROR_QA_remove = "compile-host-path"
+RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter"
