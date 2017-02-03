@@ -54,6 +54,10 @@ QT_MULTIMEDIA = " \
     qtmultimedia-qmlplugins \
     "
 
+SMART_VOICE_APPS = " \
+    smart-voice-testapp \
+    "
+
 IMAGE_INSTALL += " \
     amixer-conf \
     rtl-8188eus-32 \
@@ -69,4 +73,5 @@ IMAGE_INSTALL += " \
     ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
     ${SYSTEMD_INSTALL} \
     ${QT_MULTIMEDIA} \
+    ${SMART_VOICE_APPS} \
     "
