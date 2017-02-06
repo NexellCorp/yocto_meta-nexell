@@ -10,7 +10,8 @@ RESULT_DIR="result-$1-$2"
 PARENT_DIR="${PWD%/*}"
 RESULT_PATH="${PARENT_DIR}/${RESULT_DIR}"
 IMAGE_TYPE=$2
-SDK_RELEASE=$3
+NUMBER_THREADS=$3
+SDK_RELEASE=$4
 NEXELL_CODE_MASK="NEXELL appended code"
 
 MACHINE_NAME=$1
@@ -135,6 +136,13 @@ function local_conf_append()
     fi
 
     #-----------------------------------------------------------------
+    # CORE THREADS numbers
+    #-----------------------------------------------------------------
+    if [ ${NUMBER_THREADS} != "-1" ]; then
+        echo "BB_NUMBER_THREADS = \"${NUMBER_THREADS}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    fi
+
+    #-----------------------------------------------------------------
     # SDK related code clean for rebuild time
     #-----------------------------------------------------------------
     if [ ${SDK_RELEASE} == "false" ]; then
@@ -145,7 +153,7 @@ function local_conf_append()
         do
             echo "BBMASK += \" /meta-nexell/recipes-core/images/nexell-sdk/$i\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         done
-        sed -i "/\/meta-nexell\/recipes-core\/images\/nexell-sdk\/${BOARD_SOCNAME}-${IMAGE}-sdk/d" ${NEXELL_BUILD_PATH}/conf/local.conf
+        sed -i "/\/meta-nexell\/recipes-core\/images\/nexell-sdk\/${BOARD_SOCNAME}-${IMAGE_TYPE}-sdk/d" ${NEXELL_BUILD_PATH}/conf/local.conf
     fi
 
     #smart voice
