@@ -58,6 +58,13 @@ SMART_VOICE_APPS = " \
     smart-voice-testapp \
     "
 
+TOOLS = " \
+    perf \
+    udev-extraconf \
+    tzdata \
+    net-tools \
+    "
+
 IMAGE_INSTALL += " \
     amixer-conf \
     rtl-8188eus-32 \
@@ -74,4 +81,5 @@ IMAGE_INSTALL += " \
     ${SYSTEMD_INSTALL} \
     ${QT_MULTIMEDIA} \
     ${SMART_VOICE_APPS} \
+    ${TOOLS} \
     "
