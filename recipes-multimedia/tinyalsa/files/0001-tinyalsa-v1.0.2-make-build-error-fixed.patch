@@ -1,0 +1,45 @@
+From d1b752c5a3576a2210b64af0fde493403873008a Mon Sep 17 00:00:00 2001
+From: choonghyun-Jeon <suker@nexell.co.kr>
+Date: Fri, 17 Feb 2017 17:30:41 +0900
+Subject: [PATCH] tinyalsa v1.0.2 make build error fixed
+
+---
+ doxygen/Makefile | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/doxygen/Makefile b/doxygen/Makefile
+index 5f8c5c0..1f79073 100644
+--- a/doxygen/Makefile
++++ b/doxygen/Makefile
+@@ -2,21 +2,26 @@ DESTDIR ?=
+ PREFIX ?= /usr/local
+ MANDIR ?= $(PREFIX)/share/man
+ 
+-DOXYGEN ?= doxygen
++DOCYGEN := $(shell command -v doxygen 2> /dev/null)
+ DOXYGENFLAGS =
+ 
+ .PHONY: all
+ all:
++ifdef DOXYGEN
+ 	$(DOXYGEN) $(DOXYGENFLAGS)
++endif
+ 
+ .PHONY: clean
+ clean:
++ifdef DOXYGEN
+ 	rm -Rf html
+ 	rm -Rf man
++endif
+ 
+ .PHONY: install
+ install:
++ifdef DOXYGEN
+ 	mkdir -p $(DESTDIR)$(MANDIR)/man3
+ 	cp -u man/man3/tinyalsa-pcm.3 $(DESTDIR)$(MANDIR)/man3
+ 	cp -u man/man3/tinyalsa-mixer.3 $(DESTDIR)$(MANDIR)/man3
+-
++endif
+-- 
+2.11.0
+
