@@ -162,9 +162,6 @@ function mkbootimg()
 
     cp -a *.dtb ./boot
 
-    if [ "${BOARD_NAME}" == "smart-voice" ]; then
-        cp ${META_NEXELL_TOOLS_PATH}/s5p4418-smart-voice/nxc100_ver_01.bin ./boot
-    fi
     ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/
 }
 
