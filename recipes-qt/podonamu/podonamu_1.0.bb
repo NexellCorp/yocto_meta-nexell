@@ -3,7 +3,7 @@ HOMEPAGE = "http://www.podovat.com"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS += "qtbase qtquickcontrols2 qtmultimedia qtwebkit qtwayland systemd"
+DEPENDS += "qtbase qtquickcontrols2 qtmultimedia qtwebkit qtwayland qtvirtualkeyboard connman systemd"
 
 PR = "r1"
 
@@ -25,7 +25,7 @@ do_install() {
     cp -a ${S}/apps/pdhelloweb/ ${D}/podo/apps/
     cp -a ${S}/*.sh ${D}/podo
     rm ${D}/podo/install.sh
-    APPS="pdhellocpp pdhelloqml pdimageview pdsetting textures pdapreceiver pdapsender"
+    APPS="pdhellocpp pdhelloqml pdimageview pdsetting textures pdapreceiver pdapsender pdconnman"
     for i in $APPS
     do
           echo "Copying $i..."

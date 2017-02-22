@@ -69,6 +69,12 @@ QT_ALSA_EXTRA_IMAGE_INSTALL = " \
      alsa-utils-alsactl \
      "
 
+PODO_IMAGE_INSTALL = " \
+     podonamu \
+     connman \
+     connman-client \
+     "
+
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qtwebkit} \
@@ -76,6 +82,6 @@ IMAGE_INSTALL += " \
      ${TOUCH_IMAGE_INSTALL} \
      ${QT_ALSA_IMAGE_INSTALL} \
      ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
-     podonamu \
+     ${PODO_IMAGE_INSTALL} \
      "
 
