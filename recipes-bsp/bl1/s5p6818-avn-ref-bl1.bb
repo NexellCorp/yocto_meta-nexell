@@ -10,7 +10,7 @@ EXTRA_OEMAKE = "\
 "
 
 do_compile () {
-    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="AVN" KERNEL_VER="4" ${SECURE-BL1} -j 1
+    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="avn" KERNEL_VER="4" SYSLOG="n" DEVICE_PORT="2" ${SECURE-BL1} -j 1
 }
 
 inherit deploy
@@ -18,6 +18,7 @@ inherit deploy
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/out/bl1-avn.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/bl1-emmcboot.bin ${DEPLOY_DIR_IMAGE}
 }
 
 addtask deploy after do_install

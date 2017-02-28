@@ -95,6 +95,7 @@ function copy_bin_files()
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi
     fi
+    cp ${TMP_DEPLOY_PATH}/bl1-emmcboot.bin ${RESULT_PATH}
     cp ${TMP_DEPLOY_PATH}/u-boot.bin ${RESULT_PATH}
     cp ${TMP_DEPLOY_PATH}/default_envs.txt ${RESULT_PATH}
 }

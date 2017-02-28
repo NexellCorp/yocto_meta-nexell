@@ -9,7 +9,7 @@ EXTRA_OEMAKE = "\
 "
 
 do_compile () {
-    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="SMART_VOICE" SECURE="NO" CHIPNAME="NXP4330" -j 1
+    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="smart_voice" ARM_SECURE="n" CHIPNAME="nxp4330" DEVICE_PORT="0" SYSLOG="n" -j 1
 }
 
 inherit deploy
@@ -17,6 +17,7 @@ inherit deploy
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/out/bl1-smart_voice.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/bl1-emmcboot.bin ${DEPLOY_DIR_IMAGE}
 }
 
 addtask deploy after do_install

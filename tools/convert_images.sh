@@ -185,7 +185,7 @@ function make_2ndboot_for_emmc()
 	    echo -e "Yocto build not support aes encrypt! Something wrong!"
 	    exit 1
         fi
-	gen_img=bl1-emmcboot.bin.gen
+	gen_img=bl1-emmcboot.bin
 	aes_in_img=${gen_img}
 	aes_out_img=bl1-emmcboot.img
     elif [ "${chip_name}" == "s5p4418" ]; then
@@ -194,26 +194,12 @@ function make_2ndboot_for_emmc()
 	gen_img=bl1-emmcboot.img
     fi
 
-    # BINGEN
-    if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-        bl1_source=bl1-raptor.bin
-        file_name=raptor-emmc-32.txt
-    elif [ "${BOARD_NAME}" == "smart-voice" ]; then
-        bl1_source=bl1-smart_voice.bin
-        file_name=nsih_smart_voice_emmc.txt
-    else
-        bl1_source=bl1-${BOARD_PREFIX}.bin
-        file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
-    fi
-
     local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
 
     if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" -o "${MACHINE_NAME}" == "s5p4418-smart-voice" ]; then
         chip_name="nxp4330"
         bootbingen=BOOT_BINGEN_NAVI
     fi
-
-    ${PARENT_DIR}/meta-nexell/tools/${bootbingen} -c ${chip_name} -t 2ndboot -n ${nsih} -i ${bl1_source} -o ${gen_img} -l 0xffff0000 -e 0xffff0000
 
     # SECURE
     if [ "${chip_name}" == "s5p6818" ]; then
