@@ -182,7 +182,9 @@ function post_process()
     if [ -f secure.cfg ]; then
 	cp secure.cfg ${RESULT_PATH}
         echo -e "\n secure.cfg file copy Done!"
-    fi    
+    fi
+
+    touch ${RESULT_PATH}/YOCTO.${RESULT_DIR}.INFO.DoNotChange
     echo -e "\033[40;33m  Maybe you need to convert some binary images                                \033[0m"
     echo -e "\033[40;33m  You can use below operation                                                 \033[0m"
     echo -e "\033[40;33m  ex) ${META_NEXELL_PATH}/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE}  \033[0m\n"
