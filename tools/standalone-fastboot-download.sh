@@ -81,6 +81,14 @@ function parse_args()
     done
 
     PARTMAP=$TOOLS_PATH/partmap_emmc.txt
+
+    IFS='/' array=($RESULT_DIR)
+    local temp="${array[-1]}"
+
+    MACHINE_NAME=${temp#*-}
+    BOARD_SOCNAME=${MACHINE_NAME%-*-*-*}
+
+    IFS=''
 }
 
 function print_args()
@@ -255,3 +263,5 @@ fi
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
+
+sudo fastboot continue
