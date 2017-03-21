@@ -1,5 +1,5 @@
-#ifndef _NX_PDM_H_
-#define _NX_PDM_H_
+#ifndef NX_PDM_H
+#define NX_PDM_H
 
 #if __cplusplus
 extern "C" {
@@ -9,15 +9,7 @@ typedef struct {
 	int GeneratedFilterBlock_states[63];
 } pdmLPF_STATDEF;
 
-void PDM_LPF_Init(pdmLPF_STATDEF *lpf_st);
-void PDM_LPF_Run(pdmLPF_STATDEF *lpf_st, short *pOutBuf,
-			short *pInBuf, int len);
-
-/*
- * Static Variables
- */
 typedef struct {
-	unsigned int start_sign;
 	int frames;
 	long int sum;
 	int iGain;
@@ -26,26 +18,7 @@ typedef struct {
 	int dc_offset;
 	int sum_table[20];
 	pdmLPF_STATDEF lpf_st;
-	unsigned int end_sign;
 } agc_STATDEF;
-
-#define	START_AGC_SIGN	0x12345678
-#define	END_AGC_SIGN	0xDEADDEAD
-
-/*
- * function prototypes
- */
-void  agc_Init(agc_STATDEF  *agc_st);
-
-/*
- * agc_st	: address of the stativ variable structure
- * plta		: signal
- */
-#ifdef AGC_DEBUG
-void agc_Agc(agc_STATDEF *agc_st, short *signal, short *plta, int dB);
-#else
-void agc_Run(agc_STATDEF *agc_st, short *signal, int dB);
-#endif
 
 typedef struct {
 	agc_STATDEF agc_st[4];
@@ -55,18 +28,73 @@ typedef struct {
 	int OldSigma5[4];
 } pdm_STATDEF;
 
+/*
+ * pdm_Init - initialize pdm to pcm function
+ * @pdm_STATDEF: address of the stativ variable structure
+ */
 void pdm_Init(pdm_STATDEF *pdm_STATDEF);
 
-/*
- * outbuf	: 2048 byte (256 sample : L/R | L/R)
- * inbuf	: 2048  * 4 = 8 KB : 8byte (L) -> 2byte (L) (64KHz->16KHz)
+/**
+ * pdm_Run - covert 4 channel pdm raw data to 4 channel pcm data
+ *
+ * @pdm_st: pointer to an pdm_STATDEF structure
+ *
+ * @outbuf: converted pcm data, data buffer size must be 2048 bytes,
+ *	    pcm out data format : 4 channel pcm
+ *		L0[16B] / R0[16B]
+ *		L1[16B] / R1[16B]
+ *		.....
+ *
+ * @inbuf: pdm raw data, data buffer size must be 8192 bytes,
+ *	    pdm raw input data format :
+ *		L0[1B]/R0[1B]/L1[1B]/R1[1B]/......
+ *		.....
+ *
+ * @agc_dB: pcm data output gain value
+ *
+ * Convert pdm raw data (8192bytes) to interleved pcm format data(2048bytes)
  */
 void pdm_Run(pdm_STATDEF *pdm_st, short *outbuf, int *inbuf, int agc_dB);
 
-#define SAMPLE_LENGTH_PDM	256
-
+/**
+ * pdm_Run_channel - covert pdm raw data to pcm data with channel
+ *
+ * @pdm_st: pointer to an pdm_STATDEF structure
+ *
+ * @outbuf: converted pcm data
+ *	    pcm out data format :
+ *	    if channels == 4, data buffer size must be 2048 bytes
+ *		L0[16B] / R0[16B]
+ *		L1[16B] / R1[16B]
+ *		.....
+ *	    if channels == 3, data buffer size must be 2048 bytes
+ *		L0[16B] / R0[16B]
+ *		L1[16B] / NULL
+ *		.....
+ *	    if channels == 2, data buffer size must be 1024 bytes
+ *		L0[16B] / R0[16B]
+ *		.....
+ *	    if channels == 1, data buffer size must be 1024 bytes
+ *		L0[16B] / NULL
+ *		.....
+ *
+ * @inbuf: pdm raw data, data buffer size must be 8192 bytes,
+ *	    pdm raw input data format :
+ *		L0[1B]/R0[1B]/L1[1B]/R1[1B]/......
+ *		.....
+ *
+ * @agc_dB: pcm data output gain value
+ *
+ * @channels: pdm raw data channel count to convert pcm data, support 1 ~ 4 channel
+ *
+ * @be: swap to big-endian
+ *
+ * Convert pdm raw data (8192bytes) to interleved pcm format data(2048bytes)
+ */
+void pdm_Run_channel(pdm_STATDEF *pdm_st, short *outbuf, int *inbuf,
+			int agc_dB, int ch, int swap);
 #if __cplusplus
 }
 #endif
 
-#endif	/* _NX_PDM_H_ */
+#endif	/* NX_PDM_H */
