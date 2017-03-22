@@ -48,7 +48,7 @@ extern "C" {
 #define	PCM_AGC_INPUT_BYTES	(8192)		/* FIX: 8120 AGC IN  (from PDM) */
 #define	PCM_AGC_OUTPUT_BYTES	(2048)		/* FIX: 2048 AGC OUT (from PDM) */
 
-#define	PCM_AGC_PERIOD_BYTES	(2048)
+#define	PCM_AGC_PERIOD_BYTES	(PCM_AGC_OUTPUT_BYTES)
 #define	PCM_AGC_PERIOD_SIZE	((PCM_PDM_PERIOD_BYTES * PCM_PDM_PERIOD_SIZE) / PCM_AGC_PERIOD_BYTES)
 
 #define WAV_SAVE_PERIOD		(512 * 1024)	/* 51Kbyte */
@@ -187,6 +187,24 @@ static inline void swap_16(void *s, int size)
 #define	swap_16(s, l)
 #endif
 
+static void pdm_raw_channel_clear(void *ptr, int ch)
+{
+	unsigned int *data = (unsigned int *)ptr;
+	unsigned int mask;
+
+	for (int i = 0; i < 256; i++) {
+		for (int j = 0; j < 8; j++) {
+			mask =
+			~(((1<<ch) << 28) | ((1<<ch) << 24) |
+			  ((1<<ch) << 20) | ((1<<ch) << 16) |
+			  ((1<<ch) << 12) | ((1<<ch) << 8)  |
+			  ((1<<ch) << 4)  | ((1<<ch) << 0));
+			*data &= mask;
+			data++;
+		}
+	}
+}
+
 static void *audio_agc_stream(void *data)
 {
 	CAudioStream *Stream = (CAudioStream *)data;
@@ -278,21 +296,48 @@ __reinit:
 		 */
 		RUN_TIMESTAMP_US(ts);
 
+#if 0
+		int pdm_chs = 2;
+		bool be = true;
+
+		if (!be)
+			swap_16(InPtr, i_bytes);
+
+		/* PDM OUT [L0/R0/L1/R1] -> PCM [L0/R0/L1/R1] */
+		pdm_Run_channel(&pdm_st, (short int*)OutPtr, (int*)InPtr, agc_dB, pdm_chs, be);
+
+		END_TIMESTAMP_US(ts, td);
+
+		/* for SPLIT copy  [L0/R0/L1/R1] -> [L0/R0 .....][L1/R1 ....]*/
+		if (pdm_chs > 2) {
+			int length = o_bytes/2;
+
+			agc_split((int*)OutPtr, tmp[0], tmp[1], o_bytes);
+			for (int i = 0; i < 2; i++) {
+				unsigned char *dst = OutPtr + (i * length);
+
+				memcpy(dst, tmp[i], length);
+			}
+		}
+#else
 		swap_16(InPtr, i_bytes);
+
+		/* PDM OUT [L0/R0/L1/R1] -> PCM [L0/R0/L1/R1] */
 		pdm_Run(&pdm_st, (short int*)OutPtr, (int*)InPtr, agc_dB);
 
 		END_TIMESTAMP_US(ts, td);
 
-		/* for SPLIT copy */
+		/* for SPLIT copy  [L0/R0/L1/R1] -> [L0/R0 .....][L1/R1 ....]*/
 		int length = o_bytes/2;
+
 		agc_split((int*)OutPtr, tmp[0], tmp[1], o_bytes);
 
-		/* Realignment PDM OUT [L0/R0/L1/R1] -> [L0/R0 ..... L1/R1 ....] */
 		for (int i = 0; i < 2; i++) {
 			unsigned char *dst = OutPtr + (i * length);
 
 			memcpy(dst, tmp[i], length);
 		}
+#endif
 
 		Stream->InBufPopRel(i_type, i_bytes);
 		Stream->OutBufPushRel(type, o_bytes);
