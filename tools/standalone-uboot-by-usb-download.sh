@@ -39,15 +39,15 @@ function run_by_usb()
     if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
         if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -n ${TOOLS_PATH}/raptor-32.txt \
-                 -b ${RESULT_DIR}/bl1-raptor.bin
+                 -b ${RESULT_DIR}/bl1-raptor.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
                  -f ${RESULT_DIR}/fip-loader-usb.img -m
         elif [ "${BOARD_NAME}" == "avn-ref" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -n ${TOOLS_PATH}/nsih_avn_ref_usb.txt \
-                 -b ${RESULT_DIR}/bl1-avn.bin
+                 -b ${RESULT_DIR}/bl1-avn.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
                  -f ${RESULT_DIR}/fip-loader-usb.img -m
@@ -55,28 +55,25 @@ function run_by_usb()
     else
         if [ ${BOARD_PREFIX} == "avn" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -n ${TOOLS_PATH}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -n ${TOOLS_PATH}/nsih_${BOARD_PREFIX}_ref_usb.txt \
                  -f ${RESULT_DIR}/u-boot.bin -a 0x43c00000 -j 0x43c00000
         elif [ ${BOARD_PREFIX} == "navi" ]; then
             echo ${TOOLS_PATH}
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -n ${TOOLS_PATH}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-usb.bin
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-usb.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -n ${TOOLS_PATH}/nsih_${BOARD_PREFIX}_ref_usb.txt \
                  -f ${RESULT_DIR}/u-boot.bin -a 0x43c00000 -j 0x43c00000
         elif [ ${BOARD_PREFIX} == "smart" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -n ${TOOLS_PATH}/nsih_${BOARD_PREFIX}_voice_usb.txt \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-voice-usb.bin
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-voice-usb.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -n ${TOOLS_PATH}/nsih_${BOARD_PREFIX}_voice_usb.txt \
                  -f ${RESULT_DIR}/u-boot.bin -a 0x43c00000 -j 0x43c00000
 
         else
