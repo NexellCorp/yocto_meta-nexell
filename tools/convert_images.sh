@@ -2,12 +2,14 @@
 
 set -e
 
-result_dir=`pwd`
 argc=$#
-PARENT_DIR="${PWD%/*}"
+CURRENT_PATH=`dirname $0`
 ROOTDIR="root"
 BOOTDIR="boot"
-META_NEXELL_TOOLS_PATH="${PARENT_DIR}/meta-nexell/tools"
+META_NEXELL_TOOLS_PATH=`readlink -ev ${CURRENT_PATH}`
+RESULT_NAME="result-${1}-${2}"
+RESULT_PATH="${META_NEXELL_TOOLS_PATH}/../../${RESULT_NAME}"
+result_dir=`readlink -ev ${RESULT_PATH}`
 
 SECURE_TOOL=${META_NEXELL_TOOLS_PATH}/secure_tools/SECURE_BINGEN
 RSA_SIGN_TOOL=${META_NEXELL_TOOLS_PATH}/secure_tools/rsa_sign_pss
@@ -120,6 +122,7 @@ function mkramdisk()
     echo "build mkramdisk"
     echo "================================================="
 
+    cd $result_dir
     if [ ${IMAGE_TYPE} != "tiny" ]; then
         cp -a uInitrd ./boot
     else
@@ -194,7 +197,7 @@ function make_2ndboot_for_emmc()
 	gen_img=bl1-emmcboot.img
     fi
 
-    local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
+    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
 
     if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" -o "${MACHINE_NAME}" == "s5p4418-smart-voice" ]; then
         chip_name="nxp4330"
@@ -232,7 +235,7 @@ function make_3rdboot_for_emmc()
         file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
     fi
     
-    local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
+    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
  
     local load_addr=
     local jump_addr=
@@ -251,7 +254,7 @@ function make_3rdboot_for_emmc()
         chip_name="nxp4330"
     fi
 
-    ${PARENT_DIR}/meta-nexell/tools/BOOT_BINGEN -c ${chip_name} -t 3rdboot -n ${nsih} -i ${inout_image}.bin -o singleimage-emmcboot.bin -l ${load_addr} -e ${jump_addr}
+    ${META_NEXELL_TOOLS_PATH}/BOOT_BINGEN -c ${chip_name} -t 3rdboot -n ${nsih} -i ${inout_image}.bin -o singleimage-emmcboot.bin -l ${load_addr} -e ${jump_addr}
 }
 
 function post_process()
@@ -353,7 +356,7 @@ function gen_loader() {
 #	file_name=${BOARD_PURENAME}-sd.txt
     fi
 
-    local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
+    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
 
     if [ ! -f ${result_dir}/${in_img} ]; then
 	echo "${in_img} not found!"
@@ -447,7 +450,7 @@ function gen_secure() {
 #	file_name=${BOARD_PURENAME}-sd.txt
     fi
 
-    local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
+    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
     
     if [ ! -f ${result_dir}/${in_img} ]; then
 	echo "${in_img} not found!"
@@ -514,7 +517,7 @@ function gen_nonsecure() {
 #	file_name=${BOARD_PURENAME}-sd.txt
     fi
 
-    local nsih=${PARENT_DIR}/meta-nexell/tools/${MACHINE_NAME}/${file_name}
+    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
 
     if [ ! -f ${result_dir}/${in_img} ]; then
 	echo "${in_img} not found!"
