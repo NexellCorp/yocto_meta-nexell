@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mount -t configfs none /sys/kernel/config
+
 GADGET_DIR=/sys/kernel/config/usb_gadget/g1
 SERIAL_PATH=/proc/device-tree/serial-number
 

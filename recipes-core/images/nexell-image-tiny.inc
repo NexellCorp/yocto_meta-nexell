@@ -6,7 +6,14 @@ SPLASH ?= "psplash-nexell"
 
 IMAGE_FEATURES += " splash"
 
+SYSV_INSTALL = " \
+    udev \
+    sysvinit \
+    initscripts \
+    "
+
 IMAGE_INSTALL += " \
     kernel-modules \
     android-tools \
+    ${SYSV_INSTALL} \
     "
