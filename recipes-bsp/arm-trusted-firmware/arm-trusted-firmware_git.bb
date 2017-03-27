@@ -5,7 +5,6 @@ LIC_FILES_CHKSUM = "file://license.md;md5=829bdeb34c1d9044f393d5a16c068371"
 
 SRCREV = "a2684acd0c492611a294a7cc9997eb81d9288e01"
 SRC_URI = "git://git.nexell.co.kr/nexell/secure/arm-trusted-firmware;protocol=git;branch=nexell \
-           file://0001-ATF-SECURE_ON-flags-setting.patch \
           "
 
 S = "${WORKDIR}/git"
