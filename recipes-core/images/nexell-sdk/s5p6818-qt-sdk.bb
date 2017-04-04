@@ -9,5 +9,4 @@ IMAGE_INSTALL += " \
     packagegroup-nexell-common \
     packagegroup-s5p6818-qt \
     packagegroup-nexell-sdk \
-    meta-toolchain-qt5 \
     "
