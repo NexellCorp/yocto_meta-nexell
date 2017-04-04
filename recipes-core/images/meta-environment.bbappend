@@ -11,3 +11,11 @@ create_sdk_files() {
     echo "export LDFLAGS+=\" --sysroot=\$SDKTARGETSYSROOT \"" >> ${SDK_OUTPUT}/${SDKPATH}/environment-setup-${REAL_MULTIMACH_TARGET_SYS}
     echo "export CFLAGS+=\"${TARGET_CC_ARCH} --sysroot=\$SDKTARGETSYSROOT \"" >> ${SDK_OUTPUT}/${SDKPATH}/environment-setup-${REAL_MULTIMACH_TARGET_SYS}
 }
+
+# STAGING_KERNEL_DIR => kernel source path
+# SDPATH => /opt/poky/2.1.2
+# REAL_MULTIMACH_TARGET_SYS => cortexa9hf-neon-poky-linux-gnueabi
+do_install_append() {
+    install -d ${D}/${SDKPATH}/sysroots/${REAL_MULTIMACH_TARGET_SYS}/usr/include/uapi/.
+    install -m 0644 ${STAGING_KERNEL_DIR}/include/uapi/linux/videodev2_nxp_media.h ${D}/${SDKPATH}/sysroots/${REAL_MULTIMACH_TARGET_SYS}/usr/include/uapi/.
+}
