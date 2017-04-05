@@ -7,7 +7,7 @@ vDESCRIPTION = "U-Boot for avn-ref"
 COMPATIBLE_MACHINE = "s5p6818-avn-ref"
 
 do_compile() {
-    local config="s5p6818_arm64_avn_ref"
+    local config="s5p6818_avn_ref"
 
     oe_runmake clean
     oe_runmake ${config}_defconfig
