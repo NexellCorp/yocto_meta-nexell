@@ -80,6 +80,11 @@ do_compile() {
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libdrm -I${STAGING_INCDIR}/nexell" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 
+    #mpegts_test
+    cd ${S}/mpegts_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/nexell" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+
     #  ==> soft/hard floating problem... can't compile
     #libnx_video_alloc
 #    cd ${S}/libnx_video_alloc
@@ -131,7 +136,10 @@ do_install() {
 
     #dp_cam_test_onedevice
     install -m 0755 ${S}/dp_cam_test_onedevice/dp_cam_test_onedevice ${D}${bindir}
-    
+
+    #mpegts_test
+    install -m 0755 ${S}/mpegts_test/nx-mpegts-test ${D}${bindir}
+
     #--- gsttest ---
     install -d ${D}${bindir}/gsttest
     install -d ${D}${bindir}/gsttest/nxscaler
