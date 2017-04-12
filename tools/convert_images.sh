@@ -35,6 +35,48 @@ PORT_SD=0
 DEVIDS=("usb" "spi" "nand" "sdmmc" "sdfs" "uart")
 PORTS=("emmc" "sd")
 
+MEM_1G_LOAD_ADDR=0x7fcc0000
+MEM_1G_JUMP_ADDR=0x7fd00800
+MEM_1G_SECURE_LOAD_ADDR=0x7fb00000
+MEM_1G_SECURE_JUMP_ADDR=0x00000000
+MEM_1G_NON_SECURE_LOAD_ADDR=0x7df00000
+MEM_1G_NON_SECURE_JUMP_ADDR=0x00000000
+
+MEM_2G_LOAD_ADDR=0xbfcc0000
+MEM_2G_JUMP_ADDR=0xbfd00800
+MEM_2G_SECURE_LOAD_ADDR=0xbfb00000
+MEM_2G_SECURE_JUMP_ADDR=0x00000000
+MEM_2G_NON_SECURE_LOAD_ADDR=0xbdf00000
+MEM_2G_NON_SECURE_JUMP_ADDR=0x00000000
+
+MEM_LOAD_ADDR=
+MEM_JUMP_ADDR=
+MEM_SECURE_LOAD_ADDR=
+MEM_SECURE_JUMP_ADDR=
+MEM_NON_SECURE_LOAD_ADDR=
+MEM_NON_SECURE_JUMP_ADDR=
+
+declare -a mem_1G_addrs=( $MEM_1G_LOAD_ADDR \
+                          $MEM_1G_JUMP_ADDR \
+                          $MEM_1G_SECURE_LOAD_ADDR \
+                          $MEM_1G_SECURE_JUMP_ADDR \
+                          $MEM_1G_NON_SECURE_LOAD_ADDR \
+                          $MEM_1G_NON_SECURE_JUMP_ADDR \
+                        )
+declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
+                          $MEM_2G_JUMP_ADDR \
+                          $MEM_2G_SECURE_LOAD_ADDR \
+                          $MEM_2G_SECURE_JUMP_ADDR \
+                          $MEM_2G_NON_SECURE_LOAD_ADDR \
+                          $MEM_2G_NON_SECURE_JUMP_ADDR \
+                        )
+
+# RAM 1G USE
+#mem_addrs=("${mem_1G_addrs[@]}")
+# RAM 2G USE
+mem_addrs=("${mem_2G_addrs[@]}")
+
+
 # aes key
 AES_KEY=
 PRIVATE_KEY=${META_NEXELL_TOOLS_PATH}/secure_tools/private_key.pem
@@ -66,6 +108,16 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
     echo "    ex) $0 s5p4418-smart-voice smartvoice"
+}
+
+function mem_addr_setup()
+{
+    MEM_LOAD_ADDR=${mem_addrs[0]}
+    MEM_JUMP_ADDR=${mem_addrs[1]}
+    MEM_SECURE_LOAD_ADDR=${mem_addrs[2]}
+    MEM_SECURE_JUMP_ADDR=${mem_addrs[3]}
+    MEM_NON_SECURE_LOAD_ADDR=${mem_addrs[4]}
+    MEM_NON_SECURE_JUMP_ADDR=${mem_addrs[5]}
 }
 
 function convert_env_setup()
@@ -337,8 +389,8 @@ function gen_loader() {
     local private_key=${3}
     local aes_key=${6}
 
-    local load_addr=0x7fcc0000 #0x7fdce000
-    local jump_addr=0x7fd00800 #0x7fe00800
+    local load_addr=$MEM_LOAD_ADDR
+    local jump_addr=$MEM_JUMP_ADDR
     local bootdev=${4}
     local portnum=${5}
 
@@ -379,8 +431,8 @@ function gen_loader() {
 	dev_offset_opts="-m 0x60200 -b ${bootdev} -p ${portnum} \
 		-m 0x1E0200 -b ${bootdev} -p ${portnum}"
     elif [ ${bootdev} == ${DEVID_USB} ]; then
-	dev_offset_opts="-u -m 0x7fb00000 -z ${FIP_SEC_SIZE} \
-		-m 0x7df00000 -z ${FIP_NONSEC_SIZE}"
+	dev_offset_opts="-u -m $MEM_SECURE_LOAD_ADDR -z ${FIP_SEC_SIZE} \
+		-m $MEM_NON_SECURE_LOAD_ADDR -z ${FIP_NONSEC_SIZE}"
     fi
     out_img="fip-loader-${devname}.img"
     aes_out_img="${out_img}"
@@ -417,11 +469,11 @@ function gen_secure() {
     local hash_name="${in_img}".hash
     local private_key=${3}
 
-    local load_addr=0x7fb00000 #0x7fd00000
-    local jump_addr=0x00000000
+    local load_addr=$MEM_SECURE_LOAD_ADDR
+    local jump_addr=$MEM_SECURE_JUMP_ADDR
 
     local bl1_source=
-   
+
     if [ ! -f ${result_dir}/${in_img} ]; then
 	echo "${in_img} not found!"
 	exit 1
@@ -468,8 +520,8 @@ function gen_nonsecure() {
     local hash_name="${in_img}".hash
     local private_key=${3}
 
-    local load_addr=0x7df00000 #0x7fb00000
-    local jump_addr=0x00000000
+    local load_addr=$MEM_NON_SECURE_LOAD_ADDR
+    local jump_addr=$MEM_NON_SECURE_JUMP_ADDR
 
     local bl1_source=
 
@@ -576,7 +628,6 @@ function make_modules() {
     tar -xvzf modules*.tgz
     cd ..
     ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L modules -l ${MODULES_PATITION_SIZE} modules.img modules
-    
 }
 
 check_usage
@@ -585,5 +636,6 @@ make_dirs
 mkramdisk
 mkparams
 mkbootimg
+mem_addr_setup
 post_process
 #make_modules
