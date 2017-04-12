@@ -5,7 +5,7 @@ DESCRIPTION = "Linux Kernel for nexell NAVI"
 
 COMPATIBLE_MACHINE = "s5p4418-navi-ref"
 
-DEPENDS = "s5p4418-navi-ref-uboot s5p4418-navi-ref-bl1"
+DEPENDS = "s5p4418-navi-ref-uboot s5p4418-navi-ref-bl1 s5p4418-navi-ref-bl2 s5p4418-navi-ref-dispatcher"
 
 KERNEL_DEFCONFIG_s5p4418-navi-ref ?= "s5p4418_navi_ref_defconfig"
 KERNEL_COMMON_FLAGS = "ARCH=arm CROSS_COMPILE=${TARGET_PREFIX}"

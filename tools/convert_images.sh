@@ -175,11 +175,9 @@ function make_2ndboot_for_emmc()
     echo "================================================="
 
     local bl1_source=
-    local file_name=
     local chip_name=${BOARD_SOCNAME}
     local gen_img=
     local aes_out_img=
-    local bootbingen=BOOT_BINGEN
     local aes_key=${1}
 
     if [ "${chip_name}" == "s5p6818" ]; then
@@ -195,13 +193,6 @@ function make_2ndboot_for_emmc()
 	gen_img=bl1-emmcboot.bin
     else
 	gen_img=bl1-emmcboot.img
-    fi
-
-    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
-
-    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" -o "${MACHINE_NAME}" == "s5p4418-smart-voice" ]; then
-        chip_name="nxp4330"
-        bootbingen=BOOT_BINGEN_NAVI
     fi
 
     # SECURE
@@ -224,37 +215,14 @@ function make_3rdboot_for_emmc()
     echo "================================================="
     echo "make_3rdboot_for_emmc"
     echo "================================================="
+    local soc_name=${1}
+    local in=${2}
+    local load_addr=${3}
+    local jump_addr=${4}
+    local out=${5}
+    local extra_opts=${6}
 
-    local file_name=
-    local inout_image=u-boot
-    local chip_name=${BOARD_SOCNAME}
-
-    if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-        file_name=raptor-emmc-32.txt
-    else
-        file_name=nsih_${BOARD_PREFIX}_ref_emmc.txt
-    fi
-    
-    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
- 
-    local load_addr=
-    local jump_addr=
-    if [ "${BOARD_NAME}" == "s5p6818" ]; then
-        case "${MEM_SIZE}" in
-            512)  load_addr=0x5fc00000; jump_addr=0x5fe00000 ;;
-            1024) load_addr=0x7fc00000; jump_addr=0x7fe00000 ;;
-            2048) load_addr=0xbfc00000; jump_addr=0xbfe00000 ;;
-        esac
-    else
-        load_addr=0x43c00000
-        jump_addr=0x43c00000
-    fi
-
-    if [ "${MACHINE_NAME}" == "s5p4418-navi-ref" -o "${MACHINE_NAME}" == "s5p4418-smart-voice" ]; then
-        chip_name="nxp4330"
-    fi
-
-    ${META_NEXELL_TOOLS_PATH}/BOOT_BINGEN -c ${chip_name} -t 3rdboot -n ${nsih} -i ${inout_image}.bin -o singleimage-emmcboot.bin -l ${load_addr} -e ${jump_addr}
+    ${SECURE_TOOL} -c ${soc_name} -t 3rdboot -i ${in} -o ${out} -l ${load_addr} -e ${jump_addr} ${extra_opts}
 }
 
 function post_process()
@@ -264,15 +232,13 @@ function post_process()
     echo "================================================="
 
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
-	local aes_key=
+        local aes_key=
         if [ ${SECURE_BOOT} == "true" ]; then
-	    echo -e "Yocto build not support secure boot, something wrong!"
-	    exit 1
+            echo -e "Yocto build not support secure boot, something wrong!"
+            exit 1
 	fi
 
-        #make_2ndboot_for_sd ${result_dir} ${aes_key}	
-	make_2ndboot_for_emmc ${aes_key}
-	make_3rdboot_for_emmc
+        make_2ndboot_for_emmc ${aes_key}
 	
         gen_loader_emmc ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
         gen_loader_sd ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
@@ -281,9 +247,46 @@ function post_process()
 	gen_loader_usb ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
     else
 	make_2ndboot_for_emmc
-        make_3rdboot_for_emmc
+        # 1:${soc} |  2:${in} | 3:${load_addr} | 4:${jump_addr} | 5:${out} | 6:${extra_opts}
+        local dev_portnum=
+        if [ ${BOARD_NAME} == "avn-ref" ];then
+            dev_portnum=2
+        elif [ ${BOARD_NAME} == "navi-ref" ];then
+            dev_portnum=0
+        elif [ ${BOARD_NAME} == "smart-voice" ];then
+            dev_portnum=0
+        fi
+
+        make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/pyrope-bl2.bin \
+                              0xb0fe0000 \
+                              0xb0fe0400 \
+                              ${result_dir}/loader-emmc.img \
+                              "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
+
+        if [ ${BOARD_NAME} == "smart-voice" ];then
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/armv7_dispatcher-smartvoice.bin \
+                              0xffff0200 \
+                              0xffff0200 \
+                              ${result_dir}/bl_mon.img \
+                              "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
+        else
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/armv7_dispatcher-${BOARD_PREFIX}.bin \
+                              0xffff0200 \
+                              0xffff0200 \
+                              ${result_dir}/bl_mon.img \
+                              "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
+        fi
+
+        make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/u-boot.bin \
+                              0x43c00000 \
+                              0x43c00000 \
+                              ${result_dir}/bootloader.img
     fi
-    
+
     echo -e "\n\n\033[0;33m  Target download method.....                                                            \033[0m\n"
     echo -e "\033[0;33m  <Full download>                                                                            \033[0m"
     echo -e "\033[0;33m      ex) $ ${META_NEXELL_TOOLS_PATH}/update.sh -p partmap_emmc.txt -r .                     \033[0m"
@@ -340,23 +343,6 @@ function gen_loader() {
     local portnum=${5}
 
     local bl1_source=
-    local file_name=
-
-    if [ "${chip_name}" == "s5p6818" ]; then
-        if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-	    file_name=raptor-64-secure.txt
-	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
-	    file_name=avn-64-secure.txt
-	fi
-    else
-	echo "error! is not s5p6818"
-	#temporary
-	exit 1
-#	bl1_source=bl1-artik530
-#	file_name=${BOARD_PURENAME}-sd.txt
-    fi
-
-    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
 
     if [ ! -f ${result_dir}/${in_img} ]; then
 	echo "${in_img} not found!"
@@ -401,8 +387,8 @@ function gen_loader() {
     echo "[fip-loader] bootdev: ${bootdev}"
     echo "[fip-loader] out_img: ${out_img}"
 
-    # BINGEN
-    ${SECURE_TOOL} -c ${chip_name} -t 3rdboot -n ${nsih} \
+    # SECURE_BINGEN
+    ${SECURE_TOOL} -c ${chip_name} -t 3rdboot \
 		   -i ${result_dir}/${in_img} \
 		   -o ${result_dir}/${gen_img} \
 		   -l ${load_addr} -e ${jump_addr} \
@@ -435,23 +421,7 @@ function gen_secure() {
     local jump_addr=0x00000000
 
     local bl1_source=
-    local file_name=
-    if [ "${chip_name}" == "s5p6818" ]; then
-	if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-	    file_name=${BOARD_POSTFIX}-64.txt
-	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
-	    file_name=avn-64.txt
-	fi
-    else
-	echo "error! is not s5p6818"
-	#temporary
-	exit 1
-#	bl1_source=bl1-artik530
-#	file_name=${BOARD_PURENAME}-sd.txt
-    fi
-
-    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
-    
+   
     if [ ! -f ${result_dir}/${in_img} ]; then
 	echo "${in_img} not found!"
 	exit 1
@@ -467,8 +437,8 @@ function gen_secure() {
 	exit 1
     fi
 
-    # BINGEN
-    ${SECURE_TOOL} -c ${chip_name} -t 3rdboot -n ${nsih} \
+    # SECURE_BINGEN
+    ${SECURE_TOOL} -c ${chip_name} -t 3rdboot \
 		   -i ${result_dir}/${in_img} \
 		   -o ${result_dir}/${gen_img} \
 		   -l ${load_addr} -e ${jump_addr}
@@ -502,22 +472,6 @@ function gen_nonsecure() {
     local jump_addr=0x00000000
 
     local bl1_source=
-    local file_name=
-    if [ "${chip_name}" == "s5p6818" ]; then
-	if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
-	    file_name=${BOARD_POSTFIX}-64.txt
-	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
-	    file_name=avn-64.txt
-	fi
-    else
-	echo "error! is not s5p6818"
-	#temporary
-	exit 1
-#	bl1_source=bl1-artik530
-#	file_name=${BOARD_PURENAME}-sd.txt
-    fi
-
-    local nsih=${META_NEXELL_TOOLS_PATH}/${MACHINE_NAME}/${file_name}
 
     if [ ! -f ${result_dir}/${in_img} ]; then
 	echo "${in_img} not found!"
@@ -534,8 +488,8 @@ function gen_nonsecure() {
 	exit 1
     fi
 
-    # BINGEN
-    ${SECURE_TOOL} -c ${chip_name} -t 3rdboot -n ${nsih} \
+    # SECURE_BINGEN
+    ${SECURE_TOOL} -c ${chip_name} -t 3rdboot \
 		   -i ${result_dir}/${in_img} \
 		   -o ${result_dir}/${gen_img} \
 		   -l ${load_addr} -e ${jump_addr}

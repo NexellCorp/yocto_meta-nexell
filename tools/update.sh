@@ -28,6 +28,8 @@ TOOLS_PATH=`readlink -ev $CURRENT_PATH`
 PARTMAP=
 UPDATE_ALL=true
 UPDATE_BL1=false
+UPDATE_BL2=false
+UPDATE_DISPATCHER=false
 UPDATE_BOOTLOADER=false
 UPDATE_ENV=false
 UPDATE_BOOT=false
@@ -43,10 +45,12 @@ BOARD_NAME=
 
 function usage()
 {
-	echo "Usage: $0 -p <partmap-file> -r <result-dir> [-t bl1 -t uboot -t env -t kernel -t rootfs]"
+	echo "Usage: $0 -p <partmap-file> -r <result-dir> [-t bl1 -t bl2 -t dispatcher -t uboot -t env -t kernel -t rootfs]"
 	echo -e '\n -p <partmap-file> : partmap file path'
 	echo " -r <result-dir> : result dir path"
 	echo " -t bl1\t: if you want to update only bl1, specify this, default no"
+        echo " -t bl2\t: if you want to update only bl2, specify this, default no ** s5p4418 only **"
+        echo " -t armv7-dispatcher\t: if you want to update only armv7-dispatcher, specify this, default no ** s5p4418 only **"
 	echo " -t uboot\t: if you want to update only bootloader, specify this, default no"
 	echo " -t env\t: if you want to update only env, specify this, default no"
 	echo " -t kernel\t: if you want to update only boot partition, specify this, default no"
@@ -58,7 +62,7 @@ function vmsg()
 	local verbose=${VERBOSE:-"false"}
 	if [ ${verbose} == "true" ]; then
 		echo "$@"
-	fi  
+	fi
 }
 
 function parse_args()
@@ -72,6 +76,8 @@ function parse_args()
             -r ) RESULT_DIR=$2; shift 2 ;;
             -t ) case "$2" in
                     bl1    ) UPDATE_ALL=false; UPDATE_BL1=true ;;
+                    bl2    ) UPDATE_ALL=false; UPDATE_BL2=true ;;
+                    dispatcher  ) UPDATE_ALL=false; UPDATE_DISPATCHER=true ;;
                     uboot  ) UPDATE_ALL=false; UPDATE_BOOTLOADER=true ;;
                     env    ) UPDATE_ALL=false; UPDATE_ENV=true ;;
                     kernel ) UPDATE_ALL=false; UPDATE_BOOT=true ;;
@@ -106,6 +112,12 @@ function print_args()
 	else
 		if [ ${UPDATE_BL1} == "true" ]; then
 			vmsg -e "Update:\t\t\tbl1"
+		fi
+                if [ ${UPDATE_BL2} == "true" ]; then
+			vmsg -e "Update:\t\t\tbl2"
+		fi
+                if [ ${UPDATE_DISPATCHER} == "true" ]; then
+			vmsg -e "Update:\t\t\tarmv7_dispatcher"
 		fi
 		if [ ${UPDATE_BOOTLOADER} == "true" ]; then
 		    if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
@@ -153,6 +165,24 @@ function update_bl1()
 		local file=${1}
 		vmsg "update bl1: ${file}"
 		flash 2ndboot ${file}
+	fi
+}
+
+function update_bl2()
+{
+	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_BL2} == "true" ]; then
+		local file=${1}
+		vmsg "update bl2: ${file}"
+		flash loader ${file}
+	fi
+}
+
+function update_dispatcher()
+{
+	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_DISPATCHER} == "true" ]; then
+		local file=${1}
+		vmsg "update dispatcher: ${file}"
+		flash blmon ${file}
 	fi
 }
 
@@ -224,7 +254,7 @@ function update_root()
 	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_ROOT} == "true" ]; then
 		local file=${1}
 		vmsg "update rootfs: ${file}"
-		
+
 		sudo fastboot flash setenv ${CURRENT_PATH}/partition.txt
 		sudo fastboot -S 0 flash rootfs ${file}
 		#flash rootfs ${file}
@@ -260,7 +290,9 @@ if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
     update_fip3 ${RESULT_DIR}/fip-nonsecure.img
 else
     update_bl1 ${RESULT_DIR}/bl1-emmcboot.bin
-    update_bootloader ${RESULT_DIR}/singleimage-emmcboot.bin
+    update_bl2 ${RESULT_DIR}/loader-emmc.img
+    update_dispatcher ${RESULT_DIR}/bl_mon.img
+    update_bootloader ${RESULT_DIR}/bootloader.img
 fi
 
 update_env ${RESULT_DIR}/params.bin

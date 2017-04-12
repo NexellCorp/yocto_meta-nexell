@@ -89,11 +89,14 @@ function copy_bin_files()
             cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
         fi
         if [ "${BOARD_NAME}" == "smart-voice" ]; then
+            cp ${TMP_DEPLOY_PATH}/armv7_dispatcher-smartvoice.bin ${RESULT_PATH}
             cp ${TMP_DEPLOY_PATH}/bl1-smart_voice.bin ${RESULT_PATH}
             cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-smart-voice-usb.bin ${RESULT_PATH}
         else
+            cp ${TMP_DEPLOY_PATH}/armv7_dispatcher-${BOARD_PREFIX}.bin ${RESULT_PATH}
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi
+        cp ${TMP_DEPLOY_PATH}/pyrope-bl2.bin ${RESULT_PATH}
     fi
     cp ${TMP_DEPLOY_PATH}/bl1-emmcboot.bin ${RESULT_PATH}
     cp ${TMP_DEPLOY_PATH}/u-boot.bin ${RESULT_PATH}

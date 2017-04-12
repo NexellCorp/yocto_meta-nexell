@@ -5,7 +5,7 @@ DESCRIPTION = "Linux Kernel for nexell AVN"
 
 COMPATIBLE_MACHINE = "s5p4418-avn-ref"
 
-DEPENDS = "s5p4418-avn-ref-bl1 s5p4418-avn-ref-uboot"
+DEPENDS = "s5p4418-avn-ref-bl1 s5p4418-avn-ref-bl2 s5p4418-avn-ref-dispatcher s5p4418-avn-ref-uboot"
 
 KERNEL_DEFCONFIG_s5p4418-avn-ref ?= "s5p4418_avn_ref_defconfig"
 KERNEL_COMMON_FLAGS = "ARCH=arm CROSS_COMPILE=${TARGET_PREFIX}"

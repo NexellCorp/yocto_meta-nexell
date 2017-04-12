@@ -5,7 +5,7 @@ DESCRIPTION = "Linux Kernel for nexell NAVI"
 
 COMPATIBLE_MACHINE = "s5p4418-smart-voice"
 
-DEPENDS = "s5p4418-smart-voice-uboot s5p4418-smart-voice-bl1"
+DEPENDS = "s5p4418-smart-voice-uboot s5p4418-smart-voice-bl1 s5p4418-smart-voice-bl2 s5p4418-smart-voice-dispatcher"
 
 KERNEL_DEFCONFIG_s5p4418-smart-voice ?= "s5p4418_smart_voice_defconfig"
 KERNEL_COMMON_FLAGS = "ARCH=arm CROSS_COMPILE=${TARGET_PREFIX}"
