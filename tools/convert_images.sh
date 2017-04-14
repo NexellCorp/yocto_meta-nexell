@@ -323,6 +323,11 @@ function post_process()
                               0xffff0200 \
                               ${result_dir}/bl_mon.img \
                               "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/u-boot.bin \
+                              0x74C00000 \
+                              0x74C00000 \
+                              ${result_dir}/bootloader.img
         else
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/armv7_dispatcher-${BOARD_PREFIX}.bin \
@@ -330,13 +335,13 @@ function post_process()
                               0xffff0200 \
                               ${result_dir}/bl_mon.img \
                               "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
-        fi
-
-        make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/u-boot.bin \
                               0x43c00000 \
                               0x43c00000 \
                               ${result_dir}/bootloader.img
+        fi
+
     fi
 
     echo -e "\n\n\033[0;33m  Target download method.....                                                            \033[0m\n"
