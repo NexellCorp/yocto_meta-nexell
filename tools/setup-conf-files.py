@@ -68,6 +68,7 @@ CONF_BBMASK_S5P4418_AVN_REF = "/s5p4418-avn-ref"
 CONF_BBMASK_S5P6818_ARTIK710_RAPTOR = "/s5p6818-artik710-raptor"
 CONF_BBMASK_S5P6818_AVN_REF = "/s5p6818-avn-ref"
 CONF_BBMASK_S5P4418_SMART_VOICE = "/s5p4418-smart-voice"
+CONF_BBMASK_S5P6818_K_BOARD = "/s5p6818-kick-st"
 
 class parsingForpokyfiles():
     linuxMark = '/'

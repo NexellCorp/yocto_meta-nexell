@@ -14,7 +14,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st)"
 
 do_compile() {
     :
