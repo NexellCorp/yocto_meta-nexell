@@ -136,7 +136,7 @@ function convert_env_setup()
     else
 	ARM_ARCH="arm"
     fi
-    
+
     if [ -a secure.cfg ]; then
         exec < secure.cfg
         read KEY VAL
@@ -192,7 +192,7 @@ function mkramdisk()
         ${META_NEXELL_TOOLS_PATH}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
 			             -C none -a 0 -e 0 -n uInitrd -d ${result_dir}/initrd.gz \
 	                             ${result_dir}/boot/uInitrd
-        rm -f ${result_dir}/initrd.gz	    
+        rm -f ${result_dir}/initrd.gz
     fi
 }
 
@@ -291,7 +291,7 @@ function post_process()
 	fi
 
         make_2ndboot_for_emmc ${aes_key}
-	
+
         gen_loader_emmc ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
         gen_loader_sd ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
         gen_secure ${result_dir} fip-secure.bin ${PRIVATE_KEY}
@@ -342,6 +342,29 @@ function post_process()
                               ${result_dir}/bootloader.img
         fi
 
+	if [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
+		local file_name=
+		local pos=0
+		local file_size=0
+
+		file_name=${result_dir}/loader-emmc.img
+		file_size=$(du -b ${file_name} | sed 's/\([0-9]*\)\(.*\)/\1/')
+		echo "fip-nonsecure-usb <-- loader-emmc.img size=${file_size} pos=${pos}"
+		dd if=${result_dir}/loader-emmc.img of=${result_dir}/fip-nonsecure-usb.bin seek=0 bs=1
+		let pos=pos+file_size
+
+		file_name=${result_dir}/bl_mon.img
+		file_size=$(du -b ${file_name} | sed 's/\([0-9]*\)\(.*\)/\1/')
+		echo "fip-nonsecure-usb <-- bl_mon.img size=${file_size} pos=${pos}"
+		dd if=${result_dir}/bl_mon.img of=${result_dir}/fip-nonsecure-usb.bin seek=${pos} bs=1
+		let pos=pos+file_size
+
+		file_name=${result_dir}/bootloader.img
+		file_size=$(du -b ${file_name} | sed 's/\([0-9]*\)\(.*\)/\1/')
+		echo -"fip-nonsecure-usb <-- bootloader.img size=${file_size} pos=${pos}"
+		dd if=${result_dir}/bootloader.img of=${result_dir}/fip-nonsecure-usb.bin seek=${pos} bs=1
+	fi
+
     fi
 
     echo -e "\n\n\033[0;33m  Target download method.....                                                            \033[0m\n"
@@ -356,7 +379,7 @@ function post_process()
 #1-result dir 2-in_img 3-private_key 4-aes_key
 function gen_loader_emmc() {
     gen_loader ${1} ${2} ${3} ${DEVID_SDMMC} ${PORT_EMMC} ${4}
-    
+
 }
 
 function gen_loader_sd() {
@@ -452,13 +475,13 @@ function gen_loader() {
 		   -k ${bootdev} \
 		   ${dev_offset_opts}
 
-    if [ ${SECURE_BOOT} == "true" ]; then	
+    if [ ${SECURE_BOOT} == "true" ]; then
 	echo "Yocto build does not support SECURE boot"
 	break
 	# AES encrypt
 	aes_encrypt ${aes_out_img} ${aes_in_img} ${aes_key}
     fi
-    
+
     cp ${gen_img} ${aes_out_img}
 }
 
@@ -502,12 +525,12 @@ function gen_secure() {
 
     if [ ${SECURE_BOOT} == "true" ]; then
 	echo "Yocto build does not support SECURE boot"
-	break	
+	break
         # RSA
         gen_hash_rsa ${in_img} ${hash_name} ${private_key}
         write_hash_rsa ${gen_img} /dev/null ${in_img}.sig
     fi
-    
+
     cp ${gen_img} ${out_img}
 
     FIP_SEC_SIZE=`stat --printf="%s" ${out_img}`
@@ -558,7 +581,7 @@ function gen_nonsecure() {
         gen_hash_rsa ${in_img} ${hash_name} ${private_key}
         write_hash_rsa ${gen_img} /dev/null ${in_img}.sig
     fi
-    
+
     cp ${gen_img} ${out_img}
 
     FIP_NONSEC_SIZE=`stat --printf="%s" ${out_img}`
@@ -578,7 +601,7 @@ function aes_encrypt() {
     out_img=${1}
     in_img=${2}
     aes_key=${3}
-    
+
     if [ ! -f ${aes_key} ]; then
 	echo "${aes_key} not found!"
 	exit 1
