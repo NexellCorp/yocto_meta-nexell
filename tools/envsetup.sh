@@ -138,14 +138,14 @@ function local_conf_append()
     #-----------------------------------------------------------------
     # CORE THREADS numbers
     #-----------------------------------------------------------------
-    if [ ${NUMBER_THREADS} != "-1" ]; then
+    if [ "${NUMBER_THREADS}" != "-1" ]; then
         echo "BB_NUMBER_THREADS = \"${NUMBER_THREADS}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     fi
 
     #-----------------------------------------------------------------
     # SDK related code clean for rebuild time
     #-----------------------------------------------------------------
-    if [ ${SDK_RELEASE} == "false" ]; then
+    if [ "${SDK_RELEASE}" == "false" ]; then
         echo "BBMASK += \" /meta-nexell/recipes-core/images/meta-environment.bbappend\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "BBMASK += \" /meta-nexell/recipes-core/images/nexell-sdk\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
     else
@@ -239,7 +239,7 @@ function copy_build_scripts()
 	echo -e "\033[0;33m #########  Already Done, optee & ATF pre-fetch & pre-unpack ########## \033[0m"
     fi
 }
-    
+
 check_usage
 split_args
 path_setup

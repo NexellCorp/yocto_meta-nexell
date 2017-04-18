@@ -5,13 +5,13 @@ LICENSE = "GPLv2"
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
 LICENSE = "GPLv2"
-LINUX_VERSION ?= "4.4.19"
+LINUX_VERSION ?= "4.4.49"
 
 SRC_URI[md5sum] = "dbb4a2b9d337a90a304d3e30b86b8d27"
 SRC_URI[sha256sum] = "421ddaca0fa29bf8be2affea6fb020ab5bcfb67f368d8f7bba8d8cfd8c88a61f"
 
-SRCREV = "9db2c167307268e6423472662ef8611c85079ac4"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/kernel/kernel-4.1.15;protocol=git;branch=nexell"
+SRCREV = "84f7793db12930b60de153cac23eecbbe0e06064"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/kernel/kernel-4.4.x;protocol=git;branch=nexell"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 

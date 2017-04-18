@@ -3,7 +3,7 @@ DESCRIPTION = "nx-renderer"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=16672d7f6b1e95223937ee9eaf04e0c4"
 
-SRCREV = "ad5885d4df1387e645ed27af85c1b070921524c8"
+SRCREV = "bc365673700815a7e8339d17bcd7b3892c3ea595"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-renderer;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"

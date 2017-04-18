@@ -3,7 +3,7 @@ DESCRIPTION = "nx-drm-allocator"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=df9b0758c6dcd94963adedfa6f9f0580"
 
-SRCREV = "23cbd9c07e3e3f398efabac2cf97585c9e663b3e"
+SRCREV = "afac0284ef123e2d330a671558f1be46783f2c20"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-drm-allocator;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
