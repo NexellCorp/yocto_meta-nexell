@@ -43,14 +43,12 @@ function run_by_usb()
     if [ ${BOARD_SOCNAME} == "s5p6818" ]; then
         if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/raptor-32.txt \
                 -b bl1-raptor.bin
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
                 -f fip-loader-usb.img -m
         elif [ "${BOARD_NAME}" == "avn-ref" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_avn_ref_usb.txt \
                 -b bl1-avn.bin
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
@@ -59,29 +57,22 @@ function run_by_usb()
     else
         if [ ${BOARD_PREFIX} == "avn" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-                -b bl1-${BOARD_PREFIX}.bin
+                -b bl1-${BOARD_PREFIX}-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-                -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+                -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
         elif [ ${BOARD_PREFIX} == "navi" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-                -b bl1-${BOARD_PREFIX}-usb.bin
+                -b bl1-${BOARD_PREFIX}-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_ref_usb.txt \
-                -f u-boot.bin -a 0x43c00000 -j 0x43c00000
+                -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
         elif [ ${BOARD_PREFIX} == "smart" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_voice_usb.txt \
-                -b bl1-${BOARD_PREFIX}-voice-usb.bin
+                -b bl1-${BOARD_PREFIX}-voice-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -n ${META_NEXELL_TOOLS_DIR}/${MACHINE_NAME}/nsih_${BOARD_PREFIX}_voice_usb.txt \
-                -f u-boot.bin -a 0x43c00000 -j 0x43c00000
-
+                -f fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
         else
             echo "Not supported board type"
         fi
