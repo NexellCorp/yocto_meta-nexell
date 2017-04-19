@@ -73,11 +73,11 @@ static pthread_mutex_t 		stream_lock;
 #define	CMD_FILE_PDM_IN		(1<<6)
 #define	CMD_FILE_I2S_IN		(1<<7)
 
-#define	SET_COMMAND(s, c)	(s->SetCommand(c, c))
+#define	SET_COMMAND(s, c)		(s->SetCommand(c, c))
 #define	SET_COMMAND_MASK(s, c, m)	(s->SetCommand(c, m))
-#define	CLR_COMMAND(s, c)	(s->SetCommand(~c, c))
-#define	GET_COMMAND(s, c)	(s->GetCommand() & (c))
-#define	GET_COMMAND_ALL(s, c)	((c) == (s->GetCommand() & (c)))
+#define	CLR_COMMAND(s, c)		(s->SetCommand(~c, c))
+#define	GET_COMMAND(s, c)		(s->GetCommand() & (c))
+#define	GET_COMMAND_ALL(s, c)		((c) == (s->GetCommand() & (c)))
 
 enum STREAM_TYPE {
 	STREAM_PLAY,
@@ -111,13 +111,29 @@ static inline void format_path(char *buf, const char *fmt, ...)
 static void *audio_playback(void *data)
 {
 	CAudioStream *Stream = (CAudioStream *)data;
+	int ch = Stream->GetChannels();
+	int bits = Stream->GetSampleBits();
+	int o_rate = Stream->GetSampleRate();
+	int o_bytes = Stream->GetPeriodBytes();
+
+	CAudioStream *IStream = Stream->GetInputStreamObj();
 	unsigned int i_type = Stream->GetInputStreamType();
-	int bytes = Stream->GetPeriodBytes();
+	int i_bytes = IStream->GetPeriodBytes();
+	int i_rate = IStream->GetSampleRate();
 
 	unsigned char *InPtr =  NULL;
+	unsigned char *OutPtr = new unsigned char[o_bytes];
+
+	ReSampleContext *Resampler = NULL;
+	unsigned char *r_Buffer = new unsigned char[PCM_RESAMPLE_BYTES];
+	int r_offset = 0;
 	int ret;
 
-	Stream->AudioOpen(AUDIO_STREAM_PLAYBACK);
+	ret = Stream->AudioOpen(AUDIO_STREAM_PLAYBACK);
+	if (ret) {
+		Resampler = audio_resample_init(ch, ch, (float)o_rate, (float)i_rate);
+		assert(Resampler);
+	}
 
 __reinit:
 	Stream->InBufWaitForCleanAll();
@@ -125,15 +141,36 @@ __reinit:
 
 	while (!GET_COMMAND(Stream, CMD_STREAM_EXIT | CMD_STREAM_REINIT)) {
 
-		InPtr = Stream->InBufPop(i_type, bytes, 1);
+		InPtr = Stream->InBufPop(i_type, i_bytes, 1);
 		if (!InPtr)
 			continue;
+		/*
+		 * Resample
+		 */
+		if (Resampler) {
+			int framebytes = ch * (bits/8);
+			int r_frames;
 
-		ret = Stream->AudioPlayBack(InPtr, bytes);
-		if (ret < 0)
-			MSLEEP(1);
+			r_frames = audio_resample(Resampler, (short*)(r_Buffer + r_offset),
+				(short*)InPtr, (i_bytes / framebytes));
+			r_offset += (r_frames * framebytes);
 
-		Stream->InBufPopRel(i_type, bytes);
+			/*
+			 * Play resample data
+		 	*/
+			if (r_offset >= o_bytes) {
+				int remain = r_offset - o_bytes;
+
+				memcpy (OutPtr, r_Buffer, o_bytes);
+				memmove(r_Buffer, r_Buffer + o_bytes, remain);
+				r_offset = remain;
+
+				ret = Stream->AudioPlayBack(OutPtr, o_bytes);
+				if (ret < 0)
+					MSLEEP(1);
+			}
+		}
+		Stream->InBufPopRel(i_type, i_bytes);
 	}
 
 	if (GET_COMMAND(Stream, CMD_STREAM_REINIT))
@@ -187,6 +224,7 @@ static inline void swap_16(void *s, int size)
 #define	swap_16(s, l)
 #endif
 
+#if 0
 static void pdm_raw_channel_clear(void *ptr, int ch)
 {
 	unsigned int *data = (unsigned int *)ptr;
@@ -204,6 +242,7 @@ static void pdm_raw_channel_clear(void *ptr, int ch)
 		}
 	}
 }
+#endif
 
 static void *audio_agc_stream(void *data)
 {
@@ -627,13 +666,6 @@ static void *audio_capture(void *data)
 	const char *name = Stream->GetName();
 	unsigned int type = Stream->GetType();
 	int bytes = Stream->GetPeriodBytes();
-
-	int ch = Stream->GetChannels();
-	int card = Stream->GetCard();
-	int device = Stream->GetDevice();
-	int rate = Stream->GetSampleRate();
-	int bits = Stream->GetSampleBits();
-	int periods = Stream->GetPeriods();
 	bool err;
 
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
@@ -646,10 +678,11 @@ __reinit:
 	CLR_COMMAND(Stream, CMD_STREAM_REINIT);
 
 	/* re-open for resample */
-	err = Stream->AudioOpen(card, device, ch, rate, bits,
-				bytes, periods, AUDIO_STREAM_CAPTURE);
+	err = Stream->AudioOpen(AUDIO_STREAM_CAPTURE);
 	if (!err) {
-		pr_err("%10s: Failed audio open %s\n", __func__, name);
+		pr_err("%10s: Failed audio open %s, kill %d\n",
+			__func__, name, getpid());
+		kill(getpid(), SIGTERM);
 		return NULL;
 	}
 
@@ -818,7 +851,7 @@ __reinit:
 }
 
 /******************************************************************************/
-struct audio_stream {
+struct st_audio_streams {
 	CAudioStream **streams;
 	int num_streams;
 };
@@ -855,9 +888,9 @@ static void audio_event_parse(const char *msg, struct udev_message *udev)
 
 static void *audio_event(void *arg)
 {
-	struct audio_stream *astream = (struct audio_stream *)arg;
-	CAudioStream **streams = astream->streams;
-	int size = astream->num_streams;
+	struct st_audio_streams *st_stream = (struct st_audio_streams *)arg;
+	CAudioStream **streams = st_stream->streams;
+	int size = st_stream->num_streams;
 
 	CAudioStream *Stream = streams[0];
 	struct udev_message udev;
@@ -931,32 +964,32 @@ static int stream_event(void *arg, pthread_t *thr)
 #ifdef SUPPORT_STREAM_MONITOR
 static void *audio_monitor(void *arg)
 {
-	struct audio_stream *astream = (struct audio_stream *)arg;
-	CAudioStream **streams = astream->streams;
-	int size = astream->num_streams;
+	struct st_audio_streams *st_stream = (struct st_audio_streams *)arg;
+	CAudioStream **streams = st_stream->streams;
+	int size = st_stream->num_streams;
 
 	while (1) {
 		MSLEEP(STREAM_MONITOR_PERIOD);
 
 		pr_info("================================================================\n");
-
+		struct tm_stat *agc = &tm_agc;
 		#ifdef SUPPORT_AEC_PCMOUT
 		struct tm_stat *aec = &tm_aec;
-		struct tm_stat *agc = &tm_agc;
 
 		if (aec->cnt)
 			pr_info("AEC : min %3llu.%03llu ms, max %3llu.%03llu ms, avr %3llu.%03llu ms\n",
 				aec->min/1000, aec->min%1000, aec->max/1000, aec->max%1000,
 				(aec->tot/aec->cnt)/1000, (aec->tot/aec->cnt)%1000);
+		#endif
 		if (agc->cnt)
 			pr_info("AGC : min %3llu.%03llu ms, max %3llu.%03llu ms, avr %3llu.%03llu ms\n",
 				agc->min/1000, agc->min%1000, agc->max/1000, agc->max%1000,
 				(agc->tot/agc->cnt)/1000, (agc->tot/agc->cnt)%1000);
-		#endif
 
 		for(int i = 0 ; i < size; i++) {
 			CAudioStream *Stream = streams[i];
 			CQueueBuffer *pBuf = Stream->GetBufferObj();
+
 			if (pBuf){
 				pr_info("[%10s] AvailSize = %7d/%7d\n",
 					Stream->GetName(), pBuf->GetAvailSize(),
@@ -987,12 +1020,14 @@ enum CMD_TYPE {
 	CMD_SET,
 	CMD_CLR,
 };
+#define	check_command(s, c)	(0 == strncmp(s, c, strlen(c)-1))
 
-#define	check_argc(s, c)	(0 == strncmp(s, c, strlen(c)-1))
-
-static void streams_command(enum CMD_TYPE cmd_type, unsigned int cmd,
-			CAudioStream *streams[], int size)
+static void stream_command(enum CMD_TYPE cmd_type, unsigned int cmd,
+			struct st_audio_streams *st_stream)
 {
+	CAudioStream **streams = st_stream->streams;
+	int size = st_stream->num_streams;
+
 	for (int i = 0; i < size; i++) {
 		CAudioStream *Stream = streams[i];
 
@@ -1007,8 +1042,11 @@ static void streams_command(enum CMD_TYPE cmd_type, unsigned int cmd,
 	}
 }
 
-static void streams_value(CAudioStream *streams[], int size, int value)
+static void stream_value(struct st_audio_streams *st_stream, int value)
 {
+	CAudioStream **streams = st_stream->streams;
+	int size = st_stream->num_streams;
+
 	for (int i = 0; i < size; i++) {
 		CAudioStream *Stream = streams[i];
 		Stream->SetValue(value);
@@ -1022,7 +1060,13 @@ struct stream_thread {
 	pthread_t hTh;
 };
 
+struct snd_dev {
+	int card;
+	int dev;
+};
+
 struct args_option {
+	char path[256];
 	int khz;
 	bool no_in_arg;
 	bool skip_aec;
@@ -1030,7 +1074,9 @@ struct args_option {
 	bool filewrite;
 	bool fc_pdm_in;
 	bool fc_i2s_in;
-	char path[256];
+	struct snd_dev play;
+	struct snd_dev i2s;
+	struct snd_dev pdm;
 };
 
 static void print_usage(void)
@@ -1044,6 +1090,9 @@ static void print_usage(void)
 	pr_info("\t-w : start file capture\n");
 	pr_info("\t-r : file capture pdm input data\n");
 	pr_info("\t-p : file capture i2s input data\n");
+	pr_info("\t-P : select play sound device (card,device)\n");
+	pr_info("\t-S : select spi  sound device (card,device)\n");
+	pr_info("\t-I : select i2s  sound device (card,device)\n");
 }
 
 static void print_cmd_usage(void)
@@ -1062,6 +1111,7 @@ static int parse_options(int argc, char **argv,
 			struct args_option *option, unsigned int *cmd)
 {
 	int opt;
+	char *c;
 
 	option->no_in_arg = true;
 	option->skip_aec = false;
@@ -1072,9 +1122,21 @@ static int parse_options(int argc, char **argv,
 	option->khz = CPU_FREQ_KHZ;
 	strcpy(option->path, ".");
 
+	/* default play device */
+	option->play.card = -1;
+	option->play.dev = -1;
+
+	/* default i2s device */
+	option->i2s.card = 0;
+	option->i2s.dev = 2;
+
+	/* default pdm(spi) device */
+	option->pdm.card = 0;
+	option->pdm.dev = 4;
+
 	*cmd = CMD_AEC_PROCESS;
 
-	while (-1 != (opt = getopt(argc, argv, "hieprwc:s:"))) {
+	while (-1 != (opt = getopt(argc, argv, "hieprwc:s:P:S:I:"))) {
 		switch(opt) {
         	case 's':
         		option->khz = strtoul(optarg, NULL, 10);
@@ -1101,6 +1163,30 @@ static int parse_options(int argc, char **argv,
        		case 'c':
        			strcpy(option->path, optarg);
        			break;
+       		case 'P':
+       			c = optarg;
+			option->play.card = strtol(c, NULL, 10);
+			c = strchr(c, ',');
+			if (!c)
+				break;
+			option->play.dev = strtol(++c, NULL, 10);
+			break;
+       		case 'S':
+			c = optarg;
+			option->pdm.card = strtol(c, NULL, 10);
+			c = strchr(c, ',');
+			if (!c)
+				break;
+			option->pdm.dev = strtol(++c, NULL, 10);
+			break;
+       		case 'I':
+			c = optarg;
+			option->i2s.card = strtol(c, NULL, 10);
+			c = strchr(c, ',');
+			if (!c)
+				break;
+			option->i2s.dev = strtol(++c, NULL, 10);
+			break;
         	default:
         		print_usage();
         		exit(0);
@@ -1110,7 +1196,7 @@ static int parse_options(int argc, char **argv,
 	return 0;
 }
 
-static void test_command(CAudioStream *Streams[], int size)
+static void test_command(struct st_audio_streams *st_stream)
 {
 	char cmd[256];
 
@@ -1122,51 +1208,47 @@ static void test_command(CAudioStream *Streams[], int size)
 		if (0 == (strlen(cmd)-1))
 			continue;
 
-		if (check_argc("h", cmd)) {
+		if (check_command("h", cmd)) {
 			print_cmd_usage();
 			continue;
 		}
 
-		if (check_argc("q", cmd))
+		if (check_command("q", cmd))
 			break;
 
-		if (check_argc("s", cmd)) {
-			streams_command(CMD_SET,
-				CMD_FILE_WRITE, Streams, size);
+		if (check_command("s", cmd)) {
+			stream_command(CMD_SET, CMD_FILE_WRITE, st_stream);
 			continue;
 		}
 
-		if (check_argc("t", cmd)) {
-			streams_command(CMD_SET,
-				CMD_FILE_STOP, Streams, size);
+		if (check_command("t", cmd)) {
+			stream_command(CMD_SET, CMD_FILE_STOP, st_stream);
 			continue;
 		}
 
-		if (check_argc("n", cmd)) {
-			streams_command(CMD_SET,
-				CMD_STREAM_REINIT, Streams, size);
+		if (check_command("n", cmd)) {
+			stream_command(CMD_SET, CMD_STREAM_REINIT, st_stream);
 			continue;
 		}
 
-		if (check_argc("d", cmd)) {
-			streams_command(CMD_SET,
-				CMD_STREAM_NO_I2S, Streams, size);
+		if (check_command("d", cmd)) {
+			stream_command(CMD_SET, CMD_STREAM_NO_I2S, st_stream);
 			continue;
 		}
 
 		int ch = strtol(cmd, NULL, 10);
-		streams_value(Streams, size, ch);
+		stream_value(st_stream, ch);
 	}
 }
 
-static struct audio_stream *s_astream;
+static struct st_audio_streams *g_st_stream;
 static void (*sig_int_fun)(int);
 
 static void sig_int_handler(int sig)
 {
-	struct audio_stream *astream = s_astream;
-	CAudioStream **streams = astream->streams;
-	int size = astream->num_streams;
+	struct st_audio_streams *st_stream = g_st_stream;
+	CAudioStream **streams = st_stream->streams;
+	int size = st_stream->num_streams;
 
 	for (int i = 0; i < size; i++)
 		audio_clean(streams[i]);
@@ -1180,6 +1262,10 @@ int main(int argc, char **argv)
 	int khz = cpu_get_frequency();
 	unsigned int command = 0;
 	char buffer[32] = "NO DFS";
+
+	struct snd_dev *play = &option.play;
+	struct snd_dev *pdm = &option.pdm;
+	struct snd_dev *i2s = &option.i2s;
 
 	parse_options(argc, argv, &option, &command);
 	if (!(khz < 0))
@@ -1200,21 +1286,33 @@ int main(int argc, char **argv)
 	sig_int_fun = signal(SIGTERM, sig_int_handler);
 
 	/* create audio streams */
-	CAudioStream *PlayStream = new CAudioStream();
-	CAudioStream *AECStream = new CAudioStream();
-	CAudioStream *I2SStream = new CAudioStream();
-	CAudioStream *PDMStream = new CAudioStream();
-	CAudioStream *AGCStream = new CAudioStream();
-	CAudioStream *RESStream = new CAudioStream();
+	CAudioStream *PlayStream = new CAudioStream("Play", STREAM_PLAY, false);
+	CAudioStream *AECStream = new CAudioStream("AEC" , STREAM_AEC, true);
+	CAudioStream *I2SStream = new CAudioStream("I2S" , STREAM_I2S, true);
+	CAudioStream *PDMStream = new CAudioStream("PDM" , STREAM_PDM, true);
+	CAudioStream *AGCStream = new CAudioStream("AGC" , STREAM_AGC, true);
+	CAudioStream *RESStream = new CAudioStream("Resample", STREAM_RESAMPLE, true);
 
-	PlayStream->Init(-1, -1, "Play"    , STREAM_PLAY    , 2, 16000, 16, PCM_PLAY_PERIOD_BYTES, PCM_PLAY_PERIOD_SIZE, false);
-	AECStream->Init (-1, -1, "AEC"     , STREAM_AEC     , 2, 16000, 16, PCM_AEC_PERIOD_BYTES , PCM_AEC_PERIOD_SIZE, true);
-	I2SStream->Init ( 0,  2, "I2S"     , STREAM_I2S     , 2, 48000, 16, PCM_I2S_PERIOD_BYTES , PCM_I2S_PERIOD_SIZE, true);
-	PDMStream->Init ( 0,  4, "PDM"     , STREAM_PDM     , 4, 64000, 16, PCM_PDM_PERIOD_BYTES , PCM_PDM_PERIOD_SIZE, true);
-	AGCStream->Init (-1, -1, "AGC"     , STREAM_AGC     , 4, 16000, 16, PCM_AGC_PERIOD_BYTES , PCM_AGC_PERIOD_SIZE, true);
-	RESStream->Init ( 0,  0, "Resample", STREAM_RESAMPLE, 2, 16000, 16, PCM_RES_PERIOD_BYTES , PCM_RES_PERIOD_SIZE, true);
+	PlayStream->Init(play->card, play->dev,
+		2, 48000, 16, PCM_PLAY_PERIOD_BYTES, PCM_PLAY_PERIOD_SIZE);
+	AECStream->Init(-1, -1,
+		2, 16000, 16, PCM_AEC_PERIOD_BYTES, PCM_AEC_PERIOD_SIZE);
+	I2SStream->Init(i2s->card, i2s->dev,
+		2, 48000, 16, PCM_I2S_PERIOD_BYTES, PCM_I2S_PERIOD_SIZE);
+	PDMStream->Init(pdm->card, pdm->dev,
+		4, 64000, 16, PCM_PDM_PERIOD_BYTES, PCM_PDM_PERIOD_SIZE);
+	AGCStream->Init(-1, -1,
+		4, 16000, 16, PCM_AGC_PERIOD_BYTES, PCM_AGC_PERIOD_SIZE);
+	RESStream->Init(0, 0,
+		2, 16000, 16, PCM_RES_PERIOD_BYTES, PCM_RES_PERIOD_SIZE);
 
-	struct stream_thread stream_ths[] = {
+	PlayStream->AddInputStream(AECStream);	/* AEC      -> playback */
+	AECStream->AddInputStream(RESStream);	/* Resample -> AEC */
+	AECStream->AddInputStream(AGCStream);	/* AGC 	    -> AEC */
+	RESStream->AddInputStream(I2SStream);	/* I2S 	    -> Resample */
+	AGCStream->AddInputStream(PDMStream);	/* PDM 	    -> AGC */
+
+	struct stream_thread s_threads[] = {
 		{ PlayStream, audio_playback	},
 		{ AECStream , audio_aec_stream	},
 		{ I2SStream , audio_capture	},
@@ -1223,22 +1321,16 @@ int main(int argc, char **argv)
 		{ RESStream , audio_resample  	},
 	};
 
-	PlayStream->AddInputStream(AECStream);	/* AEC      -> playback */
-	AECStream->AddInputStream (RESStream);	/* Resample -> AEC */
-	AECStream->AddInputStream (AGCStream);	/* AGC 	    -> AEC */
-	RESStream->AddInputStream (I2SStream);	/* I2S 	    -> Resample */
-	AGCStream->AddInputStream (PDMStream);	/* PDM 	    -> AGC */
-
-	int size = (int)ARRAY_SIZE(stream_ths);
+	int size = (int)ARRAY_SIZE(s_threads);
 	CAudioStream *Streams[size];
-	struct audio_stream astream = { Streams, size };
+	struct st_audio_streams st_stream = { Streams, size };
 	int i, ret;
 
    	STREAM_LC_INIT();
-   	s_astream = &astream;
+   	g_st_stream = &st_stream;
 
 	for (i = 0; i < size; i++)
-		Streams[i] = stream_ths[i].Stream;
+		Streams[i] = s_threads[i].Stream;
 
 #ifdef SUPPORT_AEC_PCMOUT
 	pr_info("<<*** AEC ***>>\n");
@@ -1253,13 +1345,13 @@ int main(int argc, char **argv)
    	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
 	for (i = 0; i < size; i++) {
-		CAudioStream *Stream = stream_ths[i].Stream;
+		CAudioStream *Stream = s_threads[i].Stream;
 
 		SET_COMMAND(Stream, command);
 		Stream->SetPath(option.path);
 
-		if (0 != pthread_create(&stream_ths[i].hTh,
-				&attr, stream_ths[i].func, (void*)Stream)) {
+		if (0 != pthread_create(&s_threads[i].hTh,
+				&attr, s_threads[i].func, (void*)Stream)) {
 	    		pr_err("Failed thread.%d create, %s (%s)!\n",
 	    			i, Stream->GetName(), strerror(errno));
   			goto err_threads;
@@ -1268,11 +1360,11 @@ int main(int argc, char **argv)
 
 #ifdef SUPPORT_RATE_DETECTOR
 	pthread_t th_event;
-	stream_event(&astream, &th_event);
+	stream_event(&st_stream, &th_event);
 #endif
 #ifdef SUPPORT_STREAM_MONITOR
 	pthread_t th_monitor;
-	stream_monitor(&astream, &th_monitor);
+	stream_monitor(&st_stream, &th_monitor);
 #endif
 	if (!option.no_in_arg) {
 		while (1)
@@ -1280,11 +1372,11 @@ int main(int argc, char **argv)
 	}
 	MSLEEP(500);
 
-	test_command(Streams, size);
+	test_command(&st_stream);
 
 	/* Exit All threads */
 	pr_info("EXIT...\n");
-	streams_command(CMD_SET, CMD_STREAM_EXIT, Streams, size);
+	stream_command(CMD_SET, CMD_STREAM_EXIT, &st_stream);
 
 err_threads:
 
@@ -1299,10 +1391,10 @@ err_threads:
 
  	/* Free attribute and wait for the other threads */
 	for (i = 0; i < size; i++) {
-		ret = pthread_cancel(stream_ths[i].hTh);
-		pthread_join(stream_ths[i].hTh, (void **)&ret);
+		ret = pthread_cancel(s_threads[i].hTh);
+		pthread_join(s_threads[i].hTh, (void **)&ret);
 		pr_main("EXIT %d:%10s\n",
-			i, stream_ths[i].Stream->GetName());
+			i, s_threads[i].Stream->GetName());
 	}
 
 	return 0;

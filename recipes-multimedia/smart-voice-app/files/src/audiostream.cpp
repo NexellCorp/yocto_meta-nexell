@@ -28,18 +28,16 @@ CAudioStream::CAudioStream(void)
 	m_bValid = false;
 	m_Command = 0;
 	m_Value = 0;
+	m_AllocBuffer = false;
 }
 
-CAudioStream::CAudioStream(int Card, int Device,
-			const char *Name, unsigned int Type,
-			int Channels, int SampleRate, int SampleBits,
-			int PeriodBytes, int Periods, bool Buffer)
+CAudioStream::CAudioStream(const char *Name, unsigned int Type, bool AllocBuffer)
 	: m_Buffer(NULL),
   	  m_AudioPlayer(NULL)
 {
-	Init(Card, Device, Name, Type,
-		Channels, SampleRate, SampleBits, PeriodBytes, Periods,
-		Buffer);
+	m_Name = Name;
+	m_Type = Type;
+	m_AllocBuffer = AllocBuffer;
 }
 
 CAudioStream::~CAudioStream(void)
@@ -47,13 +45,11 @@ CAudioStream::~CAudioStream(void)
 }
 
 void CAudioStream::Init(int Card, int Device,
-			const char *Name, unsigned int Type,
 			int Channels, int SampleRate, int SampleBits,
-			int PeriodBytes, int Periods, bool Buffer)
+			int PeriodBytes, int Periods)
 {
 	pthread_mutex_init(&m_Lock, NULL);
 	pthread_mutex_init(&m_CmdLock, NULL);
-
 
 	memset(m_FileDir, 0, sizeof(m_FileDir));
 	memset(m_InStreams, 0, ARRAY_SIZE(m_InStreams));
@@ -62,10 +58,8 @@ void CAudioStream::Init(int Card, int Device,
 	WavFileNum = 0;
 	m_InStreamNum = 0;
 
-	m_Name = Name;
 	m_Card = Card;
 	m_Device = Device;
-	m_Type = Type;
 	m_Channels = Channels;
 	m_SampleRate = SampleRate;
 	m_SampleBits = SampleBits;
@@ -79,11 +73,11 @@ void CAudioStream::Init(int Card, int Device,
 			1 : STREAM_BUFF_SIZE_MULTI);
 
 	pthread_mutex_lock(&m_Lock);
-	if (Buffer) {
+	if (m_AllocBuffer) {
 		if (m_Buffer)
 			delete m_Buffer;
 
-		m_Buffer = new CQueueBuffer(Periods, PeriodBytes, Name, Type);
+		m_Buffer = new CQueueBuffer(Periods, PeriodBytes, m_Name, m_Type);
 	}
 	pthread_mutex_unlock(&m_Lock);
 
