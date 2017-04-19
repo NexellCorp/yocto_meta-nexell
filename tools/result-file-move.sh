@@ -78,21 +78,23 @@ function copy_bin_files()
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
         if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
 	    cp ${TMP_DEPLOY_PATH}/bl1-raptor.bin ${RESULT_PATH}
-	elif [ "${BOARD_NAME}" == "avn-ref" ]; then
-	    cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
-	fi
-	cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
-	cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
-	cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
-    else
-        if [ "${BOARD_NAME}" == "navi-ref" ]; then
-            cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+        elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
         fi
+        cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
+        cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
+        cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
+    else
         if [ "${BOARD_NAME}" == "smart-voice" ]; then
             cp ${TMP_DEPLOY_PATH}/armv7_dispatcher-smartvoice.bin ${RESULT_PATH}
             cp ${TMP_DEPLOY_PATH}/bl1-smart_voice.bin ${RESULT_PATH}
             cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-smart-voice-usb.bin ${RESULT_PATH}
         else
+            if [ "${BOARD_NAME}" == "avn-ref" ]; then
+                cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-avn-usb.bin ${RESULT_PATH}
+            elif [ "${BOARD_NAME}" == "navi-ref" ]; then
+                cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-navi-usb.bin ${RESULT_PATH}
+            fi
             cp ${TMP_DEPLOY_PATH}/armv7_dispatcher-${BOARD_PREFIX}.bin ${RESULT_PATH}
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi

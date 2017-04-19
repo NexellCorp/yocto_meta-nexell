@@ -55,11 +55,11 @@ function run_by_usb()
     else
         if [ ${BOARD_PREFIX} == "avn" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-usb.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -f ${RESULT_DIR}/u-boot.bin -a 0x43c00000 -j 0x43c00000
+                 -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
         elif [ ${BOARD_PREFIX} == "navi" ]; then
             echo ${TOOLS_PATH}
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
@@ -67,14 +67,14 @@ function run_by_usb()
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f ${RESULT_DIR}/u-boot.bin -a 0x43c00000 -j 0x43c00000
+                 -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
         elif [ ${BOARD_PREFIX} == "smart" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-voice-usb.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f ${RESULT_DIR}/u-boot.bin -a 0x43c00000 -j 0x43c00000
+                 -f fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
 
         else
             echo "Not supported board type"
