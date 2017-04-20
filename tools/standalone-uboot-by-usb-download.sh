@@ -59,7 +59,7 @@ function run_by_usb()
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
+                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
         elif [ ${BOARD_PREFIX} == "navi" ]; then
             echo ${TOOLS_PATH}
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
@@ -67,14 +67,14 @@ function run_by_usb()
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
+                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
         elif [ ${BOARD_PREFIX} == "smart" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-voice-usb.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
+                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
 
         else
             echo "Not supported board type"
