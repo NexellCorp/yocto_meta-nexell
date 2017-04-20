@@ -45,9 +45,7 @@ BOARD_NAME=
 
 function usage()
 {
-	echo "Usage: $0 -p <partmap-file> -r <result-dir> [-t bl1 -t bl2 -t dispatcher -t uboot -t env -t kernel -t rootfs]"
-	echo -e '\n -p <partmap-file> : partmap file path'
-	echo " -r <result-dir> : result dir path"
+	echo "Usage: $0 [-t bl1] [-t bl2] [-t dispatcher] [-t uboot] [-t env] [-t kernel] [-t rootfs]"
 	echo " -t bl1\t: if you want to update only bl1, specify this, default no"
         echo " -t bl2\t: if you want to update only bl2, specify this, default no ** s5p4418 only **"
         echo " -t armv7-dispatcher\t: if you want to update only armv7-dispatcher, specify this, default no ** s5p4418 only **"
