@@ -16,16 +16,12 @@ enum STREAM_CMD_TYPE {
 class CAudioStream {
 public:
 	CAudioStream(void);
-	CAudioStream(int Card, int Device,
-			const char *Name, unsigned int Type,
-			int Channels, int SampleRate, int SampleBits,
-			int PeriodBytes, int Periods, bool Buffer);
+	CAudioStream(const char *Name, unsigned int Type, bool AllocBuffer);
 	virtual ~CAudioStream(void);
 
 	void Init(int Card, int Device,
-			const char *Name, unsigned int type,
-			int Channels, int SampleRate, int SampleBits,
-			int PeriodBytes, int Periods, bool Buffer);
+		int Channels, int SampleRate, int SampleBits,
+		int PeriodBytes, int Periods);
 	void Release(void);
 
 	/* Audio */
@@ -98,6 +94,7 @@ private:
 	int m_SampleBits;
 	int m_Periods;
 	int m_PeriodBytes;
+	bool m_AllocBuffer;
 
 	unsigned int m_Type;
 	unsigned int m_Command;
