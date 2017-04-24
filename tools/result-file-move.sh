@@ -121,13 +121,16 @@ function copy_dtb_file()
     local file_name_dtb_rev0=
     local file_name_dtb_rev1=
     local kernel_image_path=
-    
+
     if [ "${MACHINE_NAME}" == "s5p6818-artik710-raptor" ]; then
 	file_name_dtb="s5p6818-artik710-raptor*.dtb"
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}
     elif [ "${MACHINE_NAME}" == "s5p6818-avn-ref" ]; then
 	file_name_dtb="s5p6818-avn-ref*.dtb"
-	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}    
+	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}
+    elif [ "${MACHINE_NAME}" == "s5p6818-kick-st" ]; then
+	file_name_dtb="s5p6818-kick-st.dtb"
+	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux/linux-${MACHINE_NAME}
     else
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}
 	if [ ${BOARD_PREFIX} == "avn" ]; then
