@@ -199,6 +199,7 @@ function mkramdisk()
 function mkparams()
 {
     ${META_NEXELL_TOOLS_PATH}/mkenvimage -s 16384 -o params.bin default_envs.txt
+    chmod 644 params.bin
 }
 
 function mkbootimg()
