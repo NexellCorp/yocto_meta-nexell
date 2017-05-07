@@ -2,14 +2,12 @@ require nexell-bl1-s5p4418-common.inc
 
 COMPATIBLE_MACHINE = "s5p4418-avn-ref"
 
-TOOLCHAIN_ARCH32_EABI = "${BASE_WORKDIR}/arm-eabi-4.8/bin/"
-
 EXTRA_OEMAKE = "\
     'VPATH=${WORKDIR}/git' \
 "
 
 do_compile () {
-    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} CHIPNAME="s5p4418" BOARD="avn" KERNEL_VER="4" ARM_SECURE="n" DEVICE_PORT="2" SYSLOG="n" -j 1
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CHIPNAME="s5p4418" BOARD="avn" KERNEL_VER="4" ARM_SECURE="n" DEVICE_PORT="2" SYSLOG="n" -j 1
 }
 
 inherit deploy

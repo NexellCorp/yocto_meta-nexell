@@ -6,17 +6,10 @@ DESCRIPTION = "U-Boot for AVN S5P4418"
 
 COMPATIBLE_MACHINE = "s5p4418-avn-ref"
 
-TOOLCHAIN_CORTEXA9 = "${BASE_WORKDIR}/arm-cortex_a9-eabi-4.7-eglibc-2.18"
-TOOLCHAIN_CORTEXA9_BIN = "${BASE_WORKDIR}/arm-cortex_a9-eabi-4.7-eglibc-2.18/bin/"
-
-EXTRA_OEMAKE = "\
-    'VPATH=${TOOLCHAIN_CORTEXA9}' \
-"
-
 do_compile() {
     oe_runmake clean
     oe_runmake ARCH=arm s5p4418_avn_ref_config
-    oe_runmake ARCH=arm CROSS_COMPILE="${TOOLCHAIN_CORTEXA9_BIN}arm-cortex_a9-linux-gnueabi-"
+    oe_runmake ARCH=arm CROSS_COMPILE=${TARGET_PREFIX} LDFLAGS="" CC="$CC"
 }
 
 do_install() {

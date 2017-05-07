@@ -11,7 +11,7 @@ do_compile() {
 
     oe_runmake clean
     oe_runmake ${config}_defconfig
-    oe_runmake CROSS_COMPILE=aarch64-poky-linux- LDFLAGS="" CC="$CC"
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} LDFLAGS="" CC="$CC"
 }
 
 do_install() {
