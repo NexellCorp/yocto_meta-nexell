@@ -199,7 +199,6 @@ function mkramdisk()
 function mkparams()
 {
     ${META_NEXELL_TOOLS_PATH}/mkenvimage -s 16384 -o params.bin default_envs.txt
-    chmod 644 params.bin
 }
 
 function mkbootimg()
@@ -349,19 +348,18 @@ function post_process()
 		local file_size=0
 
 		file_name=${result_dir}/loader-emmc.img
-		file_size=$(du -b ${file_name} | sed 's/\([0-9]*\)\(.*\)/\1/')
+		file_size=35840
 		echo "fip-nonsecure-usb <-- loader-emmc.img size=${file_size} pos=${pos}"
 		dd if=${result_dir}/loader-emmc.img of=${result_dir}/fip-nonsecure-usb.bin seek=0 bs=1
 		let pos=pos+file_size
 
 		file_name=${result_dir}/bl_mon.img
-		file_size=$(du -b ${file_name} | sed 's/\([0-9]*\)\(.*\)/\1/')
+		file_size=28672
 		echo "fip-nonsecure-usb <-- bl_mon.img size=${file_size} pos=${pos}"
 		dd if=${result_dir}/bl_mon.img of=${result_dir}/fip-nonsecure-usb.bin seek=${pos} bs=1
 		let pos=pos+file_size
 
 		file_name=${result_dir}/bootloader.img
-		file_size=$(du -b ${file_name} | sed 's/\([0-9]*\)\(.*\)/\1/')
 		echo -"fip-nonsecure-usb <-- bootloader.img size=${file_size} pos=${pos}"
 		dd if=${result_dir}/bootloader.img of=${result_dir}/fip-nonsecure-usb.bin seek=${pos} bs=1
 	fi
