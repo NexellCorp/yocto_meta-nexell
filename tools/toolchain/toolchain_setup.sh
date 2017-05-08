@@ -18,8 +18,8 @@ echo -e "\033[0;33m     arm-eabi- tool chain copy to tmp/work, It need to be bl1
 echo -e "\033[0;33m     please wait...\033[0m"
 cp -an ${SRC_PATH}/tools/toolchain/arm-eabi-4.8 ${DEST_PATH}
 
-echo -e "\033[0;33m     arm-cortex_a9-eabi- tool chain copy to tmp/work, for u-boot-avn- build \033[0m"
-echo -e "\033[0;33m     please wait...\033[0m"
-cp -an ${SRC_PATH}/tools/toolchain/arm-cortex_a9-eabi-4.7-eglibc-2.18 ${DEST_PATH}
+#echo -e "\033[0;33m     arm-cortex_a9-eabi- tool chain copy to tmp/work, for u-boot-avn- build \033[0m"
+#echo -e "\033[0;33m     please wait...\033[0m"
+#cp -an ${SRC_PATH}/tools/toolchain/arm-cortex_a9-eabi-4.7-eglibc-2.18 ${DEST_PATH}
 
 echo -e "\033[0;33m Done!\033[0m"

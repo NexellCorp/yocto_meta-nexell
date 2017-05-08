@@ -1,8 +1,0 @@
-prefix=/opt/crosstools/arm-cortex_a9-eabi-4.7-eglibc-2.18/arm-cortex_a9-linux-gnueabi/sysroot/usr
-exec_prefix=/opt/crosstools/arm-cortex_a9-eabi-4.7-eglibc-2.18/arm-cortex_a9-linux-gnueabi/sysroot/usr
-libdir=${exec_prefix}/lib
-
-Name: libffi
-Description: Library supporting Foreign Function Interfaces
-Version: 3.0.13
-Libs: -L${libdir} -lffi
