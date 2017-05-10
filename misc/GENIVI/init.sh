@@ -109,6 +109,7 @@ unset "${variables[@]}"
 # meta-qt5 version changed from QT5.6 to QT5.7
 cd meta-qt5
 git checkout master
+git checkout 1a42aa78af040d0fbecc960e4f9dd3f180ccb404
 cd ..
 # nexell append codes End
 #------------------------------------------------------------------------

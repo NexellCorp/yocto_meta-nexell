@@ -88,6 +88,8 @@ function customize_conf_files()
     echo "MACHINE = \"${MACHINE_NAME}\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
     echo "ALLOW_EMPTY_${MACHINE_NAME}-bl1 = \"1\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
     echo "ALLOW_EMPTY_${MACHINE_NAME}-uboot = \"1\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
+    echo "CONNECTIVITY_CHECK_URIS = \"https://eula-downloads.yoctoproject.org/index.php\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf
+
     #cp -a ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf ${GENIVI_BUILD_PATH}/conf/local.conf
     if [ ${NUMBER_THREADS} != "-1" ]; then
         echo "BB_NUMBER_THREADS = \"${NUMBER_THREADS}\"" >> ${GENIVI_BUILD_PATH}/conf/templates/nexell.local.conf

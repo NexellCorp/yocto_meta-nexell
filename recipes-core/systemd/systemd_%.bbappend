@@ -13,6 +13,7 @@ SRC_URI_append = " \
     file://30-wlan.network \
     file://60-usb.network \
     file://sync-clocks.service \
+    file://getty@tty1.service \
 "
 
 do_install_append() {
@@ -39,4 +40,7 @@ do_install_append() {
     # Need NAMESPACES enabled in the kernel, workaround for now
     install -m 0644 ${D}${systemd_system_unitdir}/systemd-hostnamed.service ${D}${sysconfdir}/systemd/system/
     sed -i 's/PrivateNetwork=yes/PrivateNetwork=no/g' ${D}${sysconfdir}/systemd/system/systemd-hostnamed.service
+
+    # For login
+    install -m 0644 ${WORKDIR}/getty@tty1.service ${D}${sysconfdir}/systemd/system/getty.target.wants/
 }
