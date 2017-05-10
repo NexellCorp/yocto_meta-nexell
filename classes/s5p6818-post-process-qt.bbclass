@@ -15,6 +15,9 @@ postprocess_about_qt_touch_function() {
     echo "" >> etc/securetty
     echo "ttySAC4" >> etc/securetty
     echo "ttySAC5" >> etc/securetty
+
+    #adb configfs mount bug fix
+    sed -i "/mount -t configfs none \/sys\/kernel\/config/d" usr/bin/start_adbd.sh
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_about_qt_touch_function;"
