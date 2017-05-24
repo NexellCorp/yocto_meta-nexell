@@ -8,6 +8,7 @@ TYPE = "mali-nexell"
 
 SRC_URI = "file://bin \
            file://lib \
+           file://include/KHR \
            "
 
 S = "${WORKDIR}"
@@ -28,6 +29,10 @@ do_install () {
 
     touch ${D}${libdir}/libMali_for_wayland
     install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM} ${D}${libdir}/libMali.so
+
+    #for SDK, below codes are not clearly, because, it has to avoid mesa driver conflict
+    install -d ${BASE_WORKDIR}/for_sdk/${includedir}/KHR
+    install -m 0644 ${S}/include/KHR/khrplatform.h ${BASE_WORKDIR}/for_sdk/${includedir}/KHR/.
 
     # install -m 0644 ${S}/bin/* ${D}${bindir}
     # install -m 0644 ${S}/lib/* ${D}${libdir}
@@ -52,7 +57,7 @@ do_install () {
 
 INSANE_SKIP_${PN} = "already-stripped debug-files dev-so ldflags"
 PACKAGES = "${PN}"
-FILES_${PN} += "${bindir} ${libdir}"
+FILES_${PN} += "${bindir} ${libdir} ${includedir}/KHR"
 
 RREPLACES_${PN} = " libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
 RPROVIDES_${PN} = " libegl libegl1 libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"

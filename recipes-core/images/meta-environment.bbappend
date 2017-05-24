@@ -18,4 +18,7 @@ create_sdk_files() {
 do_install_append() {
     install -d ${D}/${SDKPATH}/sysroots/${REAL_MULTIMACH_TARGET_SYS}/usr/include/uapi/.
     install -m 0644 ${STAGING_KERNEL_DIR}/include/uapi/linux/videodev2_nxp_media.h ${D}/${SDKPATH}/sysroots/${REAL_MULTIMACH_TARGET_SYS}/usr/include/uapi/.
+
+    install -d ${D}/${SDKPATH}/sysroots/${REAL_MULTIMACH_TARGET_SYS}/usr/include/KHR
+    install -m 0644 ${BASE_WORKDIR}/for_sdk/usr/include/KHR/khrplatform.h ${D}/${SDKPATH}/sysroots/${REAL_MULTIMACH_TARGET_SYS}/usr/include/KHR/.
 }
