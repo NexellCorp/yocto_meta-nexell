@@ -83,7 +83,7 @@ void pdm_Run(pdm_STATDEF *pdm_st, short *outbuf, int *inbuf, int agc_dB);
  *		L0[1B]/R0[1B]/L1[1B]/R1[1B]/......
  *		.....
  *
- * @agc_dB: pcm data output gain value
+ * @agc_dB: pcm data output gain value, if 0 disabled auto gain control
  *
  * @channels: pdm raw data channel count to convert pcm data, support 1 ~ 4 channel
  *
