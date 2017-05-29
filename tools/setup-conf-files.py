@@ -34,8 +34,7 @@ CONF_BBMASK_NOT_USE_BENCHMARK = " /meta-nexell/recipes-benchmark"
 CONF_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
                       'PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"',
                       'PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"',
-                      'DISTRO_FEATURES_append = " zeroconf"',
-                      'LICENSE_FLAGS_WHITELIST = "commercial"']
+                      'DISTRO_FEATURES_append = " zeroconf"']
 
 #Use weston & wayland recipes
 CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
@@ -59,8 +58,14 @@ CONF_APPEND_USE_X11 = ['DISTRO_FEATURES_remove = " wayland"',
                        'REQUIRED_DISTRO_FEATURES = "x11"',
                        'VIRTUAL-RUNTIME_init_manager = "systemd"',
                        'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',
-                       'CORE_IMAGE_EXTRA_INSTALL += "iputils"',
-                       'LICENSE_FLAGS_WHITELIST = "commercial"']
+                       'CORE_IMAGE_EXTRA_INSTALL += "iputils"']
+
+CONF_APPEND_USE_SDL = ['DISTRO_FEATURES_append = " systemd gles2 pulseaudio tslib alsa"',
+                       'DISTRO_FEATURES_remove = " directfb x11 wayland opengl"',
+                       'VIRTUAL-RUNTIME_init_manager = "systemd"',
+                       'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"']
+
+CONF_WHILTELIST_FLAGS_SET = ['LICENSE_FLAGS_WHITELIST = "commercial"']
 
 CONF_BBMASK_RECIPES_CORE = " /meta-nexell/recipes-core/images"
 CONF_BBMASK_S5P4418_NAVI_REF = "/s5p4418-navi-ref"
@@ -101,17 +106,20 @@ class parsingForpokyfiles():
             confAppend = []
         elif self.imagetype == 'smartvoice' :
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
-            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE
+            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'qt' :
             confBBmask = ''
-            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL
+            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'tinyui' :
             confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + '"'
             confAppend = CONF_APPEND_USE_WSWL
+        elif self.imagetype == 'sdl' :
+            confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
+            confAppend = CONF_APPEND_USE_SDL# CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'sato' :
             #confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + '"'
-            confAppend = CONF_APPEND_USE_X11
+            confAppend = CONF_APPEND_USE_X11 + CONF_WHILTELIST_FLAGS_SET
         else :
             pass
 

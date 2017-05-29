@@ -74,5 +74,7 @@ def get_image_type(d, a1, a2):
                 return 'agl'
             elif 'tinyui' in i :
                 return 'tinyui'
+            elif 'sdl' in i :
+                return 'sdl'
             else :
                 return 'tiny'

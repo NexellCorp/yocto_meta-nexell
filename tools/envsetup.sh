@@ -24,7 +24,7 @@ META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
 
 declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-smart-voice" "s5p6818-kick-st")
-declare -a targets_sdk=("s5p4418-qt-sdk" "s5p4418-sato-sdk" "s5p4418-tiny-sdk" "s5p6818-qt-sdk" "s5p6818-tiny-sdk")
+declare -a targets_sdk=("s5p4418-qt-sdk" "s5p4418-sdl-sdk" "s5p4418-sato-sdk" "s5p4418-tiny-sdk" "s5p6818-qt-sdk" "s5p6818-tiny-sdk")
 
 function check_usage()
 {
@@ -56,6 +56,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref sato"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
+    echo "    ex) $0 s5p4418-navi-ref sdl"
     echo "    ex) $0 s5p4418-navi-ref qt sdk"
 }
 
@@ -124,6 +125,10 @@ function local_conf_append()
         local imgtype=
         if [ ${IMAGE_TYPE} == "sato" ]; then
             imgtype="-sato"
+        elif [ ${IMAGE_TYPE} == "sdl" ]; then
+            sed -i "/IMAGE_OVERHEAD_FACTOR/d" ${META_NEXELL_PATH}/conf/machine/${MACHINE_NAME}.conf
+            echo "/IMAGE_OVERHEAD_FACTOR = \"1.2\"" ${META_NEXELL_PATH}/conf/machine/${MACHINE_NAME}.conf
+            imgtype="-sdl"
         fi
         echo "PREFERRED_PROVIDER_virtual/libgles1 = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_virtual/libgles2 = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf

@@ -10,7 +10,7 @@ KERNEL_IMAGETYPE_s5p4418-avn-ref ?= "zImage"
 KERNEL_IMAGETYPE_s5p4418-smart-voice ?= "zImage"
 KERNEL_IMAGETYPE_s5p6818-kick-st ?= "Image"
 
-MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen mouse touchscreen alsa bluetooth wifi sdio"
+MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen mouse touchscreen bluetooth wifi sdio"
 
 MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 
