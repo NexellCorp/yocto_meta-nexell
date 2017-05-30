@@ -10,7 +10,7 @@ EXTRA_OEMAKE = "\
 "
 
 do_compile () {
-    oe_runmake CROSS_TOOL_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="kick_st" KERNEL_VER="4" SYSLOG="n" DEVICE_PORT="2" ${SECURE-BL1} -j 1
+    oe_runmake CROSS_COMPILE_TOP=${TOOLCHAIN_ARCH32_EABI} BOARD="kick_st" KERNEL_VER="4" SYSLOG="n" DEVICE_PORT="2" ${SECURE-BL1} -j 1
 }
 
 inherit deploy
