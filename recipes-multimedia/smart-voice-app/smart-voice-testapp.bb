@@ -1,17 +1,19 @@
 SUMMARY = "Nexell smart voice test application"
 LICENSE = "CLOSED"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = "file://Makefile \
-           file://lib \
-           file://src \
-"
+SRCREV = "85ae05be395fdcfafe1ad44a0f431b246755ff7e"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/smart_voice_apps;protocol=git"
 
-S = "${WORKDIR}"
+PV = "NEXELL"
+PR = "0.1"
+S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_compile() {
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    cd ${S}/src
+    oe_runmake clean
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} LDFLAGS+=" -mfloat-abi=hard --sysroot=${STAGING_DIR_HOST} " CC="${CC}" \
                INCLUDE="-I${STAGING_INCDIR} \
                         -I${S}/src \
