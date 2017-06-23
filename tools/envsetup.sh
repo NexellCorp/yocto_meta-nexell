@@ -24,7 +24,7 @@ META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
 
 declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-smart-voice" "s5p6818-kick-st")
-declare -a targets_sdk=("s5p4418-qt-sdk" "s5p4418-sdl-sdk" "s5p4418-sato-sdk" "s5p4418-tiny-sdk" "s5p6818-qt-sdk" "s5p6818-tiny-sdk")
+declare -a targets_sdk=("s5p4418-qt-sdk" "s5p4418-sdl-sdk" "s5p4418-sato-sdk" "s5p4418-tiny-sdk" "s5p4418-smartvoice-sdk" "s5p6818-qt-sdk" "s5p6818-tiny-sdk")
 
 function check_usage()
 {
@@ -159,6 +159,10 @@ function local_conf_append()
             echo "BBMASK += \" /meta-nexell/recipes-core/images/nexell-sdk/$i\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         done
         sed -i "/\/meta-nexell\/recipes-core\/images\/nexell-sdk\/${BOARD_SOCNAME}-${IMAGE_TYPE}-sdk/d" ${NEXELL_BUILD_PATH}/conf/local.conf
+        if [ ${IMAGE_TYPE} == "qt" -o ${IMAGE_TYPE} == "smartvoice" ]; then
+            sed -i "/DEPENDS/d" ${META_NEXELL_PATH}/recipes-core/images/meta-environment.bbappend
+            echo "DEPENDS += \"nexell-drm-mali\"" >> ${META_NEXELL_PATH}/recipes-core/images/meta-environment.bbappend
+        fi
     fi
 
     #smart voice
