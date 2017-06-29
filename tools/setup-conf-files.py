@@ -69,6 +69,7 @@ CONF_WHILTELIST_FLAGS_SET = ['LICENSE_FLAGS_WHITELIST = "commercial"']
 
 CONF_BBMASK_RECIPES_CORE = " /meta-nexell/recipes-core/images"
 CONF_BBMASK_S5P4418_NAVI_REF = "/s5p4418-navi-ref"
+CONF_BBMASK_S5P4418_DAUDIO_REF = "/s5p4418-daudio-ref"
 CONF_BBMASK_S5P4418_AVN_REF = "/s5p4418-avn-ref"
 CONF_BBMASK_S5P6818_ARTIK710_RAPTOR = "/s5p6818-artik710-raptor"
 CONF_BBMASK_S5P6818_AVN_REF = "/s5p6818-avn-ref"
@@ -107,7 +108,7 @@ class parsingForpokyfiles():
         elif self.imagetype == 'smartvoice' :
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE + CONF_WHILTELIST_FLAGS_SET
-        elif self.imagetype == 'qt' :
+        elif self.imagetype == 'qt' or self.imagetype == 'daudio' :
             confBBmask = ''
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'tinyui' :

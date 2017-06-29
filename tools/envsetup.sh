@@ -23,7 +23,7 @@ BOARD_POSTFIX=
 META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
 
-declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-smart-voice" "s5p6818-kick-st")
+declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p4418-daudio-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-smart-voice" "s5p6818-kick-st")
 declare -a targets_sdk=("s5p4418-qt-sdk" "s5p4418-sdl-sdk" "s5p4418-sato-sdk" "s5p4418-tiny-sdk" "s5p4418-smartvoice-sdk" "s5p6818-qt-sdk" "s5p6818-tiny-sdk")
 
 function check_usage()

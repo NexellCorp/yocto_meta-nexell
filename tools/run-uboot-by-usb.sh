@@ -61,7 +61,7 @@ function run_by_usb()
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
                 -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
-        elif [ ${BOARD_PREFIX} == "navi" ]; then
+        elif [ ${BOARD_PREFIX} == "navi" -o ${BOARD_PREFIX} == "daudio" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
                 -b bl1-${BOARD_PREFIX}-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1

@@ -305,6 +305,8 @@ function post_process()
             dev_portnum=2
         elif [ ${BOARD_NAME} == "navi-ref" ];then
             dev_portnum=0
+        elif [ ${BOARD_NAME} == "daudio-ref" ];then
+            dev_portnum=0
         elif [ ${BOARD_NAME} == "smart-voice" ];then
             dev_portnum=0
         fi
