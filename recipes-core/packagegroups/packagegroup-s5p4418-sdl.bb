@@ -26,4 +26,5 @@ RDEPENDS_${PN} = " \
     libstdc++ \
     nexell-drm-mali-sdl \
     ${NEXELL_LIBS} \
+    testsuite-s5p4418 \
     "
