@@ -7,21 +7,15 @@ COMPATIBLE_MACHINE = "s5p4418-daudio-ref"
 
 DEPENDS = "s5p4418-daudio-ref-uboot s5p4418-daudio-ref-bl1 s5p4418-daudio-ref-bl2 s5p4418-daudio-ref-dispatcher"
 
-KERNEL_DEFCONFIG_s5p4418-daudio-ref ?= "s5p4418_navi_ref_defconfig"
+KERNEL_DEFCONFIG_s5p4418-daudio-ref ?= "s5p4418_daudio_ref_defconfig"
 KERNEL_COMMON_FLAGS = "ARCH=arm CROSS_COMPILE=${TARGET_PREFIX}"
 
 ARM_ARCH = "arm"
 CHIP_NAME = "s5p4418"
-BOARD_PREFIX = "navi_ref"
+BOARD_PREFIX = "daudio_ref"
 
 do_kernel_configme_prepend() {
     config=${S}/arch/${ARM_ARCH}/configs/${KERNEL_DEFCONFIG}
-
-    echo "CONFIG_FRAMEBUFFER_CONSOLE=y" >> $config
-    echo "CONFIG_PINCTRL_NEXELL=y" >> $config
-    echo "CONFIG_FONTS=y" >> $config
-    echo "CONFIG_HID_GENERIC=y" >> $config
-    echo "CONFIG_HIDRAW=y" >> $config
 
     install -m 0644 ${S}/arch/${ARM_ARCH}/configs/${KERNEL_DEFCONFIG} ${WORKDIR}/defconfig || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
 }

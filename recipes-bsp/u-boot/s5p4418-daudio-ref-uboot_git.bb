@@ -8,7 +8,7 @@ COMPATIBLE_MACHINE = "s5p4418-daudio-ref"
 
 do_compile() {
     oe_runmake clean
-    oe_runmake ARCH=arm s5p4418_navi_ref_defconfig
+    oe_runmake ARCH=arm s5p4418_daudio_ref_defconfig
     oe_runmake ARCH=arm CROSS_COMPILE=${TARGET_PREFIX} LDFLAGS="" CC="$CC"
 }
 
