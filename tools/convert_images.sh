@@ -216,7 +216,7 @@ function mkbootimg()
     fi
 
     cp -a *.dtb ./boot
-
+    cp ${META_NEXELL_TOOLS_PATH}/bootlogo/logo.bmp ./boot/
     ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/
 }
 
