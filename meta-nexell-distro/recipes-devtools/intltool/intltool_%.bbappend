@@ -1,0 +1,1 @@
+DEPENDS_class-native = "libxml-parser-perl-native gettext-native"

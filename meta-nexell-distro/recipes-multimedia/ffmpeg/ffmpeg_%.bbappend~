@@ -1,0 +1,22 @@
+DEPENDS += " libvpx speex"
+PACKAGECONFIG ??= "avdevice avfilter avcodec avformat swresample swscale postproc \
+                   bzlib gpl lzma theora x264 \
+                   ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11 xv', '', d)} \
+                   vpx libvorbis speex"
+
+# EXTRA_OECONF_append = " \ 
+#      --enable-libvpx \
+#      --enable-libschroedinger \
+#      --enable-libspeex \
+# "
+
+# PACKAGES_DYNAMIC += "^lib(speex|vpx|schroedinger).*"
+
+# INSANE_SKIP_${MLPREFIX}libspeex = "textrel"
+# INSANE_SKIP_${MLPREFIX}libvpx = "textrel"
+# INSANE_SKIP_${MLPREFIX}libschroedinger = "textrel"
+
+#PACKAGECONFIG_append = "  avresample gsm mp3lame libvorbis"
+#PACKAGECONFIG_remove = " swscale swresample lzma"
+ 
+#PACKAGECONFIG_CONFARGS=" --enable-avcodec --enable-avdevice --enable-avfilter --enable-avformat --enable-avresample --enable-bzlib --enable-gpl --enable-libgsm --disable-indev=jack --enable-libvorbis --enable-lzma --enable-libmp3lame --disable-openssl --enable-postproc --enable-libschroedinger       --enable-libspeex --enable-swresample --enable-swscale --enable-libtheora --disable-vaapi --disable-vdpau --enable-libvpx --disable-x11grab --enable      -libx264 --disable-outdev=xv"
