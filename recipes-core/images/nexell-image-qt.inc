@@ -77,6 +77,7 @@ PODO_IMAGE_INSTALL = " \
 
 NEXELL_CUSTOMIZE_INSTALL = " \
      user-fonts \
+     qtbootlauncher \
      "
 
 IMAGE_INSTALL += " \

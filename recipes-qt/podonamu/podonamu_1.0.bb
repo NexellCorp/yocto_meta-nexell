@@ -34,8 +34,8 @@ do_install() {
 
     chmod -R 775 ${D}/podo
     install -d ${D}${systemd_unitdir}/system/ ${D}${systemd_unitdir}/system/multi-user.target.wants/
-    install -Dm0644 ${S}/podonamu.service ${D}${systemd_unitdir}/system/
-    ln -sf ${D}${systemd_unitdir}/system/podonamu.service ${D}${systemd_unitdir}/system/multi-user.target.wants/podonamu.service
+    #install -Dm0644 ${S}/podonamu.service ${D}${systemd_unitdir}/system/
+    #ln -sf ${D}${systemd_unitdir}/system/podonamu.service ${D}${systemd_unitdir}/system/multi-user.target.wants/podonamu.service
 }
 
 PARALLEL_MAKE="-j 1"
@@ -45,6 +45,6 @@ FILES_${PN} = "podo ${systemd_system_unitdir}"
 INSANE_SKIP_${PN} = "host-user-contaminated debug-files"
 RDEPENDS_${PN} = "qtbase-plugins"
 
-SYSTEMD_SERVICE_${PN} = "podonamu.service"
+#SYSTEMD_SERVICE_${PN} = "podonamu.service"
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_AUTO_ENABLE_${PN} = "enable"
