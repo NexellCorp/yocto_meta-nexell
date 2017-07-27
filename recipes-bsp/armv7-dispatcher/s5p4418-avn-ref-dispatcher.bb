@@ -15,7 +15,7 @@ inherit deploy
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
-    install -m 0644 ${S}/out/armv7_dispatcher-avn.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/armv7_dispatcher.bin ${DEPLOY_DIR_IMAGE}
 }
 
 addtask deploy after do_install
