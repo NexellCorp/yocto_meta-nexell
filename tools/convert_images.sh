@@ -320,7 +320,7 @@ function post_process()
 
         if [ ${BOARD_NAME} == "smart-voice" ];then
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
-                              ${result_dir}/armv7_dispatcher-smartvoice.bin \
+                              ${result_dir}/armv7_dispatcher.bin \
                               0xffff0200 \
                               0xffff0200 \
                               ${result_dir}/bl_mon.img \
@@ -332,7 +332,7 @@ function post_process()
                               ${result_dir}/bootloader.img
         else
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
-                              ${result_dir}/armv7_dispatcher-${BOARD_PREFIX}.bin \
+                              ${result_dir}/armv7_dispatcher.bin \
                               0xffff0200 \
                               0xffff0200 \
                               ${result_dir}/bl_mon.img \

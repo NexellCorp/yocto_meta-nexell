@@ -86,7 +86,6 @@ function copy_bin_files()
         cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
     else
         if [ "${BOARD_NAME}" == "smart-voice" ]; then
-            cp ${TMP_DEPLOY_PATH}/armv7_dispatcher-smartvoice.bin ${RESULT_PATH}
             cp ${TMP_DEPLOY_PATH}/bl1-smart_voice.bin ${RESULT_PATH}
             cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-smart-voice-usb.bin ${RESULT_PATH}
         else
@@ -97,9 +96,9 @@ function copy_bin_files()
             elif [ "${BOARD_NAME}" == "daudio-ref" ]; then
                 cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-daudio-usb.bin ${RESULT_PATH}
             fi
-            cp ${TMP_DEPLOY_PATH}/armv7_dispatcher-${BOARD_PREFIX}.bin ${RESULT_PATH}
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi
+        cp ${TMP_DEPLOY_PATH}/armv7_dispatcher.bin ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/pyrope-bl2.bin ${RESULT_PATH}
     fi
     cp ${TMP_DEPLOY_PATH}/bl1-emmcboot.bin ${RESULT_PATH}
