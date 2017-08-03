@@ -174,26 +174,35 @@ function mkramdisk()
     echo "build mkramdisk"
     echo "================================================="
 
+    # cd $result_dir
+    # if [ ${IMAGE_TYPE} != "tiny" ]; then
+    #     cp -a uInitrd ./boot
+    # else
+    #     cp -a *.tar.bz2 ${ROOTDIR}
+    #     cd ${ROOTDIR}
+    #     tar -xvf *.tar.bz2
+    #     rm *.tar.bz2
+    #     rm -rf ./boot  # mean that {rootfs_dir}/boot
+    #     cd ..
+
+    #     pushd ${ROOTDIR}
+    #     find . | cpio -o -H newc | gzip > ${result_dir}/initrd.gz
+    #     popd
+
+    #     ${META_NEXELL_TOOLS_PATH}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
+    #     		             -C none -a 0 -e 0 -n uInitrd -d ${result_dir}/initrd.gz \
+    #                                  ${result_dir}/boot/uInitrd
+    #     rm -f ${result_dir}/initrd.gz
+    # fi
     cd $result_dir
-    if [ ${IMAGE_TYPE} != "tiny" ]; then
-        cp -a uInitrd ./boot
-    else
-	cp -a *.tar.bz2 ${ROOTDIR}
-	cd ${ROOTDIR}
-	tar -xvf *.tar.bz2
-	rm *.tar.bz2
-	rm -rf ./boot  # mean that {rootfs_dir}/boot
-	cd ..
 
-        pushd ${ROOTDIR}
-        find . | cpio -o -H newc | gzip > ${result_dir}/initrd.gz
-        popd
+    cp core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz initrd.gz
 
-        ${META_NEXELL_TOOLS_PATH}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
-			             -C none -a 0 -e 0 -n uInitrd -d ${result_dir}/initrd.gz \
-	                             ${result_dir}/boot/uInitrd
-        rm -f ${result_dir}/initrd.gz
-    fi
+    ${META_NEXELL_TOOLS_PATH}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
+                             -C none -a 0 -e 0 -n uInitrd -d ${result_dir}/initrd.gz \
+                             ${result_dir}/boot/uInitrd
+    rm -f ${result_dir}/initrd.gz
+    rm -rf ${ROOTDIR}
 }
 
 function mkparams()
@@ -217,7 +226,8 @@ function mkbootimg()
 
     cp -a *.dtb ./boot
     cp ${META_NEXELL_TOOLS_PATH}/bootlogo/logo.bmp ./boot/
-    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/
+    #${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/
+    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 33554432 boot.img ./boot/
 }
 
 function make_2ndboot_for_emmc()
@@ -275,6 +285,14 @@ function make_3rdboot_for_emmc()
     local extra_opts=${6}
 
     ${SECURE_TOOL} -c ${soc_name} -t 3rdboot -i ${in} -o ${out} -l ${load_addr} -e ${jump_addr} ${extra_opts}
+}
+
+function make_sparse_rootfs_img()
+{
+    echo "================================================="
+    echo "make rootfs.img"
+    echo "================================================="
+    ${META_NEXELL_TOOLS_PATH}/ext2simg $result_dir/${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
 }
 
 function post_process()
@@ -666,5 +684,6 @@ mkramdisk
 mkparams
 mkbootimg
 mem_addr_setup
+make_sparse_rootfs_img
 post_process
 #make_modules

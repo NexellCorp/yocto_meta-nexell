@@ -2,6 +2,7 @@ SOC_FAMILY = "Nexell"
 #include conf/machine/include/soc-family.inc
 
 IMAGE_FSTYPES ?= "tar.bz2 ext4"
+INITRAMFS_IMAGE = "nexell-ramdisk"
 
 KERNEL_IMAGETYPE_s5p6818-artik710-raptor ?= "Image"
 KERNEL_IMAGETYPE_s5p6818-avn-ref ?= "Image"

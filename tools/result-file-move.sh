@@ -158,10 +158,11 @@ function copy_dtb_file()
 
 function copy_ramdisk_image()
 {
-    if [ ${IMAGE_TYPE} != "tiny" ]; then
-        cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
-        #cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/ramdisk_tiny.gz ${RESULT_PATH}
-    fi
+#    if [ ${IMAGE_TYPE} != "tiny" ]; then
+#        cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/uInitrd ${RESULT_PATH}
+#    fi
+    echo -e "\033[40;33m  >>>>   copy_ramdisk_image        \033[0m"
+    cp ${TMP_DEPLOY_PATH}/"core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
 }
 
 function copy_rootfs_image()
@@ -172,7 +173,7 @@ function copy_rootfs_image()
     else
 	cp ${TMP_DEPLOY_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
-        cp ${RESULT_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
+        #cp ${RESULT_PATH}/"${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}/rootfs.img
     fi
 
     cp ${META_NEXELL_PATH}/tools/partition.txt ${RESULT_PATH}

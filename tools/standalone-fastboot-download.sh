@@ -252,9 +252,9 @@ function update_root()
 		local file=${1}
 		vmsg "update rootfs: ${file}"
 
-		sudo fastboot flash setenv ${CURRENT_PATH}/partition.txt
-		sudo fastboot -S 0 flash rootfs ${file}
-		#flash rootfs ${file}
+		#sudo fastboot flash setenv ${CURRENT_PATH}/partition.txt
+		#sudo fastboot -S 0 flash rootfs ${file}
+		flash rootfs ${file}
 	fi
 }
 
