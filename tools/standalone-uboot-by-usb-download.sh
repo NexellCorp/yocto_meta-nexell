@@ -66,8 +66,13 @@ function run_by_usb()
                  -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-usb.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
+            if [ ${BOARD_POSTFIX} == "covi" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                     -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
+            else
+                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
+            fi
         elif [ ${BOARD_PREFIX} == "smart" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-voice-usb.bin \

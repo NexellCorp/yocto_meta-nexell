@@ -35,6 +35,12 @@ PORT_SD=0
 DEVIDS=("usb" "spi" "nand" "sdmmc" "sdfs" "uart")
 PORTS=("emmc" "sd")
 
+MEM_512MB_LOAD_ADDR=0x9fcc0000
+MEM_512MB_JUMP_ADDR=0x9fd00800
+MEM_512MB_SECURE_LOAD_ADDR=0x9fb00000
+MEM_512MB_SECURE_JUMP_ADDR=0x00000000
+MEM_512MB_NON_SECURE_LOAD_ADDR=0x9df00000
+MEM_512MB_NON_SECURE_JUMP_ADDR=0x00000000
 MEM_1G_LOAD_ADDR=0x7fcc0000
 MEM_1G_JUMP_ADDR=0x7fd00800
 MEM_1G_SECURE_LOAD_ADDR=0x7fb00000
@@ -56,6 +62,13 @@ MEM_SECURE_JUMP_ADDR=
 MEM_NON_SECURE_LOAD_ADDR=
 MEM_NON_SECURE_JUMP_ADDR=
 
+declare -a mem_512MB_addrs=( $MEM_512MB_LOAD_ADDR \
+                          $MEM_512MB_JUMP_ADDR \
+                          $MEM_512MB_SECURE_LOAD_ADDR \
+                          $MEM_512MB_SECURE_JUMP_ADDR \
+                          $MEM_512MB_NON_SECURE_LOAD_ADDR \
+                          $MEM_512MB_NON_SECURE_JUMP_ADDR \
+                        )
 declare -a mem_1G_addrs=( $MEM_1G_LOAD_ADDR \
                           $MEM_1G_JUMP_ADDR \
                           $MEM_1G_SECURE_LOAD_ADDR \
@@ -75,6 +88,8 @@ declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
 #mem_addrs=("${mem_1G_addrs[@]}")
 # RAM 2G USE
 mem_addrs=("${mem_2G_addrs[@]}")
+# RAM 512MB USE
+#mem_addrs=("${mem_512MB_addrs[@]}")
 
 
 # aes key
@@ -108,6 +123,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
     echo "    ex) $0 s5p4418-smart-voice smartvoice"
+    echo "    ex) $0 s5p4418-daudio-covi qt"
 }
 
 function mem_addr_setup()
@@ -325,6 +341,8 @@ function post_process()
             dev_portnum=0
         elif [ ${BOARD_NAME} == "daudio-ref" ];then
             dev_portnum=0
+        elif [ ${BOARD_NAME} == "daudio-covi" ];then
+            dev_portnum=0
         elif [ ${BOARD_NAME} == "smart-voice" ];then
             dev_portnum=0
         fi
@@ -337,6 +355,18 @@ function post_process()
                               "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
 
         if [ ${BOARD_NAME} == "smart-voice" ];then
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/armv7_dispatcher.bin \
+                              0xffff0200 \
+                              0xffff0200 \
+                              ${result_dir}/bl_mon.img \
+                              "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/u-boot.bin \
+                              0x74C00000 \
+                              0x74C00000 \
+                              ${result_dir}/bootloader.img
+       elif [ ${BOARD_NAME} == "daudio-covi" ];then
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/armv7_dispatcher.bin \
                               0xffff0200 \

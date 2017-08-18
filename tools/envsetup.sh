@@ -23,7 +23,7 @@ BOARD_POSTFIX=
 META_NEXELL_PATH=
 NEXELL_BUILD_PATH=./
 
-declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p4418-daudio-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-smart-voice" "s5p6818-kick-st")
+declare -a targets=("s5p4418-avn-ref" "s5p4418-navi-ref" "s5p4418-daudio-ref" "s5p6818-artik710-raptor" "s5p6818-avn-ref" "s5p4418-smart-voice" "s5p6818-kick-st" "s5p4418-daudio-covi")
 declare -a targets_sdk=("s5p4418-qt-sdk" "s5p4418-sdl-sdk" "s5p4418-sato-sdk" "s5p4418-tiny-sdk" "s5p4418-smartvoice-sdk" "s5p6818-qt-sdk" "s5p6818-tiny-sdk")
 
 function check_usage()
@@ -58,6 +58,8 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref tinyui"
     echo "    ex) $0 s5p4418-navi-ref sdl"
     echo "    ex) $0 s5p4418-navi-ref qt sdk"
+    echo "    ex) $0 s5p4418-daudio-covi qt"
+    echo "    ex) $0 s5p4418-daudio-covi qt sdl"
 }
 
 function split_args()
@@ -198,13 +200,13 @@ function copy_build_scripts()
     if ! [ -d $TMP_WORK_PATH ];then
 	mkdir -p $TMP_WORK_PATH
     fi
-    
+
     #temp ARM 32bit build toolchain copy
     echo -e "\033[0;33m #########  Start toolchain copy to tmp/work/ ########## \033[0m"
     ${META_NEXELL_PATH}/tools/toolchain/toolchain_setup.sh ${META_NEXELL_PATH} ${TMP_WORK_PATH}
 
 #    #for secure boot support
-    if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then	
+    if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
 #	while :
 #	do
 #	    if [ "$ERR_MSG" != "" ]; then

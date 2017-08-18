@@ -75,6 +75,7 @@ CONF_BBMASK_S5P6818_ARTIK710_RAPTOR = "/s5p6818-artik710-raptor"
 CONF_BBMASK_S5P6818_AVN_REF = "/s5p6818-avn-ref"
 CONF_BBMASK_S5P4418_SMART_VOICE = "/s5p4418-smart-voice"
 CONF_BBMASK_S5P6818_K_BOARD = "/s5p6818-kick-st"
+CONF_BBMASK_S5P4418_DAUDIO_COVI = "/s5p4418-daudio-covi"
 
 class parsingForpokyfiles():
     linuxMark = '/'
@@ -109,6 +110,9 @@ class parsingForpokyfiles():
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'qt' or self.imagetype == 'daudio' :
+            confBBmask = ''
+            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
+        elif self.imagetype == 'qt' or self.imagetype == 'daudiocovi' :
             confBBmask = ''
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'tinyui' :

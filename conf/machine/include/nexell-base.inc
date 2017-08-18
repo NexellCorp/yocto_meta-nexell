@@ -25,5 +25,6 @@ DEFAULTTUNE_s5p4418-navi-ref ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p4418-daudio-ref ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p4418-smart-voice ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p6818-kick-st ?= "aarch64"
+DEFAULTTUNE_s5p4418-daudio-covi ?= "cortexa9hf-neon"
 
 DEFAULT_TIMEZONE="Asia/Seoul"
