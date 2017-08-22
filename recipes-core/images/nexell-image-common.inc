@@ -50,4 +50,5 @@ IMAGE_INSTALL += " \
     ${NEXELL_LIBS_EXT} \
     ${GLIBC_INSTALL} \
     ${NEXELL_MULTIMEDIA} \
+    nexell-nxreboot \
     "
