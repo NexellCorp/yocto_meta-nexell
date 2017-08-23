@@ -30,3 +30,5 @@ DEFAULTTUNE_s5p6818-kick-st ?= "aarch64"
 DEFAULTTUNE_s5p4418-daudio-covi ?= "cortexa9hf-neon"
 
 DEFAULT_TIMEZONE="Asia/Seoul"
+
+NEXELL_TOUCH_CLASS = "PRESSES"

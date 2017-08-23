@@ -13,6 +13,8 @@ postprocess_common_function() {
     #ping permission change
     echo "inet:x:3003:root"    >> etc/group
     echo "net_raw:x:3004:root" >> etc/group
+
+    rm etc/systemd/system/getty.target.wants/getty@tty1.service
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_common_function;"

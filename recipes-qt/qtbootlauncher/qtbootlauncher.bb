@@ -4,7 +4,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 DEPENDS = "qtbase qtquickcontrols2 qtmultimedia qtwayland "
 
-SRC_URI = "file://launcher.conf \
+SRC_URI = "file://launcher-cap.conf \
+           file://launcher-press.conf \
            file://Makefile \
            file://qtbootlauncher.c \
 "
@@ -25,7 +26,12 @@ do_install() {
     install -d ${D}/etc/qboot
 
     cp ${S}/qtbootlauncher ${D}/lib/systemd/system-generators/
-    cp ${S}/launcher.conf ${D}/etc/qboot/
+
+    if [ "${NEXELL_TOUCH_CLASS}" = "CAPACITIVE" ]; then
+        cp ${S}/launcher-cap.conf ${D}/etc/qboot/launcher.conf
+    else
+        cp ${S}/launcher-press.conf ${D}/etc/qboot/launcher.conf
+    fi
 }
 
 FILES_${PN} = "/lib/systemd/system-generators etc/qboot"
