@@ -308,7 +308,11 @@ function make_sparse_rootfs_img()
     echo "================================================="
     echo "make rootfs.img"
     echo "================================================="
-    ${META_NEXELL_TOOLS_PATH}/ext2simg $result_dir/${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
+    if [ "${IMAGE_TYPE}" == "smartvoice" ]; then
+        cp $result_dir/${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
+    else
+        ${META_NEXELL_TOOLS_PATH}/ext2simg $result_dir/${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
+    fi
 }
 
 function post_process()
@@ -343,7 +347,7 @@ function post_process()
             dev_portnum=0
         elif [ ${BOARD_NAME} == "daudio-covi" ];then
             dev_portnum=0
-        elif [ ${BOARD_NAME} == "smart-voice" ];then
+        elif [ ${BOARD_NAME} == "smart-voice" -o ${BOARD_NAME} == "ff-voice" ];then
             dev_portnum=0
         fi
 
@@ -354,7 +358,7 @@ function post_process()
                               ${result_dir}/loader-emmc.img \
                               "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
 
-        if [ ${BOARD_NAME} == "smart-voice" ];then
+        if [ ${BOARD_NAME} == "smart-voice" -o ${BOARD_NAME} == "ff-voice" ];then
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/armv7_dispatcher.bin \
                               0xffff0200 \
@@ -366,7 +370,7 @@ function post_process()
                               0x74C00000 \
                               0x74C00000 \
                               ${result_dir}/bootloader.img
-       elif [ ${BOARD_NAME} == "daudio-covi" ];then
+        elif [ ${BOARD_NAME} == "daudio-covi" ];then
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/armv7_dispatcher.bin \
                               0xffff0200 \

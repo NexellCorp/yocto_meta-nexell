@@ -36,6 +36,14 @@ CONF_APPEND_USE_QT = ['PACKAGECONFIG_FB_pn-qtbase = "kms"',
                       'PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"',
                       'DISTRO_FEATURES_append = " zeroconf"']
 
+CONF_APPEND_USE_TINY = [
+ 'VIRTUAL-RUNTIME_init_manager = "systemd"',
+ 'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',
+ 'DISTRO_FEATURES_append = " systemd"',
+ 'IMAGE_ROOTFS_SIZE = "65536"',
+ ''
+]
+
 #Use weston & wayland recipes
 CONF_APPEND_USE_WSWL = ['DISTRO_FEATURES_remove = " x11"',
                         'DISTRO_FEATURES_append = " systemd wayland opengl"',
@@ -50,8 +58,13 @@ CONF_APPEND_USE_SMARTVOICE = ['DISTRO_FEATURES_remove = " x11"',
                               'REQUIRED_DISTRO_FEATURES = "wayland"',
                               'VIRTUAL-RUNTIME_init_manager = "systemd"',
                               'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"',
-                              'CORE_IMAGE_BASE_INSTALL += "weston weston-init"',
-                              'IMAGE_FEATURES += "splash package-management ssh-server-dropbear hwcodecs"']
+                              'CORE_IMAGE_BASE_INSTALL += "weston weston-init"']
+
+CONF_APPEND_USE_FFVOICE = ['DISTRO_FEATURES_remove = " x11"',
+                           'DISTRO_FEATURES_append = " systemd"',
+                           'VIRTUAL-RUNTIME_init_manager = "systemd"',
+                           'VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"']
+
 #xorg/xserver(X11)
 CONF_APPEND_USE_X11 = ['DISTRO_FEATURES_remove = " wayland"',
                        'DISTRO_FEATURES_append = " systemd x11 opengl glx zeroconf"',
@@ -105,10 +118,14 @@ class parsingForpokyfiles():
         #related QT, wayland/weston
 	if self.imagetype == 'tiny' :
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
-            confAppend = []
+            confAppend = CONF_APPEND_USE_TINY
         elif self.imagetype == 'smartvoice' :
-            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
-            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE + CONF_WHILTELIST_FLAGS_SET
+            if self.boardName == 's5p4418-ff-voice' :            
+                confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
+                confAppend = CONF_APPEND_USE_FFVOICE + CONF_WHILTELIST_FLAGS_SET
+            else :
+                confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
+                confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'qt' or self.imagetype == 'daudio' :
             confBBmask = ''
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET

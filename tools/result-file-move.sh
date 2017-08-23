@@ -85,9 +85,9 @@ function copy_bin_files()
         cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
     else
-        if [ "${BOARD_NAME}" == "smart-voice" ]; then
-            cp ${TMP_DEPLOY_PATH}/bl1-smart_voice.bin ${RESULT_PATH}
-            cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-smart-voice-usb.bin ${RESULT_PATH}
+        if [ ${BOARD_NAME} == "smart-voice" -o ${BOARD_NAME} == "ff-voice" ];then
+            cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}_voice.bin ${RESULT_PATH}
+            cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-${BOARD_PREFIX}-voice-usb.bin ${RESULT_PATH}
         else
             if [ "${BOARD_NAME}" == "avn-ref" ]; then
                 cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-avn-usb.bin ${RESULT_PATH}
@@ -138,14 +138,16 @@ function copy_dtb_file()
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}
 	if [ ${BOARD_PREFIX} == "avn" ]; then
 	    file_name_dtb="s5p4418-avn_ref*.dtb"
-	elif [ ${BOARD_PREFIX} == "navi" -o ${BOARD_PREFIX} == "daudio" ]; then
-      if [ ${BOARD_POSTFIX} == "covi" ]; then
-	        file_name_dtb="s5p4418-daudio_covi*.dtb"
-	    else
-	    file_name_dtb="s5p4418-navi_ref*.dtb"
-	    fi
-        elif [ ${BOARD_PREFIX} == "smart" ]; then
-            file_name_dtb="s5p4418-smart_voice*.dtb"
+        elif [ ${BOARD_PREFIX} == "navi" -o ${BOARD_PREFIX} == "daudio" ]; then
+            if [ ${BOARD_POSTFIX} == "covi" ]; then
+                file_name_dtb="s5p4418-daudio_covi*.dtb"
+            elif [ ${BOARD_POSTFIX} == "ref" ]; then
+                file_name_dtb="s5p4418-daudio_ref*.dtb"
+            else
+                file_name_dtb="s5p4418-navi_ref*.dtb"
+            fi
+        elif [ ${BOARD_POSTFIX} == "voice" ]; then
+            file_name_dtb="s5p4418-${BOARD_PREFIX}_voice*.dtb"
         fi
     fi
 

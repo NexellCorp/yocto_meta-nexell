@@ -73,7 +73,7 @@ function run_by_usb()
                 sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                      -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
             fi
-        elif [ ${BOARD_PREFIX} == "smart" ]; then
+        elif [ ${BOARD_POSTFIX} == "voice" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
                 -b bl1-${BOARD_PREFIX}-voice-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1

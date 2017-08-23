@@ -55,7 +55,7 @@ function run_by_usb()
     else
         if [ ${BOARD_PREFIX} == "avn" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-usb.bin \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
@@ -63,19 +63,19 @@ function run_by_usb()
         elif [ ${BOARD_PREFIX} == "navi" -o ${BOARD_PREFIX} == "daudio" ]; then
             echo ${TOOLS_PATH}
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-usb.bin \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             if [ ${BOARD_POSTFIX} == "covi" ]; then
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                      -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
             else
                 sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
             fi
-        elif [ ${BOARD_PREFIX} == "smart" ]; then
+        elif [ ${BOARD_POSTFIX} == "voice" ]; then
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}-voice-usb.bin \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}_voice.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \

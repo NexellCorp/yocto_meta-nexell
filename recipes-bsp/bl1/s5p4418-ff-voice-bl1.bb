@@ -1,6 +1,6 @@
 require nexell-bl1-s5p4418-common.inc
 
-COMPATIBLE_MACHINE = "s5p4418-smart-voice"
+COMPATIBLE_MACHINE = "s5p4418-ff-voice"
 
 TOOLCHAIN_ARCH32_EABI = "${BASE_WORKDIR}/arm-eabi-4.8/bin/"
 
@@ -9,14 +9,14 @@ EXTRA_OEMAKE = "\
 "
 
 do_compile () {
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} BOARD="smart_voice" ARM_SECURE="n" KERNEL_VER="4" CHIPNAME="nxp4330" DEVICE_PORT="0" SYSLOG="n" -j 1
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} BOARD="ff_voice" KERNEL_VER="4" ARM_SECURE="n" CHIPNAME="nxp4330" DEVICE_PORT="0" SYSLOG="n" -j 1
 }
 
 inherit deploy
 
 do_deploy () {
     install -d ${DEPLOY_DIR_IMAGE}
-    install -m 0644 ${S}/out/bl1-smart_voice.bin ${DEPLOY_DIR_IMAGE}
+    install -m 0644 ${S}/out/bl1-ff_voice.bin ${DEPLOY_DIR_IMAGE}
     install -m 0644 ${S}/out/bl1-emmcboot.bin ${DEPLOY_DIR_IMAGE}
 }
 
