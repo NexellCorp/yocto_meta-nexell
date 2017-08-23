@@ -361,7 +361,7 @@ function post_process()
                               ${result_dir}/loader-emmc.img \
                               "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
 
-        if [ ${BOARD_NAME} == "smart-voice" -o ${BOARD_NAME} == "ff-voice" ];then
+        if [ ${BOARD_NAME} == "smart-voice" ];then
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/armv7_dispatcher.bin \
                               0xffff0200 \
