@@ -124,6 +124,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref tinyui"
     echo "    ex) $0 s5p4418-smart-voice smartvoice"
     echo "    ex) $0 s5p4418-daudio-covi qt"
+    echo "    ex) $0 s5p4418-ff-voice ffvoice"
 }
 
 function mem_addr_setup()
@@ -349,6 +350,8 @@ function post_process()
             dev_portnum=0
         elif [ ${BOARD_NAME} == "smart-voice" -o ${BOARD_NAME} == "ff-voice" ];then
             dev_portnum=0
+        elif [ ${BOARD_NAME} == "ff-voice" ];then
+            dev_portnum=0
         fi
 
         make_3rdboot_for_emmc ${BOARD_SOCNAME} \
@@ -381,6 +384,18 @@ function post_process()
                               ${result_dir}/u-boot.bin \
                               0x74C00000 \
                               0x74C00000 \
+                              ${result_dir}/bootloader.img
+        elif [ ${BOARD_NAME} == "ff-voice" ];then
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/armv7_dispatcher.bin \
+                              0xffff0200 \
+                              0xffff0200 \
+                              ${result_dir}/bl_mon.img \
+                              "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
+            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                              ${result_dir}/u-boot.bin \
+                              0xA4C00000 \
+                              0xA4C00000 \
                               ${result_dir}/bootloader.img
         else
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
