@@ -9,6 +9,10 @@ postprocess_common_function() {
     echo "mount -t devtmpfs none /dev" >> etc/bootscript.sh
     echo "mount -t proc none /proc" >> etc/bootscript.sh
     echo "mount -t sysfs none /sys" >> etc/bootscript.sh
+
+    #ping permission change
+    echo "inet:x:3003:root"    >> etc/group
+    echo "net_raw:x:3004:root" >> etc/group
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_common_function;"
