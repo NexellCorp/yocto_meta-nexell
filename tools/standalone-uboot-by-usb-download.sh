@@ -78,9 +78,13 @@ function run_by_usb()
                  -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}_voice.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
-
+            if [ ${BOARD_PRETFIX} == "ff_voice" ]; then
+                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                     -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0xA2000000 -j 0xA2000000
+            else
+		sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+		     -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
+            fi
         else
             echo "Not supported board type"
         fi
