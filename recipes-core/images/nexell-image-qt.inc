@@ -80,6 +80,11 @@ NEXELL_CUSTOMIZE_INSTALL = " \
      qtbootlauncher \
      "
 
+MULTIMEDIA_IMAGE_INSTALL = " \
+    ffmpeg \
+    fswebcam \
+"
+
 IMAGE_INSTALL += " \
      ${QT_IMAGE_INSTALL_common} \
      ${QT_IMAGE_INSTALL_qtwebkit} \
@@ -89,5 +94,6 @@ IMAGE_INSTALL += " \
      ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
      ${PODO_IMAGE_INSTALL} \
      ${NEXELL_CUSTOMIZE_INSTALL} \
+     ${MULTIMEDIA_IMAGE_INSTALL} \
      "
 

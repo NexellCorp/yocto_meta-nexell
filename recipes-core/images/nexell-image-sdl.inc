@@ -30,6 +30,8 @@ SYSV_IMAGE_INSTALL = " \
 MULTIMEDIA_IMAGE_INSTALL = " \
     pulseaudio \
     pulseaudio-server \
+    ffmpeg \
+    fswebcam \
     "
 
 #NEXELL_LIBS_EXT = " \
