@@ -63,7 +63,15 @@ CONF_APPEND_USE_WSWL = [
  '',
 ]
 
-CONF_APPEND_USE_SMARTVOICE = [
+# RAMDISK TINY override
+CONF_APPEND_USE_RAMDISK_TINY = [
+ '',
+ 'INITRAMFS_IMAGE = "nexell-ramdisk-tiny"',
+ 'MACHINE_FEATURES = "usbhost keyboard vfat ext2 bluetooth wifi sdio"',
+ '',
+]
+
+CONF_APPEND_USE_SMARTVOICE_UI = [
  '',
  'DISTRO_FEATURES_remove = " x11"',
  'DISTRO_FEATURES_append = " systemd wayland opengl alsa"',
@@ -143,6 +151,8 @@ class parsingForpokyfiles():
             else :
                 conf_USE = CONF_APPEND_USE_TINY_S5P6818
         elif self.imagetype == 'smartvoice' :
+            conf_USE = CONF_APPEND_USE_RAMDISK_TINY
+        elif self.imagetype == 'smartvoiceui' :
             conf_USE = CONF_APPEND_USE_QT + CONF_APPEND_USE_SMARTVOICE + CONF_APPEND_USE_PREFERRED_PROVIDER_QT + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'qt' :
             conf_USE = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_APPEND_USE_PREFERRED_PROVIDER_QT + CONF_WHILTELIST_FLAGS_SET

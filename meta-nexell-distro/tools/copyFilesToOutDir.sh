@@ -87,10 +87,10 @@ function copy_bin_files()
         cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/fip-secure.bin ${RESULT_PATH}
     else
-        if [ "${BOARD_NAME}" == "smart-voice" ]; then
-            cp ${TMP_DEPLOY_PATH}/bl1-smart_voice.bin ${RESULT_PATH}
-        elif [ "${BOARD_NAME}" == "zh-dragon" ]; then
+        if [ "${BOARD_NAME}" == "zh-dragon" ]; then
             cp ${TMP_DEPLOY_PATH}/bl1-zh_dragon.bin ${RESULT_PATH}
+        elif [ "${IMAGE_TYPE}" == "smartvoice" -o "${IMAGE_TYPE}" == "smartvoiceui" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}_voice.bin ${RESULT_PATH}
         else
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi
@@ -130,7 +130,12 @@ function copy_dtb_file()
 function copy_ramdisk_image()
 {
     echo -e "\033[40;33m  >>>>   copy_ramdisk_image        \033[0m"
-    cp ${TMP_DEPLOY_PATH}/"core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
+    # temporary
+    if [ "${BOARD_NAME}" == "ff-voice" ]; then    
+        cp ${TMP_DEPLOY_PATH}/"core-image-tiny-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
+    else
+        cp ${TMP_DEPLOY_PATH}/"core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
+    fi
 }
 
 function copy_rootfs_image()

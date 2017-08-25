@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 count=0
 
 while read StrBLOCK StrUUID StrFSTYPE
@@ -16,19 +15,17 @@ do
 	mkdir -p $MOUNT_DST
 	if [ ${FSTYPE} == "ntfs" ];
 	then
-		#echo "ntfs fs"
+#		echo "ntfs fs"
 		mount.ntfs-3g  $BLOCK $MOUNT_DST
 	else
 		if [ ${FSTYPE} == "exfat" ];
 		then
-			#echo "exfat fs"
+#			echo "exfat fs"
 			mount.exfat $BLOCK $MOUNT_DST
 		fi
 
-	#echo "ext or vfat"
+#	echo "ext or vfat"
 	mount -t $FSTYPE $BLOCK $MOUNT_DST
 	fi
 	count=`expr $count + 1`
 done < $1
-
-

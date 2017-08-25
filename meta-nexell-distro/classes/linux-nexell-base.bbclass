@@ -1,5 +1,17 @@
 inherit linux-kernel-base
 
+def get_kernel_arch(d, a):
+    if 'aarch64' in a :
+        return 'arm64'
+    else:
+        return 'arm32'
+
+def get_kernel_arch_num(d, a):
+    if 'aarch64' in a :
+        return '64'
+    else :
+        return '32'
+
 #a1 ==> Distinguish string, DEPLOY_DIR
 #a2 ==> Validate feed string, MACHINE_ARCH
 def get_image_type(d, a1, a2):

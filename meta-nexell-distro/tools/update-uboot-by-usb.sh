@@ -61,18 +61,26 @@ function run_by_usb()
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
                 -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
-        elif [ ${BOARD_PREFIX} == "navi" ]; then
-            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -b bl1-${BOARD_PREFIX}.bin -a 0xFFFF0000 -j 0xFFFF0000
+        elif [ ${BOARD_PREFIX} == "navi" -o ${BOARD_PREFIX} == "daudio" ]; then
+            echo ${TOOLS_PATH}
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
-            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -f fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
-        elif [ ${BOARD_PREFIX} == "smart" ]; then
-            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -b bl1-${BOARD_PREFIX}-voice.bin -a 0xFFFF0000 -j 0xFFFF0000
+            if [ ${BOARD_POSTFIX} == "covi" ]; then                                                                                                    
+                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \                                                                                         
+                     -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000                                                                
+            else                                                                                                                                       
+                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \                                                                                         
+                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000                                                                    
+            fi                              
+        elif [ ${BOARD_POSTFIX} == "voice" ]; then
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}_voice.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
-            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
-                -f fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
         else
             echo "Not supported board type"
         fi

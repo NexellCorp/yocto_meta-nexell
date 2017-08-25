@@ -110,6 +110,30 @@ FIP_NONSEC_SIZE=
 SECURE_BOOT="false"
 
 MODULES_PATITION_SIZE=33554432
+
+#------------------------------------
+# BL2 -------------------------------
+S5P4418_BL2_EMMC_LOAD_ADDR=0xb0fe0000
+S5P4418_BL2_EMMC_JUMP_ADDR=0xb0fe0400
+
+# COMMON ----------------------------
+S5P4418_DISPATCHER_EMMC_LOAD_ADDR_COMMON=0xffff0200
+S5P4418_DISPATCHER_EMMC_JUMP_ADDR_COMMON=0xffff0200
+
+S5P4418_UBOOT_EMMC_LOAD_ADDR_COMMON=0x43c00000
+S5P4418_UBOOT_EMMC_JUMP_ADDR_COMMON=0x43c00000
+
+# SMARTVOICE ------------------------
+S5P4418_UBOOT_EMMC_LOAD_ADDR_SMARTVOICE=0x74C00000
+S5P4418_UBOOT_EMMC_JUMP_ADDR_SMARTVOICE=0x74C00000
+
+# FFVOICE ------------------------
+S5P4418_UBOOT_EMMC_LOAD_ADDR_FFVOICE=0xA4C00000
+S5P4418_UBOOT_EMMC_JUMP_ADDR_FFVOICE=0xA4C00000
+
+# DAUDIO ----------------------------
+S5P4418_UBOOT_EMMC_LOAD_ADDR_DAUDIO_COVI=0x74C00000
+S5P4418_UBOOT_EMMC_JUMP_ADDR_DAUDIO_COVI=0x74C00000
 #------------------------------------
 
 function check_usage()
@@ -198,7 +222,11 @@ function mkramdisk()
 
     cd $result_dir
 
-    cp core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz initrd.gz
+    if [ ${MACHINE_NAME} == "s5p4418-ff-voice" ]; then
+        cp core-image-tiny-initramfs-${MACHINE_NAME}.cpio.gz initrd.gz
+    else
+        cp core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz initrd.gz
+    fi
 
     ${META_NEXELL_CONVERT_TOOLS_PATH}/mkimage -A ${ARM_ARCH} -O linux -T ramdisk \
 		             -C none -a 0 -e 0 -n uInitrd -d ${result_dir}/initrd.gz \
@@ -292,7 +320,7 @@ function make_sparse_rootfs_img()
     echo "================================================="
 
     #temporary, smartvoice can not use sparse image
-    if [ "${IMAGE_TYPE}" == "smartvoice" ]; then
+    if [ "${IMAGE_TYPE}" == "smartvoice" -o "${IMAGE_TYPE}" == "smartvoiceui" ]; then
         cp $result_dir/nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
     else
         ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg $result_dir/nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
@@ -326,36 +354,41 @@ function post_process()
 
         make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/pyrope-bl2.bin \
-                              0xb0fe0000 \
-                              0xb0fe0400 \
+                              ${S5P4418_BL2_EMMC_LOAD_ADDR} \
+                              ${S5P4418_BL2_EMMC_JUMP_ADDR} \
                               ${result_dir}/loader-emmc.img \
                               "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
 
-        if [ ${IMAGE_TYPE} == "smartvoice" ];then
-            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
-                              ${result_dir}/armv7_dispatcher.bin \
-                              0xffff0200 \
-                              0xffff0200 \
-                              ${result_dir}/bl_mon.img \
-                              "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
-            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
-                              ${result_dir}/u-boot.bin \
-                              0x74C00000 \
-                              0x74C00000 \
-                              ${result_dir}/bootloader.img
+        local dispatcher_emmc_load_addr=${S5P4418_DISPATCHER_EMMC_LOAD_ADDR_COMMON}
+        local dispatcher_emmc_jump_addr=${S5P4418_DISPATCHER_EMMC_JUMP_ADDR_COMMON}
+        local uboot_emmc_load_addr=${S5P4418_UBOOT_EMMC_LOAD_ADDR_COMMON}
+        local uboot_emmc_jump_addr=${S5P4418_UBOOT_EMMC_JUMP_ADDR_COMMON}
+
+        if [ ${BOARD_NAME} == "smart-voice" ];then
+            uboot_emmc_load_addr=${S5P4418_UBOOT_EMMC_LOAD_ADDR_SMARTVOICE}
+            uboot_emmc_jump_addr=${S5P4418_UBOOT_EMMC_JUMP_ADDR_SMARTVOICE}
+
+        elif [ ${BOARD_NAME} == "ff-voice" ];then
+            uboot_emmc_load_addr=${S5P4418_UBOOT_EMMC_LOAD_ADDR_FFVOICE}
+            uboot_emmc_jump_addr=${S5P4418_UBOOT_EMMC_JUMP_ADDR_FFVOICE}
         else
-            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
-                              ${result_dir}/armv7_dispatcher.bin \
-                              0xffff0200 \
-                              0xffff0200 \
-                              ${result_dir}/bl_mon.img \
-                              "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
-            make_3rdboot_for_emmc ${BOARD_SOCNAME} \
-                              ${result_dir}/u-boot.bin \
-                              0x43c00000 \
-                              0x43c00000 \
-                              ${result_dir}/bootloader.img
+            if [ ${BOARD_NAME} == "daudio-covi" ];then
+                uboot_emmc_load_addr=${S5P4418_UBOOT_EMMC_LOAD_ADDR_DAUDIO_COVI}
+                uboot_emmc_jump_addr=${S5P4418_UBOOT_EMMC_JUMP_ADDR_DAUDIO_COVI}
+            fi
         fi
+
+        make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                          ${result_dir}/armv7_dispatcher.bin \
+                          $dispatcher_emmc_load_addr \
+                          $dispatcher_emmc_jump_addr \
+                          ${result_dir}/bl_mon.img \
+                          "-m 0x40200 -b 3 -p ${dev_portnum} -m 0x1E0200 -b 3 -p ${dev_portnum} -m 0x60200 -b 3 -p ${dev_portnum}"
+        make_3rdboot_for_emmc ${BOARD_SOCNAME} \
+                          ${result_dir}/u-boot.bin \
+                          $uboot_emmc_load_addr \
+                          $uboot_emmc_jump_addr \
+                          ${result_dir}/bootloader.img
 
 	if [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
 		local file_name=

@@ -10,23 +10,20 @@ function update_files_check()
 	for var in $FILE;
 	do
 		filename=`echo $var | cut -d';' -f1 | cut -d':' -f5`
-		#echo "filename = ${filename} "
+#		echo "filename = ${filename}"
 		if [ -n "${filename##+([[:space:]])}" ]; then
 			if [ -f "${1}${filename}" ]; then
-				echo "${1}${filename} File exist"
+				echo "${1}${filename} file exist"
 			else
 				echo "${1}/${filename} not exist"
-				/usr/bin/psplash-write "MSG update file not found Reboot..."
-				reboot
+				/usr/bin/psplash-write "MSG Update file not found"
 			fi
-		#else
-		#	echo "file null"
+			sleep 1
 		fi
 	done
-	echo "File Check Finished"
+	echo "File check is finished"
 	update_process ${1}
 }
-
 
 function update_check()
 {
@@ -34,44 +31,46 @@ function update_check()
 		echo "update_cmd exist"
 		update_files_check $1
 	else
-		echo "update_cmd not exist"
-		#/usr/bin/psplash-write "MSG update file not found"
+		echo "update_cmd does not exist"
+		/usr/bin/psplash-write "MSG Update command file not found"
 	fi
+	sleep 1
 }
 
 function update_process()
 {
-	echo "UPDATE PROCESS at ${1}"
+	/usr/bin/psplash-write "MSG UPDATE PROCESS at ${1}"
+	sleep 3
 	/usr/bin/nx_update ${1}
-	reboot
 	while [ 1 ]
 	do
 		echo -n "."
 		sleep 1
 	done
 }
-## Start at here##
 
-echo "Enter the Nexell Update"
+## Start at here##
+echo "Enter the nexell update"
+/usr/bin/psplash -n &
+/usr/bin/psplash-write "MSG Update ready..."
+sleep 3
+/usr/bin/psplash-write "MSG Check mount block devices"
+sleep 6
 blkid > /tmp/blk_list.txt
 /etc/mount.sh /tmp/blk_list.txt
-/usr/bin/psplash -n &
-
 
 echo "Mount done"
 DIRS=`ls -d /mnt/*/`
 
 for i in ${DIRS};do
-	echo "Entering directory=$i";
+	/usr/bin/psplash-write "MSG Entering directory : $i";
 	cd $i;
 	update_check $i;
 	cd ../;
 done
 
-
-echo "Finished the Nexell Update"
 sleep 3
-/usr/bin/psplash-write "MSG update file not found Reboot..."
+/usr/bin/psplash-write "MSG Update failed, so reboot..."
 sleep 3
 reboot
 while [ 1 ]

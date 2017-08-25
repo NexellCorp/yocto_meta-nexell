@@ -3,7 +3,7 @@ inherit linux-nexell-base
 SOC_FAMILY = "Nexell"
 
 IMAGE_FSTYPES ?= "tar.bz2 ext4"
-INITRAMFS_IMAGE = "nexell-ramdisk"
+INITRAMFS_IMAGE ?= "nexell-ramdisk"
 
 # If you need to change below function, you can see the classes/linux-nexell-base.bbclass
 KERNEL_IMAGETYPE_${MACHINE} ?= "${@get_kernel_image_type(d,"${MACHINE}")}"
