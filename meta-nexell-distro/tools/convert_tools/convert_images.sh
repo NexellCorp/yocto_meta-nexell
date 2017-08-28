@@ -36,6 +36,13 @@ PORT_SD=0
 DEVIDS=("usb" "spi" "nand" "sdmmc" "sdfs" "uart")
 PORTS=("emmc" "sd")
 
+MEM_512MB_LOAD_ADDR=0x9fcc0000
+MEM_512MB_JUMP_ADDR=0x9fd00800
+MEM_512MB_SECURE_LOAD_ADDR=0x9fb00000
+MEM_512MB_SECURE_JUMP_ADDR=0x00000000
+MEM_512MB_NON_SECURE_LOAD_ADDR=0x9df00000
+MEM_512MB_NON_SECURE_JUMP_ADDR=0x00000000
+
 MEM_1G_LOAD_ADDR=0x7fcc0000
 MEM_1G_JUMP_ADDR=0x7fd00800
 MEM_1G_SECURE_LOAD_ADDR=0x7fb00000
@@ -57,6 +64,13 @@ MEM_SECURE_JUMP_ADDR=
 MEM_NON_SECURE_LOAD_ADDR=
 MEM_NON_SECURE_JUMP_ADDR=
 
+declare -a mem_512MB_addrs=( $MEM_512MB_LOAD_ADDR \
+                             $MEM_512MB_JUMP_ADDR \
+                             $MEM_512MB_SECURE_LOAD_ADDR \
+                             $MEM_512MB_SECURE_JUMP_ADDR \
+                             $MEM_512MB_NON_SECURE_LOAD_ADDR \
+                             $MEM_512MB_NON_SECURE_JUMP_ADDR \
+                           )
 declare -a mem_1G_addrs=( $MEM_1G_LOAD_ADDR \
                           $MEM_1G_JUMP_ADDR \
                           $MEM_1G_SECURE_LOAD_ADDR \
@@ -79,6 +93,7 @@ targets_dev_portnum["avn-ref"]=2
 targets_dev_portnum["navi-ref"]=0
 targets_dev_portnum["zh-dragon"]=0
 targets_dev_portnum["daudio-ref"]=0
+targets_dev_portnum["daudio-covi"]=0
 targets_dev_portnum["smart-voice"]=0
 targets_dev_portnum["ff-voice"]=0
 #------------------------------------
@@ -96,9 +111,11 @@ boot_partition_size["s5p6818"]=67108864 #64MB
 
 #------------------------------------
 # RAM 1G USE
-#mem_addrs=("${mem_1G_addrs[@]}")
+mem_addrs=("${mem_1G_addrs[@]}")
 # RAM 2G USE
-mem_addrs=("${mem_2G_addrs[@]}")
+#mem_addrs=("${mem_2G_addrs[@]}")
+# RAM 512MB USE
+#mem_addrs=("${mem_512MB_addrs[@]}")
 #------------------------------------
 
 # aes key
