@@ -18,6 +18,8 @@ NEXELL_LIBS = " \
     gst-plugins-camera \
     gst-plugins-renderer \
     gst-plugins-scaler \
+    gst-plugins-video-dec \
+    gst-plugins-video-sink \
     libdrm \
     nx-drm-allocator \
     nx-gst-meta \
