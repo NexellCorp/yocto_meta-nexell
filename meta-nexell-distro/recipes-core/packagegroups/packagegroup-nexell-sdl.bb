@@ -26,9 +26,10 @@ SDL_IMAGE_INSTALL = " \
 MULTIMEDIA_IMAGE_INSTALL = " \
     pulseaudio \
     pulseaudio-server \
-    ffmpeg \
-    fswebcam \
 "
+#    ffmpeg
+#    fswebcam
+
 
 NEXELL_LIBS = " \
     libdrm \

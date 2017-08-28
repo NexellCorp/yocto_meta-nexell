@@ -19,3 +19,7 @@ IMAGE_OVERHEAD_FACTOR="1.0"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-${NEXELL_BOARD_SOCNAME}"
 PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-nexell"
+
+# default type is pressure sensitive touch screen
+# If yoc need another type, override 'NEXELL_TOUCH_CLASS' in machine/conf/<board_name>
+NEXELL_TOUCH_CLASS = "PRESSES"
