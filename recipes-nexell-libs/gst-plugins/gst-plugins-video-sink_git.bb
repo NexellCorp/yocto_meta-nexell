@@ -13,8 +13,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS = "nx-gst-meta"
-RDEPENDS_${PN} = "libdrm"
+DEPENDS = "nx-gst-meta libdrm"
 
 inherit autotools pkgconfig
 
