@@ -13,8 +13,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS = "nx-gst-meta nx-video-api"
-RDEPENDS_${PN} = "libdrm"
+DEPENDS = "nx-gst-meta nx-video-api libdrm"
 
 inherit autotools pkgconfig
 
