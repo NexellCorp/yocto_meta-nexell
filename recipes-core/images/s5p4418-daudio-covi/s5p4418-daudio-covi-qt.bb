@@ -21,5 +21,6 @@ IMAGE_INSTALL += " \
     packagegroup-s5p4418-qt \
     ${NEXELL_QT_APPS_INSTALL} \
     pulseaudio \
+    nexell-bootanim \
     "
 
