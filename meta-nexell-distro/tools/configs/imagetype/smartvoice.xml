@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<imagetype_config>
+    <common>
+        <feature text='INITRAMFS_IMAGE = "nexell-ramdisk-tiny"'/>
+        <feature text='MACHINE_FEATURES = "usbhost keyboard vfat ext2 bluetooth wifi sdio"'/>
+    </common>
+</imagetype_config>

@@ -42,6 +42,7 @@ RESULT_DIR=`readlink -ev $CURRENT_PATH/..`
 MACHINE_NAME=
 BOARD_SOCNAME=
 BOARD_NAME=
+IMAGE_TYPE=
 
 function usage()
 {
@@ -93,6 +94,7 @@ function parse_args()
 
     MACHINE_NAME=${temp#*-}
     BOARD_SOCNAME=${MACHINE_NAME%-*-*-*}
+    IMAGE_TYPE=${MACHINE_NAME#*-*-*-}
 
     IFS=''
 }

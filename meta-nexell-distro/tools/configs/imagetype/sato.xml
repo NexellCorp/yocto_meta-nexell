@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<imagetype_config>
+    <common>
+        <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
+        <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
+        <feature text='CORE_IMAGE_EXTRA_INSTALL += "iputils"'/>
+        <feature text='DISTRO_FEATURES_remove = " wayland"'/>
+        <feature text='DISTRO_FEATURES_append = " systemd x11 opengl glx zeroconf"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"'/>
+        <feature text='XSERVER = "xserver-xorg \ '/>
+        <feature text='           xf86-input-evdev \ '/>
+        <feature text='           xf86-input-mouse \ '/>
+        <feature text='           xf86-video-fbdev \ '/>
+        <feature text='           xf86-input-keyboard"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles1 = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles2 = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/egl = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libopencl = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgl = "mesa-gl"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/mesa = "mesa-gl"'/>
+        <feature text='PREFERRED_PROVIDER_libgbm = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_libgbm-dev = "nexell-drm-mali-sato"'/>
+        <feature text=''/>
+        <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
+    </common>
+</imagetype_config>

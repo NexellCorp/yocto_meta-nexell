@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<imagetype_config>
+    <common>
+        <feature text='INITRAMFS_IMAGE = "nexell-ramdisk-tiny"'/>
+        <feature text='PACKAGE_CLASSES = "package_deb"'/>
+        <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
+        <feature text='VIRTUAL-RUNTIME_initscripts = ""'/>
+        <feature text='DISTRO_FEATURES_remove = " wayland"'/>
+        <feature text='DISTRO_FEATURES_append = " systemd"'/>
+        <feature text='DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"'/>
+        <feature text='XSERVER = "xserver-xorg \ '/>
+        <feature text='           xf86-input-evdev \ '/>
+        <feature text='           xf86-input-mouse \ '/>
+        <feature text='           xf86-video-fbdev \ '/>
+        <feature text='           xf86-input-keyboard"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles1 = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles2 = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/egl = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libopencl = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgl = "mesa-gl"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/mesa = "mesa-gl"'/>
+        <feature text='PREFERRED_PROVIDER_libgbm = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_libgbm-dev = "nexell-drm-mali-sato"'/>
+        <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
+    </common>
+    <s5p4418>
+        <feature text='SERIAL_CONSOLE = "115200 ttyAMA3"'/>
+    </s5p4418>
+    <s5p6818>
+        <feature text='SERIAL_CONSOLE = "115200 ttySAC3"'/>
+    </s5p6818>
+
+</imagetype_config>
+
+<!-- <feature text='BBMASK = "/meta-nexell/meta-nexell-distro/recipes-graphics/mesa"'/> -->
