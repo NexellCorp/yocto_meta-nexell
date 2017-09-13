@@ -35,7 +35,8 @@ do_install() {
         install -m 0755 ${WORKDIR}/${ARCH_TYPE_NUM}/sbin/*    ${D}${base_sbindir}/
         install -m 0644 ${WORKDIR}/${ARCH_TYPE_NUM}/lib/systemd/system/nxupdate.service ${D}${systemd_unitdir}/system/
 
-        ln -sf ${D}${systemd_unitdir}/system/nxupdate.service ${D}${systemd_unitdir}/system/multi-user.target.wants/nxupdate.service
+        cd ${D}${systemd_unitdir}/system/multi-user.target.wants
+        ln -sf ../nxupdate.service nxupdate.service
     else
         echo "Requires 64bit binaries."
     fi
