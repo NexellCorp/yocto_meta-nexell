@@ -19,6 +19,7 @@ EXTRA_OEMAKE += 'ARCH=arm KSRC="${STAGING_KERNEL_DIR}"'
 do_install () {
    install -d ${D}${bindir}
    install -m 0755 ${WORKDIR}/wlan.ko ${D}${bindir}  #images/usr/bin
+   install -m 0755 ${WORKDIR}/wlan.ko ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
 }
 
 #KERNEL_MODULE_AUTOLOAD += "wlan"

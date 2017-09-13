@@ -8,7 +8,7 @@ SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/gst-plugins-scaler;protoc
 
 S = "${WORKDIR}/git"
 
-PV = "NEXELL"
+PV = "1"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -52,8 +52,9 @@ do_install() {
     cd ${S}
     install -d ${D}${libdir}/gstreamer-1.0
     oe_runmake install DESTDIR=${D}
+    cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
 }
 
-INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files"
+INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files invalid-packageconfig"
 FILES_${PN} = "${libdir} ${includedir}"
 ALLOW_EMPTY_${PN} = "1"

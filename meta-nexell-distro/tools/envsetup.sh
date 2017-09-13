@@ -110,6 +110,14 @@ function customize_conf_files()
     fi
 }
 
+function ready_extra_image()
+{
+    if [ "${IMAGE_TYPE}" == "ubuntu" ]; then
+        cd ${NEXELL_BUILD_PATH}
+        mkdir -p tmp/work/extra-rootfs-support
+    fi
+}
+
 function copy_build_scripts()
 {
     local secure=
@@ -174,5 +182,6 @@ split_args
 target_validation_check
 path_setup
 customize_conf_files
+ready_extra_image
 copy_build_scripts
 

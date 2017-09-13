@@ -8,7 +8,7 @@ SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-gst-meta;protocol=git;
 
 S = "${WORKDIR}/git"
 
-PV = "NEXELL"
+PV = "1"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -22,5 +22,6 @@ EXTRA_OEMAKE += " \
      'libnxgstmeta_la_CFLAGS=$(GST_CFLAGS) -I${STAGING_INCDIR}' \
 "
 
+INSANE_SKIP_${PN} = "invalid-packageconfig"
 FILES_${PN} = "${libdir} ${includedir}"
 FILES_SOLIBSDEV = ""

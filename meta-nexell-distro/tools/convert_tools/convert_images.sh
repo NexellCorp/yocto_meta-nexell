@@ -239,7 +239,7 @@ function mkramdisk()
 
     cd $result_dir
 
-    if [ ${MACHINE_NAME} == "s5p4418-ff-voice" ]; then
+    if [ ${MACHINE_NAME} == "s5p4418-ff-voice" -o ${IMAGE_TYPE} == "ubuntu" ]; then
         cp core-image-tiny-initramfs-${MACHINE_NAME}.cpio.gz initrd.gz
     else
         cp core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz initrd.gz
@@ -335,6 +335,14 @@ function make_sparse_rootfs_img()
     echo "================================================="
     echo "make rootfs.img"
     echo "================================================="
+
+    if [ "${IMAGE_TYPE}" == "ubuntu" ]; then
+        ${META_NEXELL_CONVERT_TOOLS_PATH}/mkrootfs_image.sh \
+            $result_dir \
+            nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 \
+            7288 \
+            $result_dir/extra-rootfs-support
+    fi
 
     #temporary, smartvoice can not use sparse image
     if [ "${IMAGE_TYPE}" == "smartvoice" -o "${IMAGE_TYPE}" == "smartvoiceui" ]; then

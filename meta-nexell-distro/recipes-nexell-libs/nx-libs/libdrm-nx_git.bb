@@ -57,6 +57,24 @@ do_install() {
     ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so.1
 
     install -m 0755 ${B}/tests/modetest/.libs/modetest ${D}${bindir}
+
+    # supported for ubuntu or fedora OS system
+    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/nexell
+    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/include/nexell
+    install -d ${BASE_WORKDIR}/extra-rootfs-support/lib/nexell
+    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/bin
+
+    install -m 0644 ${S}/nexell/nexell_drm.h ${BASE_WORKDIR}/extra-rootfs-support/usr/include/nexell/
+    install -m 0644 ${S}/nexell/nexell_drmif.h ${BASE_WORKDIR}/extra-rootfs-support/usr/include/nexell/
+
+    install -m 0755 ${B}/nexell/.libs/libdrm_nexell.so.1.0.0 ${BASE_WORKDIR}/extra-rootfs-support/lib/nexell/
+    install -m 0755 ${B}/nexell/libdrm_nexell.la ${BASE_WORKDIR}/extra-rootfs-support/lib/nexell/
+
+    cd ${BASE_WORKDIR}/extra-rootfs-support/lib
+    ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so
+    ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so.1
+
+    install -m 0755 ${B}/tests/modetest/.libs/modetest ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
 }
 
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files"

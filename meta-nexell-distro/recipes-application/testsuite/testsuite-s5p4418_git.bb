@@ -122,37 +122,27 @@ do_install() {
 
     #allocator-test
     install -m 0755 ${S}/allocator_test/allocator-test ${D}${bindir}
-
     #camera_test
     install -m 0755 ${S}/camera_test/nx-camera-test ${D}${bindir}
-
     #camera_test_onedevice
     install -m 0755 ${S}/camera_test_onedevice/nx-camera-test-onedevice ${D}${bindir}
-
     #dp_cam_test
     install -m 0755 ${S}/dp_cam_test/dp_cam_test ${D}${bindir}
-
     #dp_cam_test_onedevice
     install -m 0755 ${S}/dp_cam_test_onedevice/dp_cam_test_onedevice ${D}${bindir}
-
     #mpegts_test
     install -m 0755 ${S}/mpegts_test/nx-mpegts-test ${D}${bindir}
-
     #--- gsttest ---
     install -d ${D}${bindir}/gsttest
     install -d ${D}${bindir}/gsttest/nxscaler
     install -m 0755 ${S}/gsttest/gsttest.sh ${D}${bindir}/gsttest
     install -m 0755 ${S}/gsttest/nxscaler/* ${D}${bindir}/gsttest/nxscaler
-
     #scaler_test
     install -m 0755 ${S}/scaler_test/nx-scaler-test ${D}${bindir}
-
     #dp_clipper_decimator_test
     install -m 0755 ${S}/dp_clipper_decimator_test/dp-clipper-decimator-test ${D}${bindir}
-
     #dp_decimator_test
     install -m 0755 ${S}/dp_decimator_test/dp-decimator-test ${D}${bindir}
-
     #libnx_video_alloc
     #install -m 0644 ${S}/libnx_video_alloc/src/libnx_video_alloc.a ${D}${libdir}
     #install -m 0755 ${S}/libnx_video_alloc/test/test_video_alloc ${D}${bindir}
@@ -162,6 +152,32 @@ do_install() {
     #cp -a ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.* ${D}${libdir}
     #install -m 0644 ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.so ${D}${libdir}
     #install -m 0644 ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.so.* ${D}${libdir}
+
+    # supported for ubuntu or fedora OS system
+    #allocator-test
+    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    install -m 0755 ${S}/allocator_test/allocator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #camera_test
+    install -m 0755 ${S}/camera_test/nx-camera-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #camera_test_onedevice
+    install -m 0755 ${S}/camera_test_onedevice/nx-camera-test-onedevice ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #dp_cam_test
+    install -m 0755 ${S}/dp_cam_test/dp_cam_test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #dp_cam_test_onedevice
+    install -m 0755 ${S}/dp_cam_test_onedevice/dp_cam_test_onedevice ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #mpegts_test
+    install -m 0755 ${S}/mpegts_test/nx-mpegts-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #--- gsttest ---
+    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/gsttest
+    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/gsttest/nxscaler
+    install -m 0755 ${S}/gsttest/gsttest.sh ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/gsttest
+    install -m 0755 ${S}/gsttest/nxscaler/* ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/gsttest/nxscaler
+    #scaler_test
+    install -m 0755 ${S}/scaler_test/nx-scaler-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #dp_clipper_decimator_test
+    install -m 0755 ${S}/dp_clipper_decimator_test/dp-clipper-decimator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #dp_decimator_test
+    install -m 0755 ${S}/dp_decimator_test/dp-decimator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
 }
 
 #PREFERRED_VERSION_libavcodec = "56.60.100"

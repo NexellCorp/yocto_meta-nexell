@@ -26,6 +26,13 @@ declare -A KERNEL_BIN_NAME
 KERNEL_BIN_NAME["s5p4418"]="zImage"
 KERNEL_BIN_NAME["s5p6818"]="Image"
 
+NEXELL_RELEASE_SERVER_ADDRESS="http://files.nexell.co.kr:8070"
+UBUNTU_IMAGE_LOCATION="/s5p4418/yocto/pyro/ubuntu/rootfs/"
+UBUNTU_CONSOLE_VERSION="ubuntu-rootfs-mini.tar.gz"
+UBUNTU_DESKTOP_VERSION="ubuntu-rootfs-desktop.tar.gz"
+UBUNTU_DESKTOP_LXDE_VERSION="ubuntu-rootfs-desktop-lxde.tar.gz"
+UBUNTU_ROOTFS=${UBUNTU_CONSOLE_VERSION}
+
 function check_usage()
 {
     if [ $argc -lt 3 ];then
@@ -131,7 +138,7 @@ function copy_ramdisk_image()
 {
     echo -e "\033[40;33m  >>>>   copy_ramdisk_image        \033[0m"
     # temporary
-    if [ "${BOARD_NAME}" == "ff-voice" ]; then    
+    if [ "${BOARD_NAME}" == "ff-voice" -o "${IMAGE_TYPE}" == "ubuntu" ]; then    
         cp ${TMP_DEPLOY_PATH}/"core-image-tiny-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
     else
         cp ${TMP_DEPLOY_PATH}/"core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
@@ -141,15 +148,24 @@ function copy_ramdisk_image()
 function copy_rootfs_image()
 {
     echo -e "\033[40;33m  >>>>   copy_rootfs_image        \033[0m"
-    cp ${TMP_DEPLOY_PATH}/"nexell-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
-    cp ${TMP_DEPLOY_PATH}/"nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
 
-    cp ${META_NEXELL_PATH}/tools/partition.txt ${RESULT_PATH}
+    if [ "${IMAGE_TYPE}" == "ubuntu" ];then
+        rm -rf ${RESULT_PATH}/*.ext4
+        rm -rf ${RESULT_PATH}/rootfs.img
+
+        wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION}${UBUNTU_ROOTFS} -P ${RESULT_PATH}
+        mv ${RESULT_PATH}/${UBUNTU_ROOTFS} ${RESULT_PATH}/rootfs.tar.gz
+        cp -a ${BUILD_PATH}/tmp/work/extra-rootfs-support ${RESULT_PATH}
+    else
+        cp ${TMP_DEPLOY_PATH}/"nexell-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
+        cp ${TMP_DEPLOY_PATH}/"nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
+    fi
+    cp ${META_NEXELL_PATH}/tools/fusing_tools/partition.txt ${RESULT_PATH}
 }
 
 function copy_partmap_file()
 {
-    cp ${META_NEXELL_PATH}/tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+    cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
 }
 
 function post_process()

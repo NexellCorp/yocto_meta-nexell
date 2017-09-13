@@ -8,7 +8,7 @@ SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-drm-allocator;protocol
 
 S = "${WORKDIR}/git"
 
-PV = "NEXELL"
+PV = "1"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -35,9 +35,10 @@ do_compile() {
 do_install() {
     cd ${S}
     oe_runmake install DESTDIR=${D}
+    cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
 }
 
-INSANE_SKIP_${PN} = "dev-so"
+INSANE_SKIP_${PN} = "dev-so invalid-packageconfig"
 FILES_${PN} = "${libdir} ${includedir}"
 FILES_SOLIBSDEV = ""
 #ALLOW_EMPTY_${PN} = "1"
