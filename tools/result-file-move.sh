@@ -138,13 +138,13 @@ function copy_dtb_file()
 	kernel_image_path=${BOARD_SOCNAME}_${BOARD_PREFIX}_${BOARD_POSTFIX}-poky-linux-gnueabi/linux-${MACHINE_NAME}
 	if [ ${BOARD_PREFIX} == "avn" ]; then
 	    file_name_dtb="s5p4418-avn_ref*.dtb"
-        elif [ ${BOARD_PREFIX} == "navi" -o ${BOARD_PREFIX} == "daudio" ]; then
+        elif [ ${BOARD_PREFIX} == "navi" ]; then
+            file_name_dtb="s5p4418-navi_ref*.dtb"
+        elif [ ${BOARD_PREFIX} == "daudio" ]; then
             if [ ${BOARD_POSTFIX} == "covi" ]; then
                 file_name_dtb="s5p4418-daudio_covi*.dtb"
             elif [ ${BOARD_POSTFIX} == "ref" ]; then
                 file_name_dtb="s5p4418-daudio_ref*.dtb"
-            else
-                file_name_dtb="s5p4418-navi_ref*.dtb"
             fi
         elif [ ${BOARD_POSTFIX} == "voice" ]; then
             file_name_dtb="s5p4418-${BOARD_PREFIX}_voice*.dtb"
