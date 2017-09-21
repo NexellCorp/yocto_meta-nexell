@@ -6,7 +6,7 @@ SECTION = "libs"
 
 TYPE = "mali-nexell"
 
-SRC_URI = "file://lib \
+SRC_URI = "file://library \
            file://sato/egl.pc \
            file://sato/include \
            "
@@ -26,7 +26,7 @@ do_install () {
     install -d ${D}${includedir}
 
     touch ${D}${libdir}/libMali_for_X11
-    install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM}-X11 ${D}${libdir}/libMali.so
+    install -m 0644 ${S}/library/libMali.so-${ARCH_TYPE_NUM}-X11 ${D}${libdir}/libMali.so
 
     # Create MALI manifest
     if [ "${ARCH_TYPE_NUM}" -eq "64" ]; then

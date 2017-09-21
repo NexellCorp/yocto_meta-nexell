@@ -121,7 +121,7 @@ function copy_kernel_image()
 
 function copy_dtb_file()
 {
-    echo -e "\033[40;33m  >>>>   copy_dtb_file        \033[0m"
+    echo -e "\033[40;33m  >>>>   copy_dtb_file            \033[0m"
     local deployed_dtb_file_name=${KERNEL_BIN_NAME[${BOARD_SOCNAME}]}-${BOARD_SOCNAME}*.dtb
 
     rm -rf ${RESULT_PATH}/*.dtb
@@ -136,9 +136,9 @@ function copy_dtb_file()
 
 function copy_ramdisk_image()
 {
-    echo -e "\033[40;33m  >>>>   copy_ramdisk_image        \033[0m"
+    echo -e "\033[40;33m  >>>>   copy_ramdisk_image       \033[0m"
     # temporary
-    if [ "${BOARD_NAME}" == "ff-voice" -o "${IMAGE_TYPE}" == "ubuntu" ]; then    
+    if [ "${BOARD_NAME}" == "ff-voice" -o "${IMAGE_TYPE}" == "ubuntu" ]; then
         cp ${TMP_DEPLOY_PATH}/"core-image-tiny-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
     else
         cp ${TMP_DEPLOY_PATH}/"core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}

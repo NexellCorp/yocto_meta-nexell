@@ -6,7 +6,7 @@ SECTION = "libs"
 
 TYPE = "mali-nexell"
 
-SRC_URI = "file://lib \
+SRC_URI = "file://library \
            file://sdl/src \
            "
 
@@ -28,7 +28,7 @@ do_install () {
     install -d ${D}${bindir}/sdl_example
     install -d ${D}${libdir}
 
-    install -m 0644 ${S}/lib/libMali.so-${ARCH_TYPE_NUM}-FB ${D}${libdir}/libMali.so
+    install -m 0644 ${S}/library/libMali.so-${ARCH_TYPE_NUM}-FB ${D}${libdir}/libMali.so
     install -m 0755 ${S}/sdl/src/ES1_tutorial1/tutorial1_es1 ${D}${bindir}/sdl_example/
     install -m 0755 ${S}/sdl/src/ES2_tutorial1/tutorial1_es2 ${D}${bindir}/sdl_example/
     install -m 0644 ${S}/sdl/src/ES2_tutorial1/t1_rend.frag  ${D}${bindir}/sdl_example/
