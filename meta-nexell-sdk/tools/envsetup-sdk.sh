@@ -106,7 +106,7 @@ function customize_conf_files()
 
     echo "#NEXELL appended code" >> ${NEXELL_BUILD_PATH}/conf/local.conf
    
-    ${META_NEXELL_PATH}/tools/setup-conf-files.py ${NEXELL_BUILD_PATH} ${MACHINE_NAME} ${IMAGE_TYPE} ${META_NEXELL_PATH} ${EXTERNALSRC_USING}
+    ${META_NEXELL_PATH}/tools/setup-conf-files.py ${NEXELL_BUILD_PATH} ${MACHINE_NAME} ${IMAGE_TYPE} ${META_NEXELL_DISTRO_PATH} ${EXTERNALSRC_USING}
 
     #-----------------------------------------------------------------
     # CORE THREADS numbers
