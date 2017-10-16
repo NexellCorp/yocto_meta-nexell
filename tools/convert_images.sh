@@ -62,6 +62,10 @@ MEM_SECURE_JUMP_ADDR=
 MEM_NON_SECURE_LOAD_ADDR=
 MEM_NON_SECURE_JUMP_ADDR=
 
+declare -A boot_partition_size
+boot_partition_size["s5p4418"]=33554432 #32MB
+boot_partition_size["s5p6818"]=67108864 #64MB
+
 declare -a mem_512MB_addrs=( $MEM_512MB_LOAD_ADDR \
                           $MEM_512MB_JUMP_ADDR \
                           $MEM_512MB_SECURE_LOAD_ADDR \
@@ -244,7 +248,7 @@ function mkbootimg()
     cp -a *.dtb ./boot
     cp ${META_NEXELL_TOOLS_PATH}/bootlogo/logo.bmp ./boot/
     #${META_NEXELL_TOOLS_PATH}/make_ext4fs -b 4096 -L boot -l 33554432 boot.img ./boot/
-    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 33554432 boot.img ./boot/
+    ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l ${boot_partition_size[${BOARD_SOCNAME}]} boot.img ./boot/
 }
 
 function make_2ndboot_for_emmc()
