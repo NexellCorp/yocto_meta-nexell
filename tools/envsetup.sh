@@ -171,6 +171,12 @@ function local_conf_append()
 #    if [ ${IMAGE_TYPE} == "smartvoice" ]; then
 #        smart_voice_license_flags_whitelist_set
 #    fi
+
+    if [ ${MACHINE_NAME} == "s5p4418-daudio-ref" ]; then
+         echo "BBMASK += \" /meta-nexell/recipes-qt/podonamu/podonamu_1.0.bb\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    else
+         echo "BBMASK += \" /meta-nexell/recipes-qt/podonamu/podonamu_1.0_daudio.bb\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+    fi
 }
 
 function smart_voice_license_flags_whitelist_set()
