@@ -22,4 +22,5 @@ IMAGE_INSTALL += " \
     packagegroup-s5p4418-qt \
     pulseaudio \
     nexell-bootanim \
+    nexell-btservice \
     "
