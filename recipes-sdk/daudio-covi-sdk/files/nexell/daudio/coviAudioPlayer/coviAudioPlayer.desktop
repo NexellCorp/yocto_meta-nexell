@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=coviAudioPlayer
+Name[ko]=coviAudioPlayer
+Comment=Covi Audio Player for QT
+Comment[ko]=Covi Audio Player for QT
+Icon_n=icon_music_n.png
+Icon_p=icon_music_p.png
+TryExec=coviAudioPlayer
+Exec=coviAudioPlayer

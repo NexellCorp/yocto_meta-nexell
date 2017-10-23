@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=NxAudioPlayer
+Name[ko]=NxAudioPlayer
+Comment=Nexell Audio Player for QT
+Comment[ko]=Nexell Audio Player for QT
+Icon=icon_music.png
+TryExec=NxAudioPlayer
+Exec=NxAudioPlayer

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=0.8.0
+Name=NxVideoPlayer
+Name[ko]=NxVideoPlayer
+Comment=Video Player Application
+Comment[ko]=NxVideo Player 프로그램
+Icon=icon_video.png
+TryExec=NxVideoPlayer
+Exec=NxVideoPlayer
+
+

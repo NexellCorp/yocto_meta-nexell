@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=0.1.0
+Name=coviBluetooth
+Name[ko]=coviBluetooth
+Comment=Nxell/FMS BT Phone for QT  
+Comment[ko]=Nexell/FMS BT Phone for QT
+Icon=icon_btphone.png
+Icon_n=icon_phone_n.png
+Icon_p=icon_phone_p.png
+TryExec=coviBluetooth
+Exec=coviBluetooth
+Service= bsa_server -p /etc/bluetooth/BCM20710A1_001.002.014.0103.0000.hcd -all=0
