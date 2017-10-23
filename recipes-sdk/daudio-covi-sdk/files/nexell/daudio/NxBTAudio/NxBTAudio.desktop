@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.1.0
+Name=NxBTAudio
+Name[ko]=NxBTAudio
+Comment=Nexell BT Audio for QT
+Comment[ko]=Nexell BT Audio for QT
+Icon=icon_btaudio.png
+TryExec=NxBTAudio
+Exec=NxBTAudio

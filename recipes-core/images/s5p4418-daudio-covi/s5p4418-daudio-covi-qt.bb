@@ -3,6 +3,7 @@ require ../nexell-image-qt.inc
 require ../nexell-image-common.inc
 inherit s5p4418-post-process
 inherit s5p4418-post-process-qt
+inherit s5p4418-post-process-daudio-covi-sdk
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d690"

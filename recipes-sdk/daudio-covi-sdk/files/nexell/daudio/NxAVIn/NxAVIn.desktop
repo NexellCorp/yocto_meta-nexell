@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=NxAVIn
+Name[ko]=NxAVIn
+Comment=Nexell Audio/Video In Player for QT
+Comment[ko]=Nexell Audio/Video In Player for QT
+Icon=icon_auxin.png
+TryExec=NxAVIn
+Exec=NxAVIn

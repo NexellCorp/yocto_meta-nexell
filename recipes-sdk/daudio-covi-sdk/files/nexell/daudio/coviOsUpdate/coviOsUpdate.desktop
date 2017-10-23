@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=coviOsUpdate
+Name[ko]=coviOsUpdate
+Comment=Covi Os Update for QT
+Comment[ko]=Covi Os update for QT
+Icon_n=icon_osupdate_n.png
+Icon_p=icon_osupdate_p.png
+TryExec=coviOsUpdate
+Exec=coviOsUpdate
