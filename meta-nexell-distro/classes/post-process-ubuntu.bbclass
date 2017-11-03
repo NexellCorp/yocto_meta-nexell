@@ -10,7 +10,7 @@ postprocess_common_function() {
     rm -rf ${BASE_WORKDIR}/extra-rootfs-support/boot/*
     rm -rf ${BASE_WORKDIR}/extra-rootfs-support/lib/modules
     rm -rf ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/libkms*
-    rm -rf ${BASE_WORKDIR}/extra-rootfs-support/etc/init/failsafe.conf
+    #rm -rf ${BASE_WORKDIR}/extra-rootfs-support/etc/init/failsafe.conf
     rm -rf ${BASE_WORKDIR}/extra-rootfs-support/etc/init/ttyAMA3.conf
     rm -rf ${BASE_WORKDIR}/extra-rootfs-support/etc/rc.local
     rm -rf ${BASE_WORKDIR}/extra-rootfs-support/etc/fstab
@@ -23,7 +23,7 @@ postprocess_common_function() {
     cp -rp ./boot/*                  ${BASE_WORKDIR}/extra-rootfs-support/boot/
     cp -rp ./lib/modules             ${BASE_WORKDIR}/extra-rootfs-support/lib/
     cp -a  ./usr/lib/libkms*         ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
-    cp -rp ./etc/init/failsafe.conf  ${BASE_WORKDIR}/extra-rootfs-support/etc/init/
+    #cp -rp ./etc/init/failsafe.conf  ${BASE_WORKDIR}/extra-rootfs-support/etc/init/
     cp -rp ./etc/init/ttyAMA3.conf   ${BASE_WORKDIR}/extra-rootfs-support/etc/init/
     cp -rp ./etc/rc.local            ${BASE_WORKDIR}/extra-rootfs-support/etc/
     cp -rp ./etc/fstab               ${BASE_WORKDIR}/extra-rootfs-support/etc/
@@ -33,7 +33,7 @@ postprocess_common_function() {
     cp -rp ./usr/lib/libGLESv1_CM.so ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
     cp -rp ./usr/lib/libGLESv2.so    ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
 
-    cp -a ./usr/bin/start_adb.sh     ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    cp -a ./usr/bin/start_adbd.sh     ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
 }
 
 ROOTFS_POSTPROCESS_COMMAND +=  " postprocess_common_function;"
