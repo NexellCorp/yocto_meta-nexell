@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=Quick Rear Camera
+Name[ko]=coviQuickRearCam.desktop
+Comment=covi Quick Rear Camera for Qt
+Comment[ko]=covi Quick Rear Camera for Qt
+Icon=rearcam.png
+TryExec=coviQuickRearCam
+Exec=coviQuickRearCam
+

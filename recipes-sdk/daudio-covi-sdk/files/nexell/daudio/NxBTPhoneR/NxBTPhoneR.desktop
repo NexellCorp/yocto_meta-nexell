@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.1.0
+Name=NxBTPhoneR
+Name[ko]=NxBTPhoneR
+Comment=Nexell BT PhoneR for QT
+Comment[ko]=Nexell BT PhoneR for QT
+Icon=icon_btphoner.png
+TryExec=NxBTPhoneR
+Exec=NxBTPhoneR

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=coviSetup
+Name[ko]=coviSetup
+Comment=Covi Setup for QT
+Comment[ko]=Covi Setup for QT
+Icon_n=icon_setup_n.png
+Icon_p=icon_setup_p.png
+TryExec=coviSetup
+Exec=coviSetup
