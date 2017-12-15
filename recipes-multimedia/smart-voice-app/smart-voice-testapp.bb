@@ -2,7 +2,7 @@ SUMMARY = "Nexell smart voice test application"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRCREV = "85ae05be395fdcfafe1ad44a0f431b246755ff7e"
+SRCREV = "${AUTOREV}"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/smart_voice_apps;protocol=git"
 
 PV = "NEXELL"
