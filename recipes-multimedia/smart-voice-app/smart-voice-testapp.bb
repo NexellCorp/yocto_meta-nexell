@@ -12,12 +12,10 @@ S = "${WORKDIR}/git"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_compile() {
-    cd ${S}/src
+    cd ${S}
     oe_runmake clean
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} LDFLAGS+=" -mfloat-abi=hard --sysroot=${STAGING_DIR_HOST} " CC="${CC}" \
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} PKG_LDFLAGS+=" --sysroot=${STAGING_DIR_HOST} " CC="${CC}" \
                INCLUDE="-I${STAGING_INCDIR} \
-                        -I${S}/src \
-                        -I${S}/lib \
                         -I${STAGING_INCDIR}/c++/5.3.0 \
                         -I${STAGING_INCDIR}/c++/5.3.0/${HOST_SYS}/bits \
                         -I${STAGING_INCDIR}/c++/5.3.0/${HOST_SYS}"              
@@ -25,8 +23,11 @@ do_compile() {
 
 do_install() {
     install -d ${D}${bindir}
+    mkdir -p ${D}/usr/share/nexell/smart-voice
 
-    install -m 0755 ${S}/src/smart_voice ${D}${bindir}
+    install -m 0755 ${S}/smart-voice/smart_voice ${D}${bindir}
+    install -m 0755 ${S}/smart-voice/samples/DingDong.wav ${D}/usr/share/nexell/smart-voice/
 }
 
-FILES_${PN} = "${bindir} "
+INSANE_SKIP_${PN} = "already-stripped"
+FILES_${PN} = "${bindir} /usr/share/nexell/smart-voice/"
