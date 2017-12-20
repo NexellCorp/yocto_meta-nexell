@@ -21,6 +21,7 @@ GLIBC_INSTALL = " \
     glibc-gconv-iso8859-15 \
     glibc-gconv-euc-kr \
     locale-base-en-gb \
+    localedef \
     "
 
 SYSTEMD_INSTALL = " \

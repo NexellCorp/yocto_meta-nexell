@@ -131,6 +131,9 @@ function local_conf_append()
             sed -i "/IMAGE_OVERHEAD_FACTOR/d" ${META_NEXELL_PATH}/conf/machine/${MACHINE_NAME}.conf
             echo "/IMAGE_OVERHEAD_FACTOR = \"1.2\"" ${META_NEXELL_PATH}/conf/machine/${MACHINE_NAME}.conf
             imgtype="-sdl"
+        elif [ ${IMAGE_TYPE} == "qt" ]; then
+            echo "GLIBC_GENERATE_LOCALES = \"ko_KR.EUC-KR ko_KR.UTF-8 en_GB.UTF-8 en_US.UTF-8\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
+            echo "IMAGE_LINGUAS = \" ko-kr en-us en-gb\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         fi
         echo "PREFERRED_PROVIDER_virtual/libgles1 = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
         echo "PREFERRED_PROVIDER_virtual/libgles2 = \"nexell-drm-mali${imgtype}\"" >> ${NEXELL_BUILD_PATH}/conf/local.conf
@@ -255,6 +258,12 @@ function copy_build_scripts()
     else
 	echo -e "\033[0;33m #########  Already Done, optee & ATF pre-fetch & pre-unpack ########## \033[0m"
     fi
+
+    #-----------------------------------------------
+    # post process, for rootfs customize
+    #-----------------------------------------------
+    mkdir -p ${TMP_WORK_PATH}/use-post-process
+    cp ${META_NEXELL_PATH}/recipes-core/udev/udev-extraconf/mount.sh ${TMP_WORK_PATH}/use-post-process/
 }
 
 check_usage

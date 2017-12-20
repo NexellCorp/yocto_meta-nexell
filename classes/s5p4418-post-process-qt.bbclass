@@ -14,6 +14,8 @@ postprocess_about_qt_touch_function() {
     #adb configfs mount bug fix
     sed -i "/mount -t configfs none \/sys\/kernel\/config/d" usr/bin/start_adbd.sh
 
+    #automount iocharset modified
+    cp ${BASE_WORKDIR}/use-post-process/mount.sh etc/udev/scripts/
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_about_qt_touch_function;"
