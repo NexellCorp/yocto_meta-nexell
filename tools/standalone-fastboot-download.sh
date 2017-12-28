@@ -251,12 +251,7 @@ function update_root()
 	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_ROOT} == "true" ]; then
 		local file=${1}
 		vmsg "update rootfs: ${file}"
-                if [ ${MACHINE_NAME} == "s5p4418-smart-voice" -o ${MACHINE_NAME} == "s5p4418-ff-voice" ]; then
-                    sudo fastboot flash setenv ${CURRENT_PATH}/partition.txt
-                    sudo fastboot -S 0 flash rootfs ${file}
-                else
-                    flash rootfs ${file}
-                fi
+                flash rootfs ${file}
 	fi
 }
 

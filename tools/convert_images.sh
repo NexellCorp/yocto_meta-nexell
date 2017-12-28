@@ -313,11 +313,7 @@ function make_sparse_rootfs_img()
     echo "================================================="
     echo "make rootfs.img"
     echo "================================================="
-    if [ "${IMAGE_TYPE}" == "smartvoice" ]; then
-        cp $result_dir/${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
-    else
-        ${META_NEXELL_TOOLS_PATH}/ext2simg $result_dir/${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
-    fi
+    ${META_NEXELL_TOOLS_PATH}/ext2simg $result_dir/${MACHINE_NAME}-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
 }
 
 function post_process()
