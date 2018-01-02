@@ -53,10 +53,10 @@ TOUCH_IMAGE_INSTALL = " \
      "
 
 QT_ALSA_IMAGE_INSTALL = " \
-     alsa-utils \
      alsa-lib \
      "
-QT_ALSA_EXTRA_IMAGE_INSTALL = " \
+QT_ALSA_UTILS_IMAGE_INSTALL = " \
+     alsa-utils \
      alsa-utils-alsamixer \
      alsa-utils-midi \
      alsa-utils-aplay \
@@ -86,7 +86,7 @@ IMAGE_INSTALL += " \
      ${EXAMPLE_IMAGE_INSTALL} \
      ${TOUCH_IMAGE_INSTALL} \
      ${QT_ALSA_IMAGE_INSTALL} \
-     ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
+     ${QT_ALSA_UTILS_IMAGE_INSTALL} \
      ${PODO_IMAGE_INSTALL} \
      ${NEXELL_CUSTOMIZE_INSTALL} \
      "

@@ -16,6 +16,10 @@ postprocess_about_qt_touch_function() {
 
     #automount iocharset modified
     cp ${BASE_WORKDIR}/use-post-process/mount.sh etc/udev/scripts/
+
+    #alsa-restore.service & alsa-state.service remove
+    rm ./lib/systemd/system/alsa-restore.service
+    rm ./lib/systemd/system/alsa-state.service
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_about_qt_touch_function;"
