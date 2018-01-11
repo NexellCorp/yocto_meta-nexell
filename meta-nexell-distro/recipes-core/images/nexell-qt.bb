@@ -25,8 +25,20 @@ TOUCH_IMAGE_INSTALL = " \
     tslib-nexell \
 "
 
+ETC_TOOLS = " \
+    tinyalsa \
+    udev-extraconf \
+    tzdata \
+    net-tools \
+    openssl \
+    curl \
+"
+
 NEXELL_CUSTOMIZE_INSTALL = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qt5-smarthome-launcher', 'qtbootlauncher', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'qtbootlauncher', \
+                              bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qt5-smarthome-launcher', 'qtbootlauncher', d), d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'nexell-bootanim nexell-btservice', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-covi', 'nexell-bootanim', '', d)} \
     nexell-qt5-touchsetup \
 "
 
@@ -36,7 +48,8 @@ IMAGE_INSTALL_append = " \
     ${DEVEL_TOOLS} \
     packagegroup-nexell-qt \
     rtl-8188eus-${ARCH_TYPE_NUM} \
-    testsuite-${NEXELL_BOARD_SOCNAME} \
+    testsuite \
     ${TOUCH_IMAGE_INSTALL} \
+    ${ETC_TOOLS} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
 "

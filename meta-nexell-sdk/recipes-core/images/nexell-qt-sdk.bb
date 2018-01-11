@@ -16,7 +16,8 @@ TOUCH_IMAGE_INSTALL = " \
 "
 
 NEXELL_CUSTOMIZE_INSTALL = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qt5-smarthome-launcher', 'qtbootlauncher', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'qtbootlauncher', \
+                              bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qt5-smarthome-launcher', 'qtbootlauncher', d), d)} \
     nexell-qt5-touchsetup \
 "
 

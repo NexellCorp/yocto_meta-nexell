@@ -2,7 +2,10 @@ SUMMARY = "Qt bootlauncher"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS = "qtbase qtquickcontrols2 qtmultimedia qtwayland "
+
+DEPENDS = "qtbase qtmultimedia "
+DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland', '', d)}"
+DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qtquickcontrols', 'qtquickcontrols2', d)}"
 
 SRC_URI = "file://launcher-cap.conf \
            file://launcher-press.conf \
