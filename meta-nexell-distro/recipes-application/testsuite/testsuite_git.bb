@@ -1,12 +1,12 @@
 inherit linux-nexell-base
 
-SUMMARY = "Nexell testsuite - allocator-test application"
+SUMMARY = "Nexell testsuite"
 SECTION = "application"
 
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile;md5=d5743c4d7fa2b466a875bac2c6176aa1"
 
-SRCREV = "688f63bcbfd2422e9bb59790a8face3750e7edc1"
+SRCREV = "b9b288d64ffb44cb512cb4fe5f009c6fa66e7806"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/testsuite;protocol=git;branch=nexell"
 
 DEPENDS = "nx-drm-allocator nx-v4l2 nx-renderer nx-scaler nx-gst-meta nx-video-api libdrm-nx "
@@ -26,9 +26,6 @@ AUTOTOOLS_SCRIPT_PATH = "${S}/video_api_test"
 EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
     "
-
-#TARGET_CC_ARCH_append_cortexa9hf-neon = " -D__SOFTFP__"
-#TARGET_CC_ARCH_append_armv7a = " -D__SOFTFP__"
 
 do_configure() {
     #video_api_test
@@ -180,8 +177,8 @@ do_install() {
     install -m 0755 ${S}/dp_decimator_test/dp-decimator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
 }
 
-#PREFERRED_VERSION_libavcodec = "56.60.100"
-#PREFERRED_VERSION_libavformat = "56.40.101"
+PREFERRED_VERSION_libavcodec = "56.60.100"
+PREFERRED_VERSION_libavformat = "56.40.101"
 INSANE_SKIP_${PN} = "ldflags"
 FILES_${PN} = "${bindir} ${libdir}"
 RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter"

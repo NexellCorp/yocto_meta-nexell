@@ -31,6 +31,8 @@ meta-nexell-distro/recipes-kernel/linux/linux-s5p6818.bbappend
 meta-nexell-distro/recipes-nexell-libs/gst-plugins/gst-plugins-camera_%.bbappend
 meta-nexell-distro/recipes-nexell-libs/gst-plugins/gst-plugins-renderer_%.bbappend
 meta-nexell-distro/recipes-nexell-libs/gst-plugins/gst-plugins-scaler_%.bbappend
+meta-nexell-distro/recipes-nexell-libs/gst-plugins/gst-plugins-video-dec_%.bbappend
+meta-nexell-distro/recipes-nexell-libs/gst-plugins/gst-plugins-video-sink_%.bbappend
 
 meta-nexell-distro/recipes-nexell-libs/nx-libs/libdrm-nx_%.bbappend
 meta-nexell-distro/recipes-nexell-libs/nx-libs/nx-drm-allocator_%.bbappend
@@ -40,8 +42,7 @@ meta-nexell-distro/recipes-nexell-libs/nx-libs/nx-scaler_%.bbappend
 meta-nexell-distro/recipes-nexell-libs/nx-libs/nx-v4l2_%.bbappend
 meta-nexell-distro/recipes-nexell-libs/nx-libs/nx-video-api_%.bbappend
 
-meta-nexell-distro/recipes-application/testsuite/testsuite-s5p4418_%.bbappend
-meta-nexell-distro/recipes-application/testsuite/testsuite-s5p6818_%.bbappend
+meta-nexell-distro/recipes-application/testsuite/testsuite_%.bbappend
 
 # SDK
 meta-nexell-sdk/recipes-core/images/meta-environment.bbappend
