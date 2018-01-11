@@ -3,8 +3,8 @@
 #
 # derived from oe-core: meta/recipes-core/packagegroups/packagegroup-core-boot.bb
 
-SUMMARY = "QT requirements"
-DESCRIPTION = "The qt set of packages required by NEXELL"
+SUMMARY = "SMARTVOICE requirements"
+DESCRIPTION = "The smartvoice set of packages required by NEXELL"
 LICENSE = "MIT"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -19,63 +19,48 @@ GSTREAMER10 = " \
     gstreamer1.0-plugins-ugly \
     gstreamer1.0-libav \
 "
+
 QT_WAYLAND = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland qtwayland-plugins', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland qtwayland-examples', '', d)} \
 "
+
 QT5_4_ESSENTIAL_IMAGES = " \
     qtbase \
     qtbase-plugins \
-    qtimageformats-plugins \
-    qtgraphicaleffects-qmlplugins \
     qtdeclarative-plugins \
     qtdeclarative-qmlplugins \
     qtsystems-qmlplugins \
-    qt3d-qmlplugins \
-    qtlocation-plugins \
-    qtlocation-qmlplugins \
     qtmultimedia-plugins \
     qtmultimedia-qmlplugins \
     qtquickcontrols-qmlplugins \
 "
 QT5_4_EXAMPLE_IMAGES = " \
-    qtsmarthome \
-    qt5-demo-extrafiles \
     qtconnectivity-examples \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland-examples', '', d)} \
     qtdeclarative-examples \
     qtbase-examples \
-    qtsystems-examples \
     qtmultimedia-examples \
     qtlocation-examples \
     qtscript-examples \
     qtquickcontrols-examples \
-    qt3d-examples \
-    cinematicexperience \
 "
+
 QT5_8_ESSENTIAL_IMAGES = " \
     qtbase \
     qtbase-plugins \
     qtdeclarative-qmlplugins \
-    qtlocation-plugins \
-    qtlocation-qmlplugins \
     qtmultimedia-plugins \
     qtmultimedia-qmlplugins \
-    qt3d-qmlplugins \
-    qtwebkit-qmlplugins \
     qtquick1-plugins \
     qtquick1-qmlplugins \
     qtquickcontrols-qmlplugins \
     qtquickcontrols2-qmlplugins \
-    qtgraphicaleffects-qmlplugins \
-    qtvirtualkeyboard-plugins \
-    qtvirtualkeyboard-qmlplugins \
     liberation-fonts \
 "
 QT_ALSA_LIB_IMAGE_INSTALL = " \
     alsa-lib \
 "
-QT_ALSA_EXTRA_IMAGE_INSTALL = " \
+QT_ALSA_UTILS_IMAGE_INSTALL = " \
     alsa-utils \
     alsa-utils-alsamixer \
     alsa-utils-midi \
@@ -87,6 +72,9 @@ QT_ALSA_EXTRA_IMAGE_INSTALL = " \
     alsa-utils-aseqnet \
     alsa-utils-aseqdump \
     alsa-utils-alsactl \
+"
+MULTIMEDIA_IMAGE_INSTALL = " \
+    ffmpeg \
 "
 NEXELL_LIBS = " \
     gst-plugins-camera \
@@ -101,10 +89,6 @@ NEXELL_LIBS = " \
     nx-scaler \
     nx-v4l2 \
     nx-video-api \
-"
-MULTIMEDIA_IMAGE_INSTALL = " \
-    ffmpeg \
-    fswebcam \
 "
 UTILS_INSTALL = " \
     glibc-utils \

@@ -4,10 +4,11 @@
         <feature text='PACKAGECONFIG_FB_pn-qtbase = "kms"'/>
         <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"'/>
         <feature text='PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-qt5.4"'/>
         <feature text='DISTRO_FEATURES_append = " zeroconf"'/>
-        <feature text=''/>
         <feature text='DISTRO_FEATURES_remove = " x11"'/>
         <feature text='DISTRO_FEATURES_append = " systemd wayland opengl alsa"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
         <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
         <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
         <feature text='CORE_IMAGE_EXTRA_INSTALL += "weston weston-init"'/>

@@ -196,6 +196,8 @@ function convert_env_setup()
 
     if [ ${BOARD_SOCNAME} == 's5p6818' ]; then
 	ARM_ARCH="arm64"
+        #OPTEE_PLAT_DRAM_SIZE=2048
+        mem_addrs=("${mem_2G_addrs[@]}")
     else
 	ARM_ARCH="arm"
     fi
@@ -345,11 +347,7 @@ function make_sparse_rootfs_img()
     fi
 
     #temporary, smartvoice can not use sparse image
-    if [ "${IMAGE_TYPE}" == "smartvoice" -o "${IMAGE_TYPE}" == "smartvoiceui" ]; then
-        cp $result_dir/nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
-    else
-        ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg $result_dir/nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
-    fi
+    ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg $result_dir/nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
 }
 
 function post_process()
