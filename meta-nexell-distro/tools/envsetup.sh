@@ -153,6 +153,12 @@ function copy_build_scripts()
     else
 	echo -e "\033[0;33m #########  Already Done, optee & ATF pre-fetch & pre-unpack ########## \033[0m"
     fi
+
+    #-----------------------------------------------
+    # post process, for rootfs customize
+    #-----------------------------------------------
+    mkdir -p ${TMP_WORK_PATH}/use-post-process
+    cp ${META_NEXELL_PATH}/recipes-core/udev/udev-extraconf/mount.sh ${TMP_WORK_PATH}/use-post-process/
 }
 
 function secure_select() {
