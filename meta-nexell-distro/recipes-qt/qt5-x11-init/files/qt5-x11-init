@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+
+cd /usr/share/qtsmarthome-1.0
+QTAPP="smarthome"
+QTAPPSTART="./${QTAPP} > /var/log/Xsession.log 2>&1"
+
+case "$1" in
+  start)
+	echo "Starting ${QTAPP}"
+	if [ -f /etc/profile.d/tslib.sh ]; then
+		source /etc/profile.d/tslib.sh
+	fi
+	if [ -e "$TSLIB_TSDEVICE" ]; then
+		if [ ! -f /etc/pointercal ]; then
+			/usr/bin/ts_calibrate
+		fi
+	else
+		if [ -e "/usr/bin/xinput_calibrator_once.sh" ]; then
+			xinput_calibrator_once.sh
+		fi
+	fi
+	Xorg -nocursor &
+	export DISPLAY=:0
+	eval $QTAPPSTART &
+	;;
+  stop)
+	echo "Stopping ${QTAPP}"
+		killall $QTAPP
+		killall Xorg
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  *)
+	echo "usage: $0 { start | stop | restart }" >&2
+	exit 1
+	;;
+esac
+
+exit 0

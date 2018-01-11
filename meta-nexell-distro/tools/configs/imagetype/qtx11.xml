@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<imagetype_config>
+    <common>
+<!-- qt 5.4 -->
+        <!-- <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility xcb fontconfig tools examples"'/> -->
+        <feature text='PACKAGECONFIG_append_pn-qtbase = " accessibility xcb"'/>
+        <feature text='PACKAGECONFIG_FONTS_append_pn-qtbase = " fontconfig"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-qt5.4"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
+        <feature text='DISTRO_FEATURES_append = " qt-default-platform-x11"'/>
+        <feature text='VIRTUAL-RUNTIME_graphical_init_manager ?= "xserver-nodm-init"'/>
+<!-- qt 5.8 or latest -->
+<!--    <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"'/> -->
+<!--    <feature text='DISTRO_FEATURES_append = " nexell-qt5.8"'/> -->
+<!--    <feature text='DISTRO_FEATURES_append = " nexell-mali"'/> -->
+<!--    <feature text='DISTRO_FEATURES_append = " qt-default-platform-wayland"'/> -->
+<!--    <feature text='BBMASK = /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.4.x'/> -->
+        <feature text='DISTRO_FEATURES_remove = " wayland"'/>
+        <feature text='DISTRO_FEATURES_append = " systemd x11 opengl"'/>
+        <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
+        <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
+        <feature text=''/>
+        <feature text='XSERVER = "xserver-xorg \ '/>
+        <feature text='           xserver-xorg-extension-glx \ '/>
+        <feature text='           xf86-input-evdev \ '/>
+        <feature text='           xf86-input-mouse \ '/>
+        <feature text='           xf86-video-fbdev \ '/>
+        <feature text='           xf86-input-keyboard"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles1 = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles2 = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/egl = "mesa"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libopencl = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgl = "mesa"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/mesa = "mesa"'/>
+        <feature text='PREFERRED_PROVIDER_libgbm = "nexell-drm-mali-sato"'/>
+        <feature text='PREFERRED_PROVIDER_libgbm-dev = "nexell-drm-mali-sato"'/>
+        <!-- <feature text=''/> -->
+        <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
+        <feature text='GLIBC_GENERATE_LOCALES = "ko_KR.EUC-KR ko_KR.UTF-8 en_GB.UTF-8 en_US.UTF-8"'/>
+        <feature text='IMAGE_LINGUAS = " ko-kr en-us en-gb"'/>        
+    </common>
+</imagetype_config>

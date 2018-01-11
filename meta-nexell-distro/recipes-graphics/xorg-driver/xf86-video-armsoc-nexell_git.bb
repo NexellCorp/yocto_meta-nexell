@@ -11,6 +11,7 @@ SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/xf86-video-armsoc;protoco
           "
 SRC_URI_append = " \
         file://20-armsoc.conf \
+        file://90-armsoc.conf \
         file://99-calibration-nexell.conf \
         "
 
@@ -20,10 +21,16 @@ RDEPENDS_${PN} += "xserver-xorg-module-exa"
 
 S = "${WORKDIR}/git"
 
+GLX_USE = "${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-x11', 'enable-glx', 'disable-glx', d)}"
+
 do_install_append() {
     install -d ${D}/etc/X11/xorg.conf.d
-    install -m 644 ${WORKDIR}/20-armsoc.conf ${D}/etc/X11/xorg.conf.d
-    install -m 644 ${WORKDIR}/99-calibration-nexell.conf ${D}/etc/X11/xorg.conf.d/99-calibration.conf
+    if [ ${GLX_USE} == "disable-glx" ]; then
+        install -m 644 ${WORKDIR}/20-armsoc.conf ${D}/etc/X11/xorg.conf.d/
+        install -m 644 ${WORKDIR}/99-calibration-nexell.conf ${D}/etc/X11/xorg.conf.d/99-calibration.conf
+    else
+        install -m 644 ${WORKDIR}/90-armsoc.conf ${D}/etc/X11/xorg.conf.d/
+    fi
 }
 
 FILES_${PN} += "${sysconfdir}"

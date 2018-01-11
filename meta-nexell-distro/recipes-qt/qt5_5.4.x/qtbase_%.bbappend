@@ -25,7 +25,7 @@ SRC_URI[sha256sum] = "1218e28e008e2f53198608b79ba7aff97cfec74341b273e6718bd67ede
 
 PACKAGECONFIG_GL = "${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gl', '', d)}"
 PACKAGECONFIG_FB = "${@bb.utils.contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d)}"
-PACKAGECONFIG_X11 = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xcb xvideo xsync xshape xrender xrandr xfixes xinput2 xinput xinerama xcursor gtkstyle xkb', '', d)}"
+PACKAGECONFIG_X11 = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xcb xvideo xsync xshape xrender xrandr xfixes xinput2 xinput xinerama gtkstyle xkb', '', d)}"
 PACKAGECONFIG_MULTIMEDIA = "${@bb.utils.contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio', '', d)}"
 
 PACKAGECONFIG = " \
@@ -33,8 +33,15 @@ PACKAGECONFIG = " \
     ${PACKAGECONFIG_DEFAULT} \
     ${PACKAGECONFIG_OPENSSL} \
     ${PACKAGECONFIG_FB} \
+    ${PACKAGECONFIG_GL} \
+    ${PACKAGECONFIG_X11} \
     ${PACKAGECONFIG_FONTS} \
     ${PACKAGECONFIG_SYSTEM} \
     ${PACKAGECONFIG_MULTIMEDIA} \
     ${PACKAGECONFIG_DISTRO} \
 "
+
+# QT_CONFIG_FLAGS += " \
+#     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', bb.utils.contains('DISTRO_FEATURES', 'x11', \
+#                                                             '-no-eglfs', '-no-opengl -linuxfb -no-eglfs',e d), '', d)} \
+# "

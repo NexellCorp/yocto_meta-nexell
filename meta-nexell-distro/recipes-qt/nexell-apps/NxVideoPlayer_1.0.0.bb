@@ -2,7 +2,9 @@ SUMMARY = "Qt5 APP LIBS, NEXELL"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS = "qtbase qtquickcontrols2 qtmultimedia qtwayland nx-video-api nx-v4l2 libdrm nx-vidtex ffmpeg"
+DEPENDS = "qtbase qtmultimedia nx-video-api nx-v4l2 libdrm nx-vidtex ffmpeg"
+DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland', '', d)}"
+DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qtquickcontrols', 'qtquickcontrols2', d)}"
 
 SRCREV = "bee9d7bf3443068ccaf15ca801393965c1e640fe"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/QT/NxVideoPlayer;protocol=git;branch=master"

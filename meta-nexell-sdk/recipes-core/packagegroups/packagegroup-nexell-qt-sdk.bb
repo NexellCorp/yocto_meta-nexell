@@ -81,19 +81,19 @@ QT5_8_ESSENTIAL_IMAGES = " \
 "
 
 QT_ALSA_IMAGE_INSTALL = " \
-     alsa-utils \
+    alsa-utils \
 "
 QT_ALSA_EXTRA_IMAGE_INSTALL = " \
-     alsa-utils-alsamixer \
-     alsa-utils-midi \
-     alsa-utils-aplay \
-     alsa-utils-amixer \
-     alsa-utils-aconnect \
-     alsa-utils-iecset \
-     alsa-utils-speakertest \
-     alsa-utils-aseqnet \
-     alsa-utils-aseqdump \
-     alsa-utils-alsactl \
+    alsa-utils-alsamixer \
+    alsa-utils-midi \
+    alsa-utils-aplay \
+    alsa-utils-amixer \
+    alsa-utils-aconnect \
+    alsa-utils-iecset \
+    alsa-utils-speakertest \
+    alsa-utils-aseqnet \
+    alsa-utils-aseqdump \
+    alsa-utils-alsactl \
 "
 
 RDEPENDS_${PN} = " \

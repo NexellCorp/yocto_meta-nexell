@@ -1,0 +1,10 @@
+[Unit]
+Description=start X and a qt application
+
+[Service]
+Type=forking
+#ExecStart=/usr/bin/qt5-x11-init start
+#ExecStop=/usr/bin/qt5-x11-init stop
+
+[Install]
+WantedBy=graphical.target

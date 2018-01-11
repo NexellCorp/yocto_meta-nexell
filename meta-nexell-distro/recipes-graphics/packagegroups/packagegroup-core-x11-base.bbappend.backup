@@ -1,0 +1,8 @@
+# Override RDEPENDS for matchbox remove
+
+RDEPENDS_${PN} = "\
+    packagegroup-core-x11-xserver \
+    packagegroup-core-x11-utils \
+    dbus \
+    liberation-fonts \
+"
