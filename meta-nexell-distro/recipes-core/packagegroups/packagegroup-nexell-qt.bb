@@ -48,7 +48,7 @@ QT5_4_EXAMPLE_IMAGES = " \
     qtsmarthome \
     qt5-demo-extrafiles \
     qtconnectivity-examples \
-    qtwayland-examples \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland-examples', '', d)} \
     qtdeclarative-examples \
     qtbase-examples \
     qtsystems-examples \
@@ -82,22 +82,21 @@ QT5_8_ESSENTIAL_IMAGES = " \
 #qtwebengine-qmlplugins
 #qtdeclarative-plugins
 
-QT_ALSA_IMAGE_INSTALL = " \
-     alsa-utils \
+QT_ALSA_LIB_IMAGE_INSTALL = " \
+    alsa-lib \
 "
-#alsa-lib
-
-QT_ALSA_EXTRA_IMAGE_INSTALL = " \
-     alsa-utils-alsamixer \
-     alsa-utils-midi \
-     alsa-utils-aplay \
-     alsa-utils-amixer \
-     alsa-utils-aconnect \
-     alsa-utils-iecset \
-     alsa-utils-speakertest \
-     alsa-utils-aseqnet \
-     alsa-utils-aseqdump \
-     alsa-utils-alsactl \
+QT_ALSA_UTILS_IMAGE_INSTALL = " \
+    alsa-utils \
+    alsa-utils-alsamixer \
+    alsa-utils-midi \
+    alsa-utils-aplay \
+    alsa-utils-amixer \
+    alsa-utils-aconnect \
+    alsa-utils-iecset \
+    alsa-utils-speakertest \
+    alsa-utils-aseqnet \
+    alsa-utils-aseqdump \
+    alsa-utils-alsactl \
 "
 
 MULTIMEDIA_IMAGE_INSTALL = " \
@@ -109,6 +108,8 @@ NEXELL_LIBS = " \
     gst-plugins-camera \
     gst-plugins-renderer \
     gst-plugins-scaler \
+    gst-plugins-video-dec \
+    gst-plugins-video-sink \
     libdrm \
     nx-drm-allocator \
     nx-gst-meta \
@@ -118,8 +119,19 @@ NEXELL_LIBS = " \
     nx-video-api \
 "
 
+UTILS_INSTALL = " \
+    glibc-utils \
+    localedef \
+    glibc-localedata-i18n \
+    glibc-gconv-ibm850 \
+    glibc-gconv-cp1252 \
+    glibc-gconv-iso8859-1 \
+    glibc-gconv-iso8859-15 \
+    glibc-gconv-euc-kr \
+"
+
 RDEPENDS_${PN} = " \
-    nexell-drm-mali-qt \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-qt', '', d)}  \
     weston-conf \
     ${GSTREAMER10} \
     ${QT_WAYLAND} \
@@ -127,7 +139,8 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXTRA_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXAMPLE_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
-    ${QT_ALSA_IMAGE_INSTALL} \
-    ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
     ${NEXELL_LIBS} \
+    ${UTILS_INSTALL} \
+    ${QT_ALSA_LIB_IMAGE_INSTALL} \
+    ${QT_ALSA_UTILS_IMAGE_INSTALL} \
 "

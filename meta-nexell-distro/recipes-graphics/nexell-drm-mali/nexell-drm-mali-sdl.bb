@@ -27,35 +27,26 @@ do_compile() {
 do_install () {
     install -d ${D}${bindir}/sdl_example
     install -d ${D}${libdir}
+    install -d ${D}${libdir}/nexell
 
-    install -m 0644 ${S}/library/libMali.so-${ARCH_TYPE_NUM}-FB ${D}${libdir}/libMali.so
+    install -m 0644 ${S}/library/${ARCH_TYPE_NUM}/*.so ${D}${libdir}/nexell/
     install -m 0755 ${S}/sdl/src/ES1_tutorial1/tutorial1_es1 ${D}${bindir}/sdl_example/
     install -m 0755 ${S}/sdl/src/ES2_tutorial1/tutorial1_es2 ${D}${bindir}/sdl_example/
     install -m 0644 ${S}/sdl/src/ES2_tutorial1/t1_rend.frag  ${D}${bindir}/sdl_example/
     install -m 0644 ${S}/sdl/src/ES2_tutorial1/t1_rend.vert  ${D}${bindir}/sdl_example/
 
+
+    cd ${D}${libdir}
     # Create MALI manifest
-    if [ "${ARCH_TYPE_NUM}" -eq "64" ]; then
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libEGL.so
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libEGL.so.1
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libEGL.so.1.4
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv1_CM.so
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv1_CM.so.1
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv1_CM.so.1.1
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv2.so
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv2.so.2
-        ln ${D}${libdir}/libMali.so ${D}${libdir}/libGLESv2.so.2.0
-    else
-        ln -sf libMali.so ${D}${libdir}/libEGL.so
-        ln -sf libMali.so ${D}${libdir}/libEGL.so.1
-        ln -sf libMali.so ${D}${libdir}/libEGL.so.1.4
-        ln -sf libMali.so ${D}${libdir}/libGLESv1_CM.so
-        ln -sf libMali.so ${D}${libdir}/libGLESv1_CM.so.1
-        ln -sf libMali.so ${D}${libdir}/libGLESv1_CM.so.1.1
-        ln -sf libMali.so ${D}${libdir}/libGLESv2.so
-        ln -sf libMali.so ${D}${libdir}/libGLESv2.so.2
-        ln -sf libMali.so ${D}${libdir}/libGLESv2.so.2.0
-    fi
+    ln -sf libMali.so libEGL.so
+    ln -sf libMali.so libEGL.so.1
+    ln -sf libMali.so libEGL.so.1.4
+    ln -sf libMali.so libGLESv1_CM.so
+    ln -sf libMali.so libGLESv1_CM.so.1
+    ln -sf libMali.so libGLESv1_CM.so.1.1
+    ln -sf libMali.so libGLESv2.so
+    ln -sf libMali.so libGLESv2.so.2
+    ln -sf libMali.so libGLESv2.so.2.0
 }
 
 INSANE_SKIP_${PN} = "already-stripped debug-files dev-so ldflags"

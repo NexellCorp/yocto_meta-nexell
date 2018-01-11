@@ -21,10 +21,11 @@ X11_INPUT_IMAGE_INSTALL = " \
 X11_VIDEO_ARMSOC = " \
     xf86-video-armsoc-nexell \
 "
-X11_ALSA_IMAGE_INSTALL = " \
-    alsa-utils \
+X11_ALSA_LIB_IMAGE_INSTALL = " \
+    alsa-lib \
 "
-X11_ALSA_EXTRA_IMAGE_INSTALL = " \
+X11_ALSA_UTILS_IMAGE_INSTALL = " \
+    alsa-utils \
     alsa-utils-alsamixer \
     alsa-utils-midi \
     alsa-utils-aplay \
@@ -38,10 +39,10 @@ X11_ALSA_EXTRA_IMAGE_INSTALL = " \
 "
 
 RDEPENDS_${PN} = " \
-    nexell-drm-mali-sato \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-sato', '', d)}  \
     ${GSTREAMER10_X11} \
     ${X11_INPUT_IMAGE_INSTALL} \
     ${X11_VIDEO_ARMSOC} \
-    ${X11_ALSA_IMAGE_INSTALL} \
-    ${X11_ALSA_EXTRA_IMAGE_INSTALL} \
+    ${X11_ALSA_LIB_IMAGE_INSTALL} \
+    ${X11_ALSA_UTILS_IMAGE_INSTALL} \
 "

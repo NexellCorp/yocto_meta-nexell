@@ -44,7 +44,7 @@ NEXELL_LIBS = " \
 RDEPENDS_${PN} = " \
     libgcc \
     libstdc++ \
-    nexell-drm-mali-sdl \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-sdl', '', d)}  \
     ${TOUCH_IMAGE_INSTALL} \
     ${SDL_IMAGE_INSTALL} \
     ${MULTIMEDIA_IMAGE_INSTALL} \

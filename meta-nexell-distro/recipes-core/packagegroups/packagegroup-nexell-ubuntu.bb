@@ -24,6 +24,8 @@ NEXELL_LIBS = " \
     gst-plugins-camera \
     gst-plugins-renderer \
     gst-plugins-scaler \
+    gst-plugins-video-dec \
+    gst-plugins-video-sink \
     libdrm \
     nx-drm-allocator \
     nx-gst-meta \
@@ -41,7 +43,7 @@ X11_VIDEO_ARMSOC = " \
 "
 
 RDEPENDS_${PN} = " \
-    nexell-drm-mali-sato \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-sato', '', d)}  \
     ${GSTREAMER10} \
     ${NEXELL_LIBS} \
     ${X11_INPUT_IMAGE_INSTALL} \

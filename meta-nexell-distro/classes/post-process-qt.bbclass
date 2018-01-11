@@ -38,10 +38,14 @@ postprocess_qt_function() {
     touch libMali_for_${DEFAULT_QT_PLATFORM}
     if [ "${ARCH_TYPE_NUM}" -eq "64" ]; then
         # 64bit FB library does not support, TBD
-        ln -sf ./nexell/libMali.so-${ARCH_TYPE_NUM}-WAYLAND libMali.so
+        ln -sf ./nexell/libMali-${ARCH_TYPE_NUM}-WAYLAND libMali.so
     else
-        ln -sf ./nexell/libMali.so-${ARCH_TYPE_NUM}-${DEFAULT_QT_PLATFORM} libMali.so
+        ln -sf ./nexell/libMali-${ARCH_TYPE_NUM}-${DEFAULT_QT_PLATFORM}.so libMali.so
     fi
+
+    #automount iocharset modified
+    cd ${IMAGE_ROOTFS}
+    cp ${BASE_WORKDIR}/use-post-process/mount.sh etc/udev/scripts/
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_qt_function;"

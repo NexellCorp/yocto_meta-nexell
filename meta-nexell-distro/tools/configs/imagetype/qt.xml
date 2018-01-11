@@ -5,10 +5,12 @@
 <!-- qt 5.4 -->
         <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb fontconfig alsa tslib gles2 glib examples tools openssl"'/>
         <feature text='DISTRO_FEATURES_append = " nexell-qt5.4"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
         <feature text='DISTRO_FEATURES_append = " qt-default-platform-eglfs"'/>
 <!-- qt 5.8 or latest -->
 <!--    <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"'/> -->
 <!--    <feature text='DISTRO_FEATURES_append = " nexell-qt5.8"'/> -->
+<!--    <feature text='DISTRO_FEATURES_append = " nexell-mali"'/> -->
 <!--    <feature text='DISTRO_FEATURES_append = " qt-default-platform-wayland"'/> -->
 <!--    <feature text='BBMASK = /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.4.x'/> -->
         <feature text='DISTRO_FEATURES_append = " zeroconf"'/>
@@ -32,6 +34,9 @@
         <feature text='PREFERRED_PROVIDER_libgbm-dev = "nexell-drm-mali-qt"'/>
         <feature text=''/>
         <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
+        <feature text='GLIBC_GENERATE_LOCALES = "ko_KR.EUC-KR ko_KR.UTF-8 en_GB.UTF-8 en_US.UTF-8"'/>
+        <feature text='IMAGE_LINGUAS = " ko-kr en-us en-gb"'/>
+        <feature text='IMAGE_INSTALL_append = " NxAudioPlayer NxQuickRearCam NxVideoPlayer"'/>
     </common>
 </imagetype_config>
 

@@ -6,6 +6,7 @@
         <feature text='CORE_IMAGE_EXTRA_INSTALL += "iputils"'/>
         <feature text='DISTRO_FEATURES_remove = " wayland"'/>
         <feature text='DISTRO_FEATURES_append = " systemd x11 opengl glx zeroconf"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
         <feature text=''/>
         <feature text='PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"'/>
         <feature text='XSERVER = "xserver-xorg \ '/>

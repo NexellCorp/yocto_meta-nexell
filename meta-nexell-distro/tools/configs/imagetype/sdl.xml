@@ -2,6 +2,7 @@
 <imagetype_config>
     <common>
         <feature text='DISTRO_FEATURES_append = " systemd gles2 pulseaudio tslib alsa"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
         <feature text='DISTRO_FEATURES_remove = " directfb x11 wayland opengl"'/>
         <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
         <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
