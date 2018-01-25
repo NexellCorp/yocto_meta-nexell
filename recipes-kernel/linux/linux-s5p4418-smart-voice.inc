@@ -22,7 +22,7 @@ do_kernel_configme_prepend() {
 
 do_compile() {
 #    oe_runmake ARCH=${ARM_ARCH} distclean
-    local dts_file=${S}/arch/${ARM_ARCH}/boot/dts/${CHIP_NAME}-${BOARD_PREFIX}.dts
+    local dts_file=${S}/arch/${ARM_ARCH}/boot/dts/${CHIP_NAME}-${BOARD_PREFIX}-rev00.dts
 
     oe_runmake ARCH=${ARM_ARCH} ${KERNEL_DEFCONFIG}
 
