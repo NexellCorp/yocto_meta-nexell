@@ -134,7 +134,7 @@ class parsingForpokyfiles():
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'tinyui' :
             confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + '"'
-            confAppend = CONF_APPEND_USE_WSWL
+            confAppend = CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'sdl' :
             confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
             confAppend = CONF_APPEND_USE_SDL + CONF_WHILTELIST_FLAGS_SET # CONF_APPEND_USE_WSWL
