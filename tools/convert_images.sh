@@ -129,6 +129,7 @@ function usage()
     echo "    ex) $0 s5p4418-smart-voice smartvoice"
     echo "    ex) $0 s5p4418-daudio-covi qt"
     echo "    ex) $0 s5p4418-ff-voice ffvoice"
+    echo "    ex) $0 s5p4418-svm-ref qt"
 }
 
 function mem_addr_setup()
@@ -351,6 +352,8 @@ function post_process()
         elif [ ${BOARD_NAME} == "smart-voice" -o ${BOARD_NAME} == "ff-voice" ];then
             dev_portnum=0
         elif [ ${BOARD_NAME} == "ff-voice" ];then
+            dev_portnum=0
+        elif [ ${BOARD_NAME} == "svm-ref" ];then
             dev_portnum=0
         fi
 

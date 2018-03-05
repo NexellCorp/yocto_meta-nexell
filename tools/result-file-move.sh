@@ -46,6 +46,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-navi-ref tinyui"
     echo "    ex) $0 s5p4418-navi-ref genivi"
+    echo "    ex) $0 s5p4418-svm-ref qt"
 }
 
 function split_args()
@@ -97,6 +98,8 @@ function copy_bin_files()
                 cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-daudio-usb.bin ${RESULT_PATH}
             elif [ "${BOARD_NAME}" == "daudio-covi" ]; then
                 cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-daudio-usb.bin ${RESULT_PATH}
+            elif [ "${BOARD_NAME}" == "svm-ref" ]; then
+                cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-svm-usb.bin ${RESULT_PATH}
             fi
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi
@@ -148,6 +151,8 @@ function copy_dtb_file()
             fi
         elif [ ${BOARD_POSTFIX} == "voice" ]; then
             file_name_dtb="s5p4418-${BOARD_PREFIX}_voice*.dtb"
+        elif [ ${BOARD_PREFIX} == "svm" ]; then
+            file_name_dtb="s5p4418-svm_ref*.dtb"
         fi
     fi
 

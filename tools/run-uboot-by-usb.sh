@@ -29,6 +29,7 @@ function usage()
     echo "    ex) $0 s5p4418-avn-ref"
     echo "    ex) $0 s5p4418-navi-ref"
     echo "    ex) $0 s5p4418-daudio-covi"
+    echo "    ex) $0 s5p4418-svm-ref"
 }
 
 function get_board_prefix()
@@ -73,6 +74,12 @@ function run_by_usb()
                 sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                      -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
             fi
+	elif [ ${BOARD_PREFIX} == "svm" ]; then
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
+                -b bl1-${BOARD_PREFIX}-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
+            sleep 1
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
         elif [ ${BOARD_POSTFIX} == "voice" ]; then
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
                 -b bl1-${BOARD_PREFIX}-voice-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
