@@ -1,5 +1,5 @@
 SRC_URI = " \
-        http://files.nexell.co.kr:8080/yocto-build-reference-source/qt5-5.4/${QT_MODULE}.tar.gz \
+    ${QT_GIT}/qt/${QT_MODULE}.git;branch=${QT_MODULE_BRANCH} \
 "
 
 SRCPV=""
