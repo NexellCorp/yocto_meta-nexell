@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=coviAvIn
+Name[ko]=coviAvIn
+Comment=Covi Av In Player for QT
+Comment[ko]=Covi Av In Player for QT
+Icon_n=icon_avin_n.png
+Icon_p=icon_avin_p.png
+TryExec=coviAvIn
+Exec=coviAvIn

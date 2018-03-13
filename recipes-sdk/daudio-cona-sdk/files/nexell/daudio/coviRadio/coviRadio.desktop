@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.5.0
+Name=coviRadio
+Name[ko]=coviRadio
+Comment=Covi Radio Player for QT
+Comment[ko]=Covi Radio Player for QT
+Icon_n=icon_radio_n.png
+Icon_p=icon_radio_p.png
+TryExec=coviRadio
+Exec=coviRadio

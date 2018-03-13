@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=0.8.0
+Name=coviVideoPlayer
+Name[ko]=coviVideoPlayer
+Comment=Video Player Application
+Comment[ko]=coviVideoPlayer Player 프로그램
+Icon_n=icon_video_n.png
+Icon_p=icon_video_p.png
+TryExec=coviVideoPlayer
+Exec=coviVideoPlayer
+
+
