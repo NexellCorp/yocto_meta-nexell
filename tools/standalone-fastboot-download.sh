@@ -37,6 +37,7 @@ UPDATE_MODULES=false
 UPDATE_ROOT=false
 UPDATE_SYSTEM=false
 UPDATE_DATA=false
+UPDATE_DLOAD=false
 RESULT_DIR=`readlink -ev $CURRENT_PATH/..`
 
 MACHINE_NAME=
@@ -93,6 +94,8 @@ function parse_args()
 
     MACHINE_NAME=${temp#*-}
     BOARD_SOCNAME=${MACHINE_NAME%-*-*-*}
+    T_BOARD_NAME=${MACHINE_NAME%-*}
+    BOARD_NAME=${T_BOARD_NAME#*-}
 
     IFS=''
 }
@@ -273,6 +276,15 @@ function update_data()
 	fi
 }
 
+function update_dload()
+{
+	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_DLOAD} == "true" ]; then
+		local file=${1}
+		vmsg "update dload: ${file}"
+		flash dload ${file}
+	fi
+}
+
 parse_args $@
 print_args
 update_partmap ${PARTMAP}
@@ -292,5 +304,7 @@ fi
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
-
+if [ "${BOARD_NAME}" == "daudio-covi" -o "${BOARD_NAME}" == "daudio-cona" ]; then
+    update_dload ${RESULT_DIR}/dload.img
+fi
 sudo fastboot continue

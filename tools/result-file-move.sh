@@ -100,6 +100,8 @@ function copy_bin_files()
                 cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-daudio-usb.bin ${RESULT_PATH}
             elif [ "${BOARD_NAME}" == "svm-ref" ]; then
                 cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-svm-usb.bin ${RESULT_PATH}
+            elif [ "${BOARD_NAME}" == "daudio-cona" ]; then
+                cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/bl1-daudio-usb.bin ${RESULT_PATH}
             fi
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi
@@ -148,6 +150,8 @@ function copy_dtb_file()
                 file_name_dtb="s5p4418-daudio_covi*.dtb"
             elif [ ${BOARD_POSTFIX} == "ref" ]; then
                 file_name_dtb="s5p4418-daudio_ref*.dtb"
+            elif [ ${BOARD_POSTFIX} == "cona" ]; then
+                file_name_dtb="s5p4418-daudio_cona*.dtb"
             fi
         elif [ ${BOARD_POSTFIX} == "voice" ]; then
             file_name_dtb="s5p4418-${BOARD_PREFIX}_voice*.dtb"
@@ -176,6 +180,16 @@ function copy_ramdisk_image()
     cp ${TMP_DEPLOY_PATH}/"core-image-minimal-initramfs-${MACHINE_NAME}.cpio.gz" ${RESULT_PATH}
 }
 
+function copy_osversion_file()
+{
+    echo -e "\033[40;33m  >>>>   copy_osversion_file        \033[0m"
+    if [ ${BOARD_NAME} == "daudio-covi" ]; then
+        cp ${META_NEXELL_PATH}/recipes-sdk/daudio-covi-sdk/files/nexell/daudio/fms.os.sdk.version ${RESULT_PATH}
+    elif [ ${BOARD_NAME} == "daudio-cona" ]; then
+        cp ${META_NEXELL_PATH}/recipes-sdk/daudio-cona-sdk/files/nexell/daudio/fms.os.sdk.version ${RESULT_PATH}
+    fi
+}
+
 function copy_rootfs_image()
 {
     if [ "${IMAGE_TYPE}" == "genivi" ];then
@@ -198,6 +212,11 @@ function copy_params_image()
 function copy_partmap_file()
 {
     cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/partmap_emmc.txt ${RESULT_PATH}
+}
+
+function copy_dload_file()
+{
+    cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/dload.img ${RESULT_PATH}
 }
 
 function post_process()
@@ -228,4 +247,8 @@ fi
 #copy_params_image
 copy_partmap_file
 
+if [ "${BOARD_NAME}" == "daudio-covi" -o "${BOARD_NAME}" == "daudio-cona" ]; then
+    copy_osversion_file
+    copy_dload_file
+fi
 post_process

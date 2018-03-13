@@ -130,6 +130,7 @@ function usage()
     echo "    ex) $0 s5p4418-daudio-covi qt"
     echo "    ex) $0 s5p4418-ff-voice ffvoice"
     echo "    ex) $0 s5p4418-svm-ref qt"
+    echo "    ex) $0 s5p4418-daudio-cona qt"
 }
 
 function mem_addr_setup()
@@ -347,7 +348,7 @@ function post_process()
             dev_portnum=0
         elif [ ${BOARD_NAME} == "daudio-ref" ];then
             dev_portnum=0
-        elif [ ${BOARD_NAME} == "daudio-covi" ];then
+        elif [ ${BOARD_NAME} == "daudio-covi" -o ${BOARD_NAME} == "daudio-cona" ];then
             dev_portnum=0
         elif [ ${BOARD_NAME} == "smart-voice" -o ${BOARD_NAME} == "ff-voice" ];then
             dev_portnum=0
@@ -376,7 +377,7 @@ function post_process()
                               0x74C00000 \
                               0x74C00000 \
                               ${result_dir}/bootloader.img
-        elif [ ${BOARD_NAME} == "daudio-covi" ];then
+        elif [ ${BOARD_NAME} == "daudio-covi" -o ${BOARD_NAME} == "daudio-cona" ];then
             make_3rdboot_for_emmc ${BOARD_SOCNAME} \
                               ${result_dir}/armv7_dispatcher.bin \
                               0xffff0200 \

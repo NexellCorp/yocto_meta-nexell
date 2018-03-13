@@ -90,6 +90,7 @@ CONF_BBMASK_S5P4418_SMART_VOICE = "/s5p4418-smart-voice"
 CONF_BBMASK_S5P6818_K_BOARD = "/s5p6818-kick-st"
 CONF_BBMASK_S5P4418_DAUDIO_COVI = "/s5p4418-daudio-covi"
 CONF_BBMASK_S5P4418_SVM_REF = "/s5p4418-svm-ref"
+CONF_BBMASK_S5P4418_DAUDIO_CONA = "/s5p4418-daudio-cona"
 
 class parsingForpokyfiles():
     linuxMark = '/'
@@ -121,7 +122,7 @@ class parsingForpokyfiles():
             confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
             confAppend = CONF_APPEND_USE_TINY
         elif self.imagetype == 'smartvoice' :
-            if self.boardName == 's5p4418-ff-voice' :            
+            if self.boardName == 's5p4418-ff-voice' :
                 confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
                 confAppend = CONF_APPEND_USE_FFVOICE + CONF_WHILTELIST_FLAGS_SET
             else :
@@ -131,6 +132,9 @@ class parsingForpokyfiles():
             confBBmask = ''
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'qt' or self.imagetype == 'daudiocovi' :
+            confBBmask = ''
+            confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
+        elif self.imagetype == 'qt' or self.imagetype == 'daudiocona' :
             confBBmask = ''
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'tinyui' :

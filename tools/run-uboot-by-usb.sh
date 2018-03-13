@@ -30,6 +30,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref"
     echo "    ex) $0 s5p4418-daudio-covi"
     echo "    ex) $0 s5p4418-svm-ref"
+    echo "    ex) $0 s5p4418-daudio-cona"
 }
 
 function get_board_prefix()
@@ -67,7 +68,7 @@ function run_by_usb()
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t nxp4330 \
                 -b bl1-${BOARD_PREFIX}-usb.bin -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
-            if [ ${BOARD_POSTFIX} == "covi" ]; then
+            if [ ${BOARD_POSTFIX} == "covi" -o ${BOARD_POSTFIX} == "cona" ]; then
                 sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                      -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
             else
