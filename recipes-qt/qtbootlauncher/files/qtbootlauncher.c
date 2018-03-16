@@ -11,10 +11,19 @@
 #include <fcntl.h>
 #include <dlfcn.h>
 #include <pthread.h>
+#include <time.h>
 #include <sys/stat.h>
 #include <asm/unistd.h>
+#include <sys/time.h>
+
+#define SYSTEM_SLEEP	2400000
 
 #define	LAUNCHER_CONF	"/etc/qboot/launcher.conf"
+
+#define CHK_BOOTTIME
+#undef	CHK_BOOTTIME
+#define ENABLE_CONSOLE
+#undef	ENABLE_CONSOLE
 
 /**
  * launcher_t:
@@ -324,16 +333,14 @@ static int parse_launcher_conf(const char *file, launcher_t *li, int size)
  * preload_libs:
  */
 static const char *preload_libs[] = {
-	"/backup/usr/lib/libQt5Core.so.5.7.0",	/* 5.2 M */
-	"/backup/usr/lib/libQt5Gui.so.5.7.0",	/* 4.5 M */
-	"/backup/usr/lib/libQt5Widgets.so.5.7.0", /* 5.1 M */
-	"/backup/usr/lib/libQt5Qml.so.5.7.0", /* 3.4 M */
-	#if 0
-	"/usr/lib/libQt5Network.so.5.7.0", /* 1.4 M */
-	"/usr/lib/libwayland-server.so.0.1.0",	/* 48 k */
-	"/usr/lib/libwayland-client.so.0.3.0", /* 40 k */
-	"/usr/lib/libMali.so",	/* 1.1 M */
-	#endif
+	"/usr/lib/libQt5Core.so.5.7.0",	/* 5.2 M */
+	"/usr/lib/libQt5Quick.so.5.7.0",
+	"/usr/lib/libQt5Gui.so.5.7.0",	/* 4.5 M */
+	"/usr/lib/libQt5Widgets.so.5.7.0", /* 5.1 M */
+	"/usr/lib/libQt5Qml.so.5.7.0", /* 3.4 M */
+	"/usr/lib/libQt5WaylandClient.so.5.7.0",
+	"/usr/lib/libQt5WaylandCompositor.so.5.7.0",
+	"/usr/lib/libMali.so"
 };
 #define	LIBS_SIZE ARRAY_SIZE(preload_libs)
 
@@ -395,6 +402,16 @@ static int bootlauncher(const char *file, bool debug)
 	pid_t pid;
 	int fd = 0;
 	int i, j, n;
+#ifdef CHK_BOOTTIME
+	long long ts, td;
+	struct timespec tv;
+	ts_t ts_s;
+
+	clock_gettime(CLOCK_BOOTTIME, &tv);
+	ts = (tv.tv_sec * 1000000) + (tv.tv_nsec/1000);
+	SET_TS(&ts_s, ts);
+	RUN_TS(&ts_s);
+#endif
 
 	message("[%d] bootlauncher\n", getpid());
 
@@ -443,13 +460,24 @@ static int bootlauncher(const char *file, bool debug)
 	 */
 	boot_preload(false);
 
+#ifdef ENABLE_CONSOLE
+	struct sigaction sigchld_action;
+	sigchld_action.sa_handler = SIG_DFL;
+	sigchld_action.sa_flags = SA_NOCLDWAIT;
+	sigaction(SIGCHLD, &sigchld_action, NULL);
+#endif
+
 	if (strlen(prog)) {
 		pid = fork();
 
 		/* run lanucher */
 		if (pid == 0) {
 			if (!debug) {
+#ifdef ENABLE_CONSOLE
+  				fd = open("/dev/console", O_RDWR);
+#else
 				fd = open("/dev/null", O_RDWR);
+#endif
 				dup2(fd, STDOUT_FILENO);
 				dup2(fd, STDERR_FILENO);
 			}
@@ -463,8 +491,13 @@ static int bootlauncher(const char *file, bool debug)
 	 	 * wait for launcher run
 	 	 * During this time, the system will be hold.
 	 	*/
-		sleep(2);
+		usleep(SYSTEM_SLEEP);
 	}
+
+#ifdef CHK_BOOTTIME
+  	END_TS(&ts_s);
+  	message("qtbootlauncher is finished : %lld ms\n", TS_MS(&ts_s));
+#endif
 
 	return EXIT_SUCCESS;
 }
