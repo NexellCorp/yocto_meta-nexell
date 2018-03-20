@@ -23,7 +23,7 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 IMAGE_INSTALL_append = " \
     kernel-modules \
     packagegroup-nexell-common-sdk \
-    packagegroup-nexell-qtX11-sdk \
+    packagegroup-nexell-qtx11-sdk \
     rtl-8188eus-${ARCH_TYPE_NUM} \
     ${TOUCH_IMAGE_INSTALL} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
