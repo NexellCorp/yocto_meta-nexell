@@ -93,7 +93,7 @@ function parse_args()
     local RESULT_ABS_DIR=`readlink -ev $RESULT_DIR`
     local RESULT_DIR_NAME=${RESULT_ABS_DIR##/*/}
     local T_BOARD_NAME=
-    
+
     MACHINE_NAME=${RESULT_DIR_NAME#*-}
     BOARD_SOCNAME=${MACHINE_NAME%-*-*-*}
     T_BOARD_NAME=${MACHINE_NAME%-*}
@@ -279,6 +279,15 @@ function update_data()
 	fi
 }
 
+function update_dload()
+{
+	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_DLOAD} == "true" ]; then
+		local file=${1}
+		vmsg "update dload: ${file}"
+		flash dload ${file}
+	fi
+}
+
 parse_args $@
 print_args
 update_partmap ${PARTMAP}
@@ -294,7 +303,11 @@ else
     update_dispatcher ${RESULT_DIR}/bl_mon.img
     update_bootloader ${RESULT_DIR}/bootloader.img
 fi
-
+if [ "${BOARD_NAME}" == "daudio-covi" -o "${BOARD_NAME}" == "daudio-cona" ];
+then
+	update_dload ${RESULT_DIR}/dload.img
+	update_data ${RESULT_DIR}/userdata.img
+fi
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img

@@ -8,4 +8,4 @@ flash=mmc,0:modules:ext4:0x2400000,0x2000000:modules.img;
 flash=mmc,0:rootfs:ext4:0x4400000,0x80000000:rootfs.img;
 flash=mmc,0:option:emmc:0x84500000,0x200000:;
 flash=mmc,0:dload:ext4:0x85000000,0x80000000:dload.img;
-flash=mmc,0:user:emmc:0x105000000,0:;
+flash=mmc,0:user:ext4:0x105000000,0:userdata.img;

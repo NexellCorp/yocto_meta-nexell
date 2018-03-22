@@ -305,6 +305,7 @@ update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
 if [ "${BOARD_NAME}" == "daudio-covi" -o "${BOARD_NAME}" == "daudio-cona" ]; then
-    update_dload ${RESULT_DIR}/dload.img
+	update_dload ${RESULT_DIR}/dload.img
+	update_data ${RESULT_DIR}/userdata.img
 fi
 sudo fastboot continue
