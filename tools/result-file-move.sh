@@ -220,11 +220,6 @@ function copy_partmap_file()
     cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/partmap_emmc.txt ${RESULT_PATH}
 }
 
-function copy_dload_file()
-{
-    cp ${META_NEXELL_PATH}/tools/${MACHINE_NAME}/dload.img ${RESULT_PATH}
-}
-
 function post_process()
 {
     if [ -f secure.cfg ]; then
@@ -255,6 +250,5 @@ copy_partmap_file
 
 if [ "${BOARD_NAME}" == "daudio-covi" -o "${BOARD_NAME}" == "daudio-cona" ]; then
     copy_osversion_file
-    copy_dload_file
 fi
 post_process
