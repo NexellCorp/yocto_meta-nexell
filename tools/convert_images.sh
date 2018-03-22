@@ -131,6 +131,8 @@ function usage()
     echo "    ex) $0 s5p4418-ff-voice ffvoice"
     echo "    ex) $0 s5p4418-svm-ref qt"
     echo "    ex) $0 s5p4418-daudio-cona qt"
+	echo "    ex) $0 s5p4418-cluster-ref tiny"
+	echo "    ex) $0 s5p4418-cluster-ref tinyui"
 }
 
 function mem_addr_setup()
@@ -356,6 +358,8 @@ function post_process()
             dev_portnum=0
         elif [ ${BOARD_NAME} == "svm-ref" ];then
             dev_portnum=0
+		elif [ ${BOARD_NAME} == "cluster-ref" ];then
+			dev_portnum=0
         fi
 
         make_3rdboot_for_emmc ${BOARD_SOCNAME} \

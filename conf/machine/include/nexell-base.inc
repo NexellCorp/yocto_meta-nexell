@@ -15,6 +15,7 @@ KERNEL_IMAGETYPE_s5p6818-kick-st ?= "Image"
 KERNEL_IMAGETYPE_s5p4418-svm-ref ?= "zImage"
 KERNEL_IMAGETYPE_s5p4418-daudio-covi ?= "zImage"
 KERNEL_IMAGETYPE_s5p4418-daudio-cona ?= "zImage"
+KERNEL_IMAGETYPE_s5p4418-cluster-ref ?= "zImage"
 
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen mouse touchscreen bluetooth wifi sdio"
@@ -34,6 +35,7 @@ DEFAULTTUNE_s5p6818-kick-st ?= "aarch64"
 DEFAULTTUNE_s5p4418-daudio-covi ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p4418-svm-ref ?= "cortexa9hf-neon"
 DEFAULTTUNE_s5p4418-daudio-cona ?= "cortexa9hf-neon"
+DEFAULTTUNE_s5p4418-cluster-ref ?= "cortexa9hf-neon"
 
 DEFAULT_TIMEZONE="Asia/Seoul"
 

@@ -91,6 +91,7 @@ CONF_BBMASK_S5P6818_K_BOARD = "/s5p6818-kick-st"
 CONF_BBMASK_S5P4418_DAUDIO_COVI = "/s5p4418-daudio-covi"
 CONF_BBMASK_S5P4418_SVM_REF = "/s5p4418-svm-ref"
 CONF_BBMASK_S5P4418_DAUDIO_CONA = "/s5p4418-daudio-cona"
+CONF_BBMASK_S5P4418_CLUSTER_REF = "/s5p4418-cluster-ref"
 
 class parsingForpokyfiles():
     linuxMark = '/'
