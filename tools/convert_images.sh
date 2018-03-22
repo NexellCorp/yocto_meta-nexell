@@ -442,6 +442,12 @@ function post_process()
 	fi
 
     fi
+	if [ ${BOARD_NAME} == "daudio-covi" -o ${BOARD_NAME} == "daudio-cona" ];then
+		dd if=/dev/zero of=${result_dir}/dload.img bs=1 count=0 seek=1024M
+		make_ext4fs -s -l 1024M ${result_dir}/dload.img
+		dd if=/dev/zero of=${result_dir}/userdata.img bs=1 count=0 seek=100M
+		make_ext4fs -s -l 100M ${result_dir}/userdata.img
+	fi
 
     echo -e "\n\n\033[0;33m  Target download method.....                                                            \033[0m\n"
     echo -e "\033[0;33m  <Full download>                                                                            \033[0m"
