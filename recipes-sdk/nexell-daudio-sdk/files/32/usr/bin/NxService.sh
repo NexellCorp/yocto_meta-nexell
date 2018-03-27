@@ -2,5 +2,5 @@
 
 # Add services to run below
 /usr/bin/NxDAudioManager &
-sleep 8
+sleep 10
 /usr/bin/NxBTServiceR &
