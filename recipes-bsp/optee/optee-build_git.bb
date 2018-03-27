@@ -47,12 +47,12 @@ PATH_KERNEL_BUILD = "${@env_setup(d,"kernel-build-artifacts")}"
 
 python do_make_source_dir_pathfile() {
     import commands
-    
+
     base_workdir = bb.data.getVar("BASE_WORKDIR", d, True)
     multimach_host_sys = bb.data.getVar("MULTIMACH_HOST_SYS", d, True)
     kernel_src_path = bb.data.getVar("STAGING_KERNEL_DIR", d, True)
     kernel_build_path = bb.data.getVar("STAGING_KERNEL_BUILDDIR", d, True)
-    
+
     pv = bb.data.getVar("PV", d, True)
     pr = bb.data.getVar("PR", d, True)
 
@@ -64,7 +64,7 @@ python do_make_source_dir_pathfile() {
     recipes_lloader_paths = ["l-loader"]
     recipes_atf_paths = ["arm-trusted-firmware"]
     recipes_others = [bl1_name, uboot_name, kernel_name]
-    
+
     recipes_all = recipes_optee_paths + recipes_lloader_paths + recipes_atf_paths + recipes_others
 
     commands.getoutput('echo %s > %s/source_dir_path.txt' % ("For Yocto ${MACHINE_ARCH} optee build",base_workdir))
@@ -73,7 +73,7 @@ python do_make_source_dir_pathfile() {
             commands.getoutput('echo %s >> %s/source_dir_path.txt' % (kernel_src_path, base_workdir))
             commands.getoutput('echo %s >> %s/source_dir_path.txt' % (kernel_build_path, base_workdir))
         else :
-            temp = base_workdir + "/" + multimach_host_sys + "/" + dirname + "/" + pv + "-" + pr + "/git"	    
+            temp = base_workdir + "/" + multimach_host_sys + "/" + dirname + "/" + pv + "-" + pr + "/git"
             commands.getoutput('echo %s >> %s/source_dir_path.txt' % (temp, base_workdir))
 }
 
@@ -97,21 +97,21 @@ do_make_symlink() {
 do_compile() {
     export PATH=${TOOLCHAIN_32_BIN_PATH}:$PATH
     export LDFLAGS=""
-    
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} clean
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl1 -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-lloader -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl32 -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} clean QUICKBOOT=${QUICKBOOT_ENABLE}
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl1 QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-lloader QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-loader -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-secure -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-nonsecure -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl32 QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-optee-client
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" build-optee-test
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-singleimage -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-loader QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-secure QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-nonsecure QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-optee-client QUICKBOOT=${QUICKBOOT_ENABLE}
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" QUICKBOOT=${QUICKBOOT_ENABLE} build-optee-test
+    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-singleimage QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 }
 
 do_install() {
@@ -125,11 +125,11 @@ do_install() {
 #    install -m 0755 ${PATH_OPTEE_TEST}/out/xtest/xtest ${D}/usr/bin
 
     install -d ${D}/usr/lib
-    install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/lib/* ${D}/usr/lib        
+    install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/lib/* ${D}/usr/lib
 
     cd ${PATH_OPTEE_TEST}/out/ta
 #    find . -name "*.ta" -exec cp {} ${D}/lib/optee_armtz \;
-#    chmod 444 ${D}/lib/optee_armtz/*.ta    
+#    chmod 444 ${D}/lib/optee_armtz/*.ta
 }
 
 inherit deploy
