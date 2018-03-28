@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <imagetype_config>
     <common>
+        <feature text='DISTRO_FEATURES_append = " nexell-ubuntu"'/>
         <feature text='INITRAMFS_IMAGE = "nexell-ramdisk-tiny"'/>
         <feature text='PACKAGE_CLASSES = "package_deb"'/>
         <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
