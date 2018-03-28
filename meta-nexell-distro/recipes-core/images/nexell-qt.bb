@@ -52,4 +52,5 @@ IMAGE_INSTALL_append = " \
     ${TOUCH_IMAGE_INSTALL} \
     ${ETC_TOOLS} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
+    ${@bb.utils.contains('NEXELL_BOARD_SOCNAME', 's5p4418', 'NxAudioPlayer NxQuickRearCam NxVideoPlayer', '', d)} \
 "

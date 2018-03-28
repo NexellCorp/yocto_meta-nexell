@@ -83,7 +83,6 @@ QT5_8_ESSENTIAL_IMAGES = " \
 #qtdeclarative-plugins
 
 QT_ALSA_LIB_IMAGE_INSTALL = " \
-    alsa-lib \
 "
 QT_ALSA_UTILS_IMAGE_INSTALL = " \
     alsa-utils \
@@ -138,9 +137,9 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXTRA_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXAMPLE_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT_ALSA_LIB_IMAGE_INSTALL}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
     ${NEXELL_LIBS} \
     ${UTILS_INSTALL} \
-    ${QT_ALSA_LIB_IMAGE_INSTALL} \
     ${QT_ALSA_UTILS_IMAGE_INSTALL} \
 "

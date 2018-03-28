@@ -14,6 +14,7 @@ MACHINE_NAME=$1
 IMAGE_TYPE=$2
 NUMBER_THREADS=$3
 EXTERNALSRC_USING=$4
+QT_VERSION=$5
 
 BOARD_SOCNAME=
 BOARD_NAME=
@@ -106,7 +107,7 @@ function customize_conf_files()
 
     echo "#NEXELL appended code" >> ${NEXELL_BUILD_PATH}/conf/local.conf
    
-    ${META_NEXELL_PATH}/tools/setup-conf-files.py ${NEXELL_BUILD_PATH} ${MACHINE_NAME} ${IMAGE_TYPE} ${META_NEXELL_DISTRO_PATH} ${EXTERNALSRC_USING}
+    ${META_NEXELL_PATH}/tools/setup-conf-files.py ${NEXELL_BUILD_PATH} ${MACHINE_NAME} ${IMAGE_TYPE} ${META_NEXELL_DISTRO_PATH} ${EXTERNALSRC_USING} ${QT_VERSION}
 
     #-----------------------------------------------------------------
     # CORE THREADS numbers
