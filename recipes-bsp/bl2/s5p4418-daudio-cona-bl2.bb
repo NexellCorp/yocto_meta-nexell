@@ -8,7 +8,7 @@ EXTRA_OEMAKE = "\
 
 do_compile () {
     cd ${S}
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} -j 1
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} QUICKBOOT=${QUICKBOOT_ENABLE} -j 1
 }
 
 inherit deploy
