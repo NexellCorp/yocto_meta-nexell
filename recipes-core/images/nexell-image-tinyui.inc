@@ -13,4 +13,6 @@ TOUCH_IMAGE_INSTALL = " \
 
 IMAGE_INSTALL += " \
      ${TOUCH_IMAGE_INSTALL} \
+     can-utils \
+     iproute2 \
      "
