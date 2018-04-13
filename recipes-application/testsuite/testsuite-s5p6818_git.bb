@@ -89,25 +89,25 @@ do_compile() {
     #
     #below make options are compile-host-path error fixed codes
     #video_api_test
-    cd ${S}/video_api_test
+    # cd ${S}/video_api_test
    
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} \
-    			       AM_CPPFLAGS+="$(WARN_CFLAGS) \
-    			                   -I. \
-    			                   -I${STAGING_INCDIR} \
-    			                   -I${STAGING_INCDIR}/libdrm \
-    			                   -I${S}/video_api_test/src/include \
-    			                   -I${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/include" \
-    			       video_api_test_LDADD+="-L${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib \
-    			                   -lavcodec \
-    			                   -lavformat \
-    			                   -lavutil \
-    			                   -lswresample \    			                   
-    			                   -ldrm \    			              
-                                           -lnx_video_api          \
-                                           -lnx_drm_allocator      \
-                                           -lnx_v4l2"
+    # oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    # oe_runmake CROSS_COMPILE=${TARGET_PREFIX} \
+    # 			       AM_CPPFLAGS+="$(WARN_CFLAGS) \
+    # 			                   -I. \
+    # 			                   -I${STAGING_INCDIR} \
+    # 			                   -I${STAGING_INCDIR}/libdrm \
+    # 			                   -I${S}/video_api_test/src/include \
+    # 			                   -I${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/include" \
+    # 			       video_api_test_LDADD+="-L${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib \
+    # 			                   -lavcodec \
+    # 			                   -lavformat \
+    # 			                   -lavutil \
+    # 			                   -lswresample \
+    # 			                   -ldrm \
+    #                                        -lnx_video_api          \
+    #                                        -lnx_drm_allocator      \
+    #                                        -lnx_v4l2"
 }
 
 do_install() {
@@ -149,8 +149,8 @@ do_install() {
 #    install -m 0755 ${S}/libnx_video_alloc/test/test_video_alloc ${D}${bindir}
     
     #video_api_test
-    install -m 0755 ${S}/video_api_test/src/video_api_test ${D}${bindir}
-    cp -a ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.* ${D}${libdir}
+    # install -m 0755 ${S}/video_api_test/src/video_api_test ${D}${bindir}
+    # cp -a ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.* ${D}${libdir}
     #install -m 0644 ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.so ${D}${libdir}
     #install -m 0644 ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.so.* ${D}${libdir}
 }
