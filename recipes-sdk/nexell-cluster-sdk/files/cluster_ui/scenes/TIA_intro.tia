@@ -1,1 +1,262 @@
-{"frames":[[{"name":"imageview","resourcePath":"","frames":[[{"properties":{"alpha":1,"y":0,"ID":"BITMAP0","className":"Bitmap","height":720,"NO":0,"path":"intro_bg.png","rotation":0,"width":1920,"x":0}}]],"properties":{"alpha":1,"scaleY":1,"y":0,"scaleX":1,"className":"Sprite","height":720,"hide":false,"lock":false,"rotation":0,"width":1920,"x":0},"extraParams":{"customAttribute":{},"ID":"imageview","IntroEffect":{"SetEffect":"OFF","Alpha":100,"ScaleX":100,"MotionType":"ELASTINC","ScaleY":100,"X":0,"EasingType":"EASE_OUT","Y":0,"TotalFrame":60,"DelayFrame":0},"type":"image","TargetEffect":{"Alpha":100,"X":0,"SetEffect":"OFF","Y":0,"ScaleX":100,"ScaleY":100},"OutroEffect":{"SetEffect":"OFF","Alpha":100,"ScaleX":100,"MotionType":"ELASTINC","ScaleY":100,"X":0,"EasingType":"EASE_OUT","Y":0,"TotalFrame":60,"DelayFrame":0}}},{"extraParams":{"customAttribute":{},"cellcount":"59","ID":"intro_cell","initframe":"0","IntroEffect":{"EasingType":"EASE_OUT","Alpha":100,"TotalFrame":60,"MotionType":"ELASTINC","DelayFrame":0,"X":0,"SetEffect":"OFF","Y":0,"ScaleX":100,"ScaleY":100},"type":"cellanimationimage","TargetEffect":{"Alpha":100,"X":0,"SetEffect":"OFF","Y":0,"ScaleX":100,"ScaleY":100},"autoImport":"true","OutroEffect":{"EasingType":"EASE_OUT","Alpha":100,"TotalFrame":60,"MotionType":"ELASTINC","DelayFrame":0,"X":0,"SetEffect":"OFF","Y":0,"ScaleX":100,"ScaleY":100}},"frames":[[{"properties":{"alpha":1,"y":0,"ID":"BITMAP0","className":"Bitmap","height":260,"NO":0,"path":"nexell_intro_1_00001.png","rotation":0,"width":800,"x":0}}],[{"properties":{"alpha":1,"y":0,"ID":"BITMAP1","className":"Bitmap","height":100,"NO":1,"path":"basic_image_view_100.png","rotation":0,"width":100,"x":0}}],[{"properties":{"alpha":1,"y":0,"ID":"BITMAP2","className":"Bitmap","height":100,"NO":2,"path":"basic_image_view_100.png","rotation":0,"width":100,"x":0}}],[{"properties":{"alpha":1,"y":0,"ID":"BITMAP3","className":"Bitmap","height":100,"NO":3,"path":"basic_image_view_100.png","rotation":0,"width":100,"x":0}}],[{"properties":{"alpha":1,"y":0,"ID":"BITMAP4","className":"Bitmap","height":100,"NO":4,"path":"basic_image_view_100.png","rotation":0,"width":100,"x":0}}]],"resourcePath":"","properties":{"alpha":1,"scaleY":1,"y":230,"scaleX":1,"className":"Sprite","height":260,"hide":false,"lock":false,"rotation":0,"width":400,"x":760},"name":"cellanimationimage"}]],"version":"1.0.0","properties":{"backgroundColor":16777215,"subCategory":"","className":"TIAgroup","hide":false,"lock":false,"index":0,"x":0,"height":720,"category":"","y":0,"scaleX":1,"sceneCache":false,"scaleY":1,"rotation":0,"width":1920},"guideLines":[],"extraParams":{"IntroEffect":{"EasingType":"EASE_OUT","Alpha":100,"TotalFrame":60,"Type":"NONE","MotionType":"ELASTINC","ScaleY":100,"SetEffect":"OFF","ScaleX":100,"DelayFrame":0},"type":"tiagroup","ID":"TIA_intro","OutroEffect":{"EasingType":"EASE_OUT","Alpha":100,"TotalFrame":60,"Type":"NONE","MotionType":"ELASTINC","ScaleY":100,"SetEffect":"OFF","ScaleX":100,"DelayFrame":0}}}
+{
+  "frames": [
+    [
+      {
+        "name": "imageview",
+        "resourcePath": "",
+        "frames": [
+          [
+            {
+              "properties": {
+                "alpha": 1,
+                "y": 0,
+                "ID": "BITMAP0",
+                "className": "Bitmap",
+                "height": 720,
+                "NO": 0,
+                "path": "intro_bg.png",
+                "rotation": 0,
+                "width": 1920,
+                "x": 0
+              }
+            }
+          ]
+        ],
+        "properties": {
+          "alpha": 1,
+          "scaleY": 1,
+          "y": 0,
+          "scaleX": 1,
+          "className": "Sprite",
+          "height": 720,
+          "hide": false,
+          "lock": false,
+          "rotation": 0,
+          "width": 1920,
+          "x": 0
+        },
+        "extraParams": {
+          "customAttribute": {},
+          "ID": "imageview",
+          "IntroEffect": {
+            "SetEffect": "OFF",
+            "Alpha": 100,
+            "ScaleX": 100,
+            "MotionType": "ELASTINC",
+            "ScaleY": 100,
+            "X": 0,
+            "EasingType": "EASE_OUT",
+            "Y": 0,
+            "TotalFrame": 60,
+            "DelayFrame": 0
+          },
+          "type": "image",
+          "TargetEffect": {
+            "Alpha": 100,
+            "X": 0,
+            "SetEffect": "OFF",
+            "Y": 0,
+            "ScaleX": 100,
+            "ScaleY": 100
+          },
+          "OutroEffect": {
+            "SetEffect": "OFF",
+            "Alpha": 100,
+            "ScaleX": 100,
+            "MotionType": "ELASTINC",
+            "ScaleY": 100,
+            "X": 0,
+            "EasingType": "EASE_OUT",
+            "Y": 0,
+            "TotalFrame": 60,
+            "DelayFrame": 0
+          }
+        }
+      },
+      {
+        "extraParams": {
+          "customAttribute": {},
+          "cellcount": "59",
+          "ID": "intro_cell",
+          "initframe": "0",
+          "IntroEffect": {
+            "EasingType": "EASE_OUT",
+            "Alpha": 100,
+            "TotalFrame": 60,
+            "MotionType": "ELASTINC",
+            "DelayFrame": 0,
+            "X": 0,
+            "SetEffect": "OFF",
+            "Y": 0,
+            "ScaleX": 100,
+            "ScaleY": 100
+          },
+          "type": "cellanimationimage",
+          "TargetEffect": {
+            "Alpha": 100,
+            "X": 0,
+            "SetEffect": "OFF",
+            "Y": 0,
+            "ScaleX": 100,
+            "ScaleY": 100
+          },
+          "autoImport": "true",
+          "OutroEffect": {
+            "EasingType": "EASE_OUT",
+            "Alpha": 100,
+            "TotalFrame": 60,
+            "MotionType": "ELASTINC",
+            "DelayFrame": 0,
+            "X": 0,
+            "SetEffect": "OFF",
+            "Y": 0,
+            "ScaleX": 100,
+            "ScaleY": 100
+          }
+        },
+        "frames": [
+          [
+            {
+              "properties": {
+                "alpha": 1,
+                "ID": "BITMAP0",
+                "path": "nexell_intro_1_00001.png",
+                "className": "Bitmap",
+                "width": 800,
+                "height": 133,
+                "x": 0,
+                "y": 0,
+                "rotation": 0,
+                "NO": 0
+              }
+            }
+          ],
+          [
+            {
+              "properties": {
+                "alpha": 1,
+                "y": 0,
+                "ID": "BITMAP1",
+                "className": "Bitmap",
+                "height": 100,
+                "NO": 1,
+                "path": "basic_image_view_100.png",
+                "rotation": 0,
+                "width": 100,
+                "x": 0
+              }
+            }
+          ],
+          [
+            {
+              "properties": {
+                "alpha": 1,
+                "y": 0,
+                "ID": "BITMAP2",
+                "className": "Bitmap",
+                "height": 100,
+                "NO": 2,
+                "path": "basic_image_view_100.png",
+                "rotation": 0,
+                "width": 100,
+                "x": 0
+              }
+            }
+          ],
+          [
+            {
+              "properties": {
+                "alpha": 1,
+                "y": 0,
+                "ID": "BITMAP3",
+                "className": "Bitmap",
+                "height": 100,
+                "NO": 3,
+                "path": "basic_image_view_100.png",
+                "rotation": 0,
+                "width": 100,
+                "x": 0
+              }
+            }
+          ],
+          [
+            {
+              "properties": {
+                "alpha": 1,
+                "y": 0,
+                "ID": "BITMAP4",
+                "className": "Bitmap",
+                "height": 100,
+                "NO": 4,
+                "path": "basic_image_view_100.png",
+                "rotation": 0,
+                "width": 100,
+                "x": 0
+              }
+            }
+          ]
+        ],
+        "resourcePath": "",
+        "properties": {
+          "alpha": 1,
+          "width": 800,
+          "height": 133,
+          "x": 560,
+          "y": 294,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0,
+          "className": "Sprite",
+          "hide": false,
+          "lock": false
+        },
+        "name": "cellanimationimage"
+      }
+    ]
+  ],
+  "version": "1.0.0",
+  "properties": {
+    "backgroundColor": 16777215,
+    "subCategory": "",
+    "className": "TIAgroup",
+    "hide": false,
+    "lock": false,
+    "width": 1920,
+    "height": 720,
+    "index": 0,
+    "category": "",
+    "x": 0,
+    "y": 0,
+    "scaleX": 1,
+    "sceneCache": false,
+    "scaleY": 1,
+    "rotation": 0
+  },
+  "guideLines": [],
+  "extraParams": {
+    "IntroEffect": {
+      "EasingType": "EASE_OUT",
+      "Alpha": 100,
+      "TotalFrame": 60,
+      "Type": "NONE",
+      "MotionType": "ELASTINC",
+      "ScaleY": 100,
+      "SetEffect": "OFF",
+      "ScaleX": 100,
+      "DelayFrame": 0
+    },
+    "type": "tiagroup",
+    "ID": "TIA_intro",
+    "OutroEffect": {
+      "EasingType": "EASE_OUT",
+      "Alpha": 100,
+      "TotalFrame": 60,
+      "Type": "NONE",
+      "MotionType": "ELASTINC",
+      "ScaleY": 100,
+      "SetEffect": "OFF",
+      "ScaleX": 100,
+      "DelayFrame": 0
+    }
+  }
+}
