@@ -13,10 +13,12 @@ postprocess_install_daudio_sdk_function() {
     install -d ${IMAGE_ROOTFS}/nexell/daudio/NxVideoPlayer
     install -d ${IMAGE_ROOTFS}/usr/lib
     install -d ${IMAGE_ROOTFS}/podo/apps/pdwindowcompositor
+    install -d ${IMAGE_ROOTFS}/lib/systemd/system
 
     install -m 0755 --owner=root --group=root ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/etc/bluetooth/BCM20710A1_001.002.014.0103.0000.hcd ${IMAGE_ROOTFS}/etc/bluetooth/
 
     install -m 0755 --owner=root --group=root ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/NxService.sh ${IMAGE_ROOTFS}/usr/bin/
+
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/NxBTServiceConsole ${IMAGE_ROOTFS}/usr/bin/
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/NxBTServiceR ${IMAGE_ROOTFS}/usr/bin/
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/NxCapture ${IMAGE_ROOTFS}/usr/bin/
@@ -24,6 +26,7 @@ postprocess_install_daudio_sdk_function() {
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/NxLauncher ${IMAGE_ROOTFS}/usr/bin/
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/bsa_server ${IMAGE_ROOTFS}/usr/bin/
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/key_input ${IMAGE_ROOTFS}/usr/bin/
+    install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/usr/bin/NxCommandSender ${IMAGE_ROOTFS}/usr/bin/
 
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/nexell/daudio/NxAVIn/NxAVIn ${IMAGE_ROOTFS}/nexell/daudio/NxAVIn/
     install -m 0755 --owner=root --group=root ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/nexell/daudio/NxAVIn/NxAVIn.desktop ${IMAGE_ROOTFS}/nexell/daudio/NxAVIn/
@@ -60,6 +63,8 @@ postprocess_install_daudio_sdk_function() {
 
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/podo/podo ${IMAGE_ROOTFS}/podo/
     install -m 0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/podo/apps/pdwindowcompositor/pdwindowcompositor ${IMAGE_ROOTFS}/podo/apps/pdwindowcompositor/
+
+    install -m 0644 ${PWD}/../meta-nexell/recipes-sdk/nexell-daudio-sdk/files/32/lib/systemd/system/android-tools-adbd.service ${IMAGE_ROOTFS}/lib/systemd/system/
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_install_daudio_sdk_function;"
