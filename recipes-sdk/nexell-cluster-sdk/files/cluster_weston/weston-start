@@ -2,6 +2,7 @@
 # Copyright (C) 2016 O.S. Systems Software LTDA.
 
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
+echo "=============== /usr/bin/weston-start "
 
 usage() {
     cat <<EOF
@@ -31,6 +32,7 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 	echo "ERROR: A Wayland compositor is already running, nested Weston instance is not supported yet."
 	exit 1
 fi
+
 if [ -n "$DISPLAY" ]; then
 	launcher="weston"
 else
@@ -71,4 +73,5 @@ if test -z "$XDG_RUNTIME_DIR"; then
     fi
 fi
 
-exec openvt $openvt_args -- $launcher $weston_args --log=@LOCALSTATEDIR@/log/weston.log
+exec openvt $openvt_args -- $launcher $weston_args --config=/etc/weston.ini --log=@LOCALSTATEDIR@/log/weston.log
+

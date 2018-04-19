@@ -1,0 +1,11 @@
+[Unit]
+Description=cluster
+
+[Service]
+User=root
+ExecStart=/etc/init.d/cluster start
+ExecStop=/etc/init.d/cluster stop
+
+[Install]
+WantedBy=multi-user.target
+
