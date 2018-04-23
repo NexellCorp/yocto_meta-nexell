@@ -39,6 +39,8 @@ postprocess_install_cluster_sdk_function() {
     install -Dm755 ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_weston/weston-start		${IMAGE_ROOTFS}/usr/bin/weston-start
     sed -i 's,@DATADIR@,${datadir},g'																			${IMAGE_ROOTFS}/usr/bin/weston-start
     sed -i 's,@LOCALSTATEDIR@,${localstatedir},g'																${IMAGE_ROOTFS}/usr/bin/weston-start
+
+    cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_weston/logo/Nexelllogo.png		${IMAGE_ROOTFS}/usr/share/weston/Nexelllogo.png
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_install_cluster_sdk_function;"
