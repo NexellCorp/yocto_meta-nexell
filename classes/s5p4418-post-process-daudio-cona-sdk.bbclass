@@ -11,6 +11,11 @@ postprocess_install_daudio_cona_sdk_function() {
     cp -aR ${PWD}/../meta-nexell/recipes-sdk/daudio-cona-sdk/files/nexell/daudio/*	${IMAGE_ROOTFS}/nexell/daudio/
     cp -aR ${PWD}/../meta-nexell/recipes-sdk/daudio-cona-sdk/files/podo/apps/pdwindowcompositor/* ${IMAGE_ROOTFS}/podo/apps/pdwindowcompositor/
     cp -aR ${PWD}/../meta-nexell/recipes-sdk/daudio-cona-sdk/files/nexell/daudio/fms.os.sdk.version ${IMAGE_ROOTFS}/nexell/daudio/
+	if test -e ${IMAGE_ROOTFS}/etc/systemd/system/sync-clocks.service ; then
+		rm ${IMAGE_ROOTFS}/etc/systemd/system/sync-clocks.service
+	fi
+	rm ${IMAGE_ROOTFS}/etc/systemd/system/sysinit.target.wants/sync-clocks.service
+
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_install_daudio_cona_sdk_function;"
