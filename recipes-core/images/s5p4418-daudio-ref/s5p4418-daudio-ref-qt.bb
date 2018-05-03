@@ -23,4 +23,5 @@ IMAGE_INSTALL += " \
     pulseaudio \
     nexell-bootanim \
     nexell-btservice \
+    nexell-nxlog \
     "
