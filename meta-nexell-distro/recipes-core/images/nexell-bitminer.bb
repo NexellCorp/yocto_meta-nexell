@@ -11,12 +11,21 @@ SYSTEMD_INSTALL = " \
     rsyslog-systemd \
 "
 
+CGMINER_INSTALL = " \
+    cgminer-gekko \
+"
+
 NEXELL_KERNEL_TEST_IMAGE_INSTALL = " \
     can-utils \
 "
 
 IMAGE_INSTALL_append = " \
     kernel-modules \
+    rtl-8188eus-${ARCH_TYPE_NUM} \
+    net-tools \
+    wireless-tools \
+    wpa-supplicant \
+    ${CGMINER_INSTALL} \
     ${SYSTEMD_INSTALL} \
     ${NEXELL_KERNEL_TEST_IMAGE_INSTALL} \
 "
