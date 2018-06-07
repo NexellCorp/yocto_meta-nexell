@@ -1,0 +1,11 @@
+--- a/src/pcm/pcm_rate.c
++++ b/src/pcm/pcm_rate.c
+@@ -1166,6 +1166,8 @@
+ 	.forwardable = snd_pcm_rate_forwardable,
+ 	.forward = snd_pcm_rate_forward,
+ 	.resume = snd_pcm_generic_resume,
++	.link = snd_pcm_generic_link,
++	.link_slaves = snd_pcm_generic_link_slaves,
+ 	.writei = snd_pcm_mmap_writei,
+ 	.writen = snd_pcm_mmap_writen,
+ 	.readi = snd_pcm_mmap_readi,
