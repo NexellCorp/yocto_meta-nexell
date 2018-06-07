@@ -1,0 +1,17 @@
+--- a/util-linux/volume_id/get_devname.c
++++ b/util-linux/volume_id/get_devname.c
+@@ -233,8 +233,14 @@
+ 		printf("%s:", uc->device);
+ 		if (uc->label[0])
+ 			printf(" LABEL=\"%s\"", uc->label);
++		else
++			printf(" LABEL=\"\"");
++
+ 		if (uc->uc_uuid[0])
+ 			printf(" UUID=\"%s\"", uc->uc_uuid);
++		else
++			printf(" UUID=\"\"");
++
+ #if ENABLE_FEATURE_BLKID_TYPE
+ 	if (uc->type)
+ 		printf(" TYPE=\"%s\"", uc->type);
