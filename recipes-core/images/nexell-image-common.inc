@@ -1,6 +1,8 @@
 DESCRIPTION ?= "Nexell common images"
 LICENSE ?= "GPLv2"
 
+require nexell-image-allgo.inc
+
 SPLASH ?= "psplash-nexell"
 
 IMAGE_FEATURES += "package-management ssh-server-dropbear splash"
