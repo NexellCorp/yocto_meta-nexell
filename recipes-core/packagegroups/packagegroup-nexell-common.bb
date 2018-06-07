@@ -29,7 +29,13 @@ NEXELL_LIBS = " \
     nx-video-api \
     "
 
+ALLGO_LIBS = " \
+	common-api-c++-dbus \
+	common-api-c++ \
+	"
+
 RDEPENDS_${PN} = " \
     ${NEXELL_LIBS} \
     ${GSTREAMER10} \
+	${ALLGO_LIBS} \
     "
