@@ -1,32 +1,35 @@
-CRIPTION = "Nexell customize files for bootanimation"
-SECTION = "console/utils"
+DESCRIPTION = "Nexell Bootanimation"
+HOMEPAGE = "http://www.nexell.co.kr"
+SECTION = "base"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-LICENSE = "CLOSED"
+DEPENDS = "libpng"
 
-inherit linux-nexell-base
-ARCH_TYPE_NUM = "${@get_kernel_arch_num(d,"${TARGET_PREFIX}")}"
+PV = "bootanimation"
+PR = "0.1"
+SRCREV = "${AUTOREV}"
 
 SRC_URI = " \
-    file://32/usr/bin \
-    file://32/etc/qboot \
-    file://32/system/media \
-    "
+	file://${PV} \
+	"
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/${PV}"
+
+CFLAGS_remove_arm = "-O2 -g"
+CFLAGS_append = " -O3 -fPIC"
+CFLAGS_prepend = "-I${STAGING_INCDIR}"
+LDFLAGS_append = " -static"
+LDFLAGS_prepend = "-L${STAGING_LIBDIR} "
 
 do_install() {
-    #/usr/sbin
-    install -d ${D}${bindir}
-    install -d ${D}${sysconfdir}/qboot
-    install -d ${D}/system/media
+	install -d ${D}${bindir}
+	install -d ${D}${sysconfdir}/qboot
+	install -d ${D}/system/media
 
-    if [ "${ARCH_TYPE_NUM}" -eq "32" ]; then
-        install -m 0755 ${WORKDIR}/${ARCH_TYPE_NUM}/usr/bin/bootanimation          ${D}${bindir}/
-        install -m 0755 ${WORKDIR}/${ARCH_TYPE_NUM}/etc/qboot/animation.conf       ${D}${sysconfdir}/qboot
-        install -m 0755 ${WORKDIR}/${ARCH_TYPE_NUM}/system/media/bootanimation.zip ${D}/system/media
-    else
-        echo "Requires 64bit binaries."
-    fi
+	install -m 0755 ${S}${sysconfdir}/qboot/animation.conf ${D}${sysconfdir}/qboot/
+	install -m 0755 ${S}/system/media/bootanimation.zip ${D}/system/media/
+	install -m 0755 ${S}/bootanimation ${D}${bindir}/
 }
 
 FILES_${PN} = "${bindir} ${sysconfdir}/qboot system/media"
