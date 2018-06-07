@@ -1,0 +1,187 @@
+diff --git a/dbus/dbus-message.c b/dbus/dbus-message.c
+index 699e022..60e82a1 100644
+--- a/dbus/dbus-message.c
++++ b/dbus/dbus-message.c
+@@ -3558,6 +3558,105 @@ dbus_message_get_sender (DBusMessage *message)
+ }
+ 
+ /**
++ * Sets the signature of the message, i.e. the arguments in the
++ * message payload. The signature includes only "in" arguments for
++ * #DBUS_MESSAGE_TYPE_METHOD_CALL and only "out" arguments for
++ * #DBUS_MESSAGE_TYPE_METHOD_RETURN, so is slightly different from
++ * what you might expect (it does not include the signature of the
++ * entire C++-style method).
++ *
++ * The signature is a string made up of type codes such as
++ * #DBUS_TYPE_INT32. The string is terminated with nul (nul is also
++ * the value of #DBUS_TYPE_INVALID). The macros such as
++ * #DBUS_TYPE_INT32 evaluate to integers; to assemble a signature you
++ * may find it useful to use the string forms, such as
++ * #DBUS_TYPE_INT32_AS_STRING.
++ *
++ * An "unset" or #NULL signature is considered the same as an empty
++ * signature. In fact dbus_message_get_signature() will never return
++ * #NULL.
++ *
++ * @param message the message
++ * @param signature the type signature or #NULL to unset
++ * @returns #FALSE if no memory
++ */
++dbus_bool_t
++dbus_message_set_signature (DBusMessage *message,
++                            const char  *signature)
++{
++  _dbus_return_val_if_fail (message != NULL, FALSE);
++  _dbus_return_val_if_fail (!message->locked, FALSE);
++  _dbus_return_val_if_fail (signature == NULL ||
++                            _dbus_check_is_valid_signature (signature), FALSE);
++  /* can't delete the signature if you have a message body */
++  _dbus_return_val_if_fail (_dbus_string_get_length (&message->body) == 0 ||
++                            signature != NULL, FALSE);
++
++  return set_or_delete_string_field (message,
++                                     DBUS_HEADER_FIELD_SIGNATURE,
++                                     DBUS_TYPE_SIGNATURE,
++                                     signature);
++}
++
++/**
++ * Returns pointer to the buffer used to store the message body.
++ *
++ * @param message the message
++ * @return pointer to the message body memory
++ */
++char*
++dbus_message_get_body (DBusMessage *message) {
++  _dbus_return_val_if_fail (message != NULL, NULL);
++
++  return _dbus_string_get_data(&(message->body));
++}
++
++/**
++ * Adjust the length of the message body buffer. The memory will be reallocated
++ * if the new length is bigger than the already allocated size.
++ *
++ * @see dbus_message_get_body_allocated
++ * @param message the message
++ * @param length the new length of the body
++ * @return #TRUE if successful
++ */
++dbus_bool_t
++dbus_message_set_body_length (DBusMessage *message,
++                              int length) {
++  _dbus_return_val_if_fail (message != NULL, FALSE);
++  _dbus_return_val_if_fail (length >= 0, FALSE);
++
++  return _dbus_string_set_length(&(message->body), length);
++}
++
++/**
++ * Gets the length of the message body buffer.
++ *
++ * @param message the message
++ * @param length the new length of the body
++ * @return the length of the body buffer
++ */
++int
++dbus_message_get_body_length (DBusMessage *message) {
++  _dbus_return_val_if_fail (message != NULL, 0);
++
++  return _dbus_string_get_length(&(message->body));
++}
++
++/**
++ * Gets the allocated memory size used to hold the message body.
++ *
++ * @param message the message
++ * @return size of the allocated message body memory
++ */
++int
++dbus_message_get_body_allocated (DBusMessage *message) {
++  _dbus_return_val_if_fail (message != NULL, 0);
++
++  return _dbus_string_get_allocated(&(message->body));
++}
++
++/**
+  * Gets the type signature of the message, i.e. the arguments in the
+  * message payload. The signature includes only "in" arguments for
+  * #DBUS_MESSAGE_TYPE_METHOD_CALL and only "out" arguments for
+diff --git a/dbus/dbus-message.h b/dbus/dbus-message.h
+index 3e33eb7..efd3b8c 100644
+--- a/dbus/dbus-message.h
++++ b/dbus/dbus-message.h
+@@ -137,6 +137,11 @@ dbus_bool_t   dbus_message_set_sender       (DBusMessage   *message,
+                                              const char    *sender);
+ DBUS_EXPORT
+ const char*   dbus_message_get_sender       (DBusMessage   *message);
++
++DBUS_EXPORT
++dbus_bool_t   dbus_message_set_signature    (DBusMessage   *message,
++                                             const char    *signature);
++
+ DBUS_EXPORT
+ const char*   dbus_message_get_signature    (DBusMessage   *message);
+ DBUS_EXPORT
+@@ -267,6 +272,18 @@ void        dbus_message_iter_abandon_container  (DBusMessageIter *iter,
+                                                   DBusMessageIter *sub);
+ 
+ DBUS_EXPORT
++char*       dbus_message_get_body                (DBusMessage   *message);
++
++DBUS_EXPORT
++dbus_bool_t dbus_message_set_body_length         (DBusMessage   *message,
++                                                  int length);
++DBUS_EXPORT
++int         dbus_message_get_body_length         (DBusMessage   *message);
++
++DBUS_EXPORT
++int         dbus_message_get_body_allocated      (DBusMessage   *message);
++
++DBUS_EXPORT
+ void dbus_message_lock    (DBusMessage  *message);
+ 
+ DBUS_EXPORT
+diff --git a/dbus/dbus-string.c b/dbus/dbus-string.c
+index 98d9f2b..565fa26 100644
+--- a/dbus/dbus-string.c
++++ b/dbus/dbus-string.c
+@@ -744,6 +744,22 @@ _dbus_string_get_length (const DBusString  *str)
+ }
+ #endif /* !_dbus_string_get_length */
+ 
++/* Only have the function if we don't have the macro */
++#ifndef _dbus_string_get_allocated
++/**
++ * Gets the allocated length of a string (not including nul termination).
++ *
++ * @returns the allocated length.
++ */
++int
++_dbus_string_get_allocated(const DBusString  *str)
++{
++  DBUS_CONST_STRING_PREAMBLE (str);
++
++  return real->allocated;
++}
++#endif /* !_dbus_string_get_allocated */
++
+ /**
+  * Makes a string longer by the given number of bytes.  Checks whether
+  * adding additional_length to the current length would overflow an
+diff --git a/dbus/dbus-string.h b/dbus/dbus-string.h
+index adf709b..604a5c4 100644
+--- a/dbus/dbus-string.h
++++ b/dbus/dbus-string.h
+@@ -151,6 +151,10 @@ DBUS_PRIVATE_EXPORT
+ int           _dbus_string_get_length            (const DBusString  *str);
+ #endif /* !_dbus_string_get_length */
+ 
++#ifndef _dbus_string_get_allocated
++int           _dbus_string_get_allocated         (const DBusString  *str);
++#endif /* !_dbus_string_get_allocated */
++
+ /**
+  * Get the string's length as an unsigned integer, for comparison with
+  * size_t and similar unsigned types that does not trigger compiler
