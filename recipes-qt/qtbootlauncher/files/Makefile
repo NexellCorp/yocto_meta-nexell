@@ -36,6 +36,8 @@ $(TARGET) : depend $(OBJS)
 clean :
 	rm -rf $(OBJS) $(TARGET) core .depend
 
+distclean : clean
+
 ifeq (.depend,$(wildcard .depend))
 include .depend
 endif

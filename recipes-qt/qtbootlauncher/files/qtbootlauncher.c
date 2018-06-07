@@ -333,14 +333,14 @@ static int parse_launcher_conf(const char *file, launcher_t *li, int size)
  * preload_libs:
  */
 static const char *preload_libs[] = {
-	"/usr/lib/libQt5Core.so.5.7.0",	/* 5.2 M */
-	"/usr/lib/libQt5Quick.so.5.7.0",
-	"/usr/lib/libQt5Gui.so.5.7.0",	/* 4.5 M */
-	"/usr/lib/libQt5Widgets.so.5.7.0", /* 5.1 M */
-	"/usr/lib/libQt5Qml.so.5.7.0", /* 3.4 M */
-	"/usr/lib/libQt5WaylandClient.so.5.7.0",
-	"/usr/lib/libQt5WaylandCompositor.so.5.7.0",
-	"/usr/lib/libMali.so"
+	"/usr/lib/libQt5Core.so.5.7.0",	/* 5.2M */
+	"/usr/lib/libQt5Quick.so.5.7.0", /* 3.1M */
+	"/usr/lib/libQt5Gui.so.5.7.0",	/* 4.5M */
+	"/usr/lib/libQt5Widgets.so.5.7.0", /* 5.1M */
+	"/usr/lib/libQt5Qml.so.5.7.0", /* 3.4M */
+	"/usr/lib/libQt5Network.so.5.7.0", /* 1.4M */
+	"/usr/lib/libQt5QuickWidgets.so.5.7.0", /* 49K */
+	"/usr/lib/libQt5WaylandCompositor.so.5.7.0", /* 740K */
 };
 #define	LIBS_SIZE ARRAY_SIZE(preload_libs)
 
