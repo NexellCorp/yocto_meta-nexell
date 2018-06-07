@@ -1,9 +1,0 @@
-[Unit]
-Description=NX log rotate daemon
-
-[Service]
-Type=idle
-ExecStart=/usr/sbin/nxlogrotate
-
-[Install]
-WantedBy=multi-user.target
