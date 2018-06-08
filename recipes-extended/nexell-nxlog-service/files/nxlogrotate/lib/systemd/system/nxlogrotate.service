@@ -4,7 +4,7 @@ Requires=rsyslog.service
 After=rsyslog.service
 
 [Service]
-Type=notify
+Type=idle
 ExecStart=/usr/sbin/nxlogrotate
 
 [Install]
