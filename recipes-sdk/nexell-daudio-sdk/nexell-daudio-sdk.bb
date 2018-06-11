@@ -4,17 +4,17 @@ SECTION = "devel"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS += "nx-video-api qtwayland qtmultimedia"
+DEPENDS += "nx-video-api nx-v4l2 nx-scaler ffmpeg qtwayland qtmultimedia"
 
 inherit nexell-daudio-sdk-env
 
-PV = "NEXELL"
-PR = "0.1"
 SRCREV = "${AUTOREV}"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/sdk/displayaudio;protocol=git;branch=master"
 
-SRC_URI = "file://nexell-daudio-sdk.tar.gz"
+PV = "1.0"
+PR = "r0"
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/git"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "2.1.3"
@@ -39,18 +39,23 @@ do_install() {
 	install -d ${D}/podo
 
 	cp -aR ${SDK_RESULT}${libdir}/* ${D}${libdir}/
+	chown -R root:root ${D}${libdir}/
 	cp -aR ${SDK_RESULT}${bindir}/* ${D}${bindir}/
+	chown -R root:root ${D}${bindir}/
 
 	cp -aR ${SDK_RESULT}/nexell/daudio/* ${D}/nexell/daudio/
 	chmod -R 755 ${D}/nexell/daudio/*
+	chown -R root:root ${D}/nexell/daudio/*
 
 	cp -aR ${SDK_RESULT}/podo/* ${D}/podo/
 	chmod -R 755 ${D}/podo/*
+	chown -R root:root ${D}/podo/*
 }
 
 FILES_${PN} = "${bindir} ${libdir} nexell/daudio podo"
+RDEPENDS_${PN} = "nexell-drm-mali"
 
-INSANE_SKIP_${PN} = "dev-deps dev-so staticdev"
-INSANE_SKIP_${PN}-dev = "dev-elf"
+INSANE_SKIP_${PN} = "host-user-contaminated dev-deps dev-so staticdev"
+INSANE_SKIP_${PN}-dev = "dev-elf textrel"
 
 addtask do_generate_qt_config_file before do_compile
