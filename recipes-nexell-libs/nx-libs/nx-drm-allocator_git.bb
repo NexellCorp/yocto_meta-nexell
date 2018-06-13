@@ -3,7 +3,7 @@ DESCRIPTION = "nx-drm-allocator"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=df9b0758c6dcd94963adedfa6f9f0580"
 
-SRCREV = "afac0284ef123e2d330a671558f1be46783f2c20"
+SRCREV = "{AUTOREV}"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-drm-allocator;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
@@ -20,13 +20,13 @@ EXTRA_OEMAKE += " \
     'AM_CFLAGS=$(WARN_CFLAGS) -I./ -I./drm' \
     "
 
-do_configure() {    
+do_configure() {
     cd ${S}
     NOCONFIGURE=true ./autogen.sh
     oe_runconf
 }
 
-do_compile() {    
+do_compile() {
     cd ${S}
     oe_runmake clean
     oe_runmake

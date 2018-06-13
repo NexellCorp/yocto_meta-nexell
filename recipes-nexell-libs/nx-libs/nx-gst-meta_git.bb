@@ -3,7 +3,7 @@ DESCRIPTION = "nx-gst-meta"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
-SRCREV = "23a97a7a53b1a817f4dc8bd22b0dfc639f649ab1"
+SRCREV = "{AUTOREV}"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-gst-meta;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
@@ -22,14 +22,14 @@ inherit autotools
 EXTRA_OEMAKE += " \
      'libnxgstmeta_la_CFLAGS=$(GST_CFLAGS) -I${STAGING_INCDIR}' \
      "
-     
+
 do_configure() {
     cd ${S}
     ./autogen.sh
     oe_runconf
 }
 
-do_compile() {    
+do_compile() {
     cd ${S}
     oe_runmake clean
     oe_runmake

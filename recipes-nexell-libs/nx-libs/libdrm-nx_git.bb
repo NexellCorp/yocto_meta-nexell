@@ -3,7 +3,7 @@ DESCRIPTION = "nexell libdrm"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=b8808a8f91016e96e050886b9076009a"
 
-SRCREV = "5017ac7f9cf4aaf56f3761c662e72e517b05de91"
+SRCREV = "${AUTOREV}"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/libdrm;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
@@ -36,7 +36,7 @@ EXTRA_OECONF += "\
  --disable-vmwgfx \
  --disable-omap-experimental-api \
  --disable-exynos-experimental-api \
- --disable-freedreno \      
+ --disable-freedreno \
 "
 
 do_configure() {
@@ -73,11 +73,11 @@ do_install() {
 #    oe_runmake install DESTDIR=${D}
 
     install -m 0644 ${S}/nexell/nexell_drm.h ${D}${includedir}/nexell
-    install -m 0644 ${S}/nexell/nexell_drmif.h ${D}${includedir}/nexell	
+    install -m 0644 ${S}/nexell/nexell_drmif.h ${D}${includedir}/nexell
 
     install -m 0755 ${S}/nexell/.libs/libdrm_nexell.so.1.0.0 ${D}/lib/nexell
     install -m 0755 ${S}/nexell/libdrm_nexell.la ${D}/lib/nexell
-#    ${STAGING_BASELIBDIR}										
+#	${STAGING_BASELIBDIR}
 
     cd ${D}/lib
     ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so

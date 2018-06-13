@@ -3,7 +3,7 @@ DESCRIPTION = "nx-scaler"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=e5a392bc8627d4e7a7a28a76203e8239"
 
-SRCREV = "79c9146d92b38e5407af675c959196c6aaaa889a"
+SRCREV = "${AUTOREV}"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-scaler;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
@@ -36,7 +36,7 @@ do_configure() {
     oe_runconf
 }
 
-do_compile() {    
+do_compile() {
     cd ${S}
     oe_runmake clean
     oe_runmake
