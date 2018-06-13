@@ -31,11 +31,12 @@
 
 #define NXLOGROTATE_VERSION			"0.1.0"
 
-#define SYSLOG_D_PID        		"/var/run/rsyslogd.pid"
+#define SYSLOG_D_PID				"/var/run/rsyslogd.pid"
 #define SYS_LOG_PATH				"/var/log/syslog"
 #define DEBUG_LOG_PATH				"/var/log/debug"
 #define USER_LOG_PATH				"/var/log/user.log"
 #define MESSAGE_LOG_PATH			"/var/log/messages"
+#define DAEMON_LOG_PATH				"/var/log/daemon.log"
 
 #ifndef SZ_1K
 #define SZ_1K						0x00000400
@@ -139,6 +140,7 @@ static void logrotate(void) {
     logrotate_clear(DEBUG_LOG_PATH);
     logrotate_clear(USER_LOG_PATH);
     logrotate_clear(MESSAGE_LOG_PATH);
+    logrotate_clear(DAEMON_LOG_PATH);
 	sync();
 }
 
@@ -298,6 +300,7 @@ int32_t main(int32_t argc, char *argv[]) {
 							logrotate_clear(DEBUG_LOG_PATH);
 							logrotate_clear(USER_LOG_PATH);
 							logrotate_clear(MESSAGE_LOG_PATH);
+							logrotate_clear(DAEMON_LOG_PATH);
 							sync();
 						} else {
 							logrotate();
@@ -307,6 +310,7 @@ int32_t main(int32_t argc, char *argv[]) {
 				} else if (pNotifyEvent->mask & IN_DELETE_SELF || pNotifyEvent->mask & IN_MOVE_SELF) {
 					break;
 				}
+
 				eventPos += EVENT_SIZE + pNotifyEvent->len;
 			}
 		}
