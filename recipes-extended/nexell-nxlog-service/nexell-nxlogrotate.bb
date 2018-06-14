@@ -4,15 +4,16 @@ SECTION = "console/utils"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-PV = "nxlogrotate"
-PR = "0.1"
+PV = "1.0"
+PR = "r0"
+
 SRCREV = "${AUTOREV}"
 
 SRC_URI = " \
-	file://${PV} \
+	file://nxlogrotate \
 	"
 
-S = "${WORKDIR}/${PV}"
+S = "${WORKDIR}/nxlogrotate"
 
 CFLAGS_remove_arm = "-g"
 CXXFLAGS_remove_arm = "-g"

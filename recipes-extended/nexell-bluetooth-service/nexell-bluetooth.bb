@@ -7,14 +7,14 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 inherit linux-nexell-base
 ARCH_TYPE_NUM = "${@get_kernel_arch_num(d,"${TARGET_PREFIX}")}"
 
-PV = "bsa"
-PR = "0.1"
+PV = "1.0"
+PR = "r0"
 
 SRC_URI = " \
-	file://${ARCH_TYPE_NUM}/${PV} \
+	file://${ARCH_TYPE_NUM}/bsa \
 	"
 
-S = "${WORKDIR}/${ARCH_TYPE_NUM}/${PV}"
+S = "${WORKDIR}/${ARCH_TYPE_NUM}/bsa"
 
 do_install() {
 	install -d ${D}${sysconfdir}/bluetooth
