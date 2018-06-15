@@ -15,6 +15,10 @@ CGMINER_INSTALL = " \
     cgminer-gekko \
 "
 
+WEB_INSTALL = " \
+    lighttpd \
+"
+
 NEXELL_KERNEL_TEST_IMAGE_INSTALL = " \
     can-utils \
 "
@@ -25,6 +29,7 @@ IMAGE_INSTALL_append = " \
     net-tools \
     wireless-tools \
     wpa-supplicant \
+    ${WEB_INSTALL} \
     ${CGMINER_INSTALL} \
     ${SYSTEMD_INSTALL} \
     ${NEXELL_KERNEL_TEST_IMAGE_INSTALL} \
