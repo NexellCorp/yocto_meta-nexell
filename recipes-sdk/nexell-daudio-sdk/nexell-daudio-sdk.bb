@@ -55,7 +55,7 @@ do_install() {
 FILES_${PN} = "${bindir} ${libdir} nexell/daudio podo"
 RDEPENDS_${PN} = "nexell-drm-mali"
 
-INSANE_SKIP_${PN} = "host-user-contaminated dev-deps dev-so staticdev"
+INSANE_SKIP_${PN} = "host-user-contaminated dev-deps dev-so"
 INSANE_SKIP_${PN}-dev = "dev-elf textrel"
 
 addtask do_generate_qt_config_file before do_compile
