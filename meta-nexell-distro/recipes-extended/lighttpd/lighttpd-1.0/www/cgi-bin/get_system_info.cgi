@@ -3,7 +3,7 @@
 echo {
 
 # Read network configuration
-ant_minertype=AntMiner-S4
+ant_minertype="Nexell Bitminer TSB1101"
 ant_nettype=
 ant_netdevice=
 ant_macaddr=
@@ -13,8 +13,7 @@ ant_netmask=
 ant_gateway=
 ant_dnsservers=
 
-ant_minertype=`sed -n 2p /usr/bin/compile_time`
-ant_system_filesystem_version=`sed -n 1p /usr/bin/compile_time`
+ant_system_filesystem_version=
 
 if [ -s /config/network.conf ] ; then
 	ant_nettype=`cat /config/network.conf | grep dhcp`
@@ -28,8 +27,9 @@ if [ -s /config/network.conf ] ; then
 		ant_nettype=Static
 	fi
 	
-	ant_host_name=`cat /config/network.conf | grep hostname`
-	ant_host_name=${ant_host_name/hostname=/}
+	ant_host_name=`/bin/hostname`
+#	ant_host_name=`cat /config/network.conf | grep hostname`
+#	ant_host_name=${ant_host_name/hostname=/}
 	ant_ipaddress=`cat /config/network.conf | grep ipaddress`
 	ant_ipaddress=${ant_ipaddress/ipaddress=/}
 	ant_netmask=`cat /config/network.conf | grep netmask`
@@ -39,6 +39,9 @@ if [ -s /config/network.conf ] ; then
 	ant_dnsservers=`cat /config/network.conf | grep dnsservers`
 	ant_dnsservers=${ant_dnsservers/dnsservers=/}
 	ant_dnsservers=${ant_dnsservers//\"/}
+else
+	ant_host_name=`/bin/hostname`
+	ant_ipaddress=`ip addr | grep "inet " | grep brd | awk '{print $2}' | awk -F/ '{print $1}'`
 fi
 
 ant_tmp=`ifconfig | grep eth`
