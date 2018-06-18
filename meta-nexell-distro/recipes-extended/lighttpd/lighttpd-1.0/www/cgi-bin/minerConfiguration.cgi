@@ -165,7 +165,7 @@ jQuery(document).ready(function() {
 	f_get_miner_conf();
 });
 </script>
-<title>Ant Miner</title>
+<title>Nexell BitMiner</title>
 </head>
 <body class="lang_en">
 	<p class="skiplink">

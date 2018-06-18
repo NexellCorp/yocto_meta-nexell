@@ -96,7 +96,7 @@ function f_submit_goback() {
 	window.location.href="/upgrade.html";
 }
 </script>
-<title>Ant Miner</title>
+<title>Nexell BitMiner</title>
 </head>
 EOH
 

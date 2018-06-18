@@ -33,7 +33,7 @@ show_msg ()
     echo '        window.location = "'$return_page'";'
     echo '    }'
     echo '</script>'
-    echo '<title>Ant Miner</title>'
+    echo '<title>Nexell BitMiner</title>'
     echo '</head>'
     echo -n '<body class="lang_en" onload="setTimeout('
     echo -n "'delayer()'"

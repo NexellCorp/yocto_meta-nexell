@@ -18,7 +18,7 @@ cat <<-EOH
 <script type="text/javascript" src="/js/xhr.js"></script>
 <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="/js/json2.min.js"></script>
-<title>Ant Miner</title>
+<title>Nexell BitMiner</title>
 </head>
 <body class="lang_en">
 	<p class="skiplink">
