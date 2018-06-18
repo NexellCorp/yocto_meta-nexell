@@ -155,9 +155,10 @@ do_install() {
     #install -m 0644 ${S}/video_api_test/src/ffmpeg/ffmpeg-2.8.6-${ARCH_TYPE}/lib/*.so.* ${D}${libdir}
 }
 
-PREFERRED_VERSION_libavcodec = "56.60.100"
-PREFERRED_VERSION_libavformat = "56.40.101"
+#PREFERRED_VERSION_libavcodec = "56.60.100"
+#PREFERRED_VERSION_libavformat = "56.40.101"
 INSANE_SKIP_${PN} = "ldflags"
 FILES_${PN} = "${bindir} ${libdir}"
-#RDEPENDS_${PN} += "libavformat libavcodec"
+RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter"
+FILES_libavresample = "${libdir}/libavresample${SOLIBS}"
 ALLOW_EMPTY_${PN} = "1"
