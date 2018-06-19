@@ -8,18 +8,18 @@ cat <<'EOF'
 {
 "pools" : [
 {
-"url" : "192.168.110.30:3333",
-"user" : "antminer_1",
+"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
+"user" : "maekdal.bcworker1",
 "pass" : "123"
 },
 {
-"url" : "http://stratum.antpool.com:3333",
-"user" : "antminer_1",
+"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
+"user" : "maekdal.bcworker1",
 "pass" : "123"
 },
 {
-"url" : "50.31.149.57:3333",
-"user" : "antminer_1",
+"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
+"user" : "maekdal.bcworker1",
 "pass" : "123"
 }
 ]
@@ -27,8 +27,8 @@ cat <<'EOF'
 "api-listen" : true,
 "api-network" : true,
 "api-allow" : "W:0/0",
-"bitmain-freq": "18:218.75:1106",
-"bitmain-voltage": "0725"
+"miner-freq": "18:218.75:1106",
+"miner-voltage": "0725"
 }
 
 EOF
@@ -40,10 +40,11 @@ if [ ! -f /config/cgminer.conf ] ; then
 		cp /config/cgminer.conf.factory /config/cgminer.conf
     else
 		create_default_conf_file
+		cp /config/cgminer.conf /config/cgminer.conf.factory
     fi
 fi
 
-ant_result=`cat /config/cgminer.conf`
+nexell_result=`cat /config/cgminer.conf`
 
 # CGI output must start with at least empty line (or headers)
 printf "Content-type: text/html\r\n\r\n"
@@ -66,40 +67,40 @@ cat <<-EOH
 <script>
 EOH
 
-echo "ant_data = ${ant_result};"
+echo "nexell_data = ${nexell_result};"
 
 cat <<EOT
 function f_get_miner_conf() {
 	try
 	{
-		for(var i = 0; i < ant_data.pools.length; i++) {
+		for(var i = 0; i < nexell_data.pools.length; i++) {
 			switch(i) {
 			case 0:
-				jQuery("#ant_pool1url").val(ant_data.pools[i].url);
-				jQuery("#ant_pool1user").val(ant_data.pools[i].user);
-				jQuery("#ant_pool1pw").val(ant_data.pools[i].pass);
+				jQuery("#nexell_pool1url").val(nexell_data.pools[i].url);
+				jQuery("#nexell_pool1user").val(nexell_data.pools[i].user);
+				jQuery("#nexell_pool1pw").val(nexell_data.pools[i].pass);
 				break;
 			case 1:
-				jQuery("#ant_pool2url").val(ant_data.pools[i].url);
-				jQuery("#ant_pool2user").val(ant_data.pools[i].user);
-				jQuery("#ant_pool2pw").val(ant_data.pools[i].pass);
+				jQuery("#nexell_pool2url").val(nexell_data.pools[i].url);
+				jQuery("#nexell_pool2user").val(nexell_data.pools[i].user);
+				jQuery("#nexell_pool2pw").val(nexell_data.pools[i].pass);
 				break;
 			case 2:
-				jQuery("#ant_pool3url").val(ant_data.pools[i].url);
-				jQuery("#ant_pool3user").val(ant_data.pools[i].user);
-				jQuery("#ant_pool3pw").val(ant_data.pools[i].pass);
+				jQuery("#nexell_pool3url").val(nexell_data.pools[i].url);
+				jQuery("#nexell_pool3user").val(nexell_data.pools[i].user);
+				jQuery("#nexell_pool3pw").val(nexell_data.pools[i].pass);
 				break;
 			}
 		}
-		if(ant_data["bitmain-nobeeper"]) {
-			document.getElementById("ant_beeper").checked = false;
+		if(nexell_data["bitmain-nobeeper"]) {
+			document.getElementById("nexell_beeper").checked = false;
 		} else {
-			document.getElementById("ant_beeper").checked = true;
+			document.getElementById("nexell_beeper").checked = true;
 		}
-		if(ant_data["bitmain-notempoverctrl"]) {
-			document.getElementById("ant_tempoverctrl").checked = false;
+		if(nexell_data["bitmain-notempoverctrl"]) {
+			document.getElementById("nexell_tempoverctrl").checked = false;
 		} else {
-			document.getElementById("ant_tempoverctrl").checked = true;
+			document.getElementById("nexell_tempoverctrl").checked = true;
 		}
 	}
 	catch(err)
@@ -108,39 +109,39 @@ function f_get_miner_conf() {
 	}
 }
 function f_submit_miner_conf() {
-	_ant_freq = "18:218.75:1106";
-	_ant_voltage = "0725";
+	_nexell_freq = "18:218.75:1106";
+	_nexell_voltage = "0725";
 	try
 	{
-		_ant_freq = ant_data["bitmain-freq"];
-		_ant_voltage = ant_data["bitmain-voltage"];
+		_nexell_freq = nexell_data["miner-freq"];
+		_nexell_voltage = nexell_data["miner-voltage"];
 	}
 	catch(err)
 	{
 		alert('Invalid Miner configuration file. Edit manually or reset to default.');
 	}
 	
-	_ant_pool1url = jQuery("#ant_pool1url").val();
-	_ant_pool1user = jQuery("#ant_pool1user").val();
-	_ant_pool1pw = jQuery("#ant_pool1pw").val();
-	_ant_pool2url = jQuery("#ant_pool2url").val();
-	_ant_pool2user = jQuery("#ant_pool2user").val();
-	_ant_pool2pw = jQuery("#ant_pool2pw").val();
-	_ant_pool3url = jQuery("#ant_pool3url").val();
-	_ant_pool3user = jQuery("#ant_pool3user").val();
-	_ant_pool3pw = jQuery("#ant_pool3pw").val();
-	_ant_nobeeper = "false";
-	_ant_notempoverctrl = "false";
+	_nexell_pool1url = jQuery("#nexell_pool1url").val();
+	_nexell_pool1user = jQuery("#nexell_pool1user").val();
+	_nexell_pool1pw = jQuery("#nexell_pool1pw").val();
+	_nexell_pool2url = jQuery("#nexell_pool2url").val();
+	_nexell_pool2user = jQuery("#nexell_pool2user").val();
+	_nexell_pool2pw = jQuery("#nexell_pool2pw").val();
+	_nexell_pool3url = jQuery("#nexell_pool3url").val();
+	_nexell_pool3user = jQuery("#nexell_pool3user").val();
+	_nexell_pool3pw = jQuery("#nexell_pool3pw").val();
+	_nexell_nobeeper = "false";
+	_nexell_notempoverctrl = "false";
 	
-	if(document.getElementById("ant_beeper").checked) {
-		_ant_nobeeper = "false";
+	if(document.getElementById("nexell_beeper").checked) {
+		_nexell_nobeeper = "false";
 	} else {
-		_ant_nobeeper = "true";
+		_nexell_nobeeper = "true";
 	}
-	if(document.getElementById("ant_tempoverctrl").checked) {
-		_ant_notempoverctrl = "false";
+	if(document.getElementById("nexell_tempoverctrl").checked) {
+		_nexell_notempoverctrl = "false";
 	} else {
-		_ant_notempoverctrl = "true";
+		_nexell_notempoverctrl = "true";
 	}
 	
 	jQuery("#cbi_apply_cgminer_fieldset").show();
@@ -151,7 +152,7 @@ function f_submit_miner_conf() {
 		dataType: 'json',
 		timeout: 30000,
 		cache: false,
-		data: {_ant_pool1url:_ant_pool1url, _ant_pool1user:_ant_pool1user, _ant_pool1pw:_ant_pool1pw,_ant_pool2url:_ant_pool2url, _ant_pool2user:_ant_pool2user, _ant_pool2pw:_ant_pool2pw,_ant_pool3url:_ant_pool3url, _ant_pool3user:_ant_pool3user, _ant_pool3pw:_ant_pool3pw, _ant_nobeeper:_ant_nobeeper, _ant_notempoverctrl:_ant_notempoverctrl, _ant_freq:_ant_freq, _ant_voltage:_ant_voltage},
+		data: {_nexell_pool1url:_nexell_pool1url, _nexell_pool1user:_nexell_pool1user, _nexell_pool1pw:_nexell_pool1pw,_nexell_pool2url:_nexell_pool2url, _nexell_pool2user:_nexell_pool2user, _nexell_pool2pw:_nexell_pool2pw,_nexell_pool3url:_nexell_pool3url, _nexell_pool3user:_nexell_pool3user, _nexell_pool3pw:_nexell_pool3pw, _nexell_nobeeper:_nexell_nobeeper, _nexell_notempoverctrl:_nexell_notempoverctrl, _nexell_freq:_nexell_freq, _nexell_voltage:_nexell_voltage},
 		success: function(data) {
 			window.location.reload();
 		},
@@ -223,19 +224,19 @@ jQuery(document).ready(function() {
 						<div class="cbi-value" id="cbi-cgminer-default-pool1url">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool1url">URL</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool1url" id="ant_pool1url" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool1url" id="nexell_pool1url" value="" />
 							</div>
 						</div>
 						<div class="cbi-value" id="cbi-cgminer-default-pool1user">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool1user">Worker</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool1user" id="ant_pool1user" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool1user" id="nexell_pool1user" value="" />
 							</div>
 						</div>
 						<div class="cbi-value" id="cbi-cgminer-default-pool1pw">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool1pw">Password</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool1pw" id="ant_pool1pw" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool1pw" id="nexell_pool1pw" value="" />
 							</div>
 						</div>
 					</fieldset>
@@ -244,19 +245,19 @@ jQuery(document).ready(function() {
 						<div class="cbi-value" id="cbi-cgminer-default-pool2url">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool2url">URL</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool2url" id="ant_pool2url" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool2url" id="nexell_pool2url" value="" />
 							</div>
 						</div>
 						<div class="cbi-value" id="cbi-cgminer-default-pool2user">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool2user">Worker</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool2user" id="ant_pool2user" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool2user" id="nexell_pool2user" value="" />
 							</div>
 						</div>
 						<div class="cbi-value" id="cbi-cgminer-default-pool2pw">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool2pw">Password</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool2pw" id="ant_pool2pw" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool2pw" id="nexell_pool2pw" value="" />
 							</div>
 						</div>
 					</fieldset>
@@ -265,20 +266,20 @@ jQuery(document).ready(function() {
 						<div class="cbi-value" id="cbi-cgminer-default-pool3url">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool3url">URL</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool3url" id="ant_pool3url" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool3url" id="nexell_pool3url" value="" />
 							</div>
 						</div>
 						<div class="cbi-value" id="cbi-cgminer-default-pool3user">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool3user">Worker</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool3user" id="ant_pool3user" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool3user" id="nexell_pool3user" value="" />
 							</div>
 						</div>
 						<div class="cbi-value cbi-value-last"
 							id="cbi-cgminer-default-pool3pw">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool3pw">Password</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool3pw" id="ant_pool3pw" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.pool3pw" id="nexell_pool3pw" value="" />
 							</div>
 						</div>
 					</fieldset>
@@ -287,13 +288,13 @@ jQuery(document).ready(function() {
 						<div class="cbi-value" id="cbi-cgminer-default-pool3url">
 							<label class="cbi-value-title" for="keep">Beeper ringing</label>
 							<div class="cbi-value-field">
-								<input type="checkbox" name="ant_beeper" id="ant_beeper" checked />
+								<input type="checkbox" name="nexell_beeper" id="nexell_beeper" checked />
 							</div>
 						</div>
 						<div class="cbi-value" id="cbi-cgminer-default-pool3user">
 							<label class="cbi-value-title" for="keep">Stop running when temprerature is over 80℃</label>
 							<div class="cbi-value-field">
-								<input type="checkbox" name="ant_tempoverctrl" id="ant_tempoverctrl" checked />
+								<input type="checkbox" name="nexell_tempoverctrl" id="nexell_tempoverctrl" checked />
 							</div>
 						</div>
 					</fieldset>

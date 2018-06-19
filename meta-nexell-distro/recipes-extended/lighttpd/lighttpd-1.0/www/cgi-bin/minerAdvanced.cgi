@@ -8,27 +8,27 @@ cat <<'EOF'
 {
 "pools" : [
 {
-"url" : "192.168.110.30:3333",
-"user" : "antminer_1",
-"pass" : "123"
+"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
+"user" : "maekdal.bcworker1",
+"pass" : "x"
 },
 {
-"url" : "http://stratum.antpool.com:3333",
-"user" : "antminer_1",
-"pass" : "123"
+"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
+"user" : "maekdal.bcworker2",
+"pass" : "x"
 },
 {
-"url" : "50.31.149.57:3333",
-"user" : "antminer_1",
-"pass" : "123"
+"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
+"user" : "maekdal.bcworker3",
+"pass" : "x"
 }
 ]
 ,
 "api-listen" : true,
 "api-network" : true,
 "api-allow" : "W:0/0",
-"bitmain-freq": "7:200:0782",
-"bitmain-voltage": "0725"
+"miner-freq": "7:200:0782",
+"miner-voltage": "0725"
 }
 
 EOF
@@ -43,7 +43,7 @@ if [ ! -f /config/cgminer.conf ] ; then
     fi
 fi
 
-ant_result=`cat /config/cgminer.conf`
+nexell_result=`cat /config/cgminer.conf`
 
 # CGI output must start with at least empty line (or headers)
 printf "Content-type: text/html\r\n\r\n"
@@ -66,14 +66,14 @@ cat <<-EOH
 <script>
 EOH
 
-echo "ant_data = ${ant_result};"
+echo "nexell_data = ${nexell_result};"
 
 cat <<EOT
 function f_get_miner_conf() {
 	try
 	{
-		document.getElementById("ant_freq").value=ant_data["bitmain-freq"];
-		document.getElementById("ant_voltage").value=ant_data["bitmain-voltage"];
+		document.getElementById("nexell_freq").value=nexell_data["miner-freq"];
+		document.getElementById("nexell_voltage").value=nexell_data["miner-voltage"];
 	}
 	catch(err)
 	{
@@ -81,47 +81,47 @@ function f_get_miner_conf() {
 	}
 }
 function f_submit_miner_conf() {
-	_ant_pool1url = "192.168.110.30:3333";
-	_ant_pool1user = "antminer_1";
-	_ant_pool1pw = "123";
-	_ant_pool2url = "http://stratum.antpool.com:3333";
-	_ant_pool2user = "antminer_1";
-	_ant_pool2pw = "123";
-	_ant_pool3url = "50.31.149.57:3333";
-	_ant_pool3user = "antminer_1";
-	_ant_pool3pw = "123";
-	_ant_nobeeper = "false";
-	_ant_notempoverctrl = "false";
+	_nexell_pool1url = "stratum+tcp://sg.stratum.slushpool.com:3333";
+	_nexell_pool1user = "maekdal.bcworker1";
+	_nexell_pool1pw = "123";
+	_nexell_pool2url = "stratum+tcp://sg.stratum.slushpool.com:3333";
+	_nexell_pool2user = "maekdal.bcworker2";
+	_nexell_pool2pw = "123";
+	_nexell_pool3url = "stratum+tcp://sg.stratum.slushpool.com:3333";
+	_nexell_pool3user = "maekdal.bcworker3";
+	_nexell_pool3pw = "123";
+	_nexell_nobeeper = "false";
+	_nexell_notempoverctrl = "false";
 	try
 	{
-		for(var i = 0; i < ant_data.pools.length; i++) {
+		for(var i = 0; i < nexell_data.pools.length; i++) {
 			switch(i) {
 			case 0:
-				_ant_pool1url = ant_data.pools[i].url;
-				_ant_pool1user = ant_data.pools[i].user;
-				_ant_pool1pw = ant_data.pools[i].pass;
+				_nexell_pool1url = nexell_data.pools[i].url;
+				_nexell_pool1user = nexell_data.pools[i].user;
+				_nexell_pool1pw = nexell_data.pools[i].pass;
 				break;
 			case 1:
-				_ant_pool2url = ant_data.pools[i].url;
-				_ant_pool2user = ant_data.pools[i].user;
-				_ant_pool2pw = ant_data.pools[i].pass;
+				_nexell_pool2url = nexell_data.pools[i].url;
+				_nexell_pool2user = nexell_data.pools[i].user;
+				_nexell_pool2pw = nexell_data.pools[i].pass;
 				break;
 			case 2:
-				_ant_pool3url = ant_data.pools[i].url;
-				_ant_pool3user = ant_data.pools[i].user;
-				_ant_pool3pw = ant_data.pools[i].pass;
+				_nexell_pool3url = nexell_data.pools[i].url;
+				_nexell_pool3user = nexell_data.pools[i].user;
+				_nexell_pool3pw = nexell_data.pools[i].pass;
 				break;
 			}
 		}
-		if(ant_data["bitmain_nobeeper"]) {
-			_ant_nobeeper = "true";
+		if(nexell_data["miner_nobeeper"]) {
+			_nexell_nobeeper = "true";
 		} else {
-			_ant_nobeeper = "false";
+			_nexell_nobeeper = "false";
 		}
-		if(ant_data["bitmain_notempoverctrl"]) {
-			_ant_notempoverctrl = "true";
+		if(nexell_data["miner_notempoverctrl"]) {
+			_nexell_notempoverctrl = "true";
 		} else {
-			_ant_notempoverctrl = "false";
+			_nexell_notempoverctrl = "false";
 		}
 	}
 	catch(err)
@@ -129,8 +129,8 @@ function f_submit_miner_conf() {
 		alert('Invalid Miner configuration file. Edit manually or reset to default.'+err);
 	}
 	
-	_ant_freq=jQuery("#ant_freq").val();
-	_ant_voltage=jQuery("#ant_voltage").val();
+	_nexell_freq=jQuery("#nexell_freq").val();
+	_nexell_voltage=jQuery("#nexell_voltage").val();
 	
 	jQuery("#cbi_apply_cgminer_fieldset").show();
 	
@@ -140,7 +140,7 @@ function f_submit_miner_conf() {
 		dataType: 'json',
 		timeout: 30000,
 		cache: false,
-		data: {_ant_pool1url:_ant_pool1url, _ant_pool1user:_ant_pool1user, _ant_pool1pw:_ant_pool1pw,_ant_pool2url:_ant_pool2url, _ant_pool2user:_ant_pool2user, _ant_pool2pw:_ant_pool2pw,_ant_pool3url:_ant_pool3url, _ant_pool3user:_ant_pool3user, _ant_pool3pw:_ant_pool3pw, _ant_nobeeper:_ant_nobeeper, _ant_notempoverctrl:_ant_notempoverctrl, _ant_freq:_ant_freq, _ant_voltage:_ant_voltage},
+		data: {_nexell_pool1url:_nexell_pool1url, _nexell_pool1user:_nexell_pool1user, _nexell_pool1pw:_nexell_pool1pw,_nexell_pool2url:_nexell_pool2url, _nexell_pool2user:_nexell_pool2user, _nexell_pool2pw:_nexell_pool2pw,_nexell_pool3url:_nexell_pool3url, _nexell_pool3user:_nexell_pool3user, _nexell_pool3pw:_nexell_pool3pw, _nexell_nobeeper:_nexell_nobeeper, _nexell_notempoverctrl:_nexell_notempoverctrl, _nexell_freq:_nexell_freq, _nexell_voltage:_nexell_voltage},
 		success: function(data) {
 			window.location.reload();
 		},
@@ -212,7 +212,7 @@ jQuery(document).ready(function() {
 						<div class="cbi-value" id="cbi-cgminer-default-freq">
 							<label class="cbi-value-title" for="cbid.cgminer.default.freq">Frequency</label>
 							<div class="cbi-value-field">
-								<select id="ant_freq" class="cbi-input-text">
+								<select id="nexell_freq" class="cbi-input-text">
 								    <option value="4:350:0d82">350M</option>
 								    <option value="4:343.75:1b06">343.75M</option>                          
 								    <option value="4:337.5:0d02">337.5M</option> 
@@ -260,7 +260,7 @@ jQuery(document).ready(function() {
 						<div class="cbi-value" id="cbi-cgminer-default-voltage">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool3url">Voltage</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.voltage" id="ant_voltage" value="" />
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.voltage" id="nexell_voltage" value="" />
 								<span style="color:red;">Modify voltage, clkick Save&Apply, and then re-power the miner.</span>
 							</div>
 						</div>
