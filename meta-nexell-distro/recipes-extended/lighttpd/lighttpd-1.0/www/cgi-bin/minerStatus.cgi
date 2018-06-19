@@ -122,13 +122,13 @@ if [ "${ant_tmp}" == "Socket connect failed: Connection refused" ]; then
 	ant_bestshare=0
 else
 	ant_elapsed=${ant_tmp#*Elapsed=}
-	ant_elapsed=${ant_elapsed%%,GHS 5s=*}
+	ant_elapsed=${ant_elapsed%%,MHS av=*}
 	
-	ant_ghs5s=${ant_tmp#*GHS 5s=}
-	ant_ghs5s=${ant_ghs5s%%,GHS av=*}
+	ant_ghsav=${ant_tmp#*MHS av=}
+	ant_ghsav=${ant_ghsav%%,MHS 5s=*}
 	
-	ant_ghsav=${ant_tmp#*GHS av=}
-	ant_ghsav=${ant_ghsav%%,Found Blocks=*}
+	ant_ghs5s=${ant_tmp#*MHS 5s=}
+	ant_ghs5s=${ant_ghs5s%%,MHS 1m=*}
 	
 	ant_foundblocks=${ant_tmp#*Found Blocks=}
 	ant_foundblocks=${ant_foundblocks%%,Getworks=*}
@@ -380,8 +380,8 @@ if [ "${ant_tmp}" != "Socket connect failed: Connection refused" ]; then
 		echo "<div id=\"cbip-table-1-status\"></div>"
 		echo "</td>"
 
-                ant_pool_diff=${ant_tmp#*Diff=}
-		ant_pool_diff=${ant_pool_diff%%,Diff1 Shares=*}
+                ant_pool_diff=${ant_tmp#*Work Difficulty=}
+		ant_pool_diff=${ant_pool_diff%%,Has Stratum=*}
 		echo "<td class=\"cbi-value-field\">"
 		echo "<div id=\"cbi-table-1-diff\">${ant_pool_diff}</div>"
 		echo "<div id=\"cbip-table-1-diff\"></div>"
@@ -471,7 +471,7 @@ ant_pool_diffs_split=$(echo $ant_pool_diffs| sed -r ':1;s/(.*[0-9])([0-9]{3})/\1
 		
 		
 		ant_pool_rejected=${ant_tmp#*Rejected=}
-		ant_pool_rejected=${ant_pool_rejected%%,Discarded=*}
+		ant_pool_rejected=${ant_pool_rejected%%,Works=*}
 #2014-10-16##################################################################################### 
 ant_pool_rejected_split=$(echo $ant_pool_rejected| sed -r ':1;s/(.*[0-9])([0-9]{3})/\1,\2/;t1')
 ###############################################################################################
@@ -513,7 +513,7 @@ ant_pool_lsdiff_split=$(echo $ant_pool_lsdiff| sed -r ':1;s/(.*[0-9])([0-9]{3})/
 		echo "</td>"
 		
 		ant_pool_lstime=${ant_tmp#*Last Share Time=}
-		ant_pool_lstime=${ant_pool_lstime%%,Diff=*}
+		ant_pool_lstime=${ant_pool_lstime%%,Diff1 Shares=*}
 if [ "$ant_pool_lstime" = 0 ];
 then
  ant_pool_lstime=Never
@@ -748,7 +748,7 @@ cat <<-EOD
 				<!-- /tblsection -->
 				<!-- tblsection -->
 				<fieldset class="cbi-section" id="cbi-table-table">
-					<legend>AntMiner</legend>
+					<legend>BitMiner</legend>
 					<div class="cbi-section-descr"></div>
 					<div class="cbi-section-node">
 						<table id="ant_devs" class="cbi-section-table">
