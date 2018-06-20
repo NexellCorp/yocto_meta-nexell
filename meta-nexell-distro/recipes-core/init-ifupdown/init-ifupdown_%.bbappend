@@ -13,5 +13,6 @@ do_install_append() {
 	install -m 0755 ${WORKDIR}/init.wlan0 ${D}${sysconfdir}/init.d/networking
 	install -d ${D}/config
 	install -m 0400 ${WORKDIR}/network.conf.factory ${D}/config
+	install -m 0400 ${WORKDIR}/network.conf.factory ${D}${sysconfdir}
 }
 
