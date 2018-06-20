@@ -23,19 +23,19 @@ NEXELL_KERNEL_TEST_IMAGE_INSTALL = " \
     can-utils \
 "
 
-IMAGE_INSTALL_append = " \
+NAVI_REF_WIFI_INSTALL = " \
     kernel-modules \
     rtl-8188eus-${ARCH_TYPE_NUM} \
-    net-tools \
     wireless-tools \
     wpa-supplicant \
+"
+
+IMAGE_INSTALL_append = " \
+    net-tools \
+    ${@bb.utils.contains('MACHINE', 's5p4418-navi-ref', '${NAVI_REF_WIFI_INSTALL}', '', d)} \
     ${WEB_INSTALL} \
     ${CGMINER_INSTALL} \
     ${SYSTEMD_INSTALL} \
     ${NEXELL_KERNEL_TEST_IMAGE_INSTALL} \
 "
-
-
-
-
 
