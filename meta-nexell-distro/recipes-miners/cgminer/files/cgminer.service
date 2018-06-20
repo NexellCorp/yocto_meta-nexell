@@ -1,0 +1,13 @@
+[Unit]
+Description=Multi-threaded Multi-pool FPGA and ASIC Miner for Bitcoin
+After=network.target
+
+[Service]
+Type=idle
+Environment="TERM=dumb"
+ExecStart=@BINDIR@/cgminer --api-listen --default-config /config/cgminer.conf
+ExecReload=@BASE_BINDIR@/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
