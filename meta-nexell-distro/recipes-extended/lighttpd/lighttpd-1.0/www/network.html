@@ -23,17 +23,17 @@ function f_get_network_info() {
 		success: function(data) {
 			try
 			{
-				$("#ant_netdevice").html(data.netdevice);
-				$("#ant_macaddr").html(data.macaddr);
-				$("#ant_ipaddress").html(data.ipaddress);
-				$("#ant_netmask").html(data.netmask);
+				$("#nexell_netdevice").html(data.netdevice);
+				$("#nexell_macaddr").html(data.macaddr);
+				$("#nexell_ipaddress").html(data.ipaddress);
+				$("#nexell_netmask").html(data.netmask);
 				
-				$("#ant_conf_nettype").val(data.conf_nettype);
-				$("#ant_conf_hostname").val(data.conf_hostname);
-				$("#ant_conf_ipaddress").val(data.conf_ipaddress);
-				$("#ant_conf_netmask").val(data.conf_netmask);
-				$("#ant_conf_gateway").val(data.conf_gateway);
-				$("#ant_conf_dnsservers").val(data.conf_dnsservers);
+				$("#nexell_conf_nettype").val(data.conf_nettype);
+				$("#nexell_conf_hostname").val(data.conf_hostname);
+				$("#nexell_conf_ipaddress").val(data.conf_ipaddress);
+				$("#nexell_conf_netmask").val(data.conf_netmask);
+				$("#nexell_conf_gateway").val(data.conf_gateway);
+				$("#nexell_conf_dnsservers").val(data.conf_dnsservers);
 			}
 			catch(err)
 			{
@@ -47,18 +47,18 @@ function f_get_network_info() {
 }
 
 function f_submit_network_conf() {
-	_ant_conf_nettype = $("#ant_conf_nettype").val();
-	_ant_conf_hostname = $("#ant_conf_hostname").val();
-	_ant_conf_ipaddress = $("#ant_conf_ipaddress").val();
-	_ant_conf_netmask = $("#ant_conf_netmask").val();
-	_ant_conf_gateway = $("#ant_conf_gateway").val();
-	_ant_conf_dnsservers = $("#ant_conf_dnsservers").val();
+	_nexell_conf_nettype = $("#nexell_conf_nettype").val();
+	_nexell_conf_hostname = $("#nexell_conf_hostname").val();
+	_nexell_conf_ipaddress = $("#nexell_conf_ipaddress").val();
+	_nexell_conf_netmask = $("#nexell_conf_netmask").val();
+	_nexell_conf_gateway = $("#nexell_conf_gateway").val();
+	_nexell_conf_dnsservers = $("#nexell_conf_dnsservers").val();
 	
 	$("#cbi_apply_cgminer_fieldset").show();
 	
 	setTimeout(function(){
-		if(_ant_conf_nettype == "Static") {
-			window.location.href = "http://"+_ant_conf_ipaddress+"/network.html";
+		if(_nexell_conf_nettype == "Static") {
+			window.location.href = "http://"+_nexell_conf_ipaddress+"/network.html";
 		} else {
 			window.location.reload();
 		}
@@ -70,7 +70,7 @@ function f_submit_network_conf() {
 		dataType: 'json',
 		timeout: 30000,
 		cache: false,
-		data: {_ant_conf_nettype:_ant_conf_nettype, _ant_conf_hostname:_ant_conf_hostname, _ant_conf_ipaddress:_ant_conf_ipaddress, _ant_conf_netmask:_ant_conf_netmask,_ant_conf_gateway:_ant_conf_gateway, _ant_conf_dnsservers:_ant_conf_dnsservers},
+		data: {_nexell_conf_nettype:_nexell_conf_nettype, _nexell_conf_hostname:_nexell_conf_hostname, _nexell_conf_ipaddress:_nexell_conf_ipaddress, _nexell_conf_netmask:_nexell_conf_netmask,_nexell_conf_gateway:_nexell_conf_gateway, _nexell_conf_dnsservers:_nexell_conf_dnsservers},
 		success: function(data) {
 		},
 		error: function() {
@@ -85,18 +85,18 @@ $(document).ready(function() {
 });
 function DHCPLoad()
 {
-	var obj = document.getElementById("ant_conf_nettype");
+	var obj = document.getElementById("nexell_conf_nettype");
 	var index = obj.selectedIndex;
 	var value = obj.options[index].value;
 	if (value == "DHCP"){
-	document.getElementById("ant_conf_ipaddress").readOnly=true;
-	document.getElementById("ant_conf_ipaddress").style.backgroundColor = "#999999";  
-	document.getElementById("ant_conf_netmask").readOnly=true;
-	document.getElementById("ant_conf_netmask").style.backgroundColor = "#999999"; 
-	document.getElementById("ant_conf_gateway").readOnly=true;
-	document.getElementById("ant_conf_gateway").style.backgroundColor = "#999999"; 
-	document.getElementById("ant_conf_dnsservers").readOnly=true;
-	document.getElementById("ant_conf_dnsservers").style.backgroundColor = "#999999"; 
+	document.getElementById("nexell_conf_ipaddress").readOnly=true;
+	document.getElementById("nexell_conf_ipaddress").style.backgroundColor = "#999999";  
+	document.getElementById("nexell_conf_netmask").readOnly=true;
+	document.getElementById("nexell_conf_netmask").style.backgroundColor = "#999999"; 
+	document.getElementById("nexell_conf_gateway").readOnly=true;
+	document.getElementById("nexell_conf_gateway").style.backgroundColor = "#999999"; 
+	document.getElementById("nexell_conf_dnsservers").readOnly=true;
+	document.getElementById("nexell_conf_dnsservers").style.backgroundColor = "#999999"; 
 	}
 }
 
@@ -104,24 +104,24 @@ function DHCPChange(val)
 {
 
 	if (val=="DHCP"){
-	document.getElementById("ant_conf_ipaddress").readOnly=true;
-	document.getElementById("ant_conf_ipaddress").style.backgroundColor = "#999999"; 
-	document.getElementById("ant_conf_netmask").readOnly=true;
-	document.getElementById("ant_conf_netmask").style.backgroundColor = "#999999"; 
-	document.getElementById("ant_conf_gateway").readOnly=true;
-	document.getElementById("ant_conf_gateway").style.backgroundColor = "#999999";
-	document.getElementById("ant_conf_dnsservers").readOnly=true; 
-	document.getElementById("ant_conf_dnsservers").style.backgroundColor = "#999999"; 
+	document.getElementById("nexell_conf_ipaddress").readOnly=true;
+	document.getElementById("nexell_conf_ipaddress").style.backgroundColor = "#999999"; 
+	document.getElementById("nexell_conf_netmask").readOnly=true;
+	document.getElementById("nexell_conf_netmask").style.backgroundColor = "#999999"; 
+	document.getElementById("nexell_conf_gateway").readOnly=true;
+	document.getElementById("nexell_conf_gateway").style.backgroundColor = "#999999";
+	document.getElementById("nexell_conf_dnsservers").readOnly=true; 
+	document.getElementById("nexell_conf_dnsservers").style.backgroundColor = "#999999"; 
 	}
 	else{
-	document.getElementById("ant_conf_ipaddress").readOnly=false;
-	document.getElementById("ant_conf_ipaddress").style.backgroundColor = "#f0f0f0"; 
-	document.getElementById("ant_conf_netmask").readOnly=false;
-	document.getElementById("ant_conf_netmask").style.backgroundColor = "#f0f0f0";
-	document.getElementById("ant_conf_gateway").readOnly=false;
-	document.getElementById("ant_conf_gateway").style.backgroundColor = "#f0f0f0";
-	document.getElementById("ant_conf_dnsservers").readOnly=false; 	
-	document.getElementById("ant_conf_dnsservers").style.backgroundColor = "#f0f0f0";
+	document.getElementById("nexell_conf_ipaddress").readOnly=false;
+	document.getElementById("nexell_conf_ipaddress").style.backgroundColor = "#f0f0f0"; 
+	document.getElementById("nexell_conf_netmask").readOnly=false;
+	document.getElementById("nexell_conf_netmask").style.backgroundColor = "#f0f0f0";
+	document.getElementById("nexell_conf_gateway").readOnly=false;
+	document.getElementById("nexell_conf_gateway").style.backgroundColor = "#f0f0f0";
+	document.getElementById("nexell_conf_dnsservers").readOnly=false; 	
+	document.getElementById("nexell_conf_dnsservers").style.backgroundColor = "#f0f0f0";
 	}
 }
 
@@ -186,12 +186,12 @@ function DHCPChange(val)
 											<td></td>
 											<td class="cbi-value-field" style="min-width: 16px; padding: 3px; text-align: center;" id="__status-ifc-signal">
 												<img src="/resources/icons/ethernet.png" style="width: 16px; height: 16px;" /><br />
-												<small id="ant_netdevice"></small>
+												<small id="nexell_netdevice"></small>
 											</td>
 											<td class="cbi-value-field" style="vertical-align: middle; text-align: left; padding: 3px;" id="__status-ifc-description">
-												<strong>MAC-Address:</strong><span id="ant_macaddr"></span><br />
-												<strong>IP:</strong><span id="ant_ipaddress"></span><br />
-												<strong>Netmask:</strong><span id="ant_netmask"></span><br />
+												<strong>MAC-Address:</strong><span id="nexell_macaddr"></span><br />
+												<strong>IP:</strong><span id="nexell_ipaddress"></span><br />
+												<strong>Netmask:</strong><span id="nexell_netmask"></span><br />
 											</td>
 										</tr>
 									</table>
@@ -200,13 +200,13 @@ function DHCPChange(val)
 							<div class="cbi-value" id="cbi-network-wan-ipaddr">
 								<label class="cbi-value-title" for="cbid.network.wan.hostname">Hostname</label>
 								<div class="cbi-value-field">
-									<input type="text" class="cbi-input-text" name="cbid.network.wan.hostname" id="ant_conf_hostname" value="" />
+									<input type="text" class="cbi-input-text" name="cbid.network.wan.hostname" id="nexell_conf_hostname" value="" />
 								</div>
 							</div>
 							<div class="cbi-value" id="cbi-network-wan-proto">
 								<label class="cbi-value-title" for="cbid.network.wan.proto">Protocol</label>
 								<div class="cbi-value-field">
-									<select class="cbi-input-select" id="ant_conf_nettype" name="cbid.network.wan.proto" size="1" onchange="DHCPChange(this.value)">
+									<select class="cbi-input-select" id="nexell_conf_nettype" name="cbid.network.wan.proto" size="1" onchange="DHCPChange(this.value)">
 										<option id="cbi-network-wan-proto-static" value="Static">Static</option>
 										<option id="cbi-network-wan-proto-dhcp" value="DHCP">DHCP</option>
 									</select>
@@ -215,26 +215,26 @@ function DHCPChange(val)
 							<div class="cbi-value" id="cbi-network-wan-ipaddr">
 								<label class="cbi-value-title" for="cbid.network.wan.ipaddr">IP Address</label>
 								<div class="cbi-value-field">
-									<input type="text" class="cbi-input-text" name="cbid.network.wan.ipaddr" id="ant_conf_ipaddress" value="" />
+									<input type="text" class="cbi-input-text" name="cbid.network.wan.ipaddr" id="nexell_conf_ipaddress" value="" />
 								</div>
 							</div>
 							<div class="cbi-value" id="cbi-network-wan-netmask">
 								<label class="cbi-value-title" for="cbid.network.wan.netmask">Netmask</label>
 								<div class="cbi-value-field">
-									<input type="text" class="cbi-input-text" name="cbid.network.wan.netmask" id="ant_conf_netmask" value="" />
+									<input type="text" class="cbi-input-text" name="cbid.network.wan.netmask" id="nexell_conf_netmask" value="" />
 								</div>
 							</div>
 							<div class="cbi-value" id="cbi-network-wan-gateway">
 								<label class="cbi-value-title" for="cbid.network.wan.gateway">Gateway</label>
 								<div class="cbi-value-field">
-									<input type="text" class="cbi-input-text" name="cbid.network.wan.gateway" id="ant_conf_gateway" value="" />
+									<input type="text" class="cbi-input-text" name="cbid.network.wan.gateway" id="nexell_conf_gateway" value="" />
 								</div>
 							</div>
 							<div class="cbi-value cbi-value-last" id="cbi-network-wan-dns">
 								<label class="cbi-value-title" for="cbid.network.wan.dns">DNS Servers</label>
 								<div class="cbi-value-field">
 									<div>
-										<input class="cbi-input-text" type="text" id="ant_conf_dnsservers" name="cbid.network.wan.dns" value="" /><br />
+										<input class="cbi-input-text" type="text" id="nexell_conf_dnsservers" name="cbid.network.wan.dns" value="" /><br />
 									</div>
 								</div>
 							</div>
