@@ -5,7 +5,7 @@ After=sysinit.target
 
 [Service]
 Type=idle
-ExecStart=/usr/bin/bsa_server -p /etc/bluetooth/BCM20710A1_001.002.014.0103.0000.hcd -all=0
+ExecStart=/usr/bin/bsa_server -p /etc/bluetooth/BCM20710A1_001.002.014.0103.0117.hcd -all=0
 
 [Install]
 WantedBy=multi-user.target
