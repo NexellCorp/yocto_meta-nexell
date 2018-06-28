@@ -91,6 +91,7 @@ declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
 declare -A targets_dev_portnum
 targets_dev_portnum["avn-ref"]=2
 targets_dev_portnum["navi-ref"]=0
+targets_dev_portnum["bitminer-ref"]=0
 targets_dev_portnum["zh-dragon"]=0
 targets_dev_portnum["daudio-ref"]=0
 targets_dev_portnum["daudio-covi"]=0
