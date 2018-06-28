@@ -98,6 +98,10 @@ function copy_bin_files()
             cp ${TMP_DEPLOY_PATH}/bl1-zh_dragon.bin ${RESULT_PATH}
         elif [ "${IMAGE_TYPE}" == "smartvoice" -o "${IMAGE_TYPE}" == "smartvoiceui" ]; then
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}_voice.bin ${RESULT_PATH}
+        elif [ "${BOARD_NAME}" == "miner-bit" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-navi.bin ${RESULT_PATH}
+        elif [ "${BOARD_NAME}" == "bitminer-ref" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-navi.bin ${RESULT_PATH}
         else
             cp ${TMP_DEPLOY_PATH}/bl1-${BOARD_PREFIX}.bin ${RESULT_PATH}
         fi

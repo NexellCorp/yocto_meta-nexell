@@ -33,6 +33,7 @@ NAVI_REF_WIFI_INSTALL = " \
 IMAGE_INSTALL_append = " \
     net-tools \
     ${@bb.utils.contains('MACHINE', 's5p4418-navi-ref', '${NAVI_REF_WIFI_INSTALL}', '', d)} \
+    ${@bb.utils.contains('MACHINE', 's5p4418-bitminer-ref', '${NAVI_REF_WIFI_INSTALL}', '', d)} \
     ${WEB_INSTALL} \
     ${CGMINER_INSTALL} \
     ${SYSTEMD_INSTALL} \
