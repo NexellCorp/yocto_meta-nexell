@@ -97,7 +97,17 @@ targets_dev_portnum["daudio-covi"]=0
 targets_dev_portnum["smart-voice"]=0
 targets_dev_portnum["ff-voice"]=0
 #------------------------------------
-
+# NSIH header address
+declare -A targets_load_start_address
+targets_load_start_address["avn-ref"]="63c00000"
+targets_load_start_address["navi-ref"]="63c00000"
+targets_load_start_address["daudio-ref"]="63c00000"
+targets_load_start_address["daudio-covi"]="83c00000"
+targets_load_start_address["daudio-cona"]="83c00000"
+targets_load_start_address["smart-voice"]="83c00000"
+targets_load_start_address["ff-voice"]="a2000000"
+targets_load_start_address["svm-ref"]="63c00000"
+targets_load_start_address["cluster-ref"]="63c00000"
 #------------------------------------
 # kernel image define
 declare -A kernel_image_name
@@ -435,6 +445,29 @@ function post_process()
 		dd if=${result_dir}/bootloader.img of=${result_dir}/fip-nonsecure-usb.bin seek=${pos} bs=1
 	fi
 
+    fi
+
+    if [ ${BOARD_NAME} == "daudio-covi" -o ${BOARD_NAME} == "daudio-cona" ];then
+        dd if=/dev/zero of=${result_dir}/dload.img bs=1 count=0 seek=1024M
+        ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 1024M ${result_dir}/dload.img
+        dd if=/dev/zero of=${result_dir}/userdata.img bs=1 count=0 seek=100M
+        ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 100M ${result_dir}/userdata.img
+    fi
+
+    #For usb download, create usb download image
+    if [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
+        # step1. nsih-dummy.txt + fileSize + load/start address => nsih-usbdownload.txt
+        #        python nsihtxtmod.py <work path> <source> <load address> <start address>
+        local loadAddr=${targets_load_start_address[${BOARD_NAME}]}
+        local startAddr=${targets_load_start_address[${BOARD_NAME}]}
+        python nsihtxtmod.py ./ fip-nonsecure-usb.bin $loadAddr $startAddr
+
+        # step2. nsih-usbdownload.bin
+        python nsihbingen.py
+
+        # step3, create fip-loader-usb.img
+        cp nsih-usbdownload.bin fip-loader-usb.img
+        dd if=fip-nonsecure-usb.bin >> fip-loader-usb.img
     fi
 
     echo -e "\n\033[0;34m ------------------------------------------------------------------------------------------ \033[0m\n"
