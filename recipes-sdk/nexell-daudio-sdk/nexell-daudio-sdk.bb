@@ -53,7 +53,7 @@ do_install() {
 }
 
 FILES_${PN} = "${bindir} ${libdir} nexell/daudio podo"
-RDEPENDS_${PN} = "nexell-drm-mali"
+RDEPENDS_${PN} = "nexell-drm-mali procps"
 
 INSANE_SKIP_${PN} = "host-user-contaminated dev-deps dev-so"
 INSANE_SKIP_${PN}-dev = "dev-elf textrel"
