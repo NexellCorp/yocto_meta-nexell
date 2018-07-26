@@ -88,6 +88,18 @@ declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
                           $MEM_2G_NON_SECURE_JUMP_ADDR \
                         )
 
+# NSIH header address
+declare -A targets_load_start_address
+targets_load_start_address["avn-ref"]="63c00000"
+targets_load_start_address["navi-ref"]="63c00000"
+targets_load_start_address["daudio-ref"]="63c00000"
+targets_load_start_address["daudio-covi"]="83c00000"
+targets_load_start_address["daudio-cona"]="83c00000"
+targets_load_start_address["smart-voice"]="83c00000"
+targets_load_start_address["ff-voice"]="a2000000"
+targets_load_start_address["svm-ref"]="63c00000"
+targets_load_start_address["cluster-ref"]="63c00000"
+#------------------------------------
 # RAM 1G USE
 #mem_addrs=("${mem_1G_addrs[@]}")
 # RAM 2G USE
@@ -419,7 +431,7 @@ function post_process()
                               ${result_dir}/bootloader.img
         fi
 
-	if [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
+	 if [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
 		local file_name=
 		local pos=0
 		local file_size=0
@@ -442,12 +454,29 @@ function post_process()
 	fi
 
     fi
-	if [ ${BOARD_NAME} == "daudio-covi" -o ${BOARD_NAME} == "daudio-cona" ];then
-		dd if=/dev/zero of=${result_dir}/dload.img bs=1 count=0 seek=1024M
-		${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 1024M ${result_dir}/dload.img
-		dd if=/dev/zero of=${result_dir}/userdata.img bs=1 count=0 seek=100M
-		${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 100M ${result_dir}/userdata.img
-	fi
+
+    if [ ${BOARD_NAME} == "daudio-covi" -o ${BOARD_NAME} == "daudio-cona" ];then
+        dd if=/dev/zero of=${result_dir}/dload.img bs=1 count=0 seek=1024M
+        ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 1024M ${result_dir}/dload.img
+        dd if=/dev/zero of=${result_dir}/userdata.img bs=1 count=0 seek=100M
+        ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 100M ${result_dir}/userdata.img
+    fi
+
+    #For usb download, create usb download image
+    if [ "${BOARD_SOCNAME}" == "s5p4418" ]; then
+        # step1. nsih-dummy.txt + fileSize + load/start address => nsih-usbdownload.txt
+        #        python nsihtxtmod.py <work path> <source> <load address> <start address>
+        local loadAddr=${targets_load_start_address[${BOARD_NAME}]}
+        local startAddr=${targets_load_start_address[${BOARD_NAME}]}
+        python nsihtxtmod.py ./ fip-nonsecure-usb.bin $loadAddr $startAddr
+
+        # step2. nsih-usbdownload.bin
+        python nsihbingen.py
+
+        # step3, create fip-loader-usb.img
+        cp nsih-usbdownload.bin fip-loader-usb.img
+        dd if=fip-nonsecure-usb.bin >> fip-loader-usb.img
+    fi
 
     echo -e "\n\n\033[0;33m  Target download method.....                                                            \033[0m\n"
     echo -e "\033[0;33m  <Full download>                                                                            \033[0m"

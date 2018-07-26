@@ -44,9 +44,9 @@ function run_by_usb()
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
                  -f ${RESULT_DIR}/fip-loader-usb.img -m
-        elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+        else
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -b ${RESULT_DIR}/bl1-avn.bin \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
@@ -59,50 +59,15 @@ function run_by_usb()
                  -a 0xFFFF0000 -j 0xFFFF0000
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
-                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
-        elif [ ${BOARD_PREFIX} == "navi" -o ${BOARD_PREFIX} == "daudio" ]; then
-            echo ${TOOLS_PATH}
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
-                 -a 0xFFFF0000 -j 0xFFFF0000
-            sleep 1
-            if [ ${BOARD_POSTFIX} == "covi" -o ${BOARD_POSTFIX} == "cona" ]; then
-                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                     -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
-            else
-                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
-            fi
-		elif [ ${BOARD_PREFIX} == "svm" ]; then
-            echo ${TOOLS_PATH}
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
-                 -a 0xFFFF0000 -j 0xFFFF0000
-            sleep 3
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
-		elif [ ${BOARD_PREFIX} == "cluster" ]; then
-            echo ${TOOLS_PATH}
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
-                 -a 0xFFFF0000 -j 0xFFFF0000
-            sleep 3
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
-        elif [ ${BOARD_POSTFIX} == "voice" ]; then
-            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}_voice.bin \
-                 -a 0xFFFF0000 -j 0xFFFF0000
-            sleep 1
-            if [ ${BOARD_PREFIX} == "ff" ]; then
-                sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-                     -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0xA2000000 -j 0xA2000000
-            else
-		sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
-		     -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
-            fi
+                 -f ${RESULT_DIR}/fip-loader-usb.img -m
         else
-            echo "Not supported board type"
+            echo ${TOOLS_PATH}
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
+            sleep 1
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                 -f ${RESULT_DIR}/fip-loader-usb.img -m
         fi
     fi
 }

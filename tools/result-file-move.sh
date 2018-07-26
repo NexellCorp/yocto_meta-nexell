@@ -231,6 +231,10 @@ function post_process()
     echo -e "\033[40;33m  Maybe you need to convert some binary images                                \033[0m"
     echo -e "\033[40;33m  You can use below operation                                                 \033[0m"
     echo -e "\033[40;33m  ex) ${META_NEXELL_PATH}/tools/convert_images.sh ${MACHINE_NAME} ${IMAGE_TYPE}  \033[0m\n"
+
+    cp ${META_NEXELL_PATH}/tools/nsihbingen.py ${RESULT_PATH}
+    cp ${META_NEXELL_PATH}/tools/nsihtxtmod.py ${RESULT_PATH}
+    cp ${META_NEXELL_PATH}/tools/nsih-dummy.txt ${RESULT_PATH}
 }
 
 check_usage
