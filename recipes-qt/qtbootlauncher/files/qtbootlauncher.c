@@ -428,6 +428,8 @@ static int bootlauncher(const char *file, bool debug)
 			envp[j++] = li[i].d;
 			if (debug)
 				message("PARSE:%s\n", li[i].d);
+                        else
+                                usleep(20000);
 		}
 	}
 	envp[j] = NULL;
@@ -453,6 +455,8 @@ static int bootlauncher(const char *file, bool debug)
 		for (i = 0; i < j; i++)
 			message("%s\n", envp[i]);
 		message("EXE: %s %s\n", prog, args);
+	} else {
+		usleep(30000);
 	}
 
 	/*
