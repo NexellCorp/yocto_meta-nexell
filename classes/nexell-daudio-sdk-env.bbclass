@@ -1,4 +1,4 @@
-inherit qmake5_paths
+#inherit qmake5_paths
 
 OE_QMAKE_PLATFORM_NATIVE = "linux-oe-g++"
 OE_QMAKE_PLATFORM_TARGET = "linux-oe-g++"
