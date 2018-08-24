@@ -13,4 +13,5 @@ inherit packagegroup
 
 RDEPENDS_${PN} = " \
     nexell-drm-mali \
+    testsuite-s5p4418 \
     "
