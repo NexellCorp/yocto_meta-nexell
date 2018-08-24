@@ -15,7 +15,7 @@ DEPENDS = "virtual/kernel"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-#COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st)"
+#COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-bitminer-ref|s5p6818-kick-st)"
 inherit module
 
 KERNEL_MODULE_AUTOLOAD += "optee optee_armtz"

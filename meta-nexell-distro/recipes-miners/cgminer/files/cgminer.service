@@ -5,7 +5,14 @@ After=network.target
 [Service]
 Type=idle
 Environment="TERM=dumb"
-ExecStart=@BINDIR@/cgminer --api-listen --default-config /config/cgminer.conf
+# RESET_P; GPIOB4
+ExecStartPre=/bin/sh -c '/bin/echo 36 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio36/direction; /bin/echo 1 > /sys/class/gpio/gpio36/value'
+# INTR_GLD_N_P; GPIOB2
+ExecStartPre=/bin/sh -c '/bin/echo 34 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio34/direction'
+# INTR_OON_N_P; GPIOB10
+#ExecStartPre=/bin/sh -c '/bin/echo 42 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio42/direction'
+#ExecStart=@BINDIR@/cgminer --api-listen --default-config /config/cgminer.conf
+ExecStart=/bin/echo ""
 ExecReload=@BASE_BINDIR@/kill -HUP $MAINPID
 
 [Install]

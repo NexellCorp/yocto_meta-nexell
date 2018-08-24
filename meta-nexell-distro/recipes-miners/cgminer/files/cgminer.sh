@@ -12,11 +12,16 @@ set -e
 test -x "$DAEMON" || exit 0
 
 do_start() {
+	echo 36 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio36/direction
+	cat /sys/class/gpio/gpio36/value
+	echo 0 > /sys/class/gpio/gpio36/value
 	if [ ! -e /config/cgminer.conf ]; then
 		cp /config/cgminer.conf.factory /config/cgminer.conf
 	fi
 	echo PARAMS = $PARAMS
-	start-stop-daemon -b -S -x screen -- -S cgminer -t cgminer -m -d "$DAEMON" $PARAMS --api-listen --default-config /config/cgminer.conf
+	echo 1 > /sys/class/gpio/gpio36/value
+#	start-stop-daemon -b -S -x screen -- -S cgminer -t cgminer -m -d "$DAEMON" $PARAMS --api-listen --default-config /config/cgminer.conf
 }
 
 do_stop() {

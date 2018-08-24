@@ -4,7 +4,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 DEPENDS = "ncurses curl libusb jansson"
 
-S = "${WORKDIR}/git"
+#S = "${WORKDIR}/git"
+S = "${WORKDIR}/cgminer.src"
 
 inherit autotools pkgconfig systemd
 

@@ -87,7 +87,7 @@ function copy_bin_files()
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
         if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
 	    cp ${TMP_DEPLOY_PATH}/bl1-raptor.bin ${RESULT_PATH}
-        elif [ "${BOARD_NAME}" == "avn-ref" ]; then
+        elif [ "${BOARD_NAME}" == "avn-ref" -o "${BOARD_NAME}" == "bitminer-ref" ]; then
             cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
         fi
         cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
@@ -169,7 +169,11 @@ function copy_rootfs_image()
 
 function copy_partmap_file()
 {
-    cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+    if [ "${IMAGE_TYPE}" == "bitminer" ];then
+		cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_bitminer_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+	else
+		cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+	fi
 }
 
 function post_process()

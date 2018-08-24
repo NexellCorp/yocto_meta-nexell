@@ -32,8 +32,11 @@ NAVI_REF_WIFI_INSTALL = " \
 
 IMAGE_INSTALL_append = " \
     net-tools \
+    spidevtest \
     ${@bb.utils.contains('MACHINE', 's5p4418-navi-ref', '${NAVI_REF_WIFI_INSTALL}', '', d)} \
     ${@bb.utils.contains('MACHINE', 's5p4418-bitminer-ref', '${NAVI_REF_WIFI_INSTALL}', '', d)} \
+    ${@bb.utils.contains('MACHINE', 's5p6818-bitminer-ref', '${NAVI_REF_WIFI_INSTALL}', '', d)} \
+	avahi \
     ${WEB_INSTALL} \
     ${CGMINER_INSTALL} \
     ${SYSTEMD_INSTALL} \

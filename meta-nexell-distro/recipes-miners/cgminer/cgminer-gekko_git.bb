@@ -1,26 +1,37 @@
 include cgminer.inc
 
-SUMMAR = "cgminer for the compac/2pac mining sticks"
+SUMMARY = "cgminer for the compac/2pac mining sticks"
 
-SRC_URI = "git://gitlab.com/JinyongLee/cgminer-gekko.git;protocol=https;branch=master \
+#SRC_URI = "git://gitlab.com/JinyongLee/cgminer-gekko.git;protocol=https;branch=master \
+#		   file://cgminer.conf.factory \
+#		   file://cgminer.sh \
+#		   file://cgminer.service \
+#"
+SRC_URI = "file://cgminer.src \
 		   file://cgminer.conf.factory \
 		   file://cgminer.sh \
 		   file://cgminer.service \
 "
+
 FILES_${PN} += " ${sysconfdir} config"
 
-#SRCREV = "8894aaf089b2c398337fd1ee000e306e6a001e4d"
-SRCREV = "1fccd3d4b3e1a75659b6bb5376735870ace1d5c9"
-PV = "4.9+gitr${SRCPV}"
 
-PACKAGECONFIG_append 	= " gekko"
-PACKAGECONFIG[gekko]  	= "--enable-gekko,,"
+#SRCREV = "8894aaf089b2c398337fd1ee000e306e6a001e4d"
+#SRCREV = "4740a10e3b367c63928ac7a5bde25835b6a8ae7b"
+SRCREV = "${AUTOREV}"
+#PV = "4.9+gitr${SRCPV}"
+
+#PACKAGECONFIG_append 	= " gekko"
+#PACKAGECONFIG[gekko]  	= "--enable-gekko,,"
+PACKAGECONFIG_append 	= " tsb1101"
+PACKAGECONFIG[tsb1101] 	= "--enable-tsb1101,,"
 
 INITSCRIPT_NAME = "cgminer"
 INITSCRIPT_PARAMS = "defaults 99"
 
 # rename to gekko specific cgminer binary, so we can co-exist multiple versions
-CFLAGS_prepend = "-I . -I ${S} -I ${S}/compat/jansson-2.6/src -I ${S}/compat/libusb-1.0/libusb"
+#CFLAGS_prepend = "-I . -I ${S} -I ${S}/compat/jansson-2.6/src -I ${S}/compat/libusb-1.0/libusb"
+CFLAGS_prepend = "-I . -I ${S} -I ${S}/compat/jansson-2.9/src `pkg-config libusb-1.0 --cflags`"
 
 do_compile_append() {
 	    make api-example
