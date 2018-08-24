@@ -7,7 +7,7 @@ EXTRA_OEMAKE = "\
 "
 
 do_compile () {
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} BOARD="cluster" KERNEL_VER="4" ARM_SECURE="n" CHIPNAME="nxp4330" DEVICE_PORT="0" SYSLOG="n" -j 1
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} BOARD="cluster" KERNEL_VER="4" ARM_SECURE="n" CHIPNAME="nxp4330" DEVICE_PORT="0" SYSLOG="n" QUICKBOOT=1 -j 1
 }
 
 inherit deploy
