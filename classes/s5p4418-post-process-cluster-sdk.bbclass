@@ -4,17 +4,12 @@ LICENSE = "CLOSED"
 postprocess_install_cluster_sdk_function() {
     install -d ${IMAGE_ROOTFS}/nexell/cluster/
     cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/* 	${IMAGE_ROOTFS}/nexell/cluster/
-    #cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/libSDL2-2.0.so.0.2.1		${IMAGE_ROOTFS}/usr/lib/
-    #cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/libSDL2_ttf.so			${IMAGE_ROOTFS}/usr/lib/
-	#ln -s -r ${IMAGE_ROOTFS}/usr/lib/libSDL2-2.0.so.0.2.1 ${IMAGE_ROOTFS}/usr/lib/libSDL2-2.0.so.0
-	#ln -s -r ${IMAGE_ROOTFS}/usr/lib/libSDL2-2.0.so.0.2.1 ${IMAGE_ROOTFS}/usr/lib/libSDL2.so
     install -m0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/TiaPlayer.elf	${IMAGE_ROOTFS}/nexell/cluster/TiaPlayer.elf
 
-    #cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/autorun_cluster.sh	${IMAGE_ROOTFS}/etc/profile.d/autorun_cluster.sh
     chmod 755 ${IMAGE_ROOTFS}/nexell/cluster/run.sh
-    #chmod 755 ${IMAGE_ROOTFS}/etc/profile.d/autorun_cluster.sh
-	#install -Dm0644 ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/cluster.service  ${IMAGE_ROOTFS}/etc/systemd/system/cluster.service
-	#install -Dm0644 ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/cluster.service  ${IMAGE_ROOTFS}${systemd_system_unitdir}/
+	cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/autorun_cluster.sh       ${IMAGE_ROOTFS}/nexell/
+    chmod 755 ${IMAGE_ROOTFS}/nexell/autorun_cluster.sh
+
 	install -Dm755  ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/cluster.init.d   ${IMAGE_ROOTFS}/etc/init.d/cluster
 
     cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_lib_fb/libMali.so		${IMAGE_ROOTFS}/usr/lib/
@@ -27,6 +22,15 @@ postprocess_install_cluster_sdk_function() {
 	install -d ${IMAGE_ROOTFS}/nexell/fakenavi/
     cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/fakenavi/*	${IMAGE_ROOTFS}/nexell/fakenavi
 	chmod 755 ${IMAGE_ROOTFS}/nexell/fakenavi/*
+
+    install -d ${IMAGE_ROOTFS}/nexell/avm_app/
+    cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/avm_app/nx_3d_avm   ${IMAGE_ROOTFS}/nexell/avm_app/nx_3d_avm
+    chmod 755 ${IMAGE_ROOTFS}/nexell/avm_app/nx_3d_avm
+
+    install -d ${IMAGE_ROOTFS}/sbin/3DS
+    cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/avm_app/bin/3DS/*   ${IMAGE_ROOTFS}/sbin/3DS
+    install -d ${IMAGE_ROOTFS}/sbin/avm
+    cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/avm_app/bin/avm/*   ${IMAGE_ROOTFS}/sbin/avm
 
 }
 
