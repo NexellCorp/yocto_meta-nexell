@@ -3,6 +3,9 @@
 OE_QMAKE_PLATFORM_NATIVE = "linux-oe-g++"
 OE_QMAKE_PLATFORM_TARGET = "linux-oe-g++"
 
+ENABLE_BT = "yes"
+ENABLE_CAM = "yes"
+
 export NX_OE_QMAKE_AR = "${AR}"
 export NX_OE_QMAKE_CC = "${CC}"
 export NX_OE_QMAKE_CFLAGS = "${CFLAGS}"
@@ -25,8 +28,11 @@ export NX_OE_QMAKESPEC = "${QMAKE_MKSPEC_PATH_NATIVE}/mkspecs/${OE_QMAKE_PLATFOR
 export NX_OE_XQMAKESPEC = "${QMAKE_MKSPEC_PATH_TARGET}/mkspecs/${OE_QMAKE_PLATFORM_TARGET}"
 export NX_QT_CONF_PATH = "${WORKDIR}/qt.conf"
 
+export NX_DAUDIO_ENABLE_BT = "${ENABLE_BT}"
+export NX_DAUDIO_ENABLE_CAM = "${ENABLE_CAM}"
+
 do_generate_qt_config_file() {
-	cat > ${NX_QT_CONF_PATH} <<EOF
+	cat > ${NX_QT_CONF_PATH} << EOF
 [Paths]
 Prefix = ${OE_QMAKE_PATH_PREFIX}
 Headers = ${OE_QMAKE_PATH_HEADERS}
