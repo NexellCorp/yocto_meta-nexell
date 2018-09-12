@@ -2,15 +2,15 @@ DESCRIPTION = "Nexell Cluster SDK for rootfs"
 LICENSE = "CLOSED"
 
 postprocess_install_cluster_sdk_function() {
-    install -d ${IMAGE_ROOTFS}/nexell/cluster/
-    cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/* 	${IMAGE_ROOTFS}/nexell/cluster/
-    install -m0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/TiaPlayer.elf	${IMAGE_ROOTFS}/nexell/cluster/TiaPlayer.elf
+    #install -d ${IMAGE_ROOTFS}/nexell/cluster/
+    #cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/* 	${IMAGE_ROOTFS}/nexell/cluster/
+    #install -m0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_ui/TiaPlayer.elf	${IMAGE_ROOTFS}/nexell/cluster/TiaPlayer.elf
 
-    chmod 755 ${IMAGE_ROOTFS}/nexell/cluster/run.sh
-	cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/autorun_cluster.sh       ${IMAGE_ROOTFS}/nexell/
-    chmod 755 ${IMAGE_ROOTFS}/nexell/autorun_cluster.sh
+    #chmod 755 ${IMAGE_ROOTFS}/nexell/cluster/run.sh
+	#cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/autorun_cluster.sh       ${IMAGE_ROOTFS}/nexell/
+    #chmod 755 ${IMAGE_ROOTFS}/nexell/autorun_cluster.sh
 
-	install -Dm755  ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/cluster.init.d   ${IMAGE_ROOTFS}/etc/init.d/cluster
+	#install -Dm755  ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/script/cluster.init.d   ${IMAGE_ROOTFS}/etc/init.d/cluster
 
     cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_lib_fb/libMali.so		${IMAGE_ROOTFS}/usr/lib/
     cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/nexell-cluster-sdk/files/cluster_lib_fb/libVR.so			${IMAGE_ROOTFS}/usr/lib/
