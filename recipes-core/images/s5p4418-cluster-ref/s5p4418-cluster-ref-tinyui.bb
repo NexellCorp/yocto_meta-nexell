@@ -10,5 +10,8 @@ LICENSE = "LGPLv2.1"
 IMAGE_INSTALL += " \
     packagegroup-nexell-common \
     packagegroup-s5p4418-tinyui \
-	cluster-init \
     "
+
+#IMAGE_INSTALL += " \
+#    cluster-init \
+#    "
