@@ -99,6 +99,7 @@ targets_load_start_address["smart-voice"]="83c00000"
 targets_load_start_address["ff-voice"]="a2000000"
 targets_load_start_address["svm-ref"]="63c00000"
 targets_load_start_address["cluster-ref"]="63c00000"
+targets_load_start_address["convergence-svmc"]="63c00000"
 #------------------------------------
 # RAM 1G USE
 #mem_addrs=("${mem_1G_addrs[@]}")
@@ -143,8 +144,10 @@ function usage()
     echo "    ex) $0 s5p4418-ff-voice ffvoice"
     echo "    ex) $0 s5p4418-svm-ref qt"
     echo "    ex) $0 s5p4418-daudio-cona qt"
-	echo "    ex) $0 s5p4418-cluster-ref tiny"
-	echo "    ex) $0 s5p4418-cluster-ref tinyui"
+    echo "    ex) $0 s5p4418-cluster-ref tiny"
+    echo "    ex) $0 s5p4418-cluster-ref tinyui"
+    echo "    ex) $0 s5p4418-convergence-svmc tiny"
+    echo "    ex) $0 s5p4418-convergence-svmc tinyui"
 }
 
 function mem_addr_setup()
@@ -370,8 +373,10 @@ function post_process()
             dev_portnum=0
         elif [ ${BOARD_NAME} == "svm-ref" ];then
             dev_portnum=0
-		elif [ ${BOARD_NAME} == "cluster-ref" ];then
-			dev_portnum=0
+        elif [ ${BOARD_NAME} == "cluster-ref" ];then
+            dev_portnum=0
+        elif [ ${BOARD_NAME} == "convergence-svmc" ];then
+            dev_portnum=0
         fi
 
         make_3rdboot_for_emmc ${BOARD_SOCNAME} \

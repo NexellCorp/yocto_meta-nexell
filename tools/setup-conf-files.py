@@ -92,6 +92,7 @@ CONF_BBMASK_S5P4418_DAUDIO_COVI = "/s5p4418-daudio-covi"
 CONF_BBMASK_S5P4418_SVM_REF = "/s5p4418-svm-ref"
 CONF_BBMASK_S5P4418_DAUDIO_CONA = "/s5p4418-daudio-cona"
 CONF_BBMASK_S5P4418_CLUSTER_REF = "/s5p4418-cluster-ref"
+CONF_BBMASK_S5P4418_CONVERGENCE_SVMC = "/s5p4418-convergence-svmc"
 
 class parsingForpokyfiles():
     linuxMark = '/'
