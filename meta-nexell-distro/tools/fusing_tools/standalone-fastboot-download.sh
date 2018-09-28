@@ -54,6 +54,7 @@ function usage()
 	echo " -t env\t: if you want to update only env, specify this, default no"
 	echo " -t kernel\t: if you want to update only boot partition, specify this, default no"
 	echo " -t rootfs\t: if you want to update only root partition, specify this, default no"
+	echo " -t user\t: if you want to update only root partition, specify this, default no"
 }
 
 function vmsg()
@@ -79,6 +80,7 @@ function parse_args()
                     env    ) UPDATE_ALL=false; UPDATE_ENV=true ;;
                     kernel ) UPDATE_ALL=false; UPDATE_BOOT=true ;;
                     rootfs ) UPDATE_ALL=false; UPDATE_ROOT=true ;;
+                    user   ) UPDATE_ALL=false; UPDATE_DATA=true ;;
 		    *      ) usage; exit 1 ;;
                  esac
                  shift 2 ;;
@@ -299,5 +301,6 @@ fi
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
+update_data ${RESULT_DIR}/userdata.img
 
 sudo fastboot continue

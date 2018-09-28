@@ -4,6 +4,7 @@
 
 export XDG_CONFIG_HOME=/etc/
 export XDG_RUNTIME_DIR=/tmp/wayland-runtime-dir
+export SDL_VIDEODRIVER=wayland
 export WAYLAND_DISPLAY=wayland-0
 export WS_CALUDEV_FILE=/etc/udev/rules.d/ws-calibrate.rules
 

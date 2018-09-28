@@ -44,6 +44,10 @@ function pre_operation()
         echo -e "\033[47;34m  ATF & l-loader & optee & u-boot & bl1 ==> do_fetch & do_unpack    \033[0m"
         echo -e "\033[47;34m ------------------------------------------------------------------ \033[0m"
         bitbake arm-trusted-firmware l-loader optee-client optee-os optee-test optee-linuxdriver bl1-${BOARD_SOCNAME} u-boot-nexell -c unpack
+        echo -e "\n\033[47;34m ------------------------------------------------------------------ \033[0m"
+        echo -e "\033[47;34m  optee-build ==> symlink make    \033[0m"
+        echo -e "\033[47;34m ------------------------------------------------------------------ \033[0m"
+        bitbake optee-build -c make_symlink
 
         echo -e "\033[47;34m ------------------------------------------------------------------ \033[0m"
         echo -e "\033[47;34m            do_fetch & do_unpack Done...                            \033[0m"

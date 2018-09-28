@@ -12,7 +12,7 @@ SRC_URI = "file://src \
 
 S = "${WORKDIR}"
 
-DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " mesa", " ", d)}"
+DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "nexell-mali-qt", " mesa", " ", d)}"
 PROVIDES += "virtual/egl virtual/libgles1 virtual/libgles2 virtual/libopencl virtual/libwayland-egl"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -35,15 +35,25 @@ do_install () {
 
     # Create MALI manifest
     cd ${D}${libdir}
-    ln -sf libMali.so libEGL.so
-    ln -sf libMali.so libGLESv1_CM.so
-    ln -sf libMali.so libGLESv2.so
-    ln -sf libMali.so libOpenCL.so
-    ln -sf libMali.so libgbm.so
-    ln -sf libMali.so libwayland-egl.so
+
+    if [ "${ARCH_TYPE_NUM}" -eq "64" ];then
+        ln -f libMali.so libEGL.so
+        ln -f libMali.so libGLESv1_CM.so
+        ln -f libMali.so libGLESv2.so
+        ln -f libMali.so libOpenCL.so
+        ln -f libMali.so libgbm.so
+        ln -f libMali.so libwayland-egl.so
+    else
+        ln -sf libMali.so libEGL.so
+        ln -sf libMali.so libGLESv1_CM.so
+        ln -sf libMali.so libGLESv2.so
+        ln -sf libMali.so libOpenCL.so
+        ln -sf libMali.so libgbm.so
+        ln -sf libMali.so libwayland-egl.so
+    fi
 }
 
-INSANE_SKIP_${PN} = "already-stripped debug-files dev-so ldflags"
+INSANE_SKIP_${PN} = "already-stripped debug-files dev-so ldflags file-rdeps"
 PACKAGES = "${PN}"
 FILES_${PN} += "${bindir} ${libdir} ${libdir}/nexell ${includedir}/KHR"
 

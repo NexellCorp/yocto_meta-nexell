@@ -1,0 +1,4 @@
+__fire128_tga.o: __fire128_tga.cpp \
+ /opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr/include/stdc-predef.h
+__door128_tga.o: __door128_tga.cpp \
+ /opt/crosstools/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/libc/usr/include/stdc-predef.h

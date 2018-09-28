@@ -5,7 +5,6 @@
 <!-- qt 5.4 -->
         <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb fontconfig alsa tslib gles2 glib examples tools openssl"'/>
         <feature text='DISTRO_FEATURES_append = " nexell-qt5.4"'/>
-        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
         <feature text='DISTRO_FEATURES_append = " qt-default-platform-eglfs"'/>
 <!-- qt 5.8 or latest -->
 <!--    <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"'/> -->

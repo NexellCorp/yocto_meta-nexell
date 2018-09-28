@@ -15,9 +15,12 @@ TOUCH_IMAGE_INSTALL = " \
     tslib-nexell \
 "
 
+NX_QT_LAUNCHER = "qtcinema-launcher"
+
 NEXELL_CUSTOMIZE_INSTALL = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'qtbootlauncher', \
-                              bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qt5-smarthome-launcher', 'qtbootlauncher', d), d)} \
+    ${NX_QT_LAUNCHER} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'nexell-bootanim nexell-btservice', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-covi', 'nexell-bootanim', '', d)} \
     nexell-qt5-touchsetup \
 "
 

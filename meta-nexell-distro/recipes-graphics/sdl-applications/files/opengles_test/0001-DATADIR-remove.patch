@@ -1,0 +1,55 @@
+From 09165ed2b0edf752cc0ae34eb520b07c0a8e8b30 Mon Sep 17 00:00:00 2001
+From: suker <suker@nexell.co.kr>
+Date: Wed, 12 Sep 2018 15:43:31 +0900
+Subject: [PATCH] DATADIR remove
+
+---
+ main_image.cpp | 4 ++--
+ main_mixer.cpp | 2 +-
+ main_ttf.cpp   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/main_image.cpp b/main_image.cpp
+index 24669b4..8c9fe5b 100644
+--- a/main_image.cpp
++++ b/main_image.cpp
+@@ -142,8 +142,8 @@ SDL2TestApplicationImage::initGL()
+         return;
+     }
+ 
+-    texture_from_png = textureFromImage(DATADIR "SDL_logo.png", TextureImage::RGBA);
+-    texture_from_jpg = textureFromImage(DATADIR "sailfish-site-bg_small.jpg", TextureImage::RGB);
++    texture_from_png = textureFromImage("./images/SDL_logo.png", TextureImage::RGBA);
++    texture_from_jpg = textureFromImage("./images/sailfish-site-bg_small.jpg", TextureImage::RGB);
+ }
+ 
+ void
+diff --git a/main_mixer.cpp b/main_mixer.cpp
+index 60442d5..4f4905e 100644
+--- a/main_mixer.cpp
++++ b/main_mixer.cpp
+@@ -73,7 +73,7 @@ SDL2TestApplicationMixer::initGL()
+         exit(1);
+     }
+ 
+-    sample = Mix_LoadWAV(DATADIR "95328__ramas26__c.ogg");
++    sample = Mix_LoadWAV("./sounds/95328__ramas26__c.ogg");
+     if (sample == NULL) {
+         printf("Mix_LoadWAV: %s\n", Mix_GetError());
+         exit(1);
+diff --git a/main_ttf.cpp b/main_ttf.cpp
+index 2d357a9..be6ec9a 100644
+--- a/main_ttf.cpp
++++ b/main_ttf.cpp
+@@ -123,7 +123,7 @@ SDL2TestApplicationTTF::initGL()
+     glGenTextures(1, &texture);
+ 
+     int size = 30;
+-    font = TTF_OpenFont(DATADIR "SourceSansPro-Regular.ttf", size);
++    font = TTF_OpenFont("./fonts/SourceSansPro-Regular.ttf", size);
+ }
+ 
+ void
+-- 
+1.9.1
+

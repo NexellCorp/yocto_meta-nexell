@@ -13,6 +13,9 @@ postprocess_common_function() {
     #ping permission change
     echo "inet:x:3003:root"    >> etc/group
     echo "net_raw:x:3004:root" >> etc/group
+
+    # data partition add
+    echo "/dev/mmcblk0p4 /data         ext4     noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_common_function;"

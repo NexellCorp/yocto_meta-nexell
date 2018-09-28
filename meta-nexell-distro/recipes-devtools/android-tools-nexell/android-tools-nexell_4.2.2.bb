@@ -33,9 +33,12 @@ do_compile() {
     unset CPPFLAGS
 
     sed -i "s%^CPPFLAGS+= -I/usr/include%# we don't want to include headers from host CPPFLAGS+= -I/usr/include%g" ${WORKDIR}/debian/makefiles/ext4_utils.mk
+    # sed -i "s/LIBS+= -lz -lselinux/LIBS+= -lz/g" ${WORKDIR}/debian/makefiles/ext4_utils.mk
 
     oe_runmake -f ${WORKDIR}/debian/makefiles/adbd.mk -C ${S}/core/adbd clean
     oe_runmake -f ${WORKDIR}/debian/makefiles/adbd.mk -C ${S}/core/adbd
+    # oe_runmake -f ${WORKDIR}/debian/makefiles/ext4_utils.mk -C ${S}/extras/ext4_utils clean
+    # oe_runmake -f ${WORKDIR}/debian/makefiles/ext4_utils.mk -C ${S}/extras/ext4_utils
 }
 
 do_install() {

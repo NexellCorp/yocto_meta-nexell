@@ -1,7 +1,5 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-SRC_URI_append = "file://0001-reboot-param-warning-error-bug-fixed.patch"
-
 SRC_URI_append = " \
     file://local.rules \
     file://usb1-rules.sh \
@@ -9,6 +7,34 @@ SRC_URI_append = " \
     file://10-eth.network \
     file://30-wlan.network \
     file://60-usb.network \
+"
+
+PACKAGECONFIG = " \
+    ${@bb.utils.filter('DISTRO_FEATURES', 'efi ldconfig pam selinux usrmerge', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wifi', 'rfkill', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xkbcommon', '', d)} \
+    backlight \
+    binfmt \
+    firstboot \
+    hibernate \
+    hostnamed \
+    ima \
+    localed \
+    logind \
+    machined \
+    myhostname \
+    networkd \
+    nss \
+    polkit \
+    quotacheck \
+    randomseed \
+    resolved \
+    smack \
+    sysusers \
+    timedated \
+    utmp \
+    vconsole \
+    xz \
 "
 
 do_install_append() {

@@ -24,6 +24,6 @@ IMAGE_INSTALL_append = " \
     ${DEVEL_TOOLS} \
     packagegroup-nexell-sato \
     rtl-8188eus-${ARCH_TYPE_NUM} \
-    testsuite-${NEXELL_BOARD_SOCNAME} \
+    testsuite \
 "
 

@@ -9,7 +9,7 @@ BSPPATH := "${@os.path.abspath(os.path.dirname(d.getVar('FILE', True)) + '/../..
 
 BBLAYERS ?= " \
   ${BSPPATH}/poky/meta \
-  ${BSPPATH}/poky/meta-yocto \
+  ${BSPPATH}/poky/meta-poky \
   ${BSPPATH}/poky/meta-yocto-bsp \
   ${BSPPATH}/meta-nexell/meta-nexell-distro \
   ${BSPPATH}/meta-nexell/meta-nexell-sdk \
@@ -21,5 +21,5 @@ BBLAYERS ?= " \
 
 BBLAYERS_NON_REMOVABLE ?= " \
   ${BSPPATH}/poky/meta \
-  ${BSPPATH}/poky/meta-yocto \
+  ${BSPPATH}/poky/meta-poky \
 "

@@ -6,7 +6,6 @@
         <feature text='PACKAGECONFIG_append_pn-qtbase = " accessibility xcb"'/>
         <feature text='PACKAGECONFIG_FONTS_append_pn-qtbase = " fontconfig"'/>
         <feature text='DISTRO_FEATURES_append = " nexell-qt5.4"'/>
-        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
         <feature text='DISTRO_FEATURES_append = " qt-default-platform-x11"'/>
         <feature text='VIRTUAL-RUNTIME_graphical_init_manager ?= "xserver-nodm-init"'/>
 <!-- qt 5.8 or latest -->

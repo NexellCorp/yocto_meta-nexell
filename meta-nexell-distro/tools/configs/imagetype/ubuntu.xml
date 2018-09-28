@@ -8,7 +8,6 @@
         <feature text='VIRTUAL-RUNTIME_initscripts = ""'/>
         <feature text='DISTRO_FEATURES_remove = " wayland"'/>
         <feature text='DISTRO_FEATURES_append = " systemd"'/>
-        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
         <feature text='DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"'/>
         <feature text=''/>
         <feature text='PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"'/>

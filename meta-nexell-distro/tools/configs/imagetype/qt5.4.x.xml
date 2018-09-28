@@ -4,10 +4,13 @@
         <feature text='PACKAGECONFIG_FB_pn-qtbase = "kms"'/>
         <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb fontconfig alsa tslib gles2 glib examples tools openssl"'/>
         <feature text='DISTRO_FEATURES_append = " nexell-qt5.4"'/>
-        <feature text='DISTRO_FEATURES_append = " nexell-mali"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali-qt"'/>
         <feature text='DISTRO_FEATURES_append = " qt-default-platform-eglfs"'/>
         <feature text='DISTRO_FEATURES_append = " zeroconf"'/>
         <feature text='PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"'/>
+        <feature text='BBMASK = "/meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.10.x"'/>
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.7.x "'/>
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.8.x "'/>
         <feature text=''/>
         <feature text='DISTRO_FEATURES_remove = " x11"'/>
         <feature text='DISTRO_FEATURES_append = " systemd wayland opengl"'/>

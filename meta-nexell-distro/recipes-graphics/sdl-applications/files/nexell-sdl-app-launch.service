@@ -1,0 +1,11 @@
+[Unit]
+Description=Nexell SDL wayland backend demo
+After=dbus.service weston.service systemd-journald.service systemd-logind.service systemd-udevd.service rsyslog.service
+
+
+[Service]
+#Type=oneshot
+#ExecStart=/usr/bin/sdl_example/tutorial1_es2_dp
+
+[Install]
+WantedBy=multi-user.target

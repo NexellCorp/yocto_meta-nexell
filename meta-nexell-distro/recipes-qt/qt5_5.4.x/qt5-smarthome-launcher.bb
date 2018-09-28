@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 DEPENDS = "qtsmarthome"
 
 SRC_URI = " \
+    file://qt5_smarthome_run_wayland.sh \
     file://qt5_smarthome_run_eglfs.sh \
     file://qt5_smarthome_run_xcb.sh \
     file://qt5-smarthome.service \
@@ -12,7 +13,7 @@ SRC_URI = " \
 
 S = "${WORKDIR}"
 
-BACKEND = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', bb.utils.contains('DISTRO_FEATURES', 'x11', 'xcb', 'eglfs', d), 'eglfs', d)}"
+BACKEND = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali-qt', bb.utils.contains('DISTRO_FEATURES', 'x11', 'xcb', 'eglfs', d), 'eglfs', d)}"
 inherit systemd
 
 SYSTEMD_SERVICE_${PN} = "qt5-smarthome.service"

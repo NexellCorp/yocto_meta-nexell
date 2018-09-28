@@ -39,7 +39,7 @@ X11_ALSA_UTILS_IMAGE_INSTALL = " \
 "
 
 RDEPENDS_${PN} = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-sato', '', d)}  \
+    nexell-drm-mali-sato \
     ${GSTREAMER10_X11} \
     ${X11_INPUT_IMAGE_INSTALL} \
     ${X11_VIDEO_ARMSOC} \

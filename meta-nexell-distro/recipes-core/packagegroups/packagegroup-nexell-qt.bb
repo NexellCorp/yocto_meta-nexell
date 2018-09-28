@@ -25,20 +25,23 @@ QT_WAYLAND = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland qtwayland-examples', '', d)} \
 "
 
-QT5_4_ESSENTIAL_IMAGES = " \
+QT5_ESSENTIAL_IMAGES = " \
     qtbase \
     qtbase-plugins \
-    qtimageformats-plugins \
-    qtgraphicaleffects-qmlplugins \
-    qtdeclarative-plugins \
-    qtdeclarative-qmlplugins \
-    qtsystems-qmlplugins \
-    qt3d-qmlplugins \
+    qtlocation \
     qtlocation-plugins \
     qtlocation-qmlplugins \
+    qtdeclarative-qmlplugins \
     qtmultimedia-plugins \
     qtmultimedia-qmlplugins \
-    qtquickcontrols-qmlplugins \
+    qt3d-qmlplugins \
+    qtgraphicaleffects-qmlplugins \
+"
+
+QT5_4_ESSENTIAL_IMAGES = " \
+    qtimageformats-plugins \
+    qtdeclarative-plugins \
+    qtsystems-qmlplugins \
 "
 QT5_4_EXTRA_IMAGES = " \
     maliit-framework-qt5 \
@@ -48,7 +51,6 @@ QT5_4_EXAMPLE_IMAGES = " \
     qtsmarthome \
     qt5-demo-extrafiles \
     qtconnectivity-examples \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland-examples', '', d)} \
     qtdeclarative-examples \
     qtbase-examples \
     qtsystems-examples \
@@ -56,34 +58,42 @@ QT5_4_EXAMPLE_IMAGES = " \
     qtlocation-examples \
     qtscript-examples \
     qtquickcontrols-examples \
+    qtquickcontrols-qmlplugins \
     qt3d-examples \
     cinematicexperience \
 "
 
-QT5_8_ESSENTIAL_IMAGES = " \
-    qtbase \
-    qtbase-plugins \
-    qtdeclarative-qmlplugins \
-    qtlocation-plugins \
-    qtlocation-qmlplugins \
-    qtmultimedia-plugins \
-    qtmultimedia-qmlplugins \
-    qt3d-qmlplugins \
-    qtwebkit-qmlplugins \
+QT5_6_ESSENTIAL_IMAGES = " \
+    qtscript \
+    qtquick1 \
     qtquick1-plugins \
     qtquick1-qmlplugins \
-    qtquickcontrols-qmlplugins \
+    liberation-fonts \
+    qtbase-examples \
+    qtsystems-examples \
+    qtmultimedia-examples \
+    qtscript-examples \
+    qtquickcontrols-examples \
+    qt3d-examples \
+    cinematicexperience \
+"
+
+QT5_10_ESSENTIAL_IMAGES = " \
+    qtsmarthome \
+    qtquick1-plugins \
+    qtquick1-qmlplugins \
     qtquickcontrols2-qmlplugins \
-    qtgraphicaleffects-qmlplugins \
     qtvirtualkeyboard-plugins \
     qtvirtualkeyboard-qmlplugins \
     liberation-fonts \
 "
+
 #qtwebengine-qmlplugins
 #qtdeclarative-plugins
 
 QT_ALSA_LIB_IMAGE_INSTALL = " \
 "
+
 QT_ALSA_UTILS_IMAGE_INSTALL = " \
     alsa-utils \
     alsa-utils-alsamixer \
@@ -96,6 +106,13 @@ QT_ALSA_UTILS_IMAGE_INSTALL = " \
     alsa-utils-aseqnet \
     alsa-utils-aseqdump \
     alsa-utils-alsactl \
+"
+
+QT_WEBKIT = " \
+    qtwebkit \
+    qtwebkit-qmlplugins \
+    qtsvg \
+    qtsvg-plugins \
 "
 
 MULTIMEDIA_IMAGE_INSTALL = " \
@@ -130,15 +147,17 @@ UTILS_INSTALL = " \
 "
 
 RDEPENDS_${PN} = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-qt', '', d)}  \
+    nexell-drm-mali-qt \
     weston-conf \
     ${GSTREAMER10} \
+    ${QT5_ESSENTIAL_IMAGES} \
     ${QT_WAYLAND} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXTRA_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_EXAMPLE_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT_ALSA_LIB_IMAGE_INSTALL}', '', d)}  \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', '${QT5_6_ESSENTIAL_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.10', '${QT5_10_ESSENTIAL_IMAGES}', '', d)}  \
     ${NEXELL_LIBS} \
     ${UTILS_INSTALL} \
     ${QT_ALSA_UTILS_IMAGE_INSTALL} \

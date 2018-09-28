@@ -1,0 +1,11 @@
+{
+    "title": "SDL2 image Test",
+    "id": "sdl2_image_test",
+    "version": "1.0.6",
+    "vendor": "Thomas Perl",
+    "vendor_url": "https://github.com/thp/sdl2-opengles-test",
+    "type": "game",
+    "main": "sdl2_image_test",
+    "icon": "icon.png",
+    "uiRevision": "2"
+}

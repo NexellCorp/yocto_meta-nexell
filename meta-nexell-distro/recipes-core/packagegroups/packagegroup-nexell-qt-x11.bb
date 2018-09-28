@@ -95,7 +95,7 @@ UTILS_INSTALL = " \
 "
 
 RDEPENDS_${PN} = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-sato', '', d)} \
+    nexell-drm-mali-sato \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${X11_QT5_4_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${X11_QT5_4_EXAMPLE_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \

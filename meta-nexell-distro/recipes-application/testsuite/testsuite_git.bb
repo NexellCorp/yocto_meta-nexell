@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://Makefile;md5=d5743c4d7fa2b466a875bac2c6176aa1"
 SRCREV = "b9b288d64ffb44cb512cb4fe5f009c6fa66e7806"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/testsuite;protocol=git;branch=nexell"
 
-DEPENDS = "nx-drm-allocator nx-v4l2 nx-renderer nx-scaler nx-gst-meta nx-video-api libdrm-nx "
+DEPENDS = "nx-drm-allocator nx-renderer nx-scaler nx-gst-meta nx-v4l2 libdrm-nx "
 
 S = "${WORKDIR}/git"
 
@@ -179,7 +179,7 @@ do_install() {
 
 PREFERRED_VERSION_libavcodec = "56.60.100"
 PREFERRED_VERSION_libavformat = "56.40.101"
-INSANE_SKIP_${PN} = "ldflags"
+INSANE_SKIP_${PN} = "ldflags file-rdeps"
 FILES_${PN} = "${bindir} ${libdir}"
 RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter"
 RDEPENDS_${PN} += "nx-drm-allocator nx-v4l2 nx-renderer nx-scaler nx-gst-meta nx-video-api libdrm-nx "

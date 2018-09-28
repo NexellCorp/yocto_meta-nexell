@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<imagetype_config>
+    <common>
+        <feature text='DISTRO_FEATURES_append = " systemd wayland opengl gles2 pulseaudio tslib alsa"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali-fb"'/>
+        <feature text='DISTRO_FEATURES_remove = " directfb x11"'/>
+        <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
+        <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles1 = "nexell-drm-mali-sdl-fb"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles2 = "nexell-drm-mali-sdl-fb"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/egl = "nexell-drm-mali-sdl-fb"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libopencl = "nexell-drm-mali-sdl-fb"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgl = "mesa"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/mesa = "mesa"'/>
+        <feature text=''/>        
+        <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
+    </common>
+</imagetype_config>

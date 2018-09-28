@@ -19,7 +19,7 @@ do_install() {
 
     if [ "${ARCH_TYPE_NUM}" -eq "32" ]; then
         install -m 0644 ${WORKDIR}/${ARCH_TYPE_NUM}/lib/systemd/system/bsa.service ${D}${systemd_unitdir}/system/
-        cp -aR ${WORKDIR}/${ARCH_TYPE_NUM}/lib/systemd/system/multi-user.target.wants/bsa.service ${D}${systemd_unitdir}/system/multi-user.target.wants/
+        cp -aR ${WORKDIR}/${ARCH_TYPE_NUM}/lib/systemd/system/bsa.service ${D}${systemd_unitdir}/system/multi-user.target.wants/
     else
         echo "Requires 64bit binaries."
     fi

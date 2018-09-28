@@ -101,7 +101,7 @@ UTILS_INSTALL = " \
     glibc-gconv-euc-kr \
 "
 RDEPENDS_${PN} = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-mali', 'nexell-drm-mali-qt', '', d)}  \
+    nexell-drm-mali-qt \
     weston-conf \
     ${GSTREAMER10} \
     ${QT_WAYLAND} \

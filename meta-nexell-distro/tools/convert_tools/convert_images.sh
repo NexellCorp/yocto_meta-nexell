@@ -88,6 +88,16 @@ declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
 
 #------------------------------------
 # dev_portnum define
+declare -A user_partition_size
+user_partition_size["avn-ref"]="6G"
+user_partition_size["navi-ref"]="6G"
+user_partition_size["zh-dragon"]="1G"
+user_partition_size["daudio-ref"]="0"
+user_partition_size["daudio-covi"]="0"
+user_partition_size["smart-voice"]="1G"
+user_partition_size["ff-voice"]="1G"
+#------------------------------------
+# dev_portnum define
 declare -A targets_dev_portnum
 targets_dev_portnum["avn-ref"]=2
 targets_dev_portnum["navi-ref"]=0
@@ -356,8 +366,17 @@ function make_sparse_rootfs_img()
             $result_dir/extra-rootfs-support
     fi
 
-    #temporary, smartvoice can not use sparse image
-    ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg $result_dir/nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 $result_dir/rootfs.img
+    pushd $result_dir
+    ext2simg nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 rootfs.img
+
+    local partition_size=${user_partition_size[${BOARD_NAME}]}
+    rm -rf userdata    
+    mkdir -p userdata    
+
+    ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l ${partition_size} -b 4K -a user userdata.img ./userdata
+    echo "userdata partition size : ${partition_size}byte"
+    
+    popd
 }
 
 function post_process()
@@ -449,9 +468,9 @@ function post_process()
 
     if [ ${BOARD_NAME} == "daudio-covi" -o ${BOARD_NAME} == "daudio-cona" ];then
         dd if=/dev/zero of=${result_dir}/dload.img bs=1 count=0 seek=1024M
-        ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 1024M ${result_dir}/dload.img
+        ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l 1024M ${result_dir}/dload.img
         dd if=/dev/zero of=${result_dir}/userdata.img bs=1 count=0 seek=100M
-        ${META_NEXELL_TOOLS_PATH}/make_ext4fs -s -l 100M ${result_dir}/userdata.img
+        ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l 100M ${result_dir}/userdata.img
     fi
 
     #For usb download, create usb download image

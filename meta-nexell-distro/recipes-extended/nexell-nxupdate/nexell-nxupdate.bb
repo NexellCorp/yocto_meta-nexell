@@ -42,4 +42,5 @@ do_install() {
     fi
 }
 
+INSANE_SKIP_${PN} = "file-rdeps"
 FILES_${PN} = "${bindir} ${sysconfdir} ${base_sbindir} ${systemd_unitdir}"

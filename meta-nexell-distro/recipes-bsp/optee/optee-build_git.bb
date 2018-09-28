@@ -10,16 +10,15 @@ SRC_URI = "git://git.nexell.co.kr/nexell/secure/optee/optee_build;protocol=git;b
            file://0001-optee-build-customize-for-yocto.patch \
           "
 
-S = "${WORKDIR}/git"
+S ?= "${WORKDIR}/git"
 PV = "NEXELL"
 PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st)"
-
 inherit pkgconfig
 DEPENDS = "gcc-linaro-4.9-2014.11-x86-64-arm-linux-gnueabihf \
+           gcc-linaro-4.9-2015.05-x86-64-aarch64-linux-gnu \
            arm-trusted-firmware l-loader optee-os optee-client optee-test u-boot-nexell bl1-${OPTEE_BUILD_TARGET_SOCNAME}"
 
 TOOLCHAIN_32 = "${RECIPE_SYSROOT}${datadir}/gcc-linaro-4.9-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-"
@@ -27,11 +26,29 @@ TOOLCHAIN_32_BIN_PATH = "${RECIPE_SYSROOT}${datadir}/gcc-linaro-4.9-arm-linux-gn
 TOOLCHAIN_32_LIB_PATH = "${RECIPE_SYSROOT}${datadir}/gcc-linaro-4.9-arm-linux-gnueabihf/lib"
 TOOLCHAIN_32_LIB_FLAGS = "-L${TOOLCHAIN_32_LIB_PATH}"
 
+TOOLCHAIN_64 = "${RECIPE_SYSROOT}${datadir}/${TOOLCHAIN_AARCH64_PREBUILT}/bin/aarch64-linux-gnu-"
+TOOLCHAIN_64_BIN_PATH = "${RECIPE_SYSROOT}${datadir}/${TOOLCHAIN_AARCH64_PREBUILT}/bin"
+TOOLCHAIN_64_LIB_PATH = "${RECIPE_SYSROOT}${datadir}/${TOOLCHAIN_AARCH64_PREBUILT}/lib"
+TOOLCHAIN_64_LIB_FLAGS = "-L${TOOLCHAIN_64_LIB_PATH}"
+
+PATH_OPTEE_BUILD ?= "${@env_setup(d,"optee-build")}"
+PATH_OPTEE_OS ?= "${@env_setup(d,"optee-os")}"
+PATH_OPTEE_CLIENT ?= "${@env_setup(d,"optee-client")}"
+PATH_OPTEE_LINUXDRIVER ?= "${@env_setup(d,"optee-linuxdriver")}"
+PATH_OPTEE_TEST ?= "${@env_setup(d,"optee-test")}"
+PATH_ATF ?= "${@env_setup(d,"arm-trusted-firmware")}"
+PATH_L-LOADER ?= "${@env_setup(d,"l-loader")}"
+PATH_U-BOOT ?= "${@env_setup(d,"u-boot-nexell")}"
+PATH_BL1 ?= "${@env_setup(d,"bl1-${OPTEE_BUILD_TARGET_SOCNAME}")}"
+PATH_KERNEL_SRC ?= "${@env_setup(d,"kernel-source")}"
+PATH_KERNEL_BUILD = "${@env_setup(d,"kernel-build-artifacts")}"
+
+
 COMMON_FLAGS = ' \
     PLAT_DRAM_SIZE=${OPTEE_PLAT_DRAM_SIZE} \
     PLAT_UART_BASE=0xc00a3000 \
     ${SECURE-OPTEE} \
-    CROSS_COMPILE=${TARGET_PREFIX} \
+    CROSS_COMPILE=${TOOLCHAIN_64} \
     CROSS_COMPILE32=${TOOLCHAIN_32} \
     YOCTO_DTB=${KERNEL_DTB_NAME} \
     YOCTO_DEFCONFIG=${KBUILD_DEFCONFIG} \
@@ -39,18 +56,6 @@ COMMON_FLAGS = ' \
     CPPFLAGS+="-fno-strict-aliasing" \
     DISABLE_PEDANTIC=1 \
 '
-
-PATH_OPTEE_BUILD = "${@env_setup(d,"optee-build")}"
-PATH_OPTEE_OS = "${@env_setup(d,"optee-os")}"
-PATH_OPTEE_CLIENT = "${@env_setup(d,"optee-client")}"
-PATH_OPTEE_LINUXDRIVER = "${@env_setup(d,"optee-linuxdriver")}"
-PATH_OPTEE_TEST = "${@env_setup(d,"optee-test")}"
-PATH_ATF = "${@env_setup(d,"arm-trusted-firmware")}"
-PATH_L-LOADER = "${@env_setup(d,"l-loader")}"
-PATH_U-BOOT = "${@env_setup(d,"u-boot-nexell")}"
-PATH_BL1 = "${@env_setup(d,"bl1-${OPTEE_BUILD_TARGET_SOCNAME}")}"
-PATH_KERNEL_SRC = "${@env_setup(d,"kernel-source")}"
-PATH_KERNEL_BUILD = "${@env_setup(d,"kernel-build-artifacts")}"
 
 python do_make_source_dir_pathfile() {
     import subprocess
@@ -105,20 +110,20 @@ do_compile() {
     export PATH=${TOOLCHAIN_32_BIN_PATH}:$PATH
     export LDFLAGS=""
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} clean
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl1 -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-lloader -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} clean
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-bl1 -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-lloader -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-bl32 -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-bl32 -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-loader -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-secure -j8
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-fip-nonsecure -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-loader -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-secure -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-nonsecure -j8
 
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-optee-client
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" build-optee-test
-    oe_runmake -f ${WORKDIR}/git/Makefile ${COMMON_FLAGS} build-singleimage -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-optee-client
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" build-optee-test
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-singleimage -j8
 }
 
 do_install() {
@@ -157,5 +162,6 @@ INSANE_SKIP_${PN} = "ldflags"
 INSANE_SKIP_${PN}-dev += "dev-elf ldflags"
 
 addtask make_source_dir_pathfile before do_configure
-addtask make_symlink after do_configure before do_compile
+addtask make_symlink after do_unpack before do_configure
+#addtask make_symlink after do_configure before do_compile
 addtask deploy after do_install

@@ -4,10 +4,10 @@ LICENSE = "GPLv2"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
-LINUX_VERSION ?= "4.4.49"
+LINUX_VERSION ?= "4.4.83"
 
-SRCREV = "dda3834a34289130367b4402789e98f94e0e9457"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/kernel/kernel-4.4.x;protocol=git;branch=nexell"
+SRCREV = "0e9f91fb681d4f68e343a22a8f0e5f770f0f2583"
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/kernel/kernel-4.4.x;protocol=git;branch=nexell;depth=5"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 PROVIDES += "virtual/kernel kernel kernel-base kernel-image kernel-dev kernel-vmlinux kernel-misc kernel-modules perf-dbg perf"
@@ -24,20 +24,3 @@ require recipes-kernel/linux/linux-yocto.inc
 do_configure_prepend() {
     rm ${B}/.config
 }
-
-# # Automatically depend on lzop-native if CONFIG_KERNEL_LZO is enabled
-# python () {
-#      try:
-#          defconfig = bb.fetch2.localpath('file://defconfig', d)
-#      except bb.fetch2.FetchError:
-#          return
-
-#      try:
-#          configfile = open(defconfig)
-#      except IOError:
-#          return
-
-#      if 'CONFIG_KERNEL_LZO=y\n' in configfile.readlines():
-#          depends = d.getVar('DEPENDS', False)
-#          d.setVar('DEPENDS', depends + ' lzop-native')
-# }
