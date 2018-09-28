@@ -16,6 +16,8 @@ CGMINER_INSTALL = " \
 "
 
 WEB_INSTALL = " \
+	libmodbus \
+	modbus-tcp-server \
     lighttpd \
 "
 
