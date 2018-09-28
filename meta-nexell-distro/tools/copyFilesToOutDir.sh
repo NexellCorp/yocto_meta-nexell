@@ -87,8 +87,10 @@ function copy_bin_files()
     if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
         if [ "${BOARD_NAME}" == "artik710-raptor" ]; then
 	    cp ${TMP_DEPLOY_PATH}/bl1-raptor.bin ${RESULT_PATH}
-        elif [ "${BOARD_NAME}" == "avn-ref" -o "${BOARD_NAME}" == "bitminer-ref" ]; then
+        elif [ "${BOARD_NAME}" == "avn-ref" ]; then
             cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
+        elif [ "${BOARD_NAME}" == "bitminer-ref" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-bitminer.bin ${RESULT_PATH}
         fi
         cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}

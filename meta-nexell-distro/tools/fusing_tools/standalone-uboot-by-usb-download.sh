@@ -51,6 +51,13 @@ function run_by_usb()
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
                  -f ${RESULT_DIR}/fip-loader-usb.img -m
+        elif [ "${BOARD_NAME}" == "bitminer-ref" ]; then
+            sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
+                 -b ${RESULT_DIR}/bl1-bitminer.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
+            sleep 1
+            sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
+                 -f ${RESULT_DIR}/fip-loader-usb.img -m
         fi
     else
         if [ ${BOARD_PREFIX} == "avn" ]; then
