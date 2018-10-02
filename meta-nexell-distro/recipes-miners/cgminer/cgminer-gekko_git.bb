@@ -2,12 +2,9 @@ include cgminer.inc
 
 SUMMARY = "cgminer for the compac/2pac mining sticks"
 
-#SRC_URI = "git://gitlab.com/JinyongLee/cgminer-gekko.git;protocol=https;branch=master \
-#		   file://cgminer.conf.factory \
-#		   file://cgminer.sh \
-#		   file://cgminer.service \
-#"
-SRC_URI = "file://cgminer.src \
+SRC_URI = "git://git.nexell.co.kr/nexell/bitcoin/cgminer;protocol=git;branch=nexell \
+"
+SRC_URI_append = " \
 		   file://cgminer.conf.factory \
 		   file://cgminer.sh \
 		   file://cgminer.service \
