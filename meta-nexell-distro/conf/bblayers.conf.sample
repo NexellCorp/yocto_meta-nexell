@@ -12,8 +12,6 @@ BBLAYERS ?= " \
   ${BSPPATH}/poky/meta-yocto \
   ${BSPPATH}/poky/meta-yocto-bsp \
   ${BSPPATH}/meta-nexell/meta-nexell-distro \
-  ${BSPPATH}/meta-qt5 \
-  ${BSPPATH}/meta-openembedded/meta-multimedia \
   ${BSPPATH}/meta-openembedded/meta-oe \
   ${BSPPATH}/openembedded-core/meta \
   "

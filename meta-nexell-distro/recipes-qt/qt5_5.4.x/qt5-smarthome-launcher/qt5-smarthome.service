@@ -1,9 +1,0 @@
-[Unit]
-Description=QT5 Smarthome demo
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/qt5_smarthome_run.sh
-
-[Install]
-WantedBy=multi-user.target

@@ -1,4 +1,0 @@
-require qt5-nexell.inc
-
-SRC_URI[md5sum] = "3f090704c240410825e999a3653779de"
-SRC_URI[sha256sum] = "a9513d35baad5a3878686022b13dc1165c461ab1d54ac26c4ae0003113ef9bb0"
