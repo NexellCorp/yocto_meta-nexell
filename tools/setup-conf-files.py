@@ -24,6 +24,9 @@ CONF_BBMASK = "BBMASK += "
 #Not use QT recipes
 CONF_BBMASK_NOT_USE_QT = " /meta-nexell/recipes-qt"
 
+#Not us QT related SDK
+CONF_BBMASK_NOT_USE_QT_SDK = " /meta-nexell/recipes-sdk/qt"
+
 #Not use nexell graphics
 CONF_BBMASK_NOT_USE_GRAPHICS = " /meta-nexell/recipes-graphics"
 
@@ -121,11 +124,11 @@ class parsingForpokyfiles():
 
         #related QT, wayland/weston
 	if self.imagetype == 'tiny' :
-            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
+            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_QT_SDK + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
             confAppend = CONF_APPEND_USE_TINY
         elif self.imagetype == 'smartvoice' :
             if self.boardName == 's5p4418-ff-voice' :
-                confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
+                confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_QT_SDK + CONF_BBMASK_NOT_USE_BENCHMARK + CONF_BBMASK_NOT_USE_GRAPHICS + '"'
                 confAppend = CONF_APPEND_USE_FFVOICE + CONF_WHILTELIST_FLAGS_SET
             else :
                 confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
@@ -140,14 +143,14 @@ class parsingForpokyfiles():
             confBBmask = ''
             confAppend = CONF_APPEND_USE_QT + CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'tinyui' :
-            confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + '"'
+            confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_QT_SDK + '"'
             confAppend = CONF_APPEND_USE_WSWL + CONF_WHILTELIST_FLAGS_SET
         elif self.imagetype == 'sdl' :
-            confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
+            confBBmask = CONF_BBMASK + '"' +  CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_QT_SDK + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
             confAppend = CONF_APPEND_USE_SDL + CONF_WHILTELIST_FLAGS_SET # CONF_APPEND_USE_WSWL
         elif self.imagetype == 'sato' :
             #confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_BENCHMARK + '"'
-            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + '"'
+            confBBmask = CONF_BBMASK + '"' + CONF_BBMASK_NOT_USE_QT + CONF_BBMASK_NOT_USE_QT_SDK + '"'
             confAppend = CONF_APPEND_USE_X11 + CONF_WHILTELIST_FLAGS_SET
         else :
             pass
