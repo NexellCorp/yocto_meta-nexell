@@ -36,6 +36,13 @@ PORT_SD=0
 DEVIDS=("usb" "spi" "nand" "sdmmc" "sdfs" "uart")
 PORTS=("emmc" "sd")
 
+MEM_256MB_LOAD_ADDR=0x4fcc0000
+MEM_256MB_JUMP_ADDR=0x4fd00800
+MEM_256MB_SECURE_LOAD_ADDR=0x4fb00000
+MEM_256MB_SECURE_JUMP_ADDR=0x00000000
+MEM_256MB_NON_SECURE_LOAD_ADDR=0x4df00000
+MEM_256MB_NON_SECURE_JUMP_ADDR=0x00000000
+
 MEM_512MB_LOAD_ADDR=0x9fcc0000
 MEM_512MB_JUMP_ADDR=0x9fd00800
 MEM_512MB_SECURE_LOAD_ADDR=0x9fb00000
@@ -64,6 +71,13 @@ MEM_SECURE_JUMP_ADDR=
 MEM_NON_SECURE_LOAD_ADDR=
 MEM_NON_SECURE_JUMP_ADDR=
 
+declare -a mem_256MB_addrs=( $MEM_256MB_LOAD_ADDR \
+                             $MEM_256MB_JUMP_ADDR \
+                             $MEM_256MB_SECURE_LOAD_ADDR \
+                             $MEM_256MB_SECURE_JUMP_ADDR \
+                             $MEM_256MB_NON_SECURE_LOAD_ADDR \
+                             $MEM_256MB_NON_SECURE_JUMP_ADDR \
+                           )
 declare -a mem_512MB_addrs=( $MEM_512MB_LOAD_ADDR \
                              $MEM_512MB_JUMP_ADDR \
                              $MEM_512MB_SECURE_LOAD_ADDR \
@@ -97,6 +111,7 @@ targets_dev_portnum["daudio-ref"]=0
 targets_dev_portnum["daudio-covi"]=0
 targets_dev_portnum["smart-voice"]=0
 targets_dev_portnum["ff-voice"]=0
+targets_dev_portnum["bitminer-ref"]=2
 #------------------------------------
 
 #------------------------------------
@@ -112,11 +127,13 @@ boot_partition_size["s5p6818"]=67108864 #64MB
 
 #------------------------------------
 # RAM 1G USE
-mem_addrs=("${mem_1G_addrs[@]}")
+#mem_addrs=("${mem_1G_addrs[@]}")
 # RAM 2G USE
 #mem_addrs=("${mem_2G_addrs[@]}")
 # RAM 512MB USE
 #mem_addrs=("${mem_512MB_addrs[@]}")
+# RAM 256MB USE
+mem_addrs=("${mem_256MB_addrs[@]}")
 #------------------------------------
 
 # aes key
@@ -198,7 +215,7 @@ function convert_env_setup()
     if [ ${BOARD_SOCNAME} == 's5p6818' ]; then
 	ARM_ARCH="arm64"
         #OPTEE_PLAT_DRAM_SIZE=2048
-        mem_addrs=("${mem_2G_addrs[@]}")
+        mem_addrs=("${mem_256MB_addrs[@]}")
     else
 	ARM_ARCH="arm"
     fi
