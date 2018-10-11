@@ -1,3 +1,4 @@
+inherit populate_sdk_qt5
 require recipes-graphics/images/core-image-weston.bb
 
 DESCRIPTION = "Nexell QT SDKs"

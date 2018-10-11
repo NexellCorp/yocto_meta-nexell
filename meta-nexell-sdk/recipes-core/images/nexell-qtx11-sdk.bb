@@ -1,3 +1,4 @@
+inherit populate_sdk_qt5
 include recipes-sato/images/core-image-sato.bb
 
 DESCRIPTION = "Nexell QT-X11 SDKs"
