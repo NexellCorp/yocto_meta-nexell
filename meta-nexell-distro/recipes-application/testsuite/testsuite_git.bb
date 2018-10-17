@@ -26,12 +26,20 @@ AUTOTOOLS_SCRIPT_PATH = "${S}/video_api_test"
 EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
     "
+TARGET_CC_ARCH += "${LDFLAGS}"
 
 do_configure() {
     #video_api_test
-    cd ${S}/video_api_test
+    #cd ${S}/video_api_test
+    #NOCONFIGURE=true ./autogen.sh
+    #oe_runconf
+
+    # uvc test
+    cd ${S}/uvc_test
+    ./bootstrap.sh
     NOCONFIGURE=true ./autogen.sh
     oe_runconf
+
 }
 
 do_compile() {
@@ -116,6 +124,11 @@ do_compile() {
     cd ${S}/uac_test
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/alsa" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+
+    # uvc test
+    cd ${S}/uvc_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR}" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 }
 
 do_install() {
@@ -180,13 +193,24 @@ do_install() {
     install -m 0755 ${S}/dp_clipper_decimator_test/dp-clipper-decimator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
     #dp_decimator_test
     install -m 0755 ${S}/dp_decimator_test/dp-decimator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+
     #uac_test
     install -m 0755 ${S}/uac_test/uac-test ${D}${bindir}
+
+    # uvc test
+    #install -d ${D}${libdir}/libv4l/plugins
+    #install -m 0755 ${S}/uvc_test/contrib/test/.libs/v4l2grab ${D}${bindir}
+    #install -m 0644 ${S}/uvc_test/install/lib/*.* ${D}${libdir}
+    #install -m 0644 ${S}/uvc_test/install/lib/libv4l/*.* ${D}${libdir}
+    #install -m 0644 ${S}/uvc_test/install/lib/libv4l/plugins/*.* ${D}${libdir}/libv4l/plugins
+
 }
 
 PREFERRED_VERSION_libavcodec = "56.60.100"
 PREFERRED_VERSION_libavformat = "56.40.101"
 INSANE_SKIP_${PN} = "ldflags file-rdeps"
+INSANE_SKIP_${PN}-dev = "ldflags"
+INSANE_SKIP_${PN}-dev += "dev-elf"
 FILES_${PN} = "${bindir} ${libdir}"
 RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter libasound"
 RDEPENDS_${PN} += "nx-drm-allocator nx-v4l2 nx-renderer nx-scaler nx-gst-meta nx-video-api libdrm-nx "
