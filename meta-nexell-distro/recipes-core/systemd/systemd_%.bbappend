@@ -9,6 +9,7 @@ SRC_URI_append = " \
     file://10-eth.network \
     file://30-wlan.network \
     file://60-usb.network \
+    file://resolv.conf \
 "
 
 do_install_append() {
@@ -27,4 +28,6 @@ do_install_append() {
     # Allow automount from udev
     install -m 0644 ${D}${systemd_system_unitdir}/systemd-udevd.service ${D}${sysconfdir}/systemd/system/
     sed -i 's/MountFlags=slave/MountFlags=shared/g' ${D}${sysconfdir}/systemd/system/systemd-udevd.service
+
+	install -m 0644 ${WORKDIR}/resolv.conf ${D}${sysconfdir}/resolv.conf
 }
