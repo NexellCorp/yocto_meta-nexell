@@ -92,7 +92,7 @@ declare -A user_partition_size
 user_partition_size["avn-ref"]="6G"
 user_partition_size["navi-ref"]="6G"
 user_partition_size["zh-dragon"]="1G"
-user_partition_size["daudio-ref"]="0"
+user_partition_size["daudio-ref"]="6G"
 user_partition_size["daudio-covi"]="0"
 user_partition_size["smart-voice"]="1G"
 user_partition_size["ff-voice"]="1G"
