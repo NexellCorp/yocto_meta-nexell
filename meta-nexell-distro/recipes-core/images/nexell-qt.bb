@@ -36,11 +36,16 @@ ETC_TOOLS = " \
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"
 NX_QT_LAUNCHER = "qtcinema-launcher"
+NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher', 'NX_QT_LAUNCHER', d)}"
+
+ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
 NEXELL_CUSTOMIZE_INSTALL = " \
-    ${NX_QT_LAUNCHER} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'nexell-bootanim nexell-btservice', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-covi', 'nexell-bootanim', '', d)} \
+    ${NX_LAUNCHER} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-bootanim nexell-bluetooth nexell-nxlogrotate', '', d)} \
+    ${ALLGO_CONNECTIVITY} \
+    user-fonts \
+    nexell-nxreboot \
     nexell-qt5-touchsetup \
 "
 
@@ -58,6 +63,6 @@ IMAGE_INSTALL_append = " \
 "
 
 # pyro -> sumo
-# gcc 6.3.0 -> 7.3.0 update: compile error 
+# gcc 6.3.0 -> 7.3.0 update: compile error
 #${@bb.utils.contains('NEXELL_BOARD_SOCNAME', 's5p4418', 'NxAudioPlayer NxQuickRearCam NxVideoPlayer', '', d)}
 
