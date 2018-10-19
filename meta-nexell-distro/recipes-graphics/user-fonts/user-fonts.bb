@@ -1,22 +1,23 @@
 inherit linux-nexell-base
 
-DESCRIPTION = "user fonts"
+DESCRIPTION = "User fonts"
 LICENSE = "CLOSED"
 
 TYPE = "fonts"
 
-SRC_URI = "file://font \
-           "
+SRC_URI = " \
+	file://fonts \
+	"
 
 S = "${WORKDIR}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_install () {
-    install -d ${D}/usr/share/fonts
+    install -d ${D}${datadir}/fonts/ttf
 
-    install -m 0755 ${S}/font/*.ttf ${D}/usr/share/fonts/.
+    install -m 0755 ${S}/fonts/*.ttf ${D}${datadir}/fonts/ttf/
 }
 
 PACKAGES = "${PN}"
-FILES_${PN} += "/usr/share/fonts "
+FILES_${PN} += "${datadir}/fonts/ttf"
