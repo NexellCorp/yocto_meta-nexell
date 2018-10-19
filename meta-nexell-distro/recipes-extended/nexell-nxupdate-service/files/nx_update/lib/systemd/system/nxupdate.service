@@ -1,0 +1,10 @@
+[Unit]
+Description=Nexell update
+After=sysinit.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/update.sh
+
+[Install]
+WantedBy=multi-user.target

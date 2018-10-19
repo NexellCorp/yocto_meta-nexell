@@ -1,0 +1,11 @@
+[Unit]
+Description=Nexell log rotate daemon
+Requires=rsyslog.service
+After=rsyslog.service
+
+[Service]
+Type=idle
+ExecStart=/usr/sbin/nxlogrotate
+
+[Install]
+WantedBy=multi-user.target
