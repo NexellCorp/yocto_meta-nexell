@@ -1,0 +1,4596 @@
+--- a/dbus/dbus-connection.c
++++ b/dbus/dbus-connection.c
+@@ -4,7 +4,7 @@
+  * Copyright (C) 2002-2006  Red Hat Inc.
+  *
+  * Licensed under the Academic Free License version 2.1
+- * 
++ *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+@@ -14,7 +14,7 @@
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+- * 
++ *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+@@ -96,7 +96,7 @@
+  * The other application may be a message bus; for convenience, the
+  * function dbus_bus_get() is provided to automatically open a
+  * connection to the well-known message buses.
+- * 
++ *
+  * In brief a DBusConnection is a message queue associated with some
+  * message transport mechanism such as a socket.  The connection
+  * maintains a queue of incoming messages and a queue of outgoing
+@@ -118,17 +118,17 @@
+  * The connection provides #DBusWatch and #DBusTimeout objects to
+  * the main loop. These are used to know when reading, writing, or
+  * dispatching should be performed.
+- * 
++ *
+  * Incoming messages are processed
+  * by calling dbus_connection_dispatch(). dbus_connection_dispatch()
+  * runs any handlers registered for the topmost message in the message
+  * queue, then discards the message, then returns.
+- * 
++ *
+  * dbus_connection_get_dispatch_status() indicates whether
+  * messages are currently in the queue that need dispatching.
+  * dbus_connection_set_dispatch_status_function() allows
+  * you to set a function to be used to monitor the dispatch status.
+- * 
++ *
+  * If you're using GLib or Qt add-on libraries for D-Bus, there are
+  * special convenience APIs in those libraries that hide
+  * all the details of dispatch and watch/timeout monitoring.
+@@ -151,7 +151,7 @@
+  * avoid setting up any handler functions (see
+  * dbus_connection_add_filter(),
+  * dbus_connection_register_object_path() for more on handlers).
+- * 
++ *
+  * When you use dbus_connection_send() or one of its variants to send
+  * a message, the message is added to the outgoing queue.  It's
+  * actually written to the network later; either in
+@@ -218,12 +218,12 @@
+ }
+ 
+ /**
+- * Internal struct representing a message filter function 
++ * Internal struct representing a message filter function
+  */
+ typedef struct DBusMessageFilter DBusMessageFilter;
+ 
+ /**
+- * Internal struct representing a message filter function 
++ * Internal struct representing a message filter function
+  */
+ struct DBusMessageFilter
+ {
+@@ -263,7 +263,7 @@
+   DBusCondVar *dispatch_cond;    /**< Notify when dispatch_acquired is available */
+   DBusCMutex *io_path_mutex;      /**< Protects io_path_acquired */
+   DBusCondVar *io_path_cond;     /**< Notify when io_path_acquired is available */
+-  
++
+   DBusList *outgoing_messages; /**< Queue of messages we need to send, send the end of the list first. */
+   DBusList *incoming_messages; /**< Queue of messages we have received, end of the list received most recently. */
+   DBusList *expired_messages;  /**< Messages that will be released when we next unlock. */
+@@ -271,23 +271,23 @@
+   DBusMessage *message_borrowed; /**< Filled in if the first incoming message has been borrowed;
+                                   *   dispatch_acquired will be set by the borrower
+                                   */
+-  
++
+   int n_outgoing;              /**< Length of outgoing queue. */
+   int n_incoming;              /**< Length of incoming queue. */
+ 
+   DBusCounter *outgoing_counter; /**< Counts size of outgoing messages. */
+-  
++
+   DBusTransport *transport;    /**< Object that sends/receives messages over network. */
+   DBusWatchList *watches;      /**< Stores active watches. */
+   DBusTimeoutList *timeouts;   /**< Stores active timeouts. */
+-  
++
+   DBusList *filter_list;        /**< List of filters. */
+ 
+   DBusRMutex *slot_mutex;        /**< Lock on slot_list so overall connection lock need not be taken */
+   DBusDataSlotList slot_list;   /**< Data stored by allocated integer ID */
+ 
+-  DBusHashTable *pending_replies;  /**< Hash of message serials to #DBusPendingCall. */  
+-  
++  DBusHashTable *pending_replies;  /**< Hash of message serials to #DBusPendingCall. */
++
+   dbus_uint32_t client_serial;       /**< Client serial. Increments each time a message is sent  */
+   DBusList *disconnect_message_link; /**< Preallocated list node for queueing the disconnection message */
+ 
+@@ -311,9 +311,9 @@
+    */
+   dbus_bool_t dispatch_acquired; /**< Someone has dispatch path (can drain incoming queue) */
+   dbus_bool_t io_path_acquired;  /**< Someone has transport io path (can use the transport to read/write messages) */
+-  
++
+   unsigned int shareable : 1; /**< #TRUE if libdbus owns a reference to the connection and can return it from dbus_connection_open() more than once */
+-  
++
+   unsigned int exit_on_disconnect : 1; /**< If #TRUE, exit after handling disconnect signal */
+ 
+   unsigned int route_peer_messages : 1; /**< If #TRUE, if org.freedesktop.DBus.Peer messages have a bus name, don't handle them automatically */
+@@ -325,14 +325,14 @@
+   unsigned int disconnected_message_processed : 1; /**< We did our default handling of the disconnected message,
+                                                     * such as closing the connection.
+                                                     */
+-  
++
+ #ifndef DBUS_DISABLE_CHECKS
+   unsigned int have_connection_lock : 1; /**< Used to check locking */
+ #endif
+ 
+ #if defined(DBUS_ENABLE_CHECKS) || defined(DBUS_ENABLE_ASSERT)
+   int generation; /**< _dbus_current_generation that should correspond to this connection */
+-#endif 
++#endif
+ };
+ 
+ static DBusDispatchStatus _dbus_connection_get_dispatch_status_unlocked      (DBusConnection     *connection);
+@@ -374,7 +374,7 @@
+     {
+       if (filter->free_user_data_function)
+         (* filter->free_user_data_function) (filter->user_data);
+-      
++
+       dbus_free (filter);
+     }
+ }
+@@ -447,12 +447,12 @@
+  * @param mutex_loc return for the location of the main mutex pointer
+  * @param dispatch_mutex_loc return location of the dispatch mutex pointer
+  * @param io_path_mutex_loc return location of the io_path mutex pointer
+- * @param dispatch_cond_loc return location of the dispatch conditional 
++ * @param dispatch_cond_loc return location of the dispatch conditional
+  *        variable pointer
+- * @param io_path_cond_loc return location of the io_path conditional 
++ * @param io_path_cond_loc return location of the io_path conditional
+  *        variable pointer
+- */ 
+-void 
++ */
++void
+ _dbus_connection_test_get_locks (DBusConnection *connection,
+                                  DBusMutex     **mutex_loc,
+                                  DBusMutex     **dispatch_mutex_loc,
+@@ -505,13 +505,13 @@
+ 	  _dbus_pending_call_set_timeout_added_unlocked (pending, FALSE);
+ 	}
+     }
+-  
+-  
++
++
+ 
+   connection->n_incoming += 1;
+ 
+   _dbus_connection_wakeup_mainloop (connection);
+-  
++
+   _dbus_verbose ("Message %p (%s %s %s %s '%s' reply to %u) added to incoming queue %p, %d incoming\n",
+                  message,
+                  dbus_message_type_to_string (dbus_message_get_type (message)),
+@@ -546,7 +546,7 @@
+ 						 DBusList *link)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_list_append_link (&connection->incoming_messages, link);
+ 
+   connection->n_incoming += 1;
+@@ -580,7 +580,7 @@
+  * Use dbus_connection_flush() to block until all outgoing
+  * messages have been written to the underlying transport
+  * (such as a socket).
+- * 
++ *
+  * @param connection the connection.
+  * @returns #TRUE if the outgoing queue is non-empty.
+  */
+@@ -588,7 +588,7 @@
+ dbus_connection_has_messages_to_send (DBusConnection *connection)
+ {
+   dbus_bool_t v;
+-  
++
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+ 
+   CONNECTION_LOCK (connection);
+@@ -604,12 +604,12 @@
+  *
+  * @param connection the connection.
+  * @returns the message to be sent.
+- */ 
++ */
+ DBusMessage*
+ _dbus_connection_get_message_to_send (DBusConnection *connection)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   return _dbus_list_get_last (&connection->outgoing_messages);
+ }
+ 
+@@ -628,12 +628,12 @@
+   DBusList *link;
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   /* This can be called before we even complete authentication, since
+    * it's called on disconnect to clean up the outgoing queue.
+    * It's also called as we successfully send each message.
+    */
+-  
++
+   link = _dbus_list_get_last_link (&connection->outgoing_messages);
+   _dbus_assert (link != NULL);
+   _dbus_assert (link->data == message);
+@@ -726,7 +726,7 @@
+   else
+     return FALSE;
+ }
+-     
++
+ 
+ /**
+  * Adds a watch using the connection's DBusAddWatchFunction if
+@@ -931,7 +931,7 @@
+     {
+       if (!_dbus_connection_add_timeout_unlocked (connection, timeout))
+         return FALSE;
+-      
++
+       if (!_dbus_hash_table_insert_int (connection->pending_replies,
+                                         reply_serial,
+                                         pending))
+@@ -942,7 +942,7 @@
+           HAVE_LOCK_CHECK (connection);
+           return FALSE;
+         }
+-      
++
+       _dbus_pending_call_set_timeout_added_unlocked (pending, TRUE);
+     }
+   else
+@@ -959,7 +959,7 @@
+   _dbus_pending_call_ref_unlocked (pending);
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   return TRUE;
+ }
+ 
+@@ -968,7 +968,7 @@
+ {
+   DBusPendingCall *pending;
+   DBusConnection  *connection;
+-  
++
+   if (data == NULL)
+     return;
+ 
+@@ -977,18 +977,18 @@
+   connection = _dbus_pending_call_get_connection_unlocked (pending);
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   if (_dbus_pending_call_is_timeout_added_unlocked (pending))
+     {
+       _dbus_connection_remove_timeout_unlocked (connection,
+                                                 _dbus_pending_call_get_timeout_unlocked (pending));
+-      
++
+       _dbus_pending_call_set_timeout_added_unlocked (pending, FALSE);
+     }
+ 
+-  /* FIXME 1.0? this is sort of dangerous and undesirable to drop the lock 
+-   * here, but the pending call finalizer could in principle call out to 
+-   * application code so we pretty much have to... some larger code reorg 
++  /* FIXME 1.0? this is sort of dangerous and undesirable to drop the lock
++   * here, but the pending call finalizer could in principle call out to
++   * application code so we pretty much have to... some larger code reorg
+    * might be needed.
+    */
+   _dbus_connection_ref_unlocked (connection);
+@@ -1062,7 +1062,7 @@
+ 				  int             timeout_milliseconds)
+ {
+   dbus_bool_t we_acquired;
+-  
++
+   HAVE_LOCK_CHECK (connection);
+ 
+   /* We don't want the connection to vanish */
+@@ -1070,7 +1070,7 @@
+ 
+   /* We will only touch io_path_acquired which is protected by our mutex */
+   CONNECTION_UNLOCK (connection);
+-  
++
+   _dbus_verbose ("locking io_path_mutex\n");
+   _dbus_cmutex_lock (connection->io_path_mutex);
+ 
+@@ -1078,7 +1078,7 @@
+                  connection->io_path_acquired, timeout_milliseconds);
+ 
+   we_acquired = FALSE;
+-  
++
+   if (connection->io_path_acquired)
+     {
+       if (timeout_milliseconds != -1)
+@@ -1105,18 +1105,18 @@
+           while (connection->io_path_acquired)
+             {
+               _dbus_verbose ("waiting for IO path to be acquirable\n");
+-              _dbus_condvar_wait (connection->io_path_cond, 
++              _dbus_condvar_wait (connection->io_path_cond,
+                                   connection->io_path_mutex);
+             }
+         }
+     }
+-  
++
+   if (!connection->io_path_acquired)
+     {
+       we_acquired = TRUE;
+       connection->io_path_acquired = TRUE;
+     }
+-  
++
+   _dbus_verbose ("end connection->io_path_acquired = %d we_acquired = %d\n",
+                  connection->io_path_acquired, we_acquired);
+ 
+@@ -1124,11 +1124,11 @@
+   _dbus_cmutex_unlock (connection->io_path_mutex);
+ 
+   CONNECTION_LOCK (connection);
+-  
++
+   HAVE_LOCK_CHECK (connection);
+ 
+   _dbus_connection_unref_unlocked (connection);
+-  
++
+   return we_acquired;
+ }
+ 
+@@ -1143,15 +1143,15 @@
+ _dbus_connection_release_io_path (DBusConnection *connection)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_verbose ("locking io_path_mutex\n");
+   _dbus_cmutex_lock (connection->io_path_mutex);
+-  
++
+   _dbus_assert (connection->io_path_acquired);
+ 
+   _dbus_verbose ("start connection->io_path_acquired = %d\n",
+                  connection->io_path_acquired);
+-  
++
+   connection->io_path_acquired = FALSE;
+   _dbus_condvar_wake_one (connection->io_path_cond);
+ 
+@@ -1188,7 +1188,7 @@
+  * lock for a while.
+  *
+  * Called with connection lock held.
+- * 
++ *
+  * @param connection the connection.
+  * @param pending the pending call that should be checked or NULL
+  * @param flags iteration flags.
+@@ -1201,17 +1201,16 @@
+                                         int             timeout_milliseconds)
+ {
+   _dbus_verbose ("start\n");
+-  
++
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   if (connection->n_outgoing == 0)
+     flags &= ~DBUS_ITERATION_DO_WRITING;
+ 
+-  if (_dbus_connection_acquire_io_path (connection,
+-					(flags & DBUS_ITERATION_BLOCK) ? timeout_milliseconds : 0))
++  if (_dbus_connection_acquire_io_path (connection,timeout_milliseconds))
+     {
+       HAVE_LOCK_CHECK (connection);
+-      
++
+       if ( (pending != NULL) && _dbus_pending_call_get_completed_unlocked(pending))
+         {
+           _dbus_verbose ("pending call completed while acquiring I/O path");
+@@ -1256,7 +1255,7 @@
+   DBusMessage *disconnect_message;
+   DBusCounter *outgoing_counter;
+   DBusObjectTree *objects;
+-  
++
+   watch_list = NULL;
+   connection = NULL;
+   pending_replies = NULL;
+@@ -1265,14 +1264,14 @@
+   disconnect_message = NULL;
+   outgoing_counter = NULL;
+   objects = NULL;
+-  
++
+   watch_list = _dbus_watch_list_new ();
+   if (watch_list == NULL)
+     goto error;
+ 
+   timeout_list = _dbus_timeout_list_new ();
+   if (timeout_list == NULL)
+-    goto error;  
++    goto error;
+ 
+   pending_replies =
+     _dbus_hash_table_new (DBUS_HASH_INT,
+@@ -1280,7 +1279,7 @@
+                           (DBusFreeFunction)free_pending_call_on_hash_removal);
+   if (pending_replies == NULL)
+     goto error;
+-  
++
+   connection = dbus_new0 (DBusConnection, 1);
+   if (connection == NULL)
+     goto error;
+@@ -1296,11 +1295,11 @@
+   _dbus_cmutex_new_at_location (&connection->dispatch_mutex);
+   if (connection->dispatch_mutex == NULL)
+     goto error;
+-  
++
+   _dbus_condvar_new_at_location (&connection->dispatch_cond);
+   if (connection->dispatch_cond == NULL)
+     goto error;
+-  
++
+   _dbus_condvar_new_at_location (&connection->io_path_cond);
+   if (connection->io_path_cond == NULL)
+     goto error;
+@@ -1312,7 +1311,7 @@
+   disconnect_message = dbus_message_new_signal (DBUS_PATH_LOCAL,
+                                                 DBUS_INTERFACE_LOCAL,
+                                                 "Disconnected");
+-  
++
+   if (disconnect_message == NULL)
+     goto error;
+ 
+@@ -1327,7 +1326,7 @@
+   objects = _dbus_object_tree_new (connection);
+   if (objects == NULL)
+     goto error;
+-  
++
+   if (_dbus_modify_sigpipe)
+     _dbus_disable_sigpipe ();
+ 
+@@ -1346,11 +1345,11 @@
+   connection->route_peer_messages = FALSE;
+   connection->disconnected_message_arrived = FALSE;
+   connection->disconnected_message_processed = FALSE;
+-  
++
+ #if defined(DBUS_ENABLE_CHECKS) || defined(DBUS_ENABLE_ASSERT)
+   connection->generation = _dbus_current_generation;
+ #endif
+-  
++
+   _dbus_data_slot_list_init (&connection->slot_list);
+ 
+   connection->client_serial = 1;
+@@ -1358,7 +1357,7 @@
+   connection->disconnect_message_link = disconnect_link;
+ 
+   CONNECTION_LOCK (connection);
+-  
++
+   if (!_dbus_transport_set_connection (transport, connection))
+     {
+       CONNECTION_UNLOCK (connection);
+@@ -1372,14 +1371,14 @@
+ 
+   _dbus_connection_trace_ref (connection, 0, 1, "new_for_transport");
+   return connection;
+-  
++
+  error:
+   if (disconnect_message != NULL)
+     dbus_message_unref (disconnect_message);
+-  
++
+   if (disconnect_link != NULL)
+     _dbus_list_free_link (disconnect_link);
+-  
++
+   if (connection != NULL)
+     {
+       _dbus_condvar_free_at_location (&connection->io_path_cond);
+@@ -1392,7 +1391,7 @@
+     }
+   if (pending_replies)
+     _dbus_hash_table_unref (pending_replies);
+-  
++
+   if (watch_list)
+     _dbus_watch_list_free (watch_list);
+ 
+@@ -1404,7 +1403,7 @@
+ 
+   if (objects)
+     _dbus_object_tree_unref (objects);
+-  
++
+   return NULL;
+ }
+ 
+@@ -1471,7 +1470,7 @@
+ 
+ /**
+  * A callback for use with dbus_watch_new() to create a DBusWatch.
+- * 
++ *
+  * @todo This is basically a hack - we could delete _dbus_transport_handle_watch()
+  * and the virtual handle_watch in DBusTransport if we got rid of it.
+  * The reason this is some work is threading, see the _dbus_connection_handle_watch()
+@@ -1494,7 +1493,7 @@
+   connection = data;
+ 
+   _dbus_verbose ("start\n");
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   if (!_dbus_connection_acquire_io_path (connection, 1))
+@@ -1513,14 +1512,14 @@
+   HAVE_LOCK_CHECK (connection);
+ 
+   _dbus_verbose ("middle\n");
+-  
++
+   status = _dbus_connection_get_dispatch_status_unlocked (connection);
+ 
+   /* this calls out to user code */
+   _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+ 
+   _dbus_verbose ("end\n");
+-  
++
+   return retval;
+ }
+ 
+@@ -1561,10 +1560,10 @@
+     {
+       DBusConnection *connection;
+       DBusHashIter iter;
+-      
++
+       _dbus_hash_iter_init (shared_connections, &iter);
+       _dbus_hash_iter_next (&iter);
+-       
++
+       connection = _dbus_hash_iter_get_value (&iter);
+ 
+       _DBUS_UNLOCK (shared_connections);
+@@ -1577,7 +1576,7 @@
+     }
+ 
+   _dbus_assert (_dbus_hash_table_get_n_entries (shared_connections) == 0);
+-  
++
+   _dbus_hash_table_unref (shared_connections);
+   shared_connections = NULL;
+ 
+@@ -1596,7 +1595,7 @@
+     }
+ 
+   shared_connections_no_guid = NULL;
+-  
++
+   _DBUS_UNLOCK (shared_connections);
+ }
+ 
+@@ -1605,7 +1604,7 @@
+                           DBusConnection   **result)
+ {
+   _dbus_verbose ("checking for existing connection\n");
+-  
++
+   *result = NULL;
+ 
+   if (!_DBUS_LOCK (shared_connections))
+@@ -1618,7 +1617,7 @@
+   if (shared_connections == NULL)
+     {
+       _dbus_verbose ("creating shared_connections hash table\n");
+-      
++
+       shared_connections = _dbus_hash_table_new (DBUS_HASH_STRING,
+                                                  dbus_free,
+                                                  NULL);
+@@ -1637,7 +1636,7 @@
+         }
+ 
+       _dbus_verbose ("  successfully created shared_connections\n");
+-      
++
+       _DBUS_UNLOCK (shared_connections);
+       return TRUE; /* no point looking up in the hash we just made */
+     }
+@@ -1646,11 +1645,11 @@
+       const char *guid;
+ 
+       guid = dbus_address_entry_get_value (entry, "guid");
+-      
++
+       if (guid != NULL)
+         {
+           DBusConnection *connection;
+-          
++
+           connection = _dbus_hash_table_lookup_string (shared_connections,
+                                                        guid);
+ 
+@@ -1686,7 +1685,7 @@
+               CONNECTION_UNLOCK (connection);
+             }
+         }
+-      
++
+       _DBUS_UNLOCK (shared_connections);
+       return TRUE;
+     }
+@@ -1723,12 +1722,12 @@
+       _DBUS_UNLOCK (shared_connections);
+       return TRUE; /* don't store in the hash */
+     }
+-  
++
+   /* A separate copy of the key is required in the hash table, because
+    * we don't have a lock on the connection when we are doing a hash
+    * lookup.
+    */
+-  
++
+   guid_key = _dbus_strdup (guid);
+   if (guid_key == NULL)
+     return FALSE;
+@@ -1748,7 +1747,7 @@
+     }
+ 
+   _dbus_assert (shared_connections != NULL);
+-  
++
+   if (!_dbus_hash_table_insert_string (shared_connections,
+                                        guid_key, connection))
+     {
+@@ -1762,11 +1761,11 @@
+ 
+   _dbus_verbose ("stored connection to %s to be shared\n",
+                  connection->server_guid);
+-  
++
+   _DBUS_UNLOCK (shared_connections);
+ 
+   _dbus_assert (connection->server_guid != NULL);
+-  
++
+   return TRUE;
+ }
+ 
+@@ -1789,11 +1788,11 @@
+     {
+       _dbus_verbose ("dropping connection to %s out of the shared table\n",
+                      connection->server_guid);
+-      
++
+       if (!_dbus_hash_table_remove_string (shared_connections,
+                                            connection->server_guid))
+         _dbus_assert_not_reached ("connection was not in the shared table");
+-      
++
+       dbus_free (connection->server_guid);
+       connection->server_guid = NULL;
+     }
+@@ -1803,7 +1802,7 @@
+     }
+ 
+   _DBUS_UNLOCK (shared_connections);
+-  
++
+   /* remove our reference held on all shareable connections */
+   _dbus_connection_unref_unlocked (connection);
+ }
+@@ -1826,7 +1825,7 @@
+   connection = _dbus_connection_new_for_transport (transport);
+ 
+   _dbus_transport_unref (transport);
+-  
++
+   if (connection == NULL)
+     {
+       _DBUS_SET_OOM (error);
+@@ -1866,12 +1865,12 @@
+ 
+   _dbus_verbose ("opening %s connection to: %s\n",
+                  shared ? "shared" : "private", address);
+-  
++
+   if (!dbus_parse_address (address, &entries, &len, error))
+     return NULL;
+ 
+   _DBUS_ASSERT_ERROR_IS_CLEAR (error);
+-  
++
+   connection = NULL;
+ 
+   for (i = 0; i < len; i++)
+@@ -1890,14 +1889,14 @@
+           if (connection != NULL && shared)
+             {
+               const char *guid;
+-                  
++
+               connection->shareable = TRUE;
+-                  
++
+               /* guid may be NULL */
+               guid = dbus_address_entry_get_value (entries[i], "guid");
+-                  
++
+               CONNECTION_LOCK (connection);
+-          
++
+               if (!connection_record_shared_unlocked (connection, guid))
+                 {
+                   _DBUS_SET_OOM (&tmp_error);
+@@ -1909,21 +1908,21 @@
+                 CONNECTION_UNLOCK (connection);
+             }
+         }
+-      
++
+       if (connection)
+         break;
+ 
+       _DBUS_ASSERT_ERROR_IS_SET (&tmp_error);
+-      
++
+       if (i == 0)
+         dbus_move_error (&tmp_error, &first_error);
+       else
+         dbus_error_free (&tmp_error);
+     }
+-  
++
+   _DBUS_ASSERT_ERROR_IS_CLEAR (error);
+   _DBUS_ASSERT_ERROR_IS_CLEAR (&tmp_error);
+-  
++
+   if (connection == NULL)
+     {
+       _DBUS_ASSERT_ERROR_IS_SET (&first_error);
+@@ -1931,7 +1930,7 @@
+     }
+   else
+     dbus_error_free (&first_error);
+-  
++
+   dbus_address_entries_free (entries);
+   return connection;
+ }
+@@ -1941,7 +1940,7 @@
+  * only be used on private connections. Should only be called by the
+  * dbus code that owns the connection - an owner must be known,
+  * the open/close state is like malloc/free, not like ref/unref.
+- * 
++ *
+  * @param connection the connection
+  */
+ void
+@@ -1960,9 +1959,9 @@
+   DBusPreallocatedSend *preallocated;
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_assert (connection != NULL);
+-  
++
+   preallocated = dbus_new (DBusPreallocatedSend, 1);
+   if (preallocated == NULL)
+     return NULL;
+@@ -1978,14 +1977,14 @@
+   _dbus_counter_ref (preallocated->counter_link->data);
+ 
+   preallocated->connection = connection;
+-  
++
+   return preallocated;
+-  
++
+  failed_1:
+   _dbus_list_free_link (preallocated->queue_link);
+  failed_0:
+   dbus_free (preallocated);
+-  
++
+   return NULL;
+ }
+ 
+@@ -2009,9 +2008,9 @@
+ 
+   dbus_free (preallocated);
+   preallocated = NULL;
+-  
++
+   dbus_message_ref (message);
+-  
++
+   connection->n_outgoing += 1;
+ 
+   _dbus_verbose ("Message %p (%s %s %s %s '%s') for %s added to outgoing queue %p, %d pending to send\n",
+@@ -2048,7 +2047,7 @@
+ 
+   _dbus_verbose ("Message %p serial is %u\n",
+                  message, dbus_message_get_serial (message));
+-  
++
+   dbus_message_lock (message);
+ 
+   /* Now we need to run an iteration to hopefully just write the messages
+@@ -2073,7 +2072,7 @@
+   DBusDispatchStatus status;
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_connection_send_preallocated_unlocked_no_update (connection,
+                                                          preallocated,
+                                                          message, client_serial);
+@@ -2103,7 +2102,7 @@
+ 
+   _dbus_assert (connection != NULL);
+   _dbus_assert (message != NULL);
+-  
++
+   preallocated = _dbus_connection_preallocate_send_unlocked (connection);
+   if (preallocated == NULL)
+     {
+@@ -2139,7 +2138,7 @@
+  *
+  * If we didn't atomically check the refcount and close with the lock held
+  * though, we could screw this up.
+- * 
++ *
+  * @param connection the connection
+  */
+ void
+@@ -2196,10 +2195,10 @@
+     {
+       dbus_message_unref (message);
+       message = NULL;
+-      goto out; 
++      goto out;
+     }
+ 
+-  dbus_message_set_no_reply (message, TRUE); 
++  dbus_message_set_no_reply (message, TRUE);
+ 
+   if (!dbus_message_set_reply_serial (message,
+                                       serial))
+@@ -2265,7 +2264,7 @@
+   DBusList *link;
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   link = _dbus_list_get_first_link (&connection->incoming_messages);
+ 
+   while (link != NULL)
+@@ -2291,25 +2290,25 @@
+     * dropping the lock for each item. So we restart the
+     * iter each time as we drain the hash table.
+     */
+-   
++
+    while (_dbus_hash_table_get_n_entries (connection->pending_replies) > 0)
+     {
+       DBusPendingCall *pending;
+       DBusHashIter iter;
+-      
++
+       _dbus_hash_iter_init (connection->pending_replies, &iter);
+       _dbus_hash_iter_next (&iter);
+-       
++
+       pending = _dbus_hash_iter_get_value (&iter);
+       _dbus_pending_call_ref_unlocked (pending);
+-       
+-      _dbus_pending_call_queue_timeout_error_unlocked (pending, 
++
++      _dbus_pending_call_queue_timeout_error_unlocked (pending,
+                                                        connection);
+ 
+       if (_dbus_pending_call_is_timeout_added_unlocked (pending))
+           _dbus_connection_remove_timeout_unlocked (connection,
+                                                     _dbus_pending_call_get_timeout_unlocked (pending));
+-      _dbus_pending_call_set_timeout_added_unlocked (pending, FALSE);       
++      _dbus_pending_call_set_timeout_added_unlocked (pending, FALSE);
+       _dbus_hash_iter_remove_entry (&iter);
+ 
+       _dbus_pending_call_unref_and_unlock (pending);
+@@ -2326,7 +2325,7 @@
+   _dbus_pending_call_set_reply_unlocked (pending, message);
+   _dbus_pending_call_ref_unlocked (pending); /* in case there's no app with a ref held */
+   _dbus_connection_detach_pending_call_and_unlock (connection, pending);
+- 
++
+   /* Must be called unlocked since it invokes app callback */
+   _dbus_pending_call_complete (pending);
+   dbus_pending_call_unref (pending);
+@@ -2339,7 +2338,7 @@
+   DBusMessage *reply;
+   DBusDispatchStatus status;
+ 
+-  reply = check_for_reply_unlocked (connection, 
++  reply = check_for_reply_unlocked (connection,
+                                     _dbus_pending_call_get_reply_serial_unlocked (pending));
+   if (reply != NULL)
+     {
+@@ -2369,7 +2368,7 @@
+  * filter callbacks.
+  *
+  * Returns immediately if pending call already got a reply.
+- * 
++ *
+  * @todo could use performance improvements (it keeps scanning
+  * the whole message queue for example)
+  *
+@@ -2394,7 +2393,7 @@
+   dbus_pending_call_ref (pending); /* necessary because the call could be canceled */
+ 
+   connection = _dbus_pending_call_get_connection_and_lock (pending);
+-  
++
+   /* Flush message queue - note, can affect dispatch status */
+   _dbus_connection_flush_unlocked (connection);
+ 
+@@ -2438,9 +2437,9 @@
+  recheck_status:
+ 
+   _dbus_verbose ("top of recheck\n");
+-  
++
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   /* queue messages and get status */
+ 
+   status = _dbus_connection_get_dispatch_status_unlocked (connection);
+@@ -2455,24 +2454,24 @@
+       dbus_pending_call_unref (pending);
+       return;
+     }
+-  
++
+   if (status == DBUS_DISPATCH_DATA_REMAINS)
+     {
+       if (check_for_reply_and_update_dispatch_unlocked (connection, pending))
+         return;
+     }
+-  
++
+   _dbus_get_monotonic_time (&tv_sec, &tv_usec);
+   elapsed_milliseconds = (tv_sec - start_tv_sec) * 1000 +
+ 	  (tv_usec - start_tv_usec) / 1000;
+-  
++
+   if (!_dbus_connection_get_is_connected_unlocked (connection))
+     {
+       DBusMessage *error_msg;
+ 
+       error_msg = generate_local_error_message (client_serial,
+-                                                DBUS_ERROR_DISCONNECTED, 
+-                                                "Connection was disconnected before a reply was received"); 
++                                                DBUS_ERROR_DISCONNECTED,
++                                                "Connection was disconnected before a reply was received");
+ 
+       /* on OOM error_msg is set to NULL */
+       complete_pending_call_and_unlock (connection, pending, error_msg);
+@@ -2496,7 +2495,7 @@
+           _dbus_memory_pause_based_on_timeout (timeout_milliseconds - elapsed_milliseconds);
+         }
+       else
+-        {          
++        {
+           /* block again, we don't have the reply buffered yet. */
+           _dbus_connection_do_iteration_unlocked (connection,
+                                                   pending,
+@@ -2512,7 +2511,7 @@
+   else if (elapsed_milliseconds < timeout_milliseconds)
+     {
+       _dbus_verbose ("dbus_connection_send_with_reply_and_block(): %d milliseconds remain\n", timeout_milliseconds - elapsed_milliseconds);
+-      
++
+       if (status == DBUS_DISPATCH_NEED_MEMORY)
+         {
+           /* Try sleeping a bit, as we aren't sure we need to block for reading,
+@@ -2524,7 +2523,7 @@
+           _dbus_memory_pause_based_on_timeout (timeout_milliseconds - elapsed_milliseconds);
+         }
+       else
+-        {          
++        {
+           /* block again, we don't have the reply buffered yet. */
+           _dbus_connection_do_iteration_unlocked (connection,
+                                                   NULL,
+@@ -2540,7 +2539,7 @@
+                  elapsed_milliseconds);
+ 
+   _dbus_assert (!_dbus_pending_call_get_completed_unlocked (pending));
+-  
++
+   /* unlock and call user code */
+   complete_pending_call_and_unlock (connection, pending, NULL);
+ 
+@@ -2609,7 +2608,7 @@
+  * unless you have good reason; connections are expensive enough
+  * that it's wasteful to create lots of connections to the same
+  * server.
+- * 
++ *
+  * @param address the address.
+  * @param error address where an error can be returned.
+  * @returns new connection, or #NULL on failure.
+@@ -2643,7 +2642,7 @@
+  * When you are done with this connection, you must
+  * dbus_connection_close() to disconnect it,
+  * and dbus_connection_unref() to free the connection object.
+- * 
++ *
+  * (The dbus_connection_close() can be skipped if the
+  * connection is already known to be disconnected, for example
+  * if you are inside a handler for the Disconnected signal.)
+@@ -2722,23 +2721,23 @@
+    */
+   _dbus_assert (!_dbus_transport_get_is_connected (connection->transport));
+   _dbus_assert (connection->server_guid == NULL);
+-  
++
+   /* ---- We're going to call various application callbacks here, hope it doesn't break anything... */
+   _dbus_object_tree_free_all_unlocked (connection->objects);
+-  
++
+   dbus_connection_set_dispatch_status_function (connection, NULL, NULL, NULL);
+   dbus_connection_set_wakeup_main_function (connection, NULL, NULL, NULL);
+   dbus_connection_set_unix_user_function (connection, NULL, NULL, NULL);
+   dbus_connection_set_windows_user_function (connection, NULL, NULL, NULL);
+-  
++
+   _dbus_watch_list_free (connection->watches);
+   connection->watches = NULL;
+-  
++
+   _dbus_timeout_list_free (connection->timeouts);
+   connection->timeouts = NULL;
+ 
+   _dbus_data_slot_list_free (&connection->slot_list);
+-  
++
+   link = _dbus_list_get_first_link (&connection->filter_list);
+   while (link != NULL)
+     {
+@@ -2748,23 +2747,23 @@
+       filter->function = NULL;
+       _dbus_message_filter_unref (filter); /* calls app callback */
+       link->data = NULL;
+-      
++
+       link = next;
+     }
+   _dbus_list_clear (&connection->filter_list);
+-  
++
+   /* ---- Done with stuff that invokes application callbacks */
+ 
+-  _dbus_object_tree_unref (connection->objects);  
++  _dbus_object_tree_unref (connection->objects);
+ 
+   _dbus_hash_table_unref (connection->pending_replies);
+   connection->pending_replies = NULL;
+-  
++
+   _dbus_list_foreach (&connection->outgoing_messages,
+                       free_outgoing_message,
+ 		      connection);
+   _dbus_list_clear (&connection->outgoing_messages);
+-  
++
+   _dbus_list_foreach (&connection->incoming_messages,
+ 		      (DBusForeachFunction) dbus_message_unref,
+ 		      NULL);
+@@ -2790,7 +2789,7 @@
+   _dbus_rmutex_free_at_location (&connection->slot_mutex);
+ 
+   _dbus_rmutex_free_at_location (&connection->mutex);
+-  
++
+   dbus_free (connection);
+ }
+ 
+@@ -2847,7 +2846,7 @@
+  * and in that case this function never runs. So this function must
+  * not do anything more than disconnect the transport and update the
+  * dispatch status.
+- * 
++ *
+  * If the transport self-disconnects, then we assume someone will
+  * dispatch the connection to cause the dispatch status update.
+  */
+@@ -2857,7 +2856,7 @@
+   DBusDispatchStatus status;
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_verbose ("Disconnecting %p\n", connection);
+ 
+   /* We need to ref because update_dispatch_status_and_unlock will unref
+@@ -2865,7 +2864,7 @@
+    * refcount holder.
+    */
+   _dbus_connection_ref_unlocked (connection);
+-  
++
+   _dbus_transport_disconnect (connection->transport);
+ 
+   /* This has the side effect of queuing the disconnect message link
+@@ -2893,7 +2892,7 @@
+  *
+  * Attempts to send messages after closing a connection are safe, but will result in
+  * error replies generated locally in libdbus.
+- * 
++ *
+  * This function does not affect the connection's reference count.  It's
+  * safe to close a connection more than once; all calls after the
+  * first do nothing. It's impossible to "reopen" a connection, a
+@@ -2903,8 +2902,8 @@
+  * message it generates needs to be dispatched.
+  *
+  * If a connection is dropped by the remote application, it will
+- * close itself. 
+- * 
++ * close itself.
++ *
+  * You must close a connection prior to releasing the last reference to
+  * the connection. If you dbus_connection_unref() for the last time
+  * without closing the connection, the results are undefined; it
+@@ -2945,7 +2944,7 @@
+       return;
+     }
+ #endif
+-  
++
+   _dbus_connection_close_possibly_shared_and_unlock (connection);
+ }
+ 
+@@ -2961,7 +2960,7 @@
+  * become disconnected when the remote application closes its end, or
+  * exits; a connection may also be disconnected with
+  * dbus_connection_close().
+- * 
++ *
+  * There are not separate states for "closed" and "disconnected," the two
+  * terms are synonymous. This function should really be called
+  * get_is_open() but for historical reasons is not.
+@@ -2975,11 +2974,11 @@
+   dbus_bool_t res;
+ 
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+-  
++
+   CONNECTION_LOCK (connection);
+   res = _dbus_connection_get_is_connected_unlocked (connection);
+   CONNECTION_UNLOCK (connection);
+-  
++
+   return res;
+ }
+ 
+@@ -3001,7 +3000,7 @@
+   CONNECTION_LOCK (connection);
+   res = _dbus_transport_try_to_authenticate (connection->transport);
+   CONNECTION_UNLOCK (connection);
+-  
++
+   return res;
+ }
+ 
+@@ -3021,9 +3020,9 @@
+  * dbus_server_set_auth_mechanisms() to remove the mechanisms that
+  * allow proving user identity (i.e. only allow the ANONYMOUS
+  * mechanism).
+- * 
++ *
+  * @param connection the connection
+- * @returns #TRUE if not authenticated or authenticated as anonymous 
++ * @returns #TRUE if not authenticated or authenticated as anonymous
+  */
+ dbus_bool_t
+ dbus_connection_get_is_anonymous (DBusConnection *connection)
+@@ -3031,11 +3030,11 @@
+   dbus_bool_t res;
+ 
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+-  
++
+   CONNECTION_LOCK (connection);
+   res = _dbus_transport_get_is_anonymous (connection->transport);
+   CONNECTION_UNLOCK (connection);
+-  
++
+   return res;
+ }
+ 
+@@ -3044,7 +3043,7 @@
+  * connection is on the client side. If the connection is on the
+  * server side, this will always return #NULL - use dbus_server_get_id()
+  * to get the ID of your own server, if you are the server side.
+- * 
++ *
+  * If a client-side connection is not authenticated yet, the ID may be
+  * available if it was included in the server address, but may not be
+  * available. The only way to be sure the server ID is available
+@@ -3063,7 +3062,7 @@
+  * get the machine you are on.  There isn't a convenience wrapper, but
+  * you can invoke org.freedesktop.DBus.Peer.GetMachineId on any peer
+  * to get the machine ID on the other end.
+- * 
++ *
+  * The D-Bus specification describes the server ID and other IDs in a
+  * bit more detail.
+  *
+@@ -3153,7 +3152,7 @@
+ }
+ 
+ /**
+- * Preallocates resources needed to send a message, allowing the message 
++ * Preallocates resources needed to send a message, allowing the message
+  * to be sent without the possibility of memory allocation failure.
+  * Allows apps to create a future guarantee that they can send
+  * a message regardless of memory shortages.
+@@ -3169,7 +3168,7 @@
+   _dbus_return_val_if_fail (connection != NULL, NULL);
+ 
+   CONNECTION_LOCK (connection);
+-  
++
+   preallocated =
+     _dbus_connection_preallocate_send_unlocked (connection);
+ 
+@@ -3192,7 +3191,7 @@
+                                         DBusPreallocatedSend *preallocated)
+ {
+   _dbus_return_if_fail (connection != NULL);
+-  _dbus_return_if_fail (preallocated != NULL);  
++  _dbus_return_if_fail (preallocated != NULL);
+   _dbus_return_if_fail (connection == preallocated->connection);
+ 
+   _dbus_list_free_link (preallocated->queue_link);
+@@ -3259,7 +3258,7 @@
+ 
+   _dbus_assert (connection != NULL);
+   _dbus_assert (message != NULL);
+-  
++
+   preallocated = _dbus_connection_preallocate_send_unlocked (connection);
+   if (preallocated == NULL)
+     return FALSE;
+@@ -3275,15 +3274,15 @@
+  * Adds a message to the outgoing message queue. Does not block to
+  * write the message to the network; that happens asynchronously. To
+  * force the message to be written, call dbus_connection_flush() however
+- * it is not necessary to call dbus_connection_flush() by hand; the 
+- * message will be sent the next time the main loop is run. 
++ * it is not necessary to call dbus_connection_flush() by hand; the
++ * message will be sent the next time the main loop is run.
+  * dbus_connection_flush() should only be used, for example, if
+  * the application was expected to exit before running the main loop.
+  *
+  * Because this only queues the message, the only reason it can
+  * fail is lack of memory. Even if the connection is disconnected,
+- * no error will be returned. If the function fails due to lack of memory, 
+- * it returns #FALSE. The function will never fail for other reasons; even 
++ * no error will be returned. If the function fails due to lack of memory,
++ * it returns #FALSE. The function will never fail for other reasons; even
+  * if the connection is disconnected, you can queue an outgoing message,
+  * though obviously it won't be sent.
+  *
+@@ -3292,7 +3291,7 @@
+  *
+  * dbus_message_unref() can be called as soon as this method returns
+  * as the message queue will hold its own ref until the message is sent.
+- * 
++ *
+  * @param connection the connection.
+  * @param message the message to write.
+  * @param serial return location for message serial, or #NULL if you don't care
+@@ -3337,7 +3336,7 @@
+   connection = _dbus_pending_call_get_connection_and_lock (pending);
+   _dbus_connection_ref_unlocked (connection);
+ 
+-  _dbus_pending_call_queue_timeout_error_unlocked (pending, 
++  _dbus_pending_call_queue_timeout_error_unlocked (pending,
+                                                    connection);
+   _dbus_connection_remove_timeout_unlocked (connection,
+ 				            _dbus_pending_call_get_timeout_unlocked (pending));
+@@ -3349,7 +3348,7 @@
+   /* Unlocks, and calls out to user code */
+   _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+   dbus_connection_unref (connection);
+-  
++
+   return TRUE;
+ }
+ 
+@@ -3367,7 +3366,7 @@
+  *
+  * A #DBusPendingCall will always see exactly one reply message,
+  * unless it's cancelled with dbus_pending_call_cancel().
+- * 
++ *
+  * If #NULL is passed for the pending_return, the #DBusPendingCall
+  * will still be generated internally, and used to track
+  * the message reply timeout. This means a timeout error will
+@@ -3456,7 +3455,162 @@
+ 
+   if (!_dbus_pending_call_set_timeout_error_unlocked (pending, message, serial))
+     goto error;
+-    
++
++  /* Insert the serial in the pending replies hash;
++   * hash takes a refcount on DBusPendingCall.
++   * Also, add the timeout.
++   */
++  if (!_dbus_connection_attach_pending_call_unlocked (connection,
++						      pending))
++    goto error;
++
++  if (!_dbus_connection_send_unlocked_no_update (connection, message, NULL))
++    {
++      _dbus_connection_detach_pending_call_and_unlock (connection,
++						       pending);
++      goto error_unlocked;
++    }
++
++  if (pending_return)
++    *pending_return = pending; /* hand off refcount */
++  else
++    {
++      _dbus_connection_detach_pending_call_unlocked (connection, pending);
++      /* we still have a ref to the pending call in this case, we unref
++       * after unlocking, below
++       */
++    }
++
++  status = _dbus_connection_get_dispatch_status_unlocked (connection);
++
++  /* this calls out to user code */
++  _dbus_connection_update_dispatch_status_and_unlock (connection, status);
++
++  if (pending_return == NULL)
++    dbus_pending_call_unref (pending);
++
++  return TRUE;
++
++ error:
++  CONNECTION_UNLOCK (connection);
++ error_unlocked:
++  dbus_pending_call_unref (pending);
++  return FALSE;
++}
++
++/**
++ * Queues a message to send, as with dbus_connection_send(),
++ * but also returns a #DBusPendingCall used to receive a reply to the
++ * message. If no reply is received in the given timeout_milliseconds,
++ * this function expires the pending reply and generates a synthetic
++ * error reply (generated in-process, not by the remote application)
++ * indicating that a timeout occurred.
++ *
++ * A #DBusPendingCall will see a reply message before any filters or
++ * registered object path handlers. See dbus_connection_dispatch() for
++ * details on when handlers are run.
++ *
++ * A #DBusPendingCall will always see exactly one reply message,
++ * unless it's cancelled with dbus_pending_call_cancel().
++ *
++ * If #NULL is passed for the pending_return, the #DBusPendingCall
++ * will still be generated internally, and used to track
++ * the message reply timeout. This means a timeout error will
++ * occur if no reply arrives, unlike with dbus_connection_send().
++ *
++ * If -1 is passed for the timeout, a sane default timeout is used. -1
++ * is typically the best value for the timeout for this reason, unless
++ * you want a very short or very long timeout.  If #DBUS_TIMEOUT_INFINITE is
++ * passed for the timeout, no timeout will be set and the call will block
++ * forever.
++ *
++ * @warning if the connection is disconnected or you try to send Unix
++ * file descriptors on a connection that does not support them, the
++ * #DBusPendingCall will be set to #NULL, so be careful with this.
++ *
++ * @param connection the connection
++ * @param message the message to send
++ * @param pending_return return location for a #DBusPendingCall
++ * object, or #NULL if connection is disconnected or when you try to
++ * send Unix file descriptors on a connection that does not support
++ * them.
++ * @param timeout_milliseconds timeout in milliseconds, -1 (or
++ *  #DBUS_TIMEOUT_USE_DEFAULT) for default or #DBUS_TIMEOUT_INFINITE for no
++ *  timeout
++ * @returns #FALSE if no memory, #TRUE otherwise.
++ *
++ */
++dbus_bool_t
++dbus_connection_send_with_reply_set_notify (DBusConnection     *connection,
++                                 DBusMessage        *message,
++                                 DBusPendingCall   **pending_return,
++                                 DBusPendingCallNotifyFunction function0,
++                                 void               *user_data0,
++                                 DBusFreeFunction    free_user_data0,
++                                 int                 timeout_milliseconds)
++{
++  DBusPendingCall *pending;
++  dbus_int32_t serial = -1;
++  DBusDispatchStatus status;
++
++  _dbus_return_val_if_fail (connection != NULL, FALSE);
++  _dbus_return_val_if_fail (message != NULL, FALSE);
++  _dbus_return_val_if_fail (timeout_milliseconds >= 0 || timeout_milliseconds == -1, FALSE);
++
++  if (pending_return)
++    *pending_return = NULL;
++
++  CONNECTION_LOCK (connection);
++
++#ifdef HAVE_UNIX_FD_PASSING
++
++  if (!_dbus_transport_can_pass_unix_fd(connection->transport) &&
++      message->n_unix_fds > 0)
++    {
++      /* Refuse to send fds on a connection that cannot handle
++         them. Unfortunately we cannot return a proper error here, so
++         the best we can do is return TRUE but leave *pending_return
++         as NULL. */
++      CONNECTION_UNLOCK (connection);
++      return TRUE;
++    }
++
++#endif
++
++   if (!_dbus_connection_get_is_connected_unlocked (connection))
++    {
++      CONNECTION_UNLOCK (connection);
++
++      return TRUE;
++    }
++
++  pending = _dbus_pending_call_new_unlocked (connection,
++                                             timeout_milliseconds,
++                                             reply_handler_timeout);
++
++  CONNECTION_UNLOCK (connection);
++  if (pending == NULL)
++    {
++      return FALSE;
++    }
++
++  if (!dbus_pending_call_set_notify(pending, function0, user_data0, free_user_data0))
++    {
++      return FALSE;
++    }
++  CONNECTION_LOCK (connection);
++
++  /* Assign a serial to the message */
++  serial = dbus_message_get_serial (message);
++  if (serial == 0)
++    {
++      serial = _dbus_connection_get_next_client_serial (connection);
++      dbus_message_set_serial (message, serial);
++    }
++
++  if (!_dbus_pending_call_set_timeout_error_unlocked (pending, message, serial))
++    goto error;
++
+   /* Insert the serial in the pending replies hash;
+    * hash takes a refcount on DBusPendingCall.
+    * Also, add the timeout.
+@@ -3464,7 +3618,7 @@
+   if (!_dbus_connection_attach_pending_call_unlocked (connection,
+ 						      pending))
+     goto error;
+- 
++
+   if (!_dbus_connection_send_unlocked_no_update (connection, message, NULL))
+     {
+       _dbus_connection_detach_pending_call_and_unlock (connection,
+@@ -3489,7 +3643,7 @@
+ 
+   if (pending_return == NULL)
+     dbus_pending_call_unref (pending);
+-  
++
+   return TRUE;
+ 
+  error:
+@@ -3505,7 +3659,7 @@
+  * i.e. messages other than the reply are queued up but not
+  * processed. This function is used to invoke method calls on a
+  * remote object.
+- * 
++ *
+  * If a normal reply is received, it is returned, and removed from the
+  * incoming message queue. If it is not received, #NULL is returned
+  * and the error is set to #DBUS_ERROR_NO_REPLY.  If an error reply is
+@@ -3571,7 +3725,7 @@
+       dbus_set_error (error, DBUS_ERROR_DISCONNECTED, "Connection is closed");
+       return NULL;
+     }
+-  
++
+   dbus_pending_call_block (pending);
+ 
+   reply = dbus_pending_call_steal_reply (pending);
+@@ -3581,7 +3735,7 @@
+    * always fill this in.
+    */
+   _dbus_assert (reply != NULL);
+-  
++
+    if (dbus_set_error_from_message (error, reply))
+     {
+       dbus_message_unref (reply);
+@@ -3596,7 +3750,7 @@
+  * Assumes connection lock already held.
+  *
+  * If you call this, you MUST call update_dispatch_status afterword...
+- * 
++ *
+  * @param connection the connection.
+  */
+ static DBusDispatchStatus
+@@ -3610,7 +3764,7 @@
+   DBusDispatchStatus status;
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   while (connection->n_outgoing > 0 &&
+          _dbus_connection_get_is_connected_unlocked (connection))
+     {
+@@ -3648,11 +3802,11 @@
+   DBusDispatchStatus status;
+ 
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   status = _dbus_connection_flush_unlocked (connection);
+-  
++
+   HAVE_LOCK_CHECK (connection);
+   /* Unlocks and calls out to user code */
+   _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+@@ -3664,7 +3818,7 @@
+  * This function implements dbus_connection_read_write_dispatch() and
+  * dbus_connection_read_write() (they pass a different value for the
+  * dispatch parameter).
+- * 
++ *
+  * @param connection the connection
+  * @param timeout_milliseconds max time to block or -1 for infinite
+  * @param dispatch dispatch new messages or leave them on the incoming queue
+@@ -3672,14 +3826,14 @@
+  */
+ static dbus_bool_t
+ _dbus_connection_read_write_dispatch (DBusConnection *connection,
+-                                     int             timeout_milliseconds, 
++                                     int             timeout_milliseconds,
+                                      dbus_bool_t     dispatch)
+ {
+   DBusDispatchStatus dstatus;
+   dbus_bool_t progress_possible;
+ 
+   /* Need to grab a ref here in case we're a private connection and
+-   * the user drops the last ref in a handler we call; see bug 
++   * the user drops the last ref in a handler we call; see bug
+    * https://bugs.freedesktop.org/show_bug.cgi?id=15635
+    */
+   dbus_connection_ref (connection);
+@@ -3711,7 +3865,7 @@
+                                                   timeout_milliseconds);
+         }
+     }
+-  
++
+   HAVE_LOCK_CHECK (connection);
+   /* If we can dispatch, we can make progress until the Disconnected message
+    * has been processed; if we can only read/write, we can make progress
+@@ -3735,16 +3889,16 @@
+  * This function is intended for use with applications that don't want
+  * to write a main loop and deal with #DBusWatch and #DBusTimeout. An
+  * example usage would be:
+- * 
++ *
+  * @code
+  *   while (dbus_connection_read_write_dispatch (connection, -1))
+  *     ; // empty loop body
+  * @endcode
+- * 
++ *
+  * In this usage you would normally have set up a filter function to look
+  * at each message as it is dispatched. The loop terminates when the last
+  * message from the connection (the disconnected signal) is processed.
+- * 
++ *
+  * If there are messages to dispatch, this function will
+  * dbus_connection_dispatch() once, and return. If there are no
+  * messages to dispatch, this function will block until it can read or
+@@ -3774,11 +3928,11 @@
+    return _dbus_connection_read_write_dispatch(connection, timeout_milliseconds, TRUE);
+ }
+ 
+-/** 
++/**
+  * This function is intended for use with applications that don't want to
+  * write a main loop and deal with #DBusWatch and #DBusTimeout. See also
+  * dbus_connection_read_write_dispatch().
+- * 
++ *
+  * As long as the connection is open, this function will block until it can
+  * read or write, then read or write, then return #TRUE.
+  *
+@@ -3792,15 +3946,15 @@
+  * processed. dbus_connection_read_write_dispatch() dispatches
+  * incoming messages for you; with dbus_connection_read_write() you
+  * have to arrange to drain the incoming queue yourself.
+- * 
+- * @param connection the connection 
+- * @param timeout_milliseconds max time to block or -1 for infinite 
++ *
++ * @param connection the connection
++ * @param timeout_milliseconds max time to block or -1 for infinite
+  * @returns #TRUE if still connected
+  */
+-dbus_bool_t 
+-dbus_connection_read_write (DBusConnection *connection, 
+-                            int             timeout_milliseconds) 
+-{ 
++dbus_bool_t
++dbus_connection_read_write (DBusConnection *connection,
++                            int             timeout_milliseconds)
++{
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+   _dbus_return_val_if_fail (timeout_milliseconds >= 0 || timeout_milliseconds == -1, FALSE);
+    return _dbus_connection_read_write_dispatch(connection, timeout_milliseconds, FALSE);
+@@ -3830,7 +3984,7 @@
+ /**
+  * Returns the first-received message from the incoming message queue,
+  * leaving it in the queue. If the queue is empty, returns #NULL.
+- * 
++ *
+  * The caller does not own a reference to the returned message, and
+  * must either return it using dbus_connection_return_message() or
+  * keep it after calling dbus_connection_steal_borrowed_message(). No
+@@ -3855,14 +4009,14 @@
+   _dbus_return_val_if_fail (connection != NULL, NULL);
+ 
+   _dbus_verbose ("start\n");
+-  
++
+   /* this is called for the side effect that it queues
+    * up any messages from the transport
+    */
+   status = dbus_connection_get_dispatch_status (connection);
+   if (status != DBUS_DISPATCH_DATA_REMAINS)
+     return NULL;
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   _dbus_connection_acquire_dispatch (connection);
+@@ -3871,11 +4025,11 @@
+   _dbus_assert (connection->message_borrowed == NULL);
+ 
+   connection->message_borrowed = _dbus_list_get_first (&connection->incoming_messages);
+-  
++
+   message = connection->message_borrowed;
+ 
+   check_disconnected_message_arrived_unlocked (connection, message);
+-  
++
+   /* Note that we KEEP the dispatch lock until the message is returned */
+   if (message == NULL)
+     _dbus_connection_release_dispatch (connection);
+@@ -3885,7 +4039,7 @@
+   _dbus_message_trace_ref (message, -1, -1, "dbus_connection_borrow_message");
+ 
+   /* We don't update dispatch status until it's returned or stolen */
+-  
++
+   return message;
+ }
+ 
+@@ -3902,19 +4056,19 @@
+ 				DBusMessage    *message)
+ {
+   DBusDispatchStatus status;
+-  
++
+   _dbus_return_if_fail (connection != NULL);
+   _dbus_return_if_fail (message != NULL);
+   _dbus_return_if_fail (message == connection->message_borrowed);
+   _dbus_return_if_fail (connection->dispatch_acquired);
+-  
++
+   CONNECTION_LOCK (connection);
+-  
++
+   _dbus_assert (message == connection->message_borrowed);
+-  
++
+   connection->message_borrowed = NULL;
+ 
+-  _dbus_connection_release_dispatch (connection); 
++  _dbus_connection_release_dispatch (connection);
+ 
+   status = _dbus_connection_get_dispatch_status_unlocked (connection);
+   _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+@@ -3942,9 +4096,9 @@
+   _dbus_return_if_fail (message != NULL);
+   _dbus_return_if_fail (message == connection->message_borrowed);
+   _dbus_return_if_fail (connection->dispatch_acquired);
+-  
++
+   CONNECTION_LOCK (connection);
+- 
++
+   _dbus_assert (message == connection->message_borrowed);
+ 
+   pop_message = _dbus_list_pop_first (&connection->incoming_messages);
+@@ -3952,10 +4106,10 @@
+   (void) pop_message; /* unused unless asserting */
+ 
+   connection->n_incoming -= 1;
+- 
++
+   _dbus_verbose ("Incoming message %p stolen from queue, %d incoming\n",
+ 		 message, connection->n_incoming);
+- 
++
+   connection->message_borrowed = NULL;
+ 
+   _dbus_connection_release_dispatch (connection);
+@@ -3973,9 +4127,9 @@
+ _dbus_connection_pop_message_link_unlocked (DBusConnection *connection)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_assert (connection->message_borrowed == NULL);
+-  
++
+   if (connection->n_incoming > 0)
+     {
+       DBusList *link;
+@@ -4003,7 +4157,7 @@
+           "_dbus_connection_pop_message_link_unlocked");
+ 
+       check_disconnected_message_arrived_unlocked (connection, link->data);
+-      
++
+       return link;
+     }
+   else
+@@ -4019,17 +4173,17 @@
+   DBusList *link;
+ 
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   link = _dbus_connection_pop_message_link_unlocked (connection);
+ 
+   if (link != NULL)
+     {
+       DBusMessage *message;
+-      
++
+       message = link->data;
+-      
++
+       _dbus_list_free_link (link);
+-      
++
+       return message;
+     }
+   else
+@@ -4041,7 +4195,7 @@
+                                                 DBusList       *message_link)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_assert (message_link != NULL);
+   /* You can't borrow a message while a link is outstanding */
+   _dbus_assert (connection->message_borrowed == NULL);
+@@ -4083,7 +4237,7 @@
+  * queue, so dbus_connection_dispatch(), dbus_connection_pop_message(),
+  * dbus_connection_borrow_message(), etc. will all block while one of the others
+  * in the group is running.
+- * 
++ *
+  * @param connection the connection.
+  * @returns next message in the incoming queue.
+  */
+@@ -4094,27 +4248,27 @@
+   DBusDispatchStatus status;
+ 
+   _dbus_verbose ("start\n");
+-  
++
+   /* this is called for the side effect that it queues
+    * up any messages from the transport
+    */
+   status = dbus_connection_get_dispatch_status (connection);
+   if (status != DBUS_DISPATCH_DATA_REMAINS)
+     return NULL;
+-  
++
+   CONNECTION_LOCK (connection);
+   _dbus_connection_acquire_dispatch (connection);
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   message = _dbus_connection_pop_message_unlocked (connection);
+ 
+-  _dbus_verbose ("Returning popped message %p\n", message);    
++  _dbus_verbose ("Returning popped message %p\n", message);
+ 
+   _dbus_connection_release_dispatch (connection);
+ 
+   status = _dbus_connection_get_dispatch_status_unlocked (connection);
+   _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+-  
++
+   return message;
+ }
+ 
+@@ -4132,24 +4286,24 @@
+ 
+   _dbus_connection_ref_unlocked (connection);
+   CONNECTION_UNLOCK (connection);
+-  
++
+   _dbus_verbose ("locking dispatch_mutex\n");
+   _dbus_cmutex_lock (connection->dispatch_mutex);
+ 
+   while (connection->dispatch_acquired)
+     {
+       _dbus_verbose ("waiting for dispatch to be acquirable\n");
+-      _dbus_condvar_wait (connection->dispatch_cond, 
++      _dbus_condvar_wait (connection->dispatch_cond,
+                           connection->dispatch_mutex);
+     }
+-  
++
+   _dbus_assert (!connection->dispatch_acquired);
+ 
+   connection->dispatch_acquired = TRUE;
+ 
+   _dbus_verbose ("unlocking dispatch_mutex\n");
+   _dbus_cmutex_unlock (connection->dispatch_mutex);
+-  
++
+   CONNECTION_LOCK (connection);
+   _dbus_connection_unref_unlocked (connection);
+ }
+@@ -4165,10 +4319,10 @@
+ _dbus_connection_release_dispatch (DBusConnection *connection)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   _dbus_verbose ("locking dispatch_mutex\n");
+   _dbus_cmutex_lock (connection->dispatch_mutex);
+-  
++
+   _dbus_assert (connection->dispatch_acquired);
+ 
+   connection->dispatch_acquired = FALSE;
+@@ -4208,15 +4362,15 @@
+   if (connection->n_outgoing > 0)
+     {
+       DBusList *link;
+-      
++
+       _dbus_verbose ("Dropping %d outgoing messages since we're disconnected\n",
+                      connection->n_outgoing);
+-      
++
+       while ((link = _dbus_list_get_last_link (&connection->outgoing_messages)))
+         {
+           _dbus_connection_message_sent_unlocked (connection, link->data);
+         }
+-    } 
++    }
+ }
+ 
+ /* Note this may be called multiple times since we don't track whether we already did it */
+@@ -4224,16 +4378,16 @@
+ notify_disconnected_and_dispatch_complete_unlocked (DBusConnection *connection)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   if (connection->disconnect_message_link != NULL)
+     {
+       _dbus_verbose ("Sending disconnect message\n");
+-      
++
+       /* If we have pending calls, queue their timeouts - we want the Disconnected
+        * to be the last message, after these timeouts.
+        */
+       connection_timeout_and_complete_all_pending_calls_unlocked (connection);
+-      
++
+       /* We haven't sent the disconnect message already,
+        * and all real messages have been queued up.
+        */
+@@ -4251,7 +4405,7 @@
+ _dbus_connection_get_dispatch_status_unlocked (DBusConnection *connection)
+ {
+   HAVE_LOCK_CHECK (connection);
+-  
++
+   if (connection->n_incoming > 0)
+     return DBUS_DISPATCH_DATA_REMAINS;
+   else if (!_dbus_transport_queue_messages (connection->transport))
+@@ -4260,13 +4414,13 @@
+     {
+       DBusDispatchStatus status;
+       dbus_bool_t is_connected;
+-      
++
+       status = _dbus_transport_get_dispatch_status (connection->transport);
+       is_connected = _dbus_transport_get_is_connected (connection->transport);
+ 
+       _dbus_verbose ("dispatch status = %s is_connected = %d\n",
+                      DISPATCH_STATUS_NAME (status), is_connected);
+-      
++
+       if (!is_connected)
+         {
+           /* It's possible this would be better done by having an explicit
+@@ -4285,7 +4439,7 @@
+           if (status == DBUS_DISPATCH_COMPLETE)
+             status = notify_disconnected_and_dispatch_complete_unlocked (connection);
+         }
+-      
++
+       if (status != DBUS_DISPATCH_COMPLETE)
+         return status;
+       else if (connection->n_incoming > 0)
+@@ -4318,7 +4472,7 @@
+       !connection->disconnected_message_processed)
+     {
+       connection->disconnected_message_processed = TRUE;
+-      
++
+       /* this does an unref, but we have a ref
+        * so we should not run the finalizer here
+        * inside the lock.
+@@ -4327,25 +4481,25 @@
+ 
+       if (connection->exit_on_disconnect)
+         {
+-          CONNECTION_UNLOCK (connection);            
+-          
++          CONNECTION_UNLOCK (connection);
++
+           _dbus_verbose ("Exiting on Disconnected signal\n");
+           _dbus_exit (1);
+           _dbus_assert_not_reached ("Call to exit() returned");
+         }
+     }
+-  
++
+   /* We drop the lock */
+   CONNECTION_UNLOCK (connection);
+-  
++
+   if (changed && function)
+     {
+       _dbus_verbose ("Notifying of change to dispatch status of %p now %d (%s)\n",
+                      connection, new_status,
+                      DISPATCH_STATUS_NAME (new_status));
+-      (* function) (connection, new_status, data);      
++      (* function) (connection, new_status, data);
+     }
+-  
++
+   dbus_connection_unref (connection);
+ }
+ 
+@@ -4370,7 +4524,7 @@
+  * In particular this happens on initial connection, because all sorts
+  * of authentication protocol stuff has to be parsed before the
+  * first message arrives.
+- * 
++ *
+  * @param connection the connection.
+  * @returns current dispatch status
+  */
+@@ -4382,11 +4536,11 @@
+   _dbus_return_val_if_fail (connection != NULL, DBUS_DISPATCH_COMPLETE);
+ 
+   _dbus_verbose ("start\n");
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   status = _dbus_connection_get_dispatch_status_unlocked (connection);
+-  
++
+   CONNECTION_UNLOCK (connection);
+ 
+   return status;
+@@ -4539,7 +4693,7 @@
+  * The incoming data buffer is filled when the connection reads from
+  * its underlying transport (such as a socket).  Reading usually
+  * happens in dbus_watch_handle() or dbus_connection_read_write().
+- * 
++ *
+  * If there are complete messages in the incoming queue,
+  * dbus_connection_dispatch() removes one message from the queue and
+  * processes it. Processing has three steps.
+@@ -4547,7 +4701,7 @@
+  * First, any method replies are passed to #DBusPendingCall or
+  * dbus_connection_send_with_reply_and_block() in order to
+  * complete the pending method call.
+- * 
++ *
+  * Second, any filters registered with dbus_connection_add_filter()
+  * are run. If any filter returns #DBUS_HANDLER_RESULT_HANDLED
+  * then processing stops after that filter.
+@@ -4565,9 +4719,9 @@
+  * recursively.  If threads have been initialized with a recursive
+  * mutex function, then this will not deadlock; however, it can
+  * certainly confuse your application.
+- * 
++ *
+  * @todo some FIXME in here about handling DBUS_HANDLER_RESULT_NEED_MEMORY
+- * 
++ *
+  * @param connection the connection
+  * @returns dispatch status, see dbus_connection_get_dispatch_status()
+  */
+@@ -4585,7 +4739,7 @@
+   _dbus_return_val_if_fail (connection != NULL, DBUS_DISPATCH_COMPLETE);
+ 
+   _dbus_verbose ("\n");
+-  
++
+   CONNECTION_LOCK (connection);
+   status = _dbus_connection_get_dispatch_status_unlocked (connection);
+   if (status != DBUS_DISPATCH_DATA_REMAINS)
+@@ -4594,7 +4748,7 @@
+       _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+       return status;
+     }
+-  
++
+   /* We need to ref the connection since the callback could potentially
+    * drop the last ref to it
+    */
+@@ -4609,15 +4763,15 @@
+       /* another thread dispatched our stuff */
+ 
+       _dbus_verbose ("another thread dispatched message (during acquire_dispatch above)\n");
+-      
++
+       _dbus_connection_release_dispatch (connection);
+ 
+       status = _dbus_connection_get_dispatch_status_unlocked (connection);
+ 
+       _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+-      
++
+       dbus_connection_unref (connection);
+-      
++
+       return status;
+     }
+ 
+@@ -4635,14 +4789,14 @@
+                  dbus_message_get_signature (message));
+ 
+   result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+-  
++
+   /* Pending call handling must be first, because if you do
+    * dbus_connection_send_with_reply_and_block() or
+    * dbus_pending_call_block() then no handlers/filters will be run on
+    * the reply. We want consistent semantics in the case where we
+    * dbus_connection_dispatch() the reply.
+    */
+-  
++
+   reply_serial = dbus_message_get_reply_serial (message);
+   pending = _dbus_hash_table_lookup_int (connection->pending_replies,
+                                          reply_serial);
+@@ -4651,7 +4805,7 @@
+       _dbus_verbose ("Dispatching a pending reply\n");
+       complete_pending_call_and_unlock (connection, pending, message);
+       pending = NULL; /* it's probably unref'd */
+-      
++
+       CONNECTION_LOCK (connection);
+       _dbus_verbose ("pending call completed in dispatch\n");
+       result = DBUS_HANDLER_RESULT_HANDLED;
+@@ -4661,22 +4815,22 @@
+   result = _dbus_connection_run_builtin_filters_unlocked_no_update (connection, message);
+   if (result != DBUS_HANDLER_RESULT_NOT_YET_HANDLED)
+     goto out;
+- 
++
+   if (!_dbus_list_copy (&connection->filter_list, &filter_list_copy))
+     {
+       _dbus_connection_release_dispatch (connection);
+       HAVE_LOCK_CHECK (connection);
+-      
++
+       _dbus_connection_failed_pop (connection, message_link);
+ 
+       /* unlocks and calls user code */
+       _dbus_connection_update_dispatch_status_and_unlock (connection,
+                                                           DBUS_DISPATCH_NEED_MEMORY);
+       dbus_connection_unref (connection);
+-      
++
+       return DBUS_DISPATCH_NEED_MEMORY;
+     }
+-  
++
+   _dbus_list_foreach (&filter_list_copy,
+ 		      (DBusForeachFunction)_dbus_message_filter_ref,
+ 		      NULL);
+@@ -4685,7 +4839,7 @@
+    * since we acquired the dispatcher
+    */
+   CONNECTION_UNLOCK (connection);
+-  
++
+   link = _dbus_list_get_first_link (&filter_list_copy);
+   while (link != NULL)
+     {
+@@ -4712,7 +4866,7 @@
+ 		      (DBusForeachFunction)_dbus_message_filter_unref,
+ 		      NULL);
+   _dbus_list_clear (&filter_list_copy);
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   if (result == DBUS_HANDLER_RESULT_NEED_MEMORY)
+@@ -4744,7 +4898,7 @@
+   result = _dbus_object_tree_dispatch_and_unlock (connection->objects,
+                                                   message,
+                                                   &found_object);
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   if (result != DBUS_HANDLER_RESULT_NOT_YET_HANDLED)
+@@ -4769,7 +4923,7 @@
+           _dbus_verbose ("no memory for error string in dispatch\n");
+           goto out;
+         }
+-              
++
+       if (!_dbus_string_append_printf (&str,
+                                        "Method \"%s\" with signature \"%s\" on interface \"%s\" doesn't exist\n",
+                                        dbus_message_get_member (message),
+@@ -4781,7 +4935,7 @@
+           _dbus_verbose ("no memory for error string in dispatch\n");
+           goto out;
+         }
+-      
++
+       reply = dbus_message_new_error (message,
+                                       found_object ? DBUS_ERROR_UNKNOWN_METHOD : DBUS_ERROR_UNKNOWN_OBJECT,
+                                       _dbus_string_get_const_data (&str));
+@@ -4824,7 +4978,7 @@
+ 
+       result = DBUS_HANDLER_RESULT_HANDLED;
+     }
+-  
++
+   _dbus_verbose ("  done dispatching %p (%s %s %s '%s') on connection %p\n", message,
+                  dbus_message_type_to_string (dbus_message_get_type (message)),
+                  dbus_message_get_interface (message) ?
+@@ -4835,12 +4989,12 @@
+                  "no member",
+                  dbus_message_get_signature (message),
+                  connection);
+-  
++
+  out:
+   if (result == DBUS_HANDLER_RESULT_NEED_MEMORY)
+     {
+       _dbus_verbose ("out of memory\n");
+-      
++
+       /* Put message back, and we'll start over.
+        * Yes this means handlers must be idempotent if they
+        * don't return HANDLED; c'est la vie.
+@@ -4881,9 +5035,9 @@
+ 
+   /* unlocks and calls user code */
+   _dbus_connection_update_dispatch_status_and_unlock (connection, status);
+-  
++
+   dbus_connection_unref (connection);
+-  
++
+   return status;
+ }
+ 
+@@ -4905,7 +5059,7 @@
+  * enabling/disabling can be done without memory allocation.  The
+  * toggled function may be NULL if a main loop re-queries
+  * dbus_watch_get_enabled() every time anyway.
+- * 
++ *
+  * The DBusWatch can be queried for the file descriptor to watch using
+  * dbus_watch_get_unix_fd() or dbus_watch_get_socket(), and for the
+  * events to watch for using dbus_watch_get_flags(). The flags
+@@ -4922,7 +5076,7 @@
+  * dbus_watch_handle() cannot be called during the
+  * DBusAddWatchFunction, as the connection will not be ready to handle
+  * that watch yet.
+- * 
++ *
+  * It is not allowed to reference a DBusWatch after it has been passed
+  * to remove_function.
+  *
+@@ -4939,7 +5093,7 @@
+  * may not invoke any methods on DBusConnection or it will deadlock.
+  * See the comments in the code or http://lists.freedesktop.org/archives/dbus/2007-July/tread.html#8144
+  * if you encounter this issue and want to attempt writing a patch.
+- * 
++ *
+  * @param connection the connection.
+  * @param add_function function to begin monitoring a new descriptor.
+  * @param remove_function function to stop monitoring a descriptor.
+@@ -4959,7 +5113,7 @@
+   dbus_bool_t retval;
+ 
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   retval = _dbus_watch_list_set_functions (connection->watches,
+@@ -4978,7 +5132,7 @@
+  * When using Qt, typically the DBusAddTimeoutFunction would create a
+  * QTimer. When using GLib, the DBusAddTimeoutFunction would call
+  * g_timeout_add.
+- * 
++ *
+  * The DBusTimeoutToggledFunction notifies the application that the
+  * timeout has been enabled or disabled. Call
+  * dbus_timeout_get_enabled() to check this. A disabled timeout should
+@@ -5022,7 +5176,7 @@
+   dbus_bool_t retval;
+ 
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   retval = _dbus_timeout_list_set_functions (connection->timeouts,
+@@ -5059,7 +5213,7 @@
+   DBusFreeFunction old_free_data;
+ 
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   old_data = connection->wakeup_main_data;
+   old_free_data = connection->free_wakeup_main_data;
+@@ -5067,7 +5221,7 @@
+   connection->wakeup_main_function = wakeup_main_function;
+   connection->wakeup_main_data = data;
+   connection->free_wakeup_main_data = free_data_function;
+-  
++
+   CONNECTION_UNLOCK (connection);
+ 
+   /* Callback outside the lock */
+@@ -5105,7 +5259,7 @@
+   DBusFreeFunction old_free_data;
+ 
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   old_data = connection->dispatch_status_data;
+   old_free_data = connection->free_dispatch_status_data;
+@@ -5113,7 +5267,7 @@
+   connection->dispatch_status_function = function;
+   connection->dispatch_status_data = data;
+   connection->free_dispatch_status_data = free_data_function;
+-  
++
+   CONNECTION_UNLOCK (connection);
+ 
+   /* Callback outside the lock */
+@@ -5135,7 +5289,7 @@
+  *
+  * Right now the returned descriptor is always a socket, but
+  * that is not guaranteed.
+- * 
++ *
+  * @param connection the connection
+  * @param fd return location for the file descriptor.
+  * @returns #TRUE if fd is successfully obtained.
+@@ -5151,7 +5305,7 @@
+   /* FIXME do this on a lower level */
+   return FALSE;
+ #endif
+-  
++
+   return dbus_connection_get_socket(connection, fd);
+ }
+ 
+@@ -5165,7 +5319,7 @@
+  * If the connection is not socket-based, this function will return FALSE,
+  * even if the connection does have a file descriptor of some kind.
+  * i.e. this function always returns specifically a socket file descriptor.
+- * 
++ *
+  * @param connection the connection
+  * @param fd return location for the file descriptor.
+  * @returns #TRUE if fd is successfully obtained.
+@@ -5179,9 +5333,9 @@
+ 
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+   _dbus_return_val_if_fail (connection->transport != NULL, FALSE);
+-  
++
+   CONNECTION_LOCK (connection);
+-  
++
+   retval = _dbus_transport_get_socket_fd (connection->transport, &s);
+ 
+   if (retval)
+@@ -5237,7 +5391,7 @@
+ #ifdef DBUS_WIN
+   _dbus_assert (!result);
+ #endif
+-  
++
+   CONNECTION_UNLOCK (connection);
+ 
+   return result;
+@@ -5326,7 +5480,7 @@
+  * However, the function will never be called, because there are
+  * no UNIX user ids to pass to it, or at least none of the existing
+  * auth protocols would allow authenticating as a UNIX user on Windows.
+- * 
++ *
+  * @param connection the connection
+  * @param function the predicate
+  * @param data data to pass to the predicate
+@@ -5342,7 +5496,7 @@
+   DBusFreeFunction old_free_function = NULL;
+ 
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   _dbus_transport_set_unix_user_function (connection->transport,
+                                           function, data, free_data_function,
+@@ -5399,7 +5553,7 @@
+  * The return value indicates whether the user SID is available;
+  * if it's available but we don't have the memory to copy it,
+  * then the return value is #TRUE and #NULL is given as the SID.
+- * 
++ *
+  * @todo We would like to be able to say "You can ask the bus to tell
+  * you the user of another connection though if you like; this is done
+  * with dbus_bus_get_windows_user()." But this has to be implemented
+@@ -5430,7 +5584,7 @@
+ #ifdef DBUS_UNIX
+   _dbus_assert (!result);
+ #endif
+-  
++
+   CONNECTION_UNLOCK (connection);
+ 
+   return result;
+@@ -5451,7 +5605,7 @@
+  * be invoked when the connection is freed or a new function is set.
+  * However, the function will never be called, because there is no
+  * way right now to authenticate as a Windows user on UNIX.
+- * 
++ *
+  * @param connection the connection
+  * @param function the predicate
+  * @param data data to pass to the predicate
+@@ -5467,7 +5621,7 @@
+   DBusFreeFunction old_free_function = NULL;
+ 
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   _dbus_transport_set_windows_user_function (connection->transport,
+                                              function, data, free_data_function,
+@@ -5484,7 +5638,7 @@
+  * #TRUE (the default is #FALSE), then the connection can proceed even if
+  * the client does not authenticate as some user identity, i.e. clients
+  * can connect anonymously.
+- * 
++ *
+  * This setting interacts with the available authorization mechanisms
+  * (see dbus_server_set_auth_mechanisms()). Namely, an auth mechanism
+  * such as ANONYMOUS that supports anonymous auth must be included in
+@@ -5500,7 +5654,7 @@
+  * You can override the rules for connections authorized as a
+  * user identity with dbus_connection_set_unix_user_function()
+  * and dbus_connection_set_windows_user_function().
+- * 
++ *
+  * @param connection the connection
+  * @param value whether to allow authentication as an anonymous user
+  */
+@@ -5509,7 +5663,7 @@
+                                      dbus_bool_t                 value)
+ {
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   _dbus_transport_set_allow_anonymous (connection->transport, value);
+   CONNECTION_UNLOCK (connection);
+@@ -5537,7 +5691,7 @@
+                                          dbus_bool_t                 value)
+ {
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   connection->route_peer_messages = value;
+   CONNECTION_UNLOCK (connection);
+@@ -5571,7 +5725,7 @@
+                             DBusFreeFunction           free_data_function)
+ {
+   DBusMessageFilter *filter;
+-  
++
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+   _dbus_return_val_if_fail (function != NULL, FALSE);
+ 
+@@ -5595,11 +5749,11 @@
+    * so we don't run the free_user_data_function
+    * if the add_filter() fails
+    */
+-  
++
+   filter->function = function;
+   filter->user_data = user_data;
+   filter->free_user_data_function = free_data_function;
+-        
++
+   CONNECTION_UNLOCK (connection);
+   return TRUE;
+ }
+@@ -5623,14 +5777,14 @@
+ {
+   DBusList *link;
+   DBusMessageFilter *filter;
+-  
++
+   _dbus_return_if_fail (connection != NULL);
+   _dbus_return_if_fail (function != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   filter = NULL;
+-  
++
+   link = _dbus_list_get_last_link (&connection->filter_list);
+   while (link != NULL)
+     {
+@@ -5641,14 +5795,14 @@
+         {
+           _dbus_list_remove_link (&connection->filter_list, link);
+           filter->function = NULL;
+-          
++
+           break;
+         }
+-        
++
+       link = _dbus_list_get_prev_link (&connection->filter_list, link);
+       filter = NULL;
+     }
+-  
++
+   CONNECTION_UNLOCK (connection);
+ 
+ #ifndef DBUS_DISABLE_CHECKS
+@@ -5659,14 +5813,14 @@
+       return;
+     }
+ #endif
+-  
++
+   /* Call application code */
+   if (filter->free_user_data_function)
+     (* filter->free_user_data_function) (filter->user_data);
+ 
+   filter->free_user_data_function = NULL;
+   filter->user_data = NULL;
+-  
++
+   _dbus_message_filter_unref (filter);
+ }
+ 
+@@ -5906,10 +6060,10 @@
+   _dbus_return_val_if_fail (data_p != NULL, FALSE);
+ 
+   *data_p = NULL;
+-  
++
+   if (!_dbus_decompose_path (path, strlen (path), &decomposed_path, NULL))
+     return FALSE;
+-  
++
+   CONNECTION_LOCK (connection);
+ 
+   *data_p = _dbus_object_tree_get_user_data_unlocked (connection->objects, (const char**) decomposed_path);
+@@ -5966,7 +6120,7 @@
+  * The passed-in slot must be initialized to -1, and is filled in
+  * with the slot ID. If the passed-in slot is not -1, it's assumed
+  * to be already allocated, and its refcount is incremented.
+- * 
++ *
+  * The allocated slot is global, i.e. all DBusConnection objects will
+  * have a slot with the given integer ID reserved.
+  *
+@@ -5995,7 +6149,7 @@
+ dbus_connection_free_data_slot (dbus_int32_t *slot_p)
+ {
+   _dbus_return_if_fail (*slot_p >= 0);
+-  
++
+   _dbus_data_slot_allocator_free (&slot_allocator, slot_p);
+ }
+ 
+@@ -6033,14 +6187,14 @@
+ 
+   _dbus_return_val_if_fail (connection != NULL, FALSE);
+   _dbus_return_val_if_fail (slot >= 0, FALSE);
+-  
++
+   SLOTS_LOCK (connection);
+ 
+   retval = _dbus_data_slot_list_set (&slot_allocator,
+                                      &connection->slot_list,
+                                      slot, data, free_data_func,
+                                      &old_free_func, &old_data);
+-  
++
+   SLOTS_UNLOCK (connection);
+ 
+   if (retval)
+@@ -6084,7 +6238,7 @@
+   res = _dbus_data_slot_list_get (&slot_allocator,
+                                   &connection->slot_list,
+                                   slot);
+-  
++
+   SLOTS_UNLOCK (connection);
+ 
+   return res;
+@@ -6098,7 +6252,7 @@
+  */
+ void
+ dbus_connection_set_change_sigpipe (dbus_bool_t will_modify_sigpipe)
+-{  
++{
+   _dbus_modify_sigpipe = will_modify_sigpipe != FALSE;
+ }
+ 
+@@ -6106,7 +6260,7 @@
+  * Specifies the maximum size message this connection is allowed to
+  * receive. Larger messages will result in disconnecting the
+  * connection.
+- * 
++ *
+  * @param connection a #DBusConnection
+  * @param size maximum message size the connection can receive, in bytes
+  */
+@@ -6115,7 +6269,7 @@
+                                       long            size)
+ {
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   _dbus_transport_set_max_message_size (connection->transport,
+                                         size);
+@@ -6134,7 +6288,7 @@
+   long res;
+ 
+   _dbus_return_val_if_fail (connection != NULL, 0);
+-  
++
+   CONNECTION_LOCK (connection);
+   res = _dbus_transport_get_max_message_size (connection->transport);
+   CONNECTION_UNLOCK (connection);
+@@ -6194,7 +6348,7 @@
+  *
+  * Thus, the max live messages size can actually be exceeded
+  * by up to the maximum size of a single message.
+- * 
++ *
+  * Also, if we read say 1024 bytes off the wire in a single read(),
+  * and that contains a half-dozen small messages, we may exceed the
+  * size max by that amount. But this should be inconsequential.
+@@ -6210,7 +6364,7 @@
+                                        long            size)
+ {
+   _dbus_return_if_fail (connection != NULL);
+-  
++
+   CONNECTION_LOCK (connection);
+   _dbus_transport_set_max_received_size (connection->transport,
+                                          size);
+@@ -6229,7 +6383,7 @@
+   long res;
+ 
+   _dbus_return_val_if_fail (connection != NULL, 0);
+-  
++
+   CONNECTION_LOCK (connection);
+   res = _dbus_transport_get_max_received_size (connection->transport);
+   CONNECTION_UNLOCK (connection);
+
+--- a/dbus/dbus-connection.h
++++ b/dbus/dbus-connection.h
+@@ -4,7 +4,7 @@
+  * Copyright (C) 2002, 2003  Red Hat Inc.
+  *
+  * Licensed under the Academic Free License version 2.1
+- * 
++ *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+@@ -14,7 +14,7 @@
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+- * 
++ *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+@@ -140,7 +140,7 @@
+  * ID is allowed to connect, if the client tried to auth as a UNIX
+  * user ID. Normally on Windows this would never happen. Set with
+  * dbus_connection_set_unix_user_function().
+- */ 
++ */
+ typedef dbus_bool_t (* DBusAllowUnixUserFunction)  (DBusConnection *connection,
+                                                     unsigned long   uid,
+                                                     void           *data);
+@@ -150,7 +150,7 @@
+  * ID is allowed to connect, if the client tried to auth as a Windows
+  * user ID. Normally on UNIX this would never happen. Set with
+  * dbus_connection_set_windows_user_function().
+- */ 
++ */
+ typedef dbus_bool_t (* DBusAllowWindowsUserFunction)  (DBusConnection *connection,
+                                                        const char     *user_sid,
+                                                        void           *data);
+@@ -231,6 +231,14 @@
+                                                                  DBusPendingCall           **pending_return,
+                                                                  int                         timeout_milliseconds);
+ DBUS_EXPORT
++dbus_bool_t        dbus_connection_send_with_reply_set_notify   (DBusConnection             *connection,
++                                                                 DBusMessage                *message,
++                                                                 DBusPendingCall           **pending_return,
++                                                                 DBusPendingCallNotifyFunction function0,
++                                                                 void                      * user_data0,
++                                                                 DBusFreeFunction            free_user_data0,
++                                                                 int                         timeout_milliseconds);
++DBUS_EXPORT
+ DBusMessage *      dbus_connection_send_with_reply_and_block    (DBusConnection             *connection,
+                                                                  DBusMessage                *message,
+                                                                  int                         timeout_milliseconds,
+@@ -276,7 +284,7 @@
+                                                                  DBusFreeFunction            free_data_function);
+ DBUS_EXPORT
+ dbus_bool_t        dbus_connection_get_windows_user             (DBusConnection             *connection,
+-                                                                 char                      **windows_sid_p); 
++                                                                 char                      **windows_sid_p);
+ DBUS_EXPORT
+ void               dbus_connection_set_windows_user_function    (DBusConnection             *connection,
+                                                                  DBusAllowWindowsUserFunction function,
+@@ -318,7 +326,7 @@
+                                                 dbus_int32_t      slot);
+ 
+ DBUS_EXPORT
+-void        dbus_connection_set_change_sigpipe (dbus_bool_t       will_modify_sigpipe); 
++void        dbus_connection_set_change_sigpipe (dbus_bool_t       will_modify_sigpipe);
+ 
+ DBUS_EXPORT
+ void dbus_connection_set_max_message_size  (DBusConnection *connection,
+@@ -386,7 +394,7 @@
+ {
+   DBusObjectPathUnregisterFunction   unregister_function; /**< Function to unregister this handler */
+   DBusObjectPathMessageFunction      message_function; /**< Function to handle messages */
+-  
++
+   void (* dbus_internal_pad1) (void *); /**< Reserved for future expansion */
+   void (* dbus_internal_pad2) (void *); /**< Reserved for future expansion */
+   void (* dbus_internal_pad3) (void *); /**< Reserved for future expansion */
+
+--- a/dbus/dbus-message.c
++++ b/dbus/dbus-message.c
+@@ -196,9 +196,9 @@
+     return;
+ 
+   _dbus_verbose ("Swapping message into compiler byte order\n");
+-  
++
+   get_const_signature (&message->header, &type_str, &type_pos);
+-  
++
+   _dbus_marshal_byteswap (type_str, type_pos,
+                           byte_order,
+                           DBUS_COMPILER_BYTE_ORDER,
+@@ -266,14 +266,14 @@
+  * Sets the serial number of a message.
+  * This can only be done once on a message.
+  *
+- * DBusConnection will automatically set the serial to an appropriate value 
+- * when the message is sent; this function is only needed when encapsulating 
++ * DBusConnection will automatically set the serial to an appropriate value
++ * when the message is sent; this function is only needed when encapsulating
+  * messages in another protocol, or otherwise bypassing DBusConnection.
+  *
+  * @param message the message
+  * @param serial the serial
+  */
+-void 
++void
+ dbus_message_set_serial (DBusMessage   *message,
+                          dbus_uint32_t  serial)
+ {
+@@ -398,7 +398,7 @@
+  * reference to a message in the outgoing queue and change it
+  * underneath us. Messages are locked when they enter the outgoing
+  * queue (dbus_connection_send_message()), and the library complains
+- * if the message is modified while locked. This function may also 
++ * if the message is modified while locked. This function may also
+  * called externally, for applications wrapping D-Bus in another protocol.
+  *
+  * @param message the message to lock.
+@@ -570,7 +570,7 @@
+   _dbus_assert (_dbus_atomic_get (&message->refcount) == 0);
+ 
+   _dbus_assert (message->counters == NULL);
+-  
++
+   _DBUS_UNLOCK (message_cache);
+ 
+   return message;
+@@ -704,7 +704,7 @@
+   _dbus_assert (_dbus_atomic_get (&message->refcount) == 0);
+ 
+   _DBUS_UNLOCK (message_cache);
+-  
++
+   if (!was_cached)
+     dbus_message_finalize (message);
+ }
+@@ -965,7 +965,7 @@
+                   const char *s;
+                   _dbus_type_reader_read_basic (&array,
+                                                 (void *) &s);
+-                  
++
+                   str_array[j] = _dbus_strdup (s);
+                   if (str_array[j] == NULL)
+                     {
+@@ -973,9 +973,9 @@
+                       _DBUS_SET_OOM (error);
+                       goto out;
+                     }
+-                  
++
+                   ++j;
+-                  
++
+                   if (!_dbus_type_reader_next (&array))
+                     _dbus_assert (j == n_elements);
+                 }
+@@ -1116,7 +1116,7 @@
+  *
+  * The D-Bus specification goes into some more detail about header fields and
+  * message types.
+- * 
++ *
+  * @{
+  */
+ 
+@@ -1303,7 +1303,7 @@
+  * Usually you want to use dbus_message_new_method_call(),
+  * dbus_message_new_method_return(), dbus_message_new_signal(),
+  * or dbus_message_new_error() instead.
+- * 
++ *
+  * @param message_type type of message
+  * @returns new message or #NULL if no memory
+  */
+@@ -1343,7 +1343,7 @@
+  *
+  * Destination, path, interface, and method name can't contain
+  * any invalid characters (see the D-Bus specification).
+- * 
++ *
+  * @param destination name that the message should be sent to or #NULL
+  * @param path object path the message should be sent to
+  * @param iface interface to invoke method on, or #NULL
+@@ -1436,7 +1436,7 @@
+  *
+  * Path, interface, and signal name must all be valid (the D-Bus
+  * specification defines the syntax of these fields).
+- * 
++ *
+  * @param path the path to the object emitting the signal
+  * @param iface the interface the signal is emitted from
+  * @param name name of the signal
+@@ -1553,7 +1553,7 @@
+  *
+  * @todo add _DBUS_GNUC_PRINTF to this (requires moving _DBUS_GNUC_PRINTF to
+  * public header, see DBUS_DEPRECATED for an example)
+- * 
++ *
+  * @param reply_to the original message
+  * @param error_name the error name
+  * @param error_format the error message format as with printf
+@@ -1875,7 +1875,7 @@
+           char buf[2];
+ 
+           element_type = va_arg (var_args, int);
+-              
++
+           buf[0] = element_type;
+           buf[1] = '\0';
+           if (!dbus_message_iter_open_container (&iter,
+@@ -1892,7 +1892,7 @@
+ 
+               value = va_arg (var_args, const DBusBasicValue**);
+               n_elements = va_arg (var_args, int);
+-              
++
+               if (!dbus_message_iter_append_fixed_array (&array,
+                                                          element_type,
+                                                          value,
+@@ -1907,12 +1907,12 @@
+               const char **value;
+               int n_elements;
+               int i;
+-              
++
+               value_p = va_arg (var_args, const char***);
+               n_elements = va_arg (var_args, int);
+ 
+               value = *value_p;
+-              
++
+               i = 0;
+               while (i < n_elements)
+                 {
+@@ -1990,7 +1990,7 @@
+  *
+  * If more arguments than requested are present, the requested
+  * arguments are returned and the extra arguments are ignored.
+- * 
++ *
+  * @todo support DBUS_TYPE_STRUCT and DBUS_TYPE_VARIANT and complex arrays
+  *
+  * @param message the message
+@@ -2068,7 +2068,7 @@
+    * message, we need to get in the right byte order
+    */
+   ensure_byte_order (message);
+-  
++
+   real->message = message;
+   real->changed_stamp = message->changed_stamp;
+   real->iter_type = iter_type;
+@@ -2083,7 +2083,7 @@
+  * Some types of argument can only be read with #DBusMessageIter
+  * however.
+  *
+- * The easiest way to iterate is like this: 
++ * The easiest way to iterate is like this:
+  * @code
+  * dbus_message_iter_init (message, &iter);
+  * while ((current_type = dbus_message_iter_get_arg_type (&iter)) != DBUS_TYPE_INVALID)
+@@ -2092,7 +2092,7 @@
+  *
+  * #DBusMessageIter contains no allocated memory; it need not be
+  * freed, and can be copied by assignment or memcpy().
+- * 
++ *
+  * @param message the message
+  * @param iter pointer to an iterator to initialize
+  * @returns #FALSE if the message has no arguments
+@@ -2249,7 +2249,7 @@
+  * the variant's value.
+  *
+  * The returned string must be freed with dbus_free().
+- * 
++ *
+  * @param iter the message iterator
+  * @returns the contained signature, or NULL if out of memory
+  */
+@@ -2442,20 +2442,20 @@
+  * The value argument should be the address of a location to store the
+  * returned array. So for int32 it should be a "const dbus_int32_t**"
+  * The returned value is by reference and should not be freed.
+- * 
++ *
+  * This function should only be used if dbus_type_is_fixed() returns
+  * #TRUE for the element type.
+  *
+  * If an array's elements are not fixed in size, you have to recurse
+  * into the array with dbus_message_iter_recurse() and read the
+  * elements one by one.
+- * 
++ *
+  * Because the array is not copied, this function runs in constant
+  * time and is fast; it's much preferred over walking the entire array
+  * with an iterator. (However, you can always use
+  * dbus_message_iter_recurse(), even for fixed-length types;
+  * dbus_message_iter_get_fixed_array() is just an optimization.)
+- * 
++ *
+  * @param iter the iterator
+  * @param value location to store the block
+  * @param n_elements number of elements in the block
+@@ -2971,7 +2971,7 @@
+                              contained_signature != NULL) ||
+                             (type == DBUS_TYPE_ARRAY &&
+                              contained_signature != NULL), FALSE);
+-  
++
+   /* this would fail if the contained_signature is a dict entry, since
+    * dict entries are invalid signatures standalone (they must be in
+    * an array)
+@@ -3200,7 +3200,7 @@
+  * required to reply.
+  *
+  * On the protocol level this toggles #DBUS_HEADER_FLAG_NO_REPLY_EXPECTED
+- * 
++ *
+  * @param message the message
+  * @param no_reply #TRUE if no reply is desired
+  */
+@@ -3242,7 +3242,7 @@
+  * The flag is set to #TRUE by default, i.e. auto starting is the default.
+  *
+  * On the protocol level this toggles #DBUS_HEADER_FLAG_NO_AUTO_START
+- * 
++ *
+  * @param message the message
+  * @param auto_start #TRUE if auto-starting is desired
+  */
+@@ -3312,7 +3312,7 @@
+  *
+  * The returned string becomes invalid if the message is
+  * modified, since it points into the wire-marshaled message data.
+- * 
++ *
+  * @param message the message
+  * @returns the path (should not be freed) or #NULL
+  */
+@@ -3346,7 +3346,7 @@
+ {
+   const char *msg_path;
+   msg_path = dbus_message_get_path (message);
+-  
++
+   if (msg_path == NULL)
+     {
+       if (path == NULL)
+@@ -3357,7 +3357,7 @@
+ 
+   if (path == NULL)
+     return FALSE;
+-   
++
+   if (strcmp (msg_path, path) == 0)
+     return TRUE;
+ 
+@@ -3376,7 +3376,7 @@
+  * and the path "/" becomes { NULL }.
+  *
+  * See also dbus_message_get_path().
+- * 
++ *
+  * @todo this could be optimized by using the len from the message
+  * instead of calling strlen() again
+  *
+@@ -3413,7 +3413,7 @@
+  *
+  * The interface name must contain only valid characters as defined
+  * in the D-Bus specification.
+- * 
++ *
+  * @param message the message
+  * @param iface the interface or #NULL to unset
+  * @returns #FALSE if not enough memory
+@@ -3475,7 +3475,7 @@
+ {
+   const char *msg_interface;
+   msg_interface = dbus_message_get_interface (message);
+-   
++
+   if (msg_interface == NULL)
+     {
+       if (iface == NULL)
+@@ -3486,7 +3486,7 @@
+ 
+   if (iface == NULL)
+     return FALSE;
+-     
++
+   if (strcmp (msg_interface, iface) == 0)
+     return TRUE;
+ 
+@@ -3529,7 +3529,7 @@
+  *
+  * The returned string becomes invalid if the message is
+  * modified, since it points into the wire-marshaled message data.
+- * 
++ *
+  * @param message the message
+  * @returns the member name (should not be freed) or #NULL
+  */
+@@ -3561,7 +3561,7 @@
+ {
+   const char *msg_member;
+   msg_member = dbus_message_get_member (message);
+- 
++
+   if (msg_member == NULL)
+     {
+       if (member == NULL)
+@@ -3572,7 +3572,7 @@
+ 
+   if (member == NULL)
+     return FALSE;
+-    
++
+   if (strcmp (msg_member, member) == 0)
+     return TRUE;
+ 
+@@ -3613,7 +3613,7 @@
+  *
+  * The returned string becomes invalid if the message is
+  * modified, since it points into the wire-marshaled message data.
+- * 
++ *
+  * @param message the message
+  * @returns the error name (should not be freed) or #NULL
+  */
+@@ -3640,7 +3640,7 @@
+  *
+  * The destination name must contain only valid characters as defined
+  * in the D-Bus specification.
+- * 
++ *
+  * @param message the message
+  * @param destination the destination name or #NULL to unset
+  * @returns #FALSE if not enough memory
+@@ -3723,7 +3723,7 @@
+  * Note, the returned sender is always the unique bus name.
+  * Connections may own multiple other bus names, but those
+  * are not found in the sender field.
+- * 
++ *
+  * The returned string becomes invalid if the message is
+  * modified, since it points into the wire-marshaled message data.
+  *
+@@ -3746,6 +3746,124 @@
+ }
+ 
+ /**
++ * Sets the signature of the message, i.e. the arguments in the
++ * message payload. The signature includes only "in" arguments for
++ * #DBUS_MESSAGE_TYPE_METHOD_CALL and only "out" arguments for
++ * #DBUS_MESSAGE_TYPE_METHOD_RETURN, so is slightly different from
++ * what you might expect (it does not include the signature of the
++ * entire C++-style method).
++ *
++ * The signature is a string made up of type codes such as
++ * #DBUS_TYPE_INT32. The string is terminated with nul (nul is also
++ * the value of #DBUS_TYPE_INVALID). The macros such as
++ * #DBUS_TYPE_INT32 evaluate to integers; to assemble a signature you
++ * may find it useful to use the string forms, such as
++ * #DBUS_TYPE_INT32_AS_STRING.
++ *
++ * An "unset" or #NULL signature is considered the same as an empty
++ * signature. In fact dbus_message_get_signature() will never return
++ * #NULL.
++ *
++ * @param message the message
++ * @param signature the type signature or #NULL to unset
++ * @returns #FALSE if no memory
++ */
++dbus_bool_t
++dbus_message_set_signature (DBusMessage *message,
++                            const char  *signature)
++{
++  DBusString str;
++  DBusValidity signature_validity;
++
++  _dbus_return_val_if_fail (message != NULL, FALSE);
++  _dbus_return_val_if_fail (!message->locked, FALSE);
++
++  if (signature != NULL)
++    {
++      _dbus_string_init_const(&str, signature);
++      signature_validity = _dbus_validate_signature_with_reason (&str, 0, _dbus_string_get_length (&str));
++
++      if (signature_validity == DBUS_VALIDITY_UNKNOWN_OOM_ERROR)
++        {
++          return FALSE;
++        }
++    }
++  else
++    {
++      signature_validity = DBUS_VALID_BUT_INCOMPLETE;
++    }
++
++  _dbus_return_val_if_fail (signature == NULL ||
++                            signature_validity == DBUS_VALID, FALSE);
++  /* can't delete the signature if you have a message body */
++  _dbus_return_val_if_fail (_dbus_string_get_length (&message->body) == 0 ||
++                            signature != NULL, FALSE);
++
++  return set_or_delete_string_field (message,
++                                     DBUS_HEADER_FIELD_SIGNATURE,
++                                     DBUS_TYPE_SIGNATURE,
++                                     signature);
++}
++
++/**
++ * Returns pointer to the buffer used to store the message body.
++ *
++ * @param message the message
++ * @return pointer to the message body memory
++ */
++char*
++dbus_message_get_body (DBusMessage *message) {
++  _dbus_return_val_if_fail (message != NULL, NULL);
++
++  return _dbus_string_get_data(&(message->body));
++}
++
++/**
++ * Adjust the length of the message body buffer. The memory will be reallocated
++ * if the new length is bigger than the already allocated size.
++ *
++ * @see dbus_message_get_body_allocated
++ * @param message the message
++ * @param length the new length of the body
++ * @return #TRUE if successful
++ */
++dbus_bool_t
++dbus_message_set_body_length (DBusMessage *message,
++                              int length) {
++  _dbus_return_val_if_fail (message != NULL, FALSE);
++  _dbus_return_val_if_fail (length >= 0, FALSE);
++
++  return _dbus_string_set_length(&(message->body), length);
++}
++
++/**
++ * Gets the length of the message body buffer.
++ *
++ * @param message the message
++ * @param length the new length of the body
++ * @return the length of the body buffer
++ */
++int
++dbus_message_get_body_length (DBusMessage *message) {
++  _dbus_return_val_if_fail (message != NULL, 0);
++
++  return _dbus_string_get_length(&(message->body));
++}
++
++/**
++ * Gets the allocated memory size used to hold the message body.
++ *
++ * @param message the message
++ * @return size of the allocated message body memory
++ */
++int
++dbus_message_get_body_allocated (DBusMessage *message) {
++  _dbus_return_val_if_fail (message != NULL, 0);
++
++  return _dbus_string_get_allocated(&(message->body));
++}
++
++/**
+  * Gets the type signature of the message, i.e. the arguments in the
+  * message payload. The signature includes only "in" arguments for
+  * #DBUS_MESSAGE_TYPE_METHOD_CALL and only "out" arguments for
+@@ -4091,7 +4209,7 @@
+   loader = dbus_new0 (DBusMessageLoader, 1);
+   if (loader == NULL)
+     return NULL;
+-  
++
+   loader->refcount = 1;
+ 
+   loader->corrupted = FALSE;
+@@ -4412,7 +4530,7 @@
+   dbus_uint32_t n_unix_fds = 0;
+ 
+   mode = DBUS_VALIDATION_MODE_DATA_IS_UNTRUSTED;
+-  
++
+   oom = FALSE;
+ 
+ #if 0
+@@ -4455,7 +4573,7 @@
+   if (mode != DBUS_VALIDATION_MODE_WE_TRUST_THIS_DATA_ABSOLUTELY)
+     {
+       get_const_signature (&message->header, &type_str, &type_pos);
+-      
++
+       /* Because the bytes_remaining arg is NULL, this validates that the
+        * body is the right length
+        */
+@@ -4472,7 +4590,7 @@
+ 
+           loader->corrupted = TRUE;
+           loader->corruption_reason = validity;
+-          
++
+           goto failed;
+         }
+     }
+@@ -4576,7 +4694,7 @@
+ 
+   /* does nothing if the message isn't in the list */
+   _dbus_list_remove_last (&loader->messages, message);
+-  
++
+   if (oom)
+     _dbus_assert (!loader->corrupted);
+   else
+@@ -5031,7 +5149,7 @@
+   _dbus_return_val_if_fail (msg != NULL, FALSE);
+   _dbus_return_val_if_fail (marshalled_data_p != NULL, FALSE);
+   _dbus_return_val_if_fail (len_p != NULL, FALSE);
+-  
++
+   if (!_dbus_string_init (&tmp))
+     return FALSE;
+ 
+@@ -5141,10 +5259,10 @@
+  * @param buf data to be marshalled
+  * @param len the length of @p buf
+  * @returns -1 if there was no valid data to be demarshalled, 0 if there wasn't enough data to determine how much should be demarshalled. Otherwise returns the number of bytes to be demarshalled
+- * 
++ *
+  */
+-int 
+-dbus_message_demarshal_bytes_needed(const char *buf, 
++int
++dbus_message_demarshal_bytes_needed(const char *buf,
+                                     int         len)
+ {
+   DBusString str;
+@@ -5158,7 +5276,7 @@
+   if (len > DBUS_MAXIMUM_MESSAGE_LENGTH)
+     len = DBUS_MAXIMUM_MESSAGE_LENGTH;
+   _dbus_string_init_const_len (&str, buf, len);
+-  
++
+   validity = DBUS_VALID;
+   have_message
+     = _dbus_header_have_message_untrusted(DBUS_MAXIMUM_MESSAGE_LENGTH,
+
+--- a/dbus/dbus-message.h
++++ b/dbus/dbus-message.h
+@@ -4,7 +4,7 @@
+  * Copyright (C) 2002, 2003, 2005 Red Hat Inc.
+  *
+  * Licensed under the Academic Free License version 2.1
+- * 
++ *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+@@ -14,7 +14,7 @@
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+- * 
++ *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+@@ -56,10 +56,10 @@
+ typedef struct DBusMessageIter DBusMessageIter;
+ 
+ /**
+- * DBusMessageIter struct; contains no public fields. 
++ * DBusMessageIter struct; contains no public fields.
+  */
+ struct DBusMessageIter
+-{ 
++{
+   void *dummy1;         /**< Don't use this */
+   void *dummy2;         /**< Don't use this */
+   dbus_uint32_t dummy3; /**< Don't use this */
+@@ -136,15 +136,15 @@
+ DBUS_EXPORT
+ const char*   dbus_message_get_path         (DBusMessage   *message);
+ DBUS_EXPORT
+-dbus_bool_t   dbus_message_has_path         (DBusMessage   *message, 
+-                                             const char    *object_path);  
++dbus_bool_t   dbus_message_has_path         (DBusMessage   *message,
++                                             const char    *object_path);
+ DBUS_EXPORT
+ dbus_bool_t   dbus_message_set_interface    (DBusMessage   *message,
+                                              const char    *iface);
+ DBUS_EXPORT
+ const char*   dbus_message_get_interface    (DBusMessage   *message);
+ DBUS_EXPORT
+-dbus_bool_t   dbus_message_has_interface    (DBusMessage   *message, 
++dbus_bool_t   dbus_message_has_interface    (DBusMessage   *message,
+                                              const char    *iface);
+ DBUS_EXPORT
+ dbus_bool_t   dbus_message_set_member       (DBusMessage   *message,
+@@ -152,7 +152,7 @@
+ DBUS_EXPORT
+ const char*   dbus_message_get_member       (DBusMessage   *message);
+ DBUS_EXPORT
+-dbus_bool_t   dbus_message_has_member       (DBusMessage   *message, 
++dbus_bool_t   dbus_message_has_member       (DBusMessage   *message,
+                                              const char    *member);
+ DBUS_EXPORT
+ dbus_bool_t   dbus_message_set_error_name   (DBusMessage   *message,
+@@ -170,6 +170,9 @@
+ DBUS_EXPORT
+ const char*   dbus_message_get_sender       (DBusMessage   *message);
+ DBUS_EXPORT
++dbus_bool_t   dbus_message_set_signature    (DBusMessage   *message,
++                                             const char    *signature);
++DBUS_EXPORT
+ const char*   dbus_message_get_signature    (DBusMessage   *message);
+ DBUS_EXPORT
+ void          dbus_message_set_no_reply     (DBusMessage   *message,
+@@ -199,7 +202,7 @@
+ DBUS_EXPORT
+ dbus_uint32_t dbus_message_get_serial       (DBusMessage   *message);
+ DBUS_EXPORT
+-void          dbus_message_set_serial       (DBusMessage   *message, 
++void          dbus_message_set_serial       (DBusMessage   *message,
+                                              dbus_uint32_t  serial);
+ DBUS_EXPORT
+ dbus_bool_t   dbus_message_set_reply_serial (DBusMessage   *message,
+@@ -305,6 +308,18 @@
+                                                          DBusMessageIter *sub);
+ 
+ DBUS_EXPORT
++char*       dbus_message_get_body                (DBusMessage   *message);
++
++DBUS_EXPORT
++dbus_bool_t dbus_message_set_body_length         (DBusMessage   *message,
++                                                  int length);
++DBUS_EXPORT
++int         dbus_message_get_body_length         (DBusMessage   *message);
++
++DBUS_EXPORT
++int         dbus_message_get_body_allocated      (DBusMessage   *message);
++
++DBUS_EXPORT
+ void dbus_message_lock    (DBusMessage  *message);
+ 
+ DBUS_EXPORT
+@@ -340,7 +355,7 @@
+                                      DBusError  *error);
+ 
+ DBUS_EXPORT
+-int          dbus_message_demarshal_bytes_needed (const char *str, 
++int          dbus_message_demarshal_bytes_needed (const char *str,
+                                                   int len);
+ 
+ DBUS_EXPORT
+
+--- a/dbus/dbus-string.c
++++ b/dbus/dbus-string.c
+@@ -1,11 +1,11 @@
+ /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+ /* dbus-string.c String utility class (internal to D-Bus implementation)
+- * 
++ *
+  * Copyright (C) 2002, 2003, 2004, 2005 Red Hat, Inc.
+  * Copyright (C) 2006 Ralf Habacker <ralf.habacker@freenet.de>
+  *
+  * Licensed under the Academic Free License version 2.1
+- * 
++ *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+@@ -15,7 +15,7 @@
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+- * 
++ *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+@@ -48,12 +48,12 @@
+  * used (or extended and then used) rather than the libc stuff in
+  * string.h.  The string class is a bit inconvenient at spots because
+  * it handles out-of-memory failures and tries to be extra-robust.
+- * 
++ *
+  * A DBusString has a maximum length set at initialization time; this
+  * can be used to ensure that a buffer doesn't get too big.  The
+  * _dbus_string_lengthen() method checks for overflow, and for max
+  * length being exceeded.
+- * 
++ *
+  * Try to avoid conversion to a plain C string, i.e. add methods on
+  * the string object instead, only convert to C string when passing
+  * things out to the public API. In particular, no sprintf, strcpy,
+@@ -84,15 +84,15 @@
+ 
+   /* we have to have extra space in real->allocated for the align offset and nul byte */
+   _dbus_assert (real->len <= real->allocated - _DBUS_STRING_ALLOCATION_PADDING);
+-  
++
+   old_align_offset = real->align_offset;
+   real_block = real->str - old_align_offset;
+-  
++
+   aligned = _DBUS_ALIGN_ADDRESS (real_block, 8);
+ 
+   real->align_offset = aligned - real_block;
+   real->str = aligned;
+-  
++
+   if (old_align_offset != real->align_offset)
+     {
+       /* Here comes the suck */
+@@ -123,7 +123,7 @@
+  * Initializes a string that can be up to the given allocation size
+  * before it has to realloc. The string starts life with zero length.
+  * The string must eventually be freed with _dbus_string_free().
+- * 
++ *
+  * @param str memory to hold the string
+  * @param allocate_size amount to preallocate
+  * @returns #TRUE on success, #FALSE if no memory
+@@ -145,29 +145,29 @@
+    * since we also use this function to reset
+    * an existing string, e.g. in _dbus_string_steal_data()
+    */
+-  
++
+   real->str = dbus_malloc (_DBUS_STRING_ALLOCATION_PADDING + allocate_size);
+   if (real->str == NULL)
+-    return FALSE;  
+-  
++    return FALSE;
++
+   real->allocated = _DBUS_STRING_ALLOCATION_PADDING + allocate_size;
+   real->len = 0;
+   real->str[real->len] = '\0';
+-  
++
+   real->constant = FALSE;
+   real->locked = FALSE;
+   real->invalid = FALSE;
+   real->align_offset = 0;
+-  
++
+   fixup_alignment (real);
+-  
++
+   return TRUE;
+ }
+ 
+ /**
+  * Initializes a string. The string starts life with zero length.  The
+  * string must eventually be freed with _dbus_string_free().
+- * 
++ *
+  * @param str memory to hold the string
+  * @returns #TRUE on success, #FALSE if no memory
+  */
+@@ -182,7 +182,7 @@
+  * (should be static), and the string may never be modified.
+  * It is safe but not necessary to call _dbus_string_free()
+  * on a const string. The string has a length limit of MAXINT - 8.
+- * 
++ *
+  * @param str memory to use for the string
+  * @param value a string to be stored in str (not copied!!!)
+  */
+@@ -191,7 +191,7 @@
+                          const char *value)
+ {
+   _dbus_assert (value != NULL);
+-  
++
+   _dbus_string_init_const_len (str, value,
+                                strlen (value));
+ }
+@@ -201,7 +201,7 @@
+  * not copied (should be static), and the string may never be
+  * modified.  It is safe but not necessary to call _dbus_string_free()
+  * on a const string.
+- * 
++ *
+  * @param str memory to use for the string
+  * @param value a string to be stored in str (not copied!!!)
+  * @param len the length to use
+@@ -212,14 +212,14 @@
+                              int         len)
+ {
+   DBusRealString *real;
+-  
++
+   _dbus_assert (str != NULL);
+   _dbus_assert (len == 0 || value != NULL);
+   _dbus_assert (len <= _DBUS_STRING_MAX_LENGTH);
+   _dbus_assert (len >= 0);
+-  
++
+   real = (DBusRealString*) str;
+-  
++
+   real->str = (unsigned char*) value;
+   real->len = len;
+   real->allocated = real->len + _DBUS_STRING_ALLOCATION_PADDING; /* a lie, just to avoid special-case assertions... */
+@@ -260,7 +260,7 @@
+ {
+   DBusRealString *real = (DBusRealString*) str;
+   DBUS_GENERIC_STRING_PREAMBLE (real);
+-  
++
+   if (real->constant)
+     return;
+ 
+@@ -317,7 +317,7 @@
+  */
+ void
+ _dbus_string_lock (DBusString *str)
+-{  
++{
+   DBUS_LOCKED_STRING_PREAMBLE (str); /* can lock multiple times */
+ 
+   real->locked = TRUE;
+@@ -424,11 +424,11 @@
+ 
+   if (len > _DBUS_STRING_MAX_LENGTH - dest->len)
+     return FALSE; /* detected overflow of dest->len + len below */
+-  
++
+   if (!set_length (dest, dest->len + len))
+     return FALSE;
+ 
+-  memmove (dest->str + insert_at + len, 
++  memmove (dest->str + insert_at + len,
+            dest->str + insert_at,
+            dest->len - len - insert_at);
+ 
+@@ -451,7 +451,7 @@
+ _dbus_string_get_data (DBusString *str)
+ {
+   DBUS_STRING_PREAMBLE (str);
+-  
++
+   return (char*) real->str;
+ }
+ #endif /* _dbus_string_get_data */
+@@ -468,7 +468,7 @@
+ _dbus_string_get_const_data (const DBusString  *str)
+ {
+   DBUS_CONST_STRING_PREAMBLE (str);
+-  
++
+   return (const char*) real->str;
+ }
+ #endif /* _dbus_string_get_const_data */
+@@ -496,7 +496,7 @@
+   _dbus_assert (len >= 0);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (len <= real->len - start);
+-  
++
+   return (char*) real->str + start;
+ }
+ 
+@@ -520,7 +520,7 @@
+   _dbus_assert (len >= 0);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (len <= real->len - start);
+-  
++
+   return (const char*) real->str + start;
+ }
+ #endif /* _dbus_string_get_const_data_len */
+@@ -542,7 +542,7 @@
+   DBUS_STRING_PREAMBLE (str);
+   _dbus_assert (i < real->len);
+   _dbus_assert (i >= 0);
+-  
++
+   real->str[i] = byte;
+ }
+ #endif /* _dbus_string_set_byte */
+@@ -565,7 +565,7 @@
+   DBUS_CONST_STRING_PREAMBLE (str);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (start >= 0);
+-  
++
+   return real->str[start];
+ }
+ #endif /* _dbus_string_get_byte */
+@@ -593,10 +593,10 @@
+ 
+   if (n_bytes == 0)
+     return TRUE;
+-  
++
+   if (!open_gap (n_bytes, real, i))
+     return FALSE;
+-  
++
+   memset (real->str + i, byte, n_bytes);
+ 
+   return TRUE;
+@@ -618,7 +618,7 @@
+   DBUS_STRING_PREAMBLE (str);
+   _dbus_assert (i <= real->len);
+   _dbus_assert (i >= 0);
+-  
++
+   if (!open_gap (1, real, i))
+     return FALSE;
+ 
+@@ -645,7 +645,7 @@
+   _dbus_assert (data_return != NULL);
+ 
+   undo_alignment (real);
+-  
++
+   *data_return = (char*) real->str;
+ 
+   /* reset the string */
+@@ -674,7 +674,7 @@
+ {
+   DBUS_CONST_STRING_PREAMBLE (str);
+   _dbus_assert (data_return != NULL);
+-  
++
+   *data_return = dbus_malloc (real->len + 1);
+   if (*data_return == NULL)
+     return FALSE;
+@@ -688,7 +688,7 @@
+  * Copies the contents of a DBusString into a different buffer. It is
+  * a bug if avail_len is too short to hold the string contents. nul
+  * termination is not copied, just the supplied bytes.
+- * 
++ *
+  * @param str a string
+  * @param buffer a C buffer to copy data to
+  * @param avail_len maximum length of C buffer
+@@ -702,15 +702,15 @@
+ 
+   _dbus_assert (avail_len >= 0);
+   _dbus_assert (avail_len >= real->len);
+-  
++
+   memcpy (buffer, real->str, real->len);
+ }
+ 
+ /**
+  * Copies the contents of a DBusString into a different buffer. It is
+  * a bug if avail_len is too short to hold the string contents plus a
+- * nul byte. 
+- * 
++ * nul byte.
++ *
+  * @param str a string
+  * @param buffer a C buffer to copy data to
+  * @param avail_len maximum length of C buffer
+@@ -724,7 +724,7 @@
+ 
+   _dbus_assert (avail_len >= 0);
+   _dbus_assert (avail_len > real->len);
+-  
++
+   memcpy (buffer, real->str, real->len+1);
+ }
+ 
+@@ -739,11 +739,27 @@
+ _dbus_string_get_length (const DBusString  *str)
+ {
+   DBUS_CONST_STRING_PREAMBLE (str);
+-  
++
+   return real->len;
+ }
+ #endif /* !_dbus_string_get_length */
+ 
++/* Only have the function if we don't have the macro */
++#ifndef _dbus_string_get_allocated
++/**
++ * Gets the allocated length of a string (not including nul termination).
++ *
++ * @returns the allocated length.
++ */
++int
++_dbus_string_get_allocated(const DBusString  *str)
++{
++  DBUS_CONST_STRING_PREAMBLE (str);
++
++  return real->allocated;
++}
++#endif /* !_dbus_string_get_allocated */
++
+ /**
+  * Makes a string longer by the given number of bytes.  Checks whether
+  * adding additional_length to the current length would overflow an
+@@ -760,12 +776,12 @@
+ _dbus_string_lengthen (DBusString *str,
+                        int         additional_length)
+ {
+-  DBUS_STRING_PREAMBLE (str);  
++  DBUS_STRING_PREAMBLE (str);
+   _dbus_assert (additional_length >= 0);
+ 
+   if (_DBUS_UNLIKELY (additional_length > _DBUS_STRING_MAX_LENGTH - real->len))
+     return FALSE; /* would overflow */
+-  
++
+   return set_length (real,
+                      real->len + additional_length);
+ }
+@@ -825,13 +841,13 @@
+   insert_at = *insert_at_p;
+ 
+   _dbus_assert (insert_at <= real->len);
+-  
++
+   gap_pos = _DBUS_ALIGN_VALUE (insert_at, alignment);
+   new_len = real->len + (gap_pos - insert_at) + gap_size;
+-  
++
+   if (_DBUS_UNLIKELY (new_len > (unsigned long) _DBUS_STRING_MAX_LENGTH))
+     return FALSE;
+-  
++
+   delta = new_len - real->len;
+   _dbus_assert (delta >= 0);
+ 
+@@ -853,7 +869,7 @@
+     }
+ 
+   *insert_at_p = gap_pos;
+-  
++
+   return TRUE;
+ }
+ 
+@@ -865,7 +881,7 @@
+   int insert_at;
+ 
+   insert_at = _dbus_string_get_length (str);
+-  
++
+   return align_insert_point_then_open_gap (str,
+                                            &insert_at,
+                                            alignment, then_lengthen_by);
+@@ -936,14 +952,14 @@
+                      const char *buffer)
+ {
+   unsigned long buffer_len;
+-  
++
+   DBUS_STRING_PREAMBLE (str);
+   _dbus_assert (buffer != NULL);
+-  
++
+   buffer_len = strlen (buffer);
+   if (buffer_len > (unsigned long) _DBUS_STRING_MAX_LENGTH)
+     return FALSE;
+-  
++
+   return append (real, buffer, buffer_len);
+ }
+ 
+@@ -974,7 +990,7 @@
+                                const unsigned char octets[2])
+ {
+   DBUS_STRING_PREAMBLE (str);
+-  
++
+   if (!align_insert_point_then_open_gap (str, &insert_at, 2, 2))
+     return FALSE;
+ 
+@@ -998,7 +1014,7 @@
+                                const unsigned char octets[4])
+ {
+   DBUS_STRING_PREAMBLE (str);
+-  
++
+   if (!align_insert_point_then_open_gap (str, &insert_at, 4, 4))
+     return FALSE;
+ 
+@@ -1022,12 +1038,12 @@
+                                const unsigned char octets[8])
+ {
+   DBUS_STRING_PREAMBLE (str);
+-  
++
+   if (!align_insert_point_then_open_gap (str, &insert_at, 8, 8))
+     return FALSE;
+ 
+   _dbus_assert (_DBUS_ALIGN_VALUE (insert_at, 8) == (unsigned) insert_at);
+-  
++
+   ASSIGN_8_OCTETS (real->str + insert_at, octets);
+ 
+   return TRUE;
+@@ -1050,7 +1066,7 @@
+                                int                alignment)
+ {
+   DBUS_STRING_PREAMBLE (str);
+-  
++
+   if (!align_insert_point_then_open_gap (str, insert_at, alignment, 0))
+     return FALSE;
+ 
+@@ -1091,7 +1107,7 @@
+     {
+       goto out;
+     }
+-  
++
+   vsprintf ((char*) (real->str + (real->len - len)),
+             format, args_copy);
+   ret = TRUE;
+@@ -1117,7 +1133,7 @@
+ {
+   va_list args;
+   dbus_bool_t retval;
+-  
++
+   va_start (args, format);
+   retval = _dbus_string_append_printf_valist (str, format, args);
+   va_end (args);
+@@ -1174,7 +1190,7 @@
+ {
+   if (len == 0)
+     return;
+-  
++
+   memmove (real->str + start, real->str + start + len, real->len - (start + len));
+   real->len -= len;
+   real->str[real->len] = '\0';
+@@ -1199,7 +1215,7 @@
+   _dbus_assert (len >= 0);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (len <= real->len - start);
+-  
++
+   delete (real, start, len);
+ }
+ 
+@@ -1215,7 +1231,7 @@
+ 
+   if (!open_gap (len, dest, insert_at))
+     return FALSE;
+-  
++
+   memmove (dest->str + insert_at,
+            source->str + start,
+            len);
+@@ -1263,7 +1279,7 @@
+ {
+   DBusRealString *real_source = (DBusRealString*) source;
+   _dbus_assert (start <= real_source->len);
+-  
++
+   return _dbus_string_move_len (source, start,
+                                 real_source->len - start,
+                                 dest, insert_at);
+@@ -1337,7 +1353,7 @@
+         (a)->allocated = (b)->allocated;        \
+         (a)->align_offset = (b)->align_offset;  \
+       } while (0)
+-      
++
+       DBusRealString tmp;
+ 
+       ASSIGN_DATA (&tmp, real_source);
+@@ -1352,10 +1368,10 @@
+                  real_dest,
+                  insert_at))
+         return FALSE;
+-      
++
+       delete (real_source, start,
+               len);
+-      
++
+       return TRUE;
+     }
+ }
+@@ -1382,7 +1398,7 @@
+   _dbus_assert (len >= 0);
+   _dbus_assert (start <= real_source->len);
+   _dbus_assert (len <= real_source->len - start);
+-  
++
+   return copy (real_source, start, len,
+                real_dest,
+                insert_at);
+@@ -1549,7 +1565,7 @@
+     ((Char) < 0x10000 ? 3 :            \
+      ((Char) < 0x200000 ? 4 :          \
+       ((Char) < 0x4000000 ? 5 : 6)))))
+-   
++
+ /**
+  * Gets a UTF-8 value.
+  *
+@@ -1634,32 +1650,32 @@
+   DBUS_CONST_STRING_PREAMBLE (str);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (start >= 0);
+-  
++
+   i = start;
+   while (i < real->len)
+     {
+-      if (real->str[i] == '\r') 
++      if (real->str[i] == '\r')
+         {
+           if ((i+1) < real->len && real->str[i+1] == '\n') /* "\r\n" */
+             {
+-              if (found) 
++              if (found)
+                 *found = i;
+               if (found_len)
+                 *found_len = 2;
+               return TRUE;
+-            } 
++            }
+           else /* only "\r" */
+             {
+-              if (found) 
++              if (found)
+                 *found = i;
+               if (found_len)
+                 *found_len = 1;
+               return TRUE;
+             }
+-        } 
++        }
+       else if (real->str[i] == '\n')  /* only "\n" */
+         {
+-          if (found) 
++          if (found)
+             *found = i;
+           if (found_len)
+             *found_len = 1;
+@@ -1673,7 +1689,7 @@
+ 
+   if (found_len)
+     *found_len = 0;
+-  
++
+   return FALSE;
+ }
+ 
+@@ -1723,14 +1739,14 @@
+       if (real->str[i] == substr[0])
+         {
+           int j = i + 1;
+-          
++
+           while (j < end)
+             {
+               if (substr[j - i] == '\0')
+                 break;
+               else if (real->str[j] != substr[j - i])
+                 break;
+-              
++
+               ++j;
+             }
+ 
+@@ -1741,14 +1757,14 @@
+               return TRUE;
+             }
+         }
+-      
++
+       ++i;
+     }
+ 
+   if (found)
+     *found = end;
+-  
+-  return FALSE;  
++
++  return FALSE;
+ }
+ 
+ /**
+@@ -1770,7 +1786,7 @@
+   DBUS_CONST_STRING_PREAMBLE (str);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (start >= 0);
+-  
++
+   i = start;
+   while (i < real->len)
+     {
+@@ -1781,13 +1797,13 @@
+             *found = i;
+           return TRUE;
+         }
+-      
++
+       ++i;
+     }
+ 
+   if (found)
+     *found = real->len;
+-  
++
+   return FALSE;
+ }
+ 
+@@ -1808,18 +1824,18 @@
+   DBUS_CONST_STRING_PREAMBLE (str);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (start >= 0);
+-  
++
+   i = start;
+   while (i < real->len)
+     {
+       if (!DBUS_IS_ASCII_BLANK (real->str[i]))
+         break;
+-      
++
+       ++i;
+     }
+ 
+   _dbus_assert (i == real->len || !DBUS_IS_ASCII_WHITE (real->str[i]));
+-  
++
+   if (end)
+     *end = i;
+ }
+@@ -1842,18 +1858,18 @@
+   DBUS_CONST_STRING_PREAMBLE (str);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (start >= 0);
+-  
++
+   i = start;
+   while (i < real->len)
+     {
+       if (!DBUS_IS_ASCII_WHITE (real->str[i]))
+         break;
+-      
++
+       ++i;
+     }
+ 
+   _dbus_assert (i == real->len || !(DBUS_IS_ASCII_WHITE (real->str[i])));
+-  
++
+   if (end)
+     *end = i;
+ }
+@@ -1875,7 +1891,7 @@
+   DBUS_CONST_STRING_PREAMBLE (str);
+   _dbus_assert (end <= real->len);
+   _dbus_assert (end >= 0);
+-  
++
+   i = end;
+   while (i > 0)
+     {
+@@ -1885,7 +1901,7 @@
+     }
+ 
+   _dbus_assert (i >= 0 && (i == 0 || !(DBUS_IS_ASCII_WHITE (real->str[i-1]))));
+-  
++
+   if (start)
+     *start = i;
+ }
+@@ -1900,7 +1916,7 @@
+  * written purely for test code,
+  * e.g. dbus-message-builder.c). Probably should be enforced as test
+  * code only with ifdef DBUS_ENABLE_EMBEDDED_TESTS
+- * 
++ *
+  * @param source the source string
+  * @param dest the destination string (contents are replaced)
+  * @returns #FALSE if no memory, or source has length 0
+@@ -1910,9 +1926,9 @@
+                        DBusString *dest)
+ {
+   int eol, eol_len;
+-  
++
+   _dbus_string_set_length (dest, 0);
+-  
++
+   eol = 0;
+   eol_len = 0;
+   if (!_dbus_string_find_eol (source, 0, &eol, &eol_len))
+@@ -1929,10 +1945,10 @@
+   /* remember eol can be 0 if it's an empty line, but eol_len should not be zero also
+    * since find_eol returned TRUE
+    */
+-  
++
+   if (!_dbus_string_move_len (source, 0, eol + eol_len, dest, 0))
+     return FALSE;
+-  
++
+   /* remove line ending */
+   if (!_dbus_string_set_length (dest, eol))
+     {
+@@ -1954,7 +1970,7 @@
+ _dbus_string_delete_first_word (DBusString *str)
+ {
+   int i;
+-  
++
+   if (_dbus_string_find_blank (str, 0, &i))
+     _dbus_string_skip_blank (str, i, &i);
+ 
+@@ -1972,7 +1988,7 @@
+ _dbus_string_delete_leading_blanks (DBusString *str)
+ {
+   int i;
+-  
++
+   _dbus_string_skip_blank (str, 0, &i);
+ 
+   if (i > 0)
+@@ -1982,19 +1998,19 @@
+ 
+ /**
+  * Deletes leading and trailing whitespace
+- * 
++ *
+  * @param str the string
+  */
+ void
+ _dbus_string_chop_white(DBusString *str)
+ {
+   int i;
+-  
++
+   _dbus_string_skip_white (str, 0, &i);
+ 
+   if (i > 0)
+     _dbus_string_delete (str, 0, i);
+-  
++
+   _dbus_string_skip_white_reverse (str, _dbus_string_get_length (str), &i);
+ 
+   _dbus_string_set_length (str, i);
+@@ -2031,7 +2047,7 @@
+     {
+       if (*ap != *bp)
+         return FALSE;
+-      
++
+       ++ap;
+       ++bp;
+     }
+@@ -2076,7 +2092,7 @@
+     {
+       if (*ap != *bp)
+         return FALSE;
+-      
++
+       ++ap;
+       ++bp;
+     }
+@@ -2120,7 +2136,7 @@
+   _dbus_assert (a_len <= real_a->len - a_start);
+   _dbus_assert (b_start >= 0);
+   _dbus_assert (b_start <= real_b->len);
+-  
++
+   if (a_len > real_b->len - b_start)
+     return FALSE;
+ 
+@@ -2131,13 +2147,13 @@
+     {
+       if (*ap != *bp)
+         return FALSE;
+-      
++
+       ++ap;
+       ++bp;
+     }
+ 
+   _dbus_assert (bp <= (real_b->str + real_b->len));
+-  
++
+   return TRUE;
+ }
+ 
+@@ -2158,7 +2174,7 @@
+   const DBusRealString *real_a = (const DBusRealString*) a;
+   DBUS_GENERIC_STRING_PREAMBLE (real_a);
+   _dbus_assert (c_str != NULL);
+-  
++
+   ap = real_a->str;
+   bp = (const unsigned char*) c_str;
+   a_end = real_a->str + real_a->len;
+@@ -2166,14 +2182,14 @@
+     {
+       if (*ap != *bp)
+         return FALSE;
+-      
++
+       ++ap;
+       ++bp;
+     }
+ 
+   if (ap != a_end || *bp)
+     return FALSE;
+-  
++
+   return TRUE;
+ }
+ 
+@@ -2194,7 +2210,7 @@
+   const DBusRealString *real_a = (const DBusRealString*) a;
+   DBUS_GENERIC_STRING_PREAMBLE (real_a);
+   _dbus_assert (c_str != NULL);
+-  
++
+   ap = real_a->str;
+   bp = (const unsigned char*) c_str;
+   a_end = real_a->str + real_a->len;
+@@ -2202,7 +2218,7 @@
+     {
+       if (*ap != *bp)
+         return FALSE;
+-      
++
+       ++ap;
+       ++bp;
+     }
+@@ -2233,7 +2249,7 @@
+   if (!_dbus_string_append_byte (str,
+                                  hexdigits[(byte >> 4)]))
+     return FALSE;
+-  
++
+   if (!_dbus_string_append_byte (str,
+                                  hexdigits[(byte & 0x0f)]))
+     {
+@@ -2265,23 +2281,23 @@
+   const unsigned char *p;
+   const unsigned char *end;
+   dbus_bool_t retval;
+-  
++
+   _dbus_assert (start <= _dbus_string_get_length (source));
+ 
+   if (!_dbus_string_init (&result))
+     return FALSE;
+ 
+   retval = FALSE;
+-  
++
+   p = (const unsigned char*) _dbus_string_get_const_data (source);
+   end = p + _dbus_string_get_length (source);
+   p += start;
+-  
++
+   while (p != end)
+     {
+       if (!_dbus_string_append_byte_as_hex (&result, *p))
+         goto out;
+-      
++
+       ++p;
+     }
+ 
+@@ -2317,7 +2333,7 @@
+   const unsigned char *end;
+   dbus_bool_t retval;
+   dbus_bool_t high_bits;
+-  
++
+   _dbus_assert (start <= _dbus_string_get_length (source));
+ 
+   if (!_dbus_string_init (&result))
+@@ -2329,7 +2345,7 @@
+   p = (const unsigned char*) _dbus_string_get_const_data (source);
+   end = p + _dbus_string_get_length (source);
+   p += start;
+-  
++
+   while (p != end)
+     {
+       unsigned int val;
+@@ -2406,7 +2422,7 @@
+           unsigned char b;
+ 
+           len = _dbus_string_get_length (&result);
+-          
++
+           b = _dbus_string_get_byte (&result, len - 1);
+ 
+           b |= val;
+@@ -2427,9 +2443,9 @@
+     *end_return = p - (const unsigned char*) _dbus_string_get_const_data (source);
+ 
+   retval = TRUE;
+-  
++
+  out:
+-  _dbus_string_free (&result);  
++  _dbus_string_free (&result);
+   return retval;
+ }
+ 
+@@ -2440,7 +2456,7 @@
+  *
+  * @todo this is inconsistent with most of DBusString in that
+  * it allows a start,len range that extends past the string end.
+- * 
++ *
+  * @param str the string
+  * @param start first byte index to check
+  * @param len number of bytes to check
+@@ -2457,20 +2473,20 @@
+   _dbus_assert (start >= 0);
+   _dbus_assert (start <= real->len);
+   _dbus_assert (len >= 0);
+-  
++
+   if (len > real->len - start)
+     return FALSE;
+-  
++
+   s = real->str + start;
+   end = s + len;
+   while (s != end)
+     {
+       if (_DBUS_UNLIKELY (!_DBUS_ISASCII (*s)))
+         return FALSE;
+-        
++
+       ++s;
+     }
+-  
++
+   return TRUE;
+ }
+ 
+@@ -2545,7 +2561,7 @@
+  *
+  * @todo this is inconsistent with most of DBusString in that
+  * it allows a start,len range that extends past the string end.
+- * 
++ *
+  * @param str the string
+  * @param start first byte index to check
+  * @param len number of bytes to check
+@@ -2570,13 +2586,13 @@
+    * UTF-8. Also, this function seems to be a performance
+    * bottleneck in profiles.
+    */
+-  
++
+   if (_DBUS_UNLIKELY (len > real->len - start))
+     return FALSE;
+-  
++
+   p = real->str + start;
+   end = p + len;
+-  
++
+   while (p < end)
+     {
+       int i, mask, char_len;
+@@ -2585,19 +2601,19 @@
+       /* nul bytes considered invalid */
+       if (*p == '\0')
+         break;
+-      
++
+       /* Special-case ASCII; this makes us go a lot faster in
+        * D-Bus profiles where we are typically validating
+        * function names and such. We have to know that
+        * all following checks will pass for ASCII though,
+        * comments follow ...
+-       */      
++       */
+       if (*p < 128)
+         {
+           ++p;
+           continue;
+         }
+-      
++
+       UTF8_COMPUTE (*p, mask, char_len);
+ 
+       if (_DBUS_UNLIKELY (char_len == 0))  /* ASCII: char_len == 1 */
+@@ -2606,7 +2622,7 @@
+       /* check that the expected number of bytes exists in the remaining length */
+       if (_DBUS_UNLIKELY ((end - p) < char_len)) /* ASCII: p < end and char_len == 1 */
+         break;
+-        
++
+       UTF8_GET (result, p, i, mask, char_len);
+ 
+       /* Check for overlong UTF-8 */
+@@ -2623,7 +2639,7 @@
+ 
+       /* UNICODE_VALID should have caught it */
+       _dbus_assert (result != (dbus_unichar_t)-1);
+-      
++
+       p += char_len;
+     }
+ 
+@@ -2643,7 +2659,7 @@
+  *
+  * @todo this is inconsistent with most of DBusString in that
+  * it allows a start,len range that extends past the string end.
+- * 
++ *
+  * @param str the string
+  * @param start first byte index to check
+  * @param len number of bytes to check
+@@ -2660,10 +2676,10 @@
+   _dbus_assert (start >= 0);
+   _dbus_assert (len >= 0);
+   _dbus_assert (start <= real->len);
+-  
++
+   if (len > real->len - start)
+     return FALSE;
+-  
++
+   s = real->str + start;
+   end = s + len;
+   while (s != end)
+@@ -2672,7 +2688,7 @@
+         return FALSE;
+       ++s;
+     }
+-  
++
+   return TRUE;
+ }
+ 
+
+--- a/dbus/dbus-string.h
++++ b/dbus/dbus-string.h
+@@ -1,11 +1,11 @@
+ /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+ /* dbus-string.h String utility class (internal to D-Bus implementation)
+- * 
++ *
+  * Copyright (C) 2002, 2003 Red Hat, Inc.
+  * Copyright (C) 2006 Ralf Habacker <ralf.habacker@freenet.de>
+  *
+  * Licensed under the Academic Free License version 2.1
+- * 
++ *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+@@ -15,7 +15,7 @@
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+- * 
++ *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+@@ -151,6 +151,10 @@
+ int           _dbus_string_get_length            (const DBusString  *str);
+ #endif /* !_dbus_string_get_length */
+ 
++#ifndef _dbus_string_get_allocated
++int           _dbus_string_get_allocated         (const DBusString  *str);
++#endif /* !_dbus_string_get_allocated */
++
+ /**
+  * Get the string's length as an unsigned integer, for comparison with
+  * size_t and similar unsigned types that does not trigger compiler
+@@ -326,7 +330,7 @@
+ DBUS_PRIVATE_EXPORT
+ void          _dbus_string_delete_leading_blanks (DBusString        *str);
+ DBUS_PRIVATE_EXPORT
+-void          _dbus_string_chop_white            (DBusString        *str); 
++void          _dbus_string_chop_white            (DBusString        *str);
+ dbus_bool_t   _dbus_string_append_byte_as_hex    (DBusString        *str,
+                                                   unsigned char      byte);
+ DBUS_PRIVATE_EXPORT
