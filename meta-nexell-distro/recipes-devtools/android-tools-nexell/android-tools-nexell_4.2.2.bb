@@ -17,8 +17,10 @@ SRC_URI = " \
     file://android-tools.tar.gz \
     file://android-tools-debian.tar.gz \
     file://android-tools-adbd.service \
+    file://android-tools-adbd-daudio.service \
     file://start_adbd-32.sh \
     file://start_adbd-64.sh \
+    file://start_adbd-daudio.sh \
     file://stop_adbd.sh \
     "
 
@@ -27,6 +29,9 @@ S = "${WORKDIR}/android-tools"
 inherit systemd
 
 SYSTEMD_SERVICE_${PN} = "android-tools-adbd.service"
+
+ADBD_SERVICE = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'android-tools-adbd-daudio.service', 'android-tools-adbd.service', d)}"
+ADBD_START_SCRIPT = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'start_adbd-daudio.sh', 'start_adbd-${ARCH_TYPE_NUM}.sh', d)}"
 
 do_compile() {
     unset CFLAGS
@@ -46,12 +51,10 @@ do_install() {
     install -m 0755 ${S}/core/adbd/adbd ${D}${bindir}
 
     install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${WORKDIR}/android-tools-adbd.service ${D}${systemd_unitdir}/system
+    install -m 0644 ${WORKDIR}/${ADBD_SERVICE} ${D}${systemd_unitdir}/system/android-tools-adbd.service
 
-    install -m 0755 ${WORKDIR}/start_adbd-${ARCH_TYPE_NUM}.sh ${D}${bindir}/start_adbd.sh
-    install -m 0755 ${WORKDIR}/stop_adbd.sh ${D}${bindir}
-
-    install -m 0755 ${WORKDIR}/stop_adbd.sh ${D}${bindir}
+    install -m 0755 ${WORKDIR}/${ADBD_START_SCRIPT} ${D}${bindir}/start_adbd.sh
+    install -m 0755 ${WORKDIR}/stop_adbd.sh ${D}${bindir}/
 }
 
 FILES_${PN} = "${bindir} ${base_sbindir}"
