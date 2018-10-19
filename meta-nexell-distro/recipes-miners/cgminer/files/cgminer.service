@@ -5,12 +5,18 @@ After=network.target
 [Service]
 Type=idle
 Environment="TERM=dumb"
-# RESET_P; GPIOB4
-ExecStartPre=/bin/sh -c '/bin/echo 36 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio36/direction; /bin/echo 1 > /sys/class/gpio/gpio36/value'
-# INTR_GLD_N_P; GPIOB2
-ExecStartPre=/bin/sh -c '/bin/echo 34 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio34/direction'
-# INTR_OON_N_P; GPIOB10
-#ExecStartPre=/bin/sh -c '/bin/echo 42 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio42/direction'
+# HASH BD 0:RESET_P; GPIOD31
+ExecStartPre=/bin/sh -c '/bin/echo 127 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio127/direction; /bin/echo 1 > /sys/class/gpio/gpio127/value'
+# HASH BD 0:INTR_GLD_N_P; GPIOD30
+ExecStartPre=/bin/sh -c '/bin/echo 126 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio126/direction'
+# HASH BD 0:INTR_OON_N_P; GPIOD29
+ExecStartPre=/bin/sh -c '/bin/echo 125 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio125/direction'
+# HASH BD 1:RESET_P; GPIOE4
+ExecStartPre=/bin/sh -c '/bin/echo 132 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio132/direction; /bin/echo 1 > /sys/class/gpio/gpio132/value'
+# HASH BD 1:INTR_GLD_N_P; GPIOE3
+ExecStartPre=/bin/sh -c '/bin/echo 131 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio131/direction'
+# HASH BD 1:INTR_OON_N_P; GPIOE2
+ExecStartPre=/bin/sh -c '/bin/echo 130 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio130/direction'
 #ExecStart=@BINDIR@/cgminer --api-listen --default-config /config/cgminer.conf
 ExecStart=/bin/echo ""
 ExecReload=@BASE_BINDIR@/kill -HUP $MAINPID
