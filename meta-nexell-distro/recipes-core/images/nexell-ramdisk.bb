@@ -1,5 +1,7 @@
 #inherit post-process-ramdisk
 
+SPALSH = "psplash-nexell"
+
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
@@ -17,6 +19,6 @@ IMAGE_FSTYPES_forcevariable = "cpio.gz"
 # We don't need depmod data here
 KERNELDEPMODDEPEND = ""
 USE_DEPMOD = "0"
-PACKAGE_INSTALL += "systemd busybox nexell-nxupdate android-tools-nexell e2fsprogs bash"
+PACKAGE_INSTALL += "systemd busybox android-tools-nexell e2fsprogs bash psplash-nexell util-linux-sfdisk nexell-nxupdate"
 
 inherit core-image
