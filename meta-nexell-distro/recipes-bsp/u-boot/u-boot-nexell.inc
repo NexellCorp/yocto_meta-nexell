@@ -8,6 +8,6 @@ S = "${WORKDIR}/git"
 PV = "NEXELL"
 PR = "0.1"
 
-PROVIDES += "u-boot"
+PROVIDES += "u-boot fw_printenv fw_setenv"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
