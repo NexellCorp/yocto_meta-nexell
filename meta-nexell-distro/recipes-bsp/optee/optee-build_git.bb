@@ -110,20 +110,20 @@ do_compile() {
     export PATH=${TOOLCHAIN_32_BIN_PATH}:$PATH
     export LDFLAGS=""
 
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} clean
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-bl1 -j8
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-lloader -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} QUICKBOOT=${QUICKBOOT_ENABLE} clean
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-bl1 QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-lloader QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-bl32 -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-bl32 QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip -j8
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-loader -j8
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-secure -j8
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-nonsecure -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-loader QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-secure QUICKBOOT=${QUICKBOOT_ENABLE} -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-fip-nonsecure QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-optee-client
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" build-optee-test
-    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-singleimage -j8
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-optee-client QUICKBOOT=${QUICKBOOT_ENABLE}
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} OPTEE_CLIENT_EXPORT="${PATH_OPTEE_CLIENT}/out/export" QUICKBOOT=${QUICKBOOT_ENABLE} build-optee-test
+    oe_runmake -f ${S}/Makefile ${COMMON_FLAGS} build-singleimage QUICKBOOT=${QUICKBOOT_ENABLE} -j8
 }
 
 do_install() {
@@ -134,14 +134,14 @@ do_install() {
 
     install -d ${D}/usr/bin
     install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/bin/tee-supplicant ${D}/usr/bin
-#    install -m 0755 ${PATH_OPTEE_TEST}/out/xtest/xtest ${D}/usr/bin
+#   install -m 0755 ${PATH_OPTEE_TEST}/out/xtest/xtest ${D}/usr/bin
 
     install -d ${D}/usr/lib
     install -m 0755 ${PATH_OPTEE_CLIENT}/out/export/lib/* ${D}/usr/lib
 
     cd ${PATH_OPTEE_TEST}/out/ta
-#    find . -name "*.ta" -exec cp {} ${D}/lib/optee_armtz \;
-#    chmod 444 ${D}/lib/optee_armtz/*.ta
+#   find . -name "*.ta" -exec cp {} ${D}/lib/optee_armtz \;
+#   chmod 444 ${D}/lib/optee_armtz/*.ta
 }
 
 inherit deploy
