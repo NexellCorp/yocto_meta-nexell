@@ -1,0 +1,18 @@
+[Unit]
+Description=Modbus TCP server for reporting temperature
+After=network.target
+After=cgminer.service
+
+[Service]
+Type=forking
+ExecStart=@BINDIR@/screen -LdmS modbus-tcp-server @BINDIR@/modbus-tcp-server tcp
+Restart=always
+RestartSec=0
+WatchdogSec=3min
+StartLimitInterval=10
+StartLimitBurst=5
+StartLimitAction=reboot
+
+[Install]
+WantedBy=multi-user.target
+
