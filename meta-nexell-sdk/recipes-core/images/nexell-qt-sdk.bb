@@ -8,28 +8,27 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d
 IMAGE_FEATURES += " dev-pkgs tools-sdk tools-debug debug-tweaks ssh-server-openssh"
 SDKIMAGE_FEATURES += " dbg-pkgs staticdev-pkgs"
 
-TOUCH_IMAGE_INSTALL = " \
-    tslib \
-    tslib-conf \
-    tslib-tests \
-    tslib-calibrate \
-    tslib-nexell \
-"
+ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
-NX_QT_LAUNCHER = "qtcinema-launcher"
 
 NEXELL_CUSTOMIZE_INSTALL = " \
-    ${NX_QT_LAUNCHER} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'nexell-bootanim nexell-btservice', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-covi', 'nexell-bootanim', '', d)} \
-    nexell-qt5-touchsetup \
+    ${ALLGO_CONNECTIVITY} \
+"
+
+NEXELL_LIBRARY_INSTALL = " \
+    nx-drm-allocator \
+    nx-renderer \
+    nx-gst-meta \
+    nx-scaler \
+    nx-v4l2 \
+    nx-video-api \
+    nx-vidtex \
 "
 
 IMAGE_INSTALL_append = " \
     kernel-modules \
     packagegroup-nexell-common-sdk \
     packagegroup-nexell-qt-sdk \
-    rtl-8188eus-${ARCH_TYPE_NUM} \
-    ${TOUCH_IMAGE_INSTALL} \
+    ${NEXELL_LIBRARY_INSTALL} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
 "
