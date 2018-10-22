@@ -3,8 +3,8 @@ Description=Multi-threaded Multi-pool FPGA and ASIC Miner for Bitcoin
 After=network.target
 
 [Service]
-Type=idle
-Environment="TERM=dumb"
+Type=forking
+#Environment="TERM=dumb"
 # HASH BD 0:RESET_P; GPIOD31
 ExecStartPre=/bin/sh -c '/bin/echo 127 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio127/direction; /bin/echo 1 > /sys/class/gpio/gpio127/value'
 # HASH BD 0:INTR_GLD_N_P; GPIOD30
@@ -17,9 +17,15 @@ ExecStartPre=/bin/sh -c '/bin/echo 132 > /sys/class/gpio/export; /bin/echo out >
 ExecStartPre=/bin/sh -c '/bin/echo 131 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio131/direction'
 # HASH BD 1:INTR_OON_N_P; GPIOE2
 ExecStartPre=/bin/sh -c '/bin/echo 130 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio130/direction'
-#ExecStart=@BINDIR@/cgminer --api-listen --default-config /config/cgminer.conf
-ExecStart=/bin/echo ""
-ExecReload=@BASE_BINDIR@/kill -HUP $MAINPID
+#ExecStart=@BINDIR@/cgminer --api-network --api-listen --default-config /config/cgminer.conf
+ExecStart=@BINDIR@/screen -LdmS cgminer @BINDIR@/cgminer --api-network --api-listen --default-config /config/cgminer.conf
+ExecReload=@BINDIR@/screen -S cgminer -X stuff 'scy'
+Restart=always
+RestartSec=0
+WatchdogSec=3min
+StartLimitInterval=10
+StartLimitBurst=5
+StartLimitAction=reboot
 
 [Install]
 WantedBy=multi-user.target
