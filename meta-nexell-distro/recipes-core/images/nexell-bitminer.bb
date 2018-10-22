@@ -17,6 +17,7 @@ CGMINER_INSTALL = " \
 
 WEB_INSTALL = " \
 	u-boot-nexell \
+	screen \
 	libmodbus \
 	modbus-tcp-server \
     lighttpd \
