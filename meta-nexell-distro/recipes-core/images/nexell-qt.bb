@@ -36,7 +36,7 @@ ETC_TOOLS = " \
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"
 NX_QT_LAUNCHER = "qtcinema-launcher"
-NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher', 'NX_QT_LAUNCHER', d)}"
+NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
 
 ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
