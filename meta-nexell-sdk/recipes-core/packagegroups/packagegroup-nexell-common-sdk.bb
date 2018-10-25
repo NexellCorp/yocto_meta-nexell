@@ -6,6 +6,26 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
+ALLGO_CONNECTIVITY = " \
+    common-api-c++-dbus \
+    common-api-c++ \
+"
+
+NEXELL_LIBS = " \
+    gst-plugins-camera \
+    gst-plugins-renderer \
+    gst-plugins-scaler \
+    gst-plugins-video-dec \
+    gst-plugins-video-sink \
+    libdrm \
+    nx-drm-allocator \
+    nx-gst-meta \
+    nx-renderer \
+    nx-scaler \
+    nx-v4l2 \
+    nx-video-api \
+"
+
 RDEPENDS_${PN} = " \
     libgcc \
     libgcc-dev \
@@ -35,4 +55,6 @@ RDEPENDS_${PN} = " \
     zlib-dev \
     ncurses-dev \
     util-linux-dev \
+    ${NEXELL_LIBS} \
+    ${ALLGO_CONNECTIVITY} \
 "

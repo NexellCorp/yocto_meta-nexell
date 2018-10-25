@@ -13,7 +13,7 @@ create_sdk_files() {
 }
 
 # STAGING_KERNEL_DIR => kernel source path
-# SDPATH => /opt/poky/2.x.x
+# SDPATH => /opt/poky/2.5.1
 # REAL_MULTIMACH_TARGET_SYS => cortexa9hf-neon-poky-linux-gnueabi
 do_install_append() {
     install -d ${D}/${SDKPATH}/sysroots/${REAL_MULTIMACH_TARGET_SYS}/usr/include/uapi/.
