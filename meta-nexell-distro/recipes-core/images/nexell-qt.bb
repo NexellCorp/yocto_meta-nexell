@@ -32,6 +32,7 @@ ETC_TOOLS = " \
     net-tools \
     openssl \
     curl \
+    procps \
 "
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"

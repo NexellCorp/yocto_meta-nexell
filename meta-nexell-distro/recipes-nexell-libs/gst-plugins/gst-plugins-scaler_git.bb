@@ -23,7 +23,7 @@ EXTRA_OECONF = " \
     '--with-extrapath_lib=${STAGING_LIBDIR}' \
     '--with-extrapath_include=${STAGING_INCDIR}' \
     "
-    
+
 EXTRA_OEMAKE = " \
     'AM_CFLAGS=$(WARN_CFLAGS) \
                -I${STAGING_INCDIR} \
@@ -31,11 +31,11 @@ EXTRA_OEMAKE = " \
                -I${EXTRAPATH_INCLUDE} \
                -I${EXTRAPATH}/lib/glib-2.0/include \
                -I${EXTRAPATH_INCLUDE}/glib-2.0 \
-               -I${EXTRAPATH_INCLUDE}/gstreamer-${GST_API_VERSION} \ 
+               -I${EXTRAPATH_INCLUDE}/gstreamer-${GST_API_VERSION} \
                -I${STAGING_LIBDIR}/gstreamer-${GST_API_VERSION}/include' \
     'libgstnxscaler_la_LDFLAGS = -L${STAGING_LIBDIR} -L${EXTRAPATH_LIB}' \
     "
-    
+
 do_configure() {
     cd ${S}
     NOCONFIGURE=true ./autogen.sh
@@ -50,11 +50,11 @@ do_compile() {
 
 do_install() {
     cd ${S}
-    install -d ${D}${libdir}/gstreamer-1.0
+    install -d ${D}${libdir}
     oe_runmake install DESTDIR=${D}
     cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
 }
 
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files invalid-packageconfig"
-FILES_${PN} = "${libdir} ${includedir}"
+FILES_${PN} = "${libdir}"
 ALLOW_EMPTY_${PN} = "1"

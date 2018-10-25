@@ -51,12 +51,12 @@ do_compile() {
 
 do_install() {
     cd ${S}
-    install -d ${D}${libdir}/gstreamer-1.0
+    install -d ${D}${libdir}
     oe_runmake install DESTDIR=${D}
     cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
 }
 
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files invalid-packageconfig"
-FILES_${PN} = "${libdir} ${includedir}"
-RDEPENDS_${PN} += "libdrm"
+FILES_${PN} = "${libdir}"
+RDEPENDS_${PN} += "libdrm-nx"
 ALLOW_EMPTY_${PN} = "1"

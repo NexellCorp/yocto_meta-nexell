@@ -20,19 +20,22 @@ EXTRA_OEMAKE += " \
     'AM_CFLAGS=$(WARN_CFLAGS) -I./ -I./drm' \
     "
 
-do_configure() {    
+do_configure() {
     cd ${S}
     NOCONFIGURE=true ./autogen.sh
     oe_runconf
 }
 
-do_compile() {    
+do_compile() {
     cd ${S}
     oe_runmake clean
     oe_runmake
 }
 
 do_install() {
+    install -d ${D}${libdir}
+    install -d ${D}${includedir}
+
     cd ${S}
     oe_runmake install DESTDIR=${D}
     cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
@@ -40,5 +43,6 @@ do_install() {
 
 INSANE_SKIP_${PN} = "dev-so invalid-packageconfig"
 FILES_${PN} = "${libdir} ${includedir}"
+FILES_${PN}-dev = "${includedir}"
 FILES_SOLIBSDEV = ""
 #ALLOW_EMPTY_${PN} = "1"

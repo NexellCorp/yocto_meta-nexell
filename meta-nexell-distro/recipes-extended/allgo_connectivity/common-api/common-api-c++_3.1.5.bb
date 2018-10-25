@@ -16,4 +16,4 @@ SRC_URI[sha256sum] = "1c42e31761d622806409ddd40dcc85e184c506019b9706a0546868ae91
 
 EXTRA_OECMAKE += "-DCMAKE_INSTALL_PREFIX=/usr"
 
-FILES_${PN}-dev += "${libdir}/cmake"
+FILES_${PN}-dev += "${libdir}/cmake ${includedir}/CommonAPI-3.1/CommonAPI"

@@ -39,45 +39,46 @@ EXTRA_OECONF += "\
  --disable-freedreno \
 "
 
+EXTRA_ROOTFS = "/extra-rootfs-support"
+
 do_install() {
     cd ${S}
     install -d ${D}${libdir}/nexell
     install -d ${D}${includedir}/nexell
-    install -d ${D}/lib/nexell
-    install -d ${D}${bindir}
+    install -d ${D}${bindir}/nexell
 
-    install -m 0644 ${S}/nexell/nexell_drm.h ${D}${includedir}/nexell
-    install -m 0644 ${S}/nexell/nexell_drmif.h ${D}${includedir}/nexell
+    install -m 0644 ${S}/nexell/nexell_drm.h ${D}${includedir}/nexell/
+    install -m 0644 ${S}/nexell/nexell_drmif.h ${D}${includedir}/nexell/
 
-    install -m 0755 ${B}/nexell/.libs/libdrm_nexell.so.1.0.0 ${D}/lib/nexell
-    install -m 0755 ${B}/nexell/libdrm_nexell.la ${D}/lib/nexell
+    install -m 0755 ${B}/nexell/.libs/libdrm_nexell.so.1.0.0 ${D}${libdir}/nexell/
+    install -m 0755 ${B}/nexell/libdrm_nexell.la ${D}${libdir}/nexell/
 
-    cd ${D}/lib
-    ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so
+    cd ${D}${libdir}
     ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so.1
+    ln -sf libdrm_nexell.so.1 libdrm_nexell.so
 
-    install -m 0755 ${B}/tests/modetest/.libs/modetest ${D}${bindir}
+    install -m 0755 ${B}/tests/modetest/.libs/modetest ${D}${bindir}/nexell/
 
     # supported for ubuntu or fedora OS system
-    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/nexell
-    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/include/nexell
-    install -d ${BASE_WORKDIR}/extra-rootfs-support/lib/nexell
-    install -d ${BASE_WORKDIR}/extra-rootfs-support/usr/bin
+    install -d ${BASE_WORKDIR}${EXTRA_ROOTFS}${libdir}/nexell
+    install -d ${BASE_WORKDIR}${EXTRA_ROOTFS}${includedir}/nexell
+    install -d ${BASE_WORKDIR}${EXTRA_ROOTFS}${bindir}/nexell
 
-    install -m 0644 ${S}/nexell/nexell_drm.h ${BASE_WORKDIR}/extra-rootfs-support/usr/include/nexell/
-    install -m 0644 ${S}/nexell/nexell_drmif.h ${BASE_WORKDIR}/extra-rootfs-support/usr/include/nexell/
+    install -m 0644 ${S}/nexell/nexell_drm.h ${BASE_WORKDIR}${EXTRA_ROOTFS}${includedir}/nexell/
+    install -m 0644 ${S}/nexell/nexell_drmif.h ${BASE_WORKDIR}${EXTRA_ROOTFS}${includedir}/nexell/
 
-    install -m 0755 ${B}/nexell/.libs/libdrm_nexell.so.1.0.0 ${BASE_WORKDIR}/extra-rootfs-support/lib/nexell/
-    install -m 0755 ${B}/nexell/libdrm_nexell.la ${BASE_WORKDIR}/extra-rootfs-support/lib/nexell/
+    install -m 0755 ${B}/nexell/.libs/libdrm_nexell.so.1.0.0 ${BASE_WORKDIR}${EXTRA_ROOTFS}${libdir}/nexell/
+    install -m 0755 ${B}/nexell/libdrm_nexell.la ${BASE_WORKDIR}${EXTRA_ROOTFS}${libdir}/nexell/
 
-    cd ${BASE_WORKDIR}/extra-rootfs-support/lib
-    ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so
+    cd ${BASE_WORKDIR}${EXTRA_ROOTFS}${libdir}
     ln -sf ./nexell/libdrm_nexell.so.1.0.0 libdrm_nexell.so.1
+    ln -sf libdrm_nexell.so.1 libdrm_nexell.so
 
-    install -m 0755 ${B}/tests/modetest/.libs/modetest ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    install -m 0755 ${B}/tests/modetest/.libs/modetest ${BASE_WORKDIR}${EXTRA_ROOTFS}${bindir}/nexell/
 }
 
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files"
-FILES_${PN} = "${libdir} ${includedir} lib lib/nexell ${bindir}"
+FILES_${PN} = "${libdir} ${libdir}/nexell ${includedir}/nexell ${bindir}/nexell"
+FILES_${PN}-dev = "${includedir}/nexell"
 ALLOW_EMPTY_${PN} = "1"
 PROVIDES = "libdrm-nx"

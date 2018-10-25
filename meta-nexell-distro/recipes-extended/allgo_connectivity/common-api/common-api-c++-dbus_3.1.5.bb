@@ -18,4 +18,4 @@ EXTRA_OECMAKE += "-DCMAKE_INSTALL_PREFIX=/usr "
 CXXFLAGS := "${@oe.utils.str_filter_out('-fvisibility-inlines-hidden', '${CXXFLAGS}', d)}"
 
 inherit cmake lib_package pkgconfig
-FILES_${PN}-dev += "${libdir}/cmake"
+FILES_${PN}-dev += "${libdir}/cmake ${includedir}/CommonAPI-3.1/CommonAPI/DBus ${includedir}/CommonAPI-3.1/pugixml"

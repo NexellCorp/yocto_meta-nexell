@@ -28,7 +28,7 @@ do_configure() {
     oe_runconf
 }
 
-do_compile() {    
+do_compile() {
     cd ${S}
     oe_runmake clean
     oe_runmake
@@ -40,4 +40,5 @@ do_buildclean() {
 
 INSANE_SKIP_${PN} = "invalid-packageconfig"
 FILES_${PN} = "${libdir} ${includedir}"
+FILES_${PN}-dev = "${includedir}"
 FILES_SOLIBSDEV = ""

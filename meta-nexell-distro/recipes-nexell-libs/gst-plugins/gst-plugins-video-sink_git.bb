@@ -45,5 +45,5 @@ do_install() {
 }
 
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files"
-FILES_${PN} = "${libdir} ${includedir}"
+FILES_${PN} = "${libdir}"
 ALLOW_EMPTY_${PN} = "1"
