@@ -111,6 +111,11 @@ do_compile() {
     #                                        -lnx_video_api          \
     #                                        -lnx_drm_allocator      \
     #                                        -lnx_v4l2"
+
+    #uac_test
+    cd ${S}/uac_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/alsa" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 }
 
 do_install() {
@@ -175,13 +180,15 @@ do_install() {
     install -m 0755 ${S}/dp_clipper_decimator_test/dp-clipper-decimator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
     #dp_decimator_test
     install -m 0755 ${S}/dp_decimator_test/dp-decimator-test ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
+    #uac_test
+    install -m 0755 ${S}/uac_test/uac-test ${D}${bindir}
 }
 
 PREFERRED_VERSION_libavcodec = "56.60.100"
 PREFERRED_VERSION_libavformat = "56.40.101"
 INSANE_SKIP_${PN} = "ldflags file-rdeps"
 FILES_${PN} = "${bindir} ${libdir}"
-RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter"
+RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter libasound"
 RDEPENDS_${PN} += "nx-drm-allocator nx-v4l2 nx-renderer nx-scaler nx-gst-meta nx-video-api libdrm-nx "
 FILES_libavresample = "${libdir}/libavresample${SOLIBS}"
 ALLOW_EMPTY_${PN} = "1"
