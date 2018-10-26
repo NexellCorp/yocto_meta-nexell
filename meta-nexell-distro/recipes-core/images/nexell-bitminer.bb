@@ -37,6 +37,7 @@ NAVI_REF_WIFI_INSTALL = " \
 IMAGE_INSTALL_append = " \
     net-tools \
     spidevtest \
+	e2fsprogs	\
     ${WEB_INSTALL} \
     ${CGMINER_INSTALL} \
     ${SYSTEMD_INSTALL} \
