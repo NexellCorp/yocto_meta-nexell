@@ -44,7 +44,8 @@ ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-con
 
 NEXELL_CUSTOMIZE_INSTALL = " \
     ${NX_LAUNCHER} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-bootanim nexell-bluetooth nexell-nxlogrotate', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-bootanim nexell-nxlogrotate', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'support-adanis-bt', 'nexell-bluetooth', '', d)} \
     ${ALLGO_CONNECTIVITY} \
     user-fonts \
     nexell-nxreboot \
