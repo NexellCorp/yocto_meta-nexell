@@ -1,0 +1,14 @@
+[Unit]
+Description=check extra file system for config, log
+DefaultDependencies=no
+Before=local-fs.target shutdown.target
+#After=local-fs-pre.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/echo "abcdef" > /tmp/abcdef
+ExecStart=/bin/sh -c '/usr/bin/checkminerfs.sh'
+
+#[Install]
+#WantedBy=multi-user.target
+

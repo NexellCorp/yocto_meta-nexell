@@ -17,11 +17,12 @@ ExecStartPre=/bin/sh -c '/bin/echo 132 > /sys/class/gpio/export; /bin/echo out >
 ExecStartPre=/bin/sh -c '/bin/echo 131 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio131/direction'
 # HASH BD 1:INTR_OON_N_P; GPIOE2
 ExecStartPre=/bin/sh -c '/bin/echo 130 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio130/direction'
+ExecStartPre=/bin/sh -c '/usr/bin/checkminerfs.sh'
 #ExecStart=@BINDIR@/cgminer --api-network --api-listen --default-config /config/cgminer.conf
 ExecStart=@BINDIR@/screen -LdmS cgminer @BINDIR@/cgminer --api-network --api-listen --default-config /config/cgminer.conf
 ExecReload=@BINDIR@/screen -S cgminer -X stuff 'scy'
 Restart=always
-RestartSec=0
+RestartSec=5s
 WatchdogSec=3min
 StartLimitInterval=10
 StartLimitBurst=5

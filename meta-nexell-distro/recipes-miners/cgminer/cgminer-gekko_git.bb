@@ -7,6 +7,8 @@ SRC_URI = "git://git.nexell.co.kr/nexell/bitcoin/cgminer;protocol=git;branch=nex
 SRC_URI_append = " \
 		   file://cgminer.conf.factory \
 		   file://cgminer.sh \
+		   file://checkminerfs.sh \
+		   file://checkminerfs.service \
 		   file://cgminer.service \
 "
 
@@ -38,6 +40,7 @@ do_install_append() {
 	install -m 0755 ${B}/api-example ${D}/usr/bin/cgminer-api
 	install -d ${D}/config ${D}${sysconfdir}/init.d
 	install -m 0755 ${WORKDIR}/cgminer.sh ${D}${sysconfdir}/init.d
+	install -m 0755 ${WORKDIR}/checkminerfs.sh ${D}/usr/bin/
 	install -m 0400 ${WORKDIR}/cgminer.conf.factory ${D}/config/cgminer.conf
 	install -d ${D}${sysconfdir}
 	install -m 0400 ${WORKDIR}/cgminer.conf.factory ${D}${sysconfdir}

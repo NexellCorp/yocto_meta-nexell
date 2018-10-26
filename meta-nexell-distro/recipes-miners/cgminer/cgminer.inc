@@ -38,7 +38,7 @@ PACKAGECONFIG[libsystemd]  	= "--enable-libsystemd,,"
 PACKAGECONFIG[wo-curses] 	= "--without-curses,,"
 PACKAGECONFIG[jansson]  	= "--with-system-jansson,,"
 
-SYSTEMD_SERVICE_${PN} = "cgminer.service"
+SYSTEMD_SERVICE_${PN} = "cgminer.service checkminerfs.service"
 
 do_install_append() {
     install -d ${D}${bindir}
@@ -49,6 +49,14 @@ do_install_append() {
 		-e 's,@SYSCONFDIR@,${sysconfdir},g' \
 		-e 's,@BASE_BINDIR@,${base_bindir},g' \
 		${D}${systemd_unitdir}/system/cgminer.service
+
+	install -d ${D}${systemd_unitdir}/system
+	install -m 0644 ${WORKDIR}/checkminerfs.service ${D}${systemd_unitdir}/system
+	sed -i -e 's,@SBINDIR@,${sbindir},g' \
+		-e 's,@BINDIR@,${bindir},g' \
+		-e 's,@SYSCONFDIR@,${sysconfdir},g' \
+		-e 's,@BASE_BINDIR@,${base_bindir},g' \
+		${D}${systemd_unitdir}/system/checkminerfs.service
 }
 
 INSANE_SKIP += "build-deps"
