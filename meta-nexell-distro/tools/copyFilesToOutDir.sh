@@ -91,6 +91,7 @@ function copy_bin_files()
             cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
         elif [ "${BOARD_NAME}" == "bitminer-ref" ]; then
             cp ${TMP_DEPLOY_PATH}/bl1-bitminer.bin ${RESULT_PATH}
+			cp ${TMP_DEPLOY_PATH}/bl1-sdboot.bin ${RESULT_PATH}
         fi
         cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}
