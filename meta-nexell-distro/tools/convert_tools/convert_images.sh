@@ -753,6 +753,77 @@ function make_modules() {
     ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -b 4096 -L modules -l ${MODULES_PATITION_SIZE} modules.img modules
 }
 
+function make_upgradefw() {
+	if [ ! -e fw ]; then
+		mkdir -p fw
+	else
+		rm -rf fw/*
+	fi
+
+	BUILD_SERVER_IP=`hostname -I | awk '{print $1}'`
+	FWUP_FILENAME=bitminer_FW_$(date +"%Y%m%d_%H%M%S")_"${BUILD_SERVER_IP}"_$(whoami)
+	echo "FWUP_FILENAME=${FWUP_FILENAME}" >> fw/fwup_cmd.sh
+	echo "FWUP_HISTORY_DIR=/fwup_history/\$(date +\"%Y%m%d_%H%M\").${FWUP_FILENAME}" >> fw/fwup_cmd.sh
+	echo "mkdir -p /config/\${FWUP_HISTORY_DIR}" >> fw/fwup_cmd.sh
+	echo "fw_setenv rw_bl1 \"ext4write mmc 0:5 0x40000000 \${FWUP_HISTORY_DIR}/bl1 1 0; mmc write 40000000    1   80\"" >> fw/fwup_cmd.sh
+	echo "fw_setenv rw_ldr \"ext4write mmc 0:5 0x40000000 \${FWUP_HISTORY_DIR}/ldr 1 0; mmc write 40000000   81  280\"" >> fw/fwup_cmd.sh
+	echo "fw_setenv rw_sec \"ext4write mmc 0:5 0x40000000 \${FWUP_HISTORY_DIR}/sec 1 0; mmc write 40000000  301  c00\"" >> fw/fwup_cmd.sh
+	echo "fw_setenv rw_nsc \"ext4write mmc 0:5 0x40000000 \${FWUP_HISTORY_DIR}/nsc 1 0; mmc write 40000000  f01  800\"" >> fw/fwup_cmd.sh
+	echo "fw_setenv rw_prm \"ext4write mmc 0:5 0x40000000 \${FWUP_HISTORY_DIR}/prm 1 0; mmc write 40000000 1701   20\"" >> fw/fwup_cmd.sh
+	echo "fw_setenv rw_bt  \"ext4write mmc 0:5 0x40000000 \${FWUP_HISTORY_DIR}/bt  1 0;\" ' ext4_img_write 0 0000000040000000 1 \$filesize'" >> fw/fwup_cmd.sh
+	echo "fw_setenv rw_fs  \"ext4write mmc 0:5 0x40000000 \${FWUP_HISTORY_DIR}/fs  1 0;\" ' ext4_img_write 0 0000000040000000 3 \$filesize'" >> fw/fwup_cmd.sh
+
+	echo "fw_setenv up_bl1 'if ext4load mmc 0:5 0x40000000 /fw/bl1-emmcboot.img;    then run rw_bl1; fi;'" >> fw/fwup_cmd.sh
+	echo "fw_setenv up_ldr 'if ext4load mmc 0:5 0x40000000 /fw/fip-loader-emmc.img; then run rw_ldr; fi;'" >> fw/fwup_cmd.sh
+	echo "fw_setenv up_sec 'if ext4load mmc 0:5 0x40000000 /fw/fip-secure.img;      then run rw_sec; fi;'" >> fw/fwup_cmd.sh
+	echo "fw_setenv up_nsc 'if ext4load mmc 0:5 0x40000000 /fw/fip-nonsecure.img;   then run rw_nsc; fi;'" >> fw/fwup_cmd.sh
+	echo "fw_setenv up_prm 'if ext4load mmc 0:5 0x40000000 /fw/params.bin;          then run rw_prm; fi;'" >> fw/fwup_cmd.sh
+	echo "fw_setenv up_bt  'if ext4load mmc 0:5 0x40000000 /fw/boot.img;            then run rw_bt ; fi;'" >> fw/fwup_cmd.sh
+	echo "fw_setenv up_fs  'if ext4load mmc 0:5 0x40000000 /fw/rootfs.img;          then run rw_fs ; fi;'" >> fw/fwup_cmd.sh
+
+	echo "fw_setenv rm_bl1 'setenv up_bl1; setenv rw_bl1; setenv rm_bl1'" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_ldr 'setenv up_ldr; setenv rw_ldr; setenv rm_ldr'" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_sec 'setenv up_sec; setenv rw_sec; setenv rm_sec'" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_nsc 'setenv up_nsc; setenv rw_nsc; setenv rm_nsc'" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_prm 'setenv up_prm; setenv rw_prm; setenv rm_prm'" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_bt  'setenv up_bt ; setenv rw_bt ; setenv rm_bt '" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_fs  'setenv up_fs ; setenv rw_fs ; setenv rm_fs '" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_fw  'setenv rm_fw ; setenv clr_fwupenv ; setenv do_fw '" >> fw/fwup_cmd.sh
+	echo "fw_setenv rm_restore 'setenv rm_restore; setenv restore_bootcmd '" >> fw/fwup_cmd.sh
+
+	echo "fw_setenv clr_fwupenv 'run rm_bl1 rm_ldr rm_sec rm_nsc rm_prm rm_bt rm_fs rm_restore rm_fw'" >> fw/fwup_cmd.sh
+
+	echo "fw_setenv restore_bootcmd 'setenv bootcmd \"run mmcboot\"'" >> fw/fwup_cmd.sh
+
+	echo "fw_setenv do_fw 'run up_bl1 up_ldr up_sec up_nsc up_prm up_bt up_fs restore_bootcmd clr_fwupenv; saveenv'" >> fw/fwup_cmd.sh
+
+	echo "fw_setenv bootcmd 'run do_fw; reset'" >> fw/fwup_cmd.sh
+
+	cp -ua bl1-emmcboot.img		fw/
+	cp -ua fip-loader-emmc.img	fw/
+	cp -ua fip-secure.img		fw/
+	cp -ua fip-nonsecure.img		fw/
+#	cp -ua params.bin			fw/
+	cp -ua boot.img				fw/
+#	cp -ua modules.img			fw/
+	cp -ua rootfs.img			fw/
+	tar czf ${FWUP_FILENAME}.tar.gz fw
+}
+
+function make_bootsd() {
+	if [ -e make_bootsd.sh ]; then
+		rm -rf make_bootsd.sh
+	fi
+	echo "#!/bin/sh" >> make_bootsd.sh
+	echo "sudo dd if=bl1-sdboot.bin of=/dev/sdd seek=512 bs=1" >> make_bootsd.sh;
+	echo "sudo dd if=fip-loader-sd.img of=/dev/sdd seek=66048 bs=1" >> make_bootsd.sh
+	echo "sudo dd if=fip-secure.img of=/dev/sdd seek=393728 bs=1" >> make_bootsd.sh
+	echo "sudo dd if=fip-nonsecure.img of=/dev/sdd seek=1966592 bs=1" >> make_bootsd.sh
+	echo "sudo dd if=params.bin of=/dev/sdd seek=3015168 bs=1" >> make_bootsd.sh
+	echo "sync" >> make_bootsd.sh
+	chmod +x make_bootsd.sh
+}
+
 echo -e "\n\033[0;34m ------------------------------------------------------------------ \033[0m"
 echo -e "\033[0;36m                      Convert images Running                        \033[0m"
 echo -e "\033[0;34m ------------------------------------------------------------------ \033[0m"
@@ -767,3 +838,5 @@ mem_addr_setup
 make_sparse_rootfs_img
 post_process
 #make_modules
+make_upgradefw
+make_bootsd
