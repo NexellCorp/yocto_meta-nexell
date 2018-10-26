@@ -6,3 +6,5 @@ flash=mmc,0:env:env:0x2E0200,0x4000:params.bin;
 flash=mmc,0:boot:ext4:0x400000,0x4000000:boot.img;
 flash=mmc,0:modules:ext4:0x4400000,0x2000000:modules.img;
 flash=mmc,0:rootfs:ext4: 0x6400000,0x9000000:rootfs.img;
+flash=mmc,0:config:ext4: 0xf500000,0x10000000:config.img;
+flash=mmc,0:log:ext4: 0x1f500000,0:log.img;
