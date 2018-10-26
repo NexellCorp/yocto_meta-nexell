@@ -11,7 +11,7 @@
 # ^M    <--------- extra empty line
 # -----------------------------29995809218093749221856446032--^M
 
-file=/tmp/$$
+file=/config/$$
 
 trap atexit 0
 
@@ -41,29 +41,18 @@ done
 mkdir $file
 cd $file
 tar zxf -
-if [ -f runme.sh ]; then
-	sh runme.sh
-else
-    if [ -e /dev/mmcblk0p3 ]; then
-		mkdir $file.boot
-    	mount /dev/mmcblk0p1 $file.boot
-    	cp * $file.boot/
-    	umount $file.boot
-    	sync
-	fi
-	if [ -e /dev/mtd8 ]; then
-		if [ -e initramfs.bin.SD ]; then
-			echo "flash romfs"
-			flash_eraseall /dev/mtd8 >/dev/null 2>&1
-			nandwrite -p /dev/mtd8 initramfs.bin.SD >/dev/null 2>&1
-		fi
 
-		if [ -e uImage.bin ]; then
-			echo "flash kernel"
-			flash_eraseall /dev/mtd7 2>/dev/null
-			nandwrite -p /dev/mtd7 uImage.bin 2>/dev/null
-		fi
-	fi
+if [ -e /config/fw ]; then
+	rm -rf /config/fw
+fi
+
+if [ -f fw/fwup_cmd.sh ]; then
+	cp -ra fw /config
+	sh fw/fwup_cmd.sh
+	ls -al fw
+else
+	echo "fw/fwup_cmd.sh not found"
+	ls -al fw
 fi
 
 ant_result=`cat /tmp/upgrade_result`
