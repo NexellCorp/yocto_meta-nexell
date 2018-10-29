@@ -5,24 +5,55 @@ After=network.target
 [Service]
 Type=forking
 #Environment="TERM=dumb"
+
+#----------------------
+#- HASH BD 0 GPIO -----
+#----------------------
 # HASH BD 0:RESET_P; GPIOD31
 ExecStartPre=/bin/sh -c '/bin/echo 127 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio127/direction; /bin/echo 1 > /sys/class/gpio/gpio127/value'
+
 # HASH BD 0:INTR_GLD_N_P; GPIOD30
 ExecStartPre=/bin/sh -c '/bin/echo 126 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio126/direction'
+
 # HASH BD 0:INTR_OON_N_P; GPIOD29
 ExecStartPre=/bin/sh -c '/bin/echo 125 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio125/direction'
+
+# HASH BD 0:PLUG; GPIOA24
+ExecStartPre=/bin/sh -c '/bin/echo 24 > /sys/class/gpio/export; /bin/echo in > /sys/class/gpio/gpio24/direction'
+
+# HASH BD 0:PWREN; GPIOA0
+ExecStartPre=/bin/sh -c '/bin/echo 0 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio0/direction; /bin/echo 0 > /sys/class/gpio/gpio0/value'
+
+# HASH BD 0:VOLCTRL; GPIOA20
+ExecStartPre=/bin/sh -c '/bin/echo 20 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio20/direction; /bin/echo 0 > /sys/class/gpio/gpio20/value'
+
+#----------------------
+#- HASH BD 1 GPIO -----
+#----------------------
 # HASH BD 1:RESET_P; GPIOE4
 ExecStartPre=/bin/sh -c '/bin/echo 132 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio132/direction; /bin/echo 1 > /sys/class/gpio/gpio132/value'
+
 # HASH BD 1:INTR_GLD_N_P; GPIOE3
 ExecStartPre=/bin/sh -c '/bin/echo 131 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio131/direction'
+
 # HASH BD 1:INTR_OON_N_P; GPIOE2
 ExecStartPre=/bin/sh -c '/bin/echo 130 > /sys/class/gpio/export; /bin/echo  in > /sys/class/gpio/gpio130/direction'
+
+# HASH BD 1:PLUG; GPIOA11
+ExecStartPre=/bin/sh -c '/bin/echo 11 > /sys/class/gpio/export; /bin/echo in > /sys/class/gpio/gpio11/direction'
+
+# HASH BD 1:PWREN; GPIOA16
+ExecStartPre=/bin/sh -c '/bin/echo 16 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio16/direction; /bin/echo 0 > /sys/class/gpio/gpio16/value'
+
+# HASH BD 1:VOLCTRL; GPIOA9
+ExecStartPre=/bin/sh -c '/bin/echo 9 > /sys/class/gpio/export; /bin/echo out > /sys/class/gpio/gpio9/direction; /bin/echo 0 > /sys/class/gpio/gpio9/value'
+
 ExecStartPre=/bin/sh -c '/usr/bin/checkminerfs.sh'
 #ExecStart=@BINDIR@/cgminer --api-network --api-listen --default-config /config/cgminer.conf
 ExecStart=@BINDIR@/screen -LdmS cgminer @BINDIR@/cgminer --api-network --api-listen --default-config /config/cgminer.conf
 ExecReload=@BINDIR@/screen -S cgminer -X stuff 'scy'
-Restart=always
-RestartSec=5s
+Restart=on-watchdog
+RestartSec=10s
 WatchdogSec=3min
 StartLimitInterval=10
 StartLimitBurst=5
