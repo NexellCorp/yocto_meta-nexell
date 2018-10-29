@@ -19,9 +19,10 @@ PR = "0.1"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 INHIBIT_PACKAGE_STRIP = "1"
 
-inherit autotools pkgconfig
+inherit autotools pkgconfig gettext
 
-AUTOTOOLS_SCRIPT_PATH = "${S}/video_api_test"
+#AUTOTOOLS_SCRIPT_PATH = "${S}/video_api_test"
+AUTOTOOLS_SCRIPT_PATH = "${S}/uvc_test"
 
 EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
