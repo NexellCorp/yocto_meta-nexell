@@ -9,13 +9,13 @@ nexell_macaddr=
 nexell_ipaddress=
 nexell_netmask=
 
-if [ -s /config/network.conf ] ; then
-	nexell_nettype=`cat /config/network.conf | grep dhcp`
+if [ -s /etc/systemd/network/10-eth.network ] ; then
+	nexell_nettype=`cat /etc/systemd/network/10-eth.network | grep DHCP`
 	if [ -z nexell_nettype ]; then
-		nexell_nettype="dhcp=false"
+		nexell_nettype="DHCP=false"
 	fi
-	nexell_nettype=${nexell_nettype/dhcp=/}
-	if [ "${nexell_nettype}" == "true" ]; then
+	nexell_nettype=${nexell_nettype/DHCP=/}
+	if [ "${nexell_nettype}" == "yes" ]; then
 		nexell_nettype=DHCP
 	else
 		nexell_nettype=Static
@@ -67,18 +67,27 @@ nexell_conf_netmask=
 nexell_conf_gateway=
 nexell_conf_dnsservers=
 
-if [ -s /config/network.conf ] ; then	
-	nexell_conf_hostname=`cat /config/network.conf | grep hostname`
-	nexell_conf_hostname=${nexell_conf_hostname/hostname=/}
-	nexell_conf_ipaddress=`cat /config/network.conf | grep ipaddress`
-	nexell_conf_ipaddress=${nexell_conf_ipaddress/ipaddress=/}
-	nexell_conf_netmask=`cat /config/network.conf | grep netmask`
-	nexell_conf_netmask=${nexell_conf_netmask/netmask=/}
-	nexell_conf_gateway=`cat /config/network.conf | grep gateway`
-	nexell_conf_gateway=${nexell_conf_gateway/gateway=/}
-	nexell_conf_dnsservers=`cat /config/network.conf | grep dnsservers`
-	nexell_conf_dnsservers=${nexell_conf_dnsservers/dnsservers=/}
-	nexell_conf_dnsservers=${nexell_conf_dnsservers//\"/}
+if [ -s /config/hostname ] ; then	
+	nexell_conf_hostname=`cat /config/hostname`
+fi
+if [ -s /etc/systemd/network/10-eth.network ] ; then	
+	nexell_conf_ipaddress=`cat /etc/systemd/network/10-eth.network | grep Address | sed -e 's;^.*=;;' | sed -e 's;/.*$;;'`
+	nexell_conf_netmask=`cat /etc/systemd/network/10-eth.network | grep Address | sed -e 's;^.*=;;' | sed -e 's;^.*/;;'`
+	if [ "${nexell_conf_netmask}" == "24" ]; then
+		nexell_conf_netmask=255.255.255.0
+	elif [ "${nexell_conf_netmask}" == "26" ]; then
+		nexell_conf_netmask=255.255.255.192
+	elif [ "${nexell_conf_netmask}" == "28" ]; then
+		nexell_conf_netmask=255.255.255.240
+	elif [ "${nexell_conf_netmask}" == "30" ]; then
+		nexell_conf_netmask=255.255.255.252
+	else
+		nexell_conf_netmask=
+	fi
+	nexell_conf_gateway=`cat /etc/systemd/network/10-eth.network | grep Gateway`
+	nexell_conf_gateway=${nexell_conf_gateway/Gateway=/}
+	nexell_conf_dnsservers=`cat /etc/systemd/network/10-eth.network | grep DNS`
+	nexell_conf_dnsservers=${nexell_conf_dnsservers/DNS=/}
 fi
 
 echo \"conf_nettype\":\"${nexell_conf_nettype}\",

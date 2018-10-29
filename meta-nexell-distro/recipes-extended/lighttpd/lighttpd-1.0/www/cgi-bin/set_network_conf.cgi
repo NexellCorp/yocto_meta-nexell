@@ -60,20 +60,34 @@ do
 	i=`expr $i + 1`
 done
 
+echo "[Match]"							>  /etc/systemd/network/10-eth.network
+echo "Name=eth*"						>> /etc/systemd/network/10-eth.network
+echo "KernelCommandLine=!root=/dev/nfs"	>> /etc/systemd/network/10-eth.network
+echo ""									>> /etc/systemd/network/10-eth.network
+echo "[Network]"						>> /etc/systemd/network/10-eth.network
 if [ "${nexell_conf_nettype}" == "DHCP" ]; then
-	echo "dhcp=true"								>  /config/network.conf
-	echo "hostname=${nexell_conf_hostname}"			>> /config/network.conf
+	echo "DHCP=yes"						>> /etc/systemd/network/10-eth.network
 else
-	echo "hostname=${nexell_conf_hostname}"			>  /config/network.conf
-	echo "ipaddress=${nexell_conf_ipaddress}"			>> /config/network.conf
-	echo "netmask=${nexell_conf_netmask}"				>> /config/network.conf
-	echo "gateway=${nexell_conf_gateway}"				>> /config/network.conf
-	echo "dnsservers=\"${nexell_conf_dnsservers}"\"	>> /config/network.conf
+	if [ "${nexell_conf_netmask}" == "255.255.255.0" ]; then
+		echo "Address=${nexell_conf_ipaddress}/24"	>> /etc/systemd/network/10-eth.network
+	elif [ "${nexell_conf_netmask}" == "255.255.255.192" ]; then
+		echo "Address=${nexell_conf_ipaddress}/26"	>> /etc/systemd/network/10-eth.network
+	elif [ "${nexell_conf_netmask}" == "255.255.255.240" ]; then
+		echo "Address=${nexell_conf_ipaddress}/28"	>> /etc/systemd/network/10-eth.network
+	elif [ "${nexell_conf_netmask}" == "255.255.255.252" ]; then
+		echo "Address=${nexell_conf_ipaddress}/30"	>> /etc/systemd/network/10-eth.network
+	fi
+	echo "Gateway=${nexell_conf_gateway}"		>> /etc/systemd/network/10-eth.network
+	echo "DNS=${nexell_conf_dnsservers}"	>> /etc/systemd/network/10-eth.network
 fi
+echo "${nexell_conf_hostname}"			>  /config/hostname
+echo "${nexell_conf_hostname}"			>  /etc/hostname
+sync
+hostname `cat /etc/hostname`
 
-/etc/init.d/network.sh
+systemctl restart systemd-networkd
 /etc/init.d/avahi restart > /dev/null
 
-sleep 10s
+sleep 3s
 
 echo "ok"

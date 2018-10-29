@@ -33,8 +33,8 @@ if [ ! -e /config/cgminer.conf ]; then
 	sync
 fi
 
-if [ ! -e /config/network.conf ]; then
-	cp /etc/network.conf.factory /config/network.conf
+if [ ! -e /etc/systemd/network/10-eth.network ]; then
+	cp /etc/10-eth.network.factory /etc/systemd/network/10-eth.network
 	sync
 fi
 

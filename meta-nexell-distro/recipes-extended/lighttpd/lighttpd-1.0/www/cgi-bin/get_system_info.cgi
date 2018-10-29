@@ -15,30 +15,38 @@ ant_dnsservers=
 
 ant_system_filesystem_version=
 
-if [ -s /config/network.conf ] ; then
-	ant_nettype=`cat /config/network.conf | grep dhcp`
+if [ -s /etc/systemd/network/10-eth.network ] ; then
+	ant_nettype=`cat /etc/systemd/network/10-eth.network | grep DHCP`
 	if [ -z ant_nettype ]; then
-		ant_nettype="dhcp=false"
+		ant_nettype="DHCP=false"
 	fi
-	ant_nettype=${ant_nettype/dhcp=/}
-	if [ "${ant_nettype}" == "true" ]; then
+	ant_nettype=${ant_nettype/DHCP=/}
+	if [ "${ant_nettype}" == "yes" ]; then
 		ant_nettype=DHCP
 	else
 		ant_nettype=Static
 	fi
 	
 	ant_host_name=`/bin/hostname`
-#	ant_host_name=`cat /config/network.conf | grep hostname`
+#	ant_host_name=`cat /etc/systemd/network/10-eth.network | grep hostname`
 #	ant_host_name=${ant_host_name/hostname=/}
-	ant_ipaddress=`cat /config/network.conf | grep ipaddress`
-	ant_ipaddress=${ant_ipaddress/ipaddress=/}
-	ant_netmask=`cat /config/network.conf | grep netmask`
-	ant_netmask=${ant_netmask/netmask=/}
-	ant_gateway=`cat /config/network.conf | grep gateway`
-	ant_gateway=${ant_gateway/gateway=/}
-	ant_dnsservers=`cat /config/network.conf | grep dnsservers`
-	ant_dnsservers=${ant_dnsservers/dnsservers=/}
-	ant_dnsservers=${ant_dnsservers//\"/}
+	ant_ipaddress=`cat /etc/systemd/network/10-eth.network | grep Address | sed -e 's;^.*=;;' | sed -e 's;/.*$;;'`
+	ant_netmask=`cat /etc/systemd/network/10-eth.network | grep Address | sed -e 's;^.*=;;' | sed -e 's;^.*/;;'`
+	if [ "${ant_netmask}" == "24" ]; then
+		ant_netmask=255.255.255.0
+	elif [ "${ant_netmask}" == "26" ]; then
+		ant_netmask=255.255.255.192
+	elif [ "${ant_netmask}" == "28" ]; then
+		ant_netmask=255.255.255.240
+	elif [ "${ant_netmask}" == "30" ]; then
+		ant_netmask=255.255.255.252
+	else
+		ant_netmask=
+	fi
+	ant_gateway=`cat /etc/systemd/network/10-eth.network | grep Gateway`
+	ant_gateway=${ant_gateway/Gateway=/}
+	ant_dnsservers=`cat /etc/systemd/network/10-eth.network | grep DNS`
+	ant_dnsservers=${ant_dnsservers/DNS=/}
 else
 	ant_host_name=`/bin/hostname`
 	ant_ipaddress=`ip addr | grep "inet " | grep brd | awk '{print $2}' | awk -F/ '{print $1}'`

@@ -1,5 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
+PACKAGECONFIG_append = " networkd resolved"
+USERADD_PARAM_${PN} += "--system -d / -M --shell /bin/nologin systemd-network;"
+USERADD_PARAM_${PN} += "--system -d / -M --shell /bin/nologin systemd-resolve;"
+
 SRC_URI_append = "file://0001-reboot-param-warning-error-bug-fixed.patch"
 
 SRC_URI_append = " \
@@ -12,6 +16,9 @@ SRC_URI_append = " \
     file://resolv.conf \
 "
 
+IMAGE_INSTALL += "10-eth.network.factory"
+FILES_${PN} += "${sysconfdir}/10-eth.network.factory"
+
 do_install_append() {
     install -d ${D}${sysconfdir}/udev/rules.d/
     install -m 0644 ${WORKDIR}/local.rules ${D}${sysconfdir}/udev/rules.d/
@@ -22,6 +29,7 @@ do_install_append() {
 
     install -d ${D}${sysconfdir}/systemd/network/
     install -m 0644 ${WORKDIR}/10-eth.network ${D}${sysconfdir}/systemd/network/
+    install -m 0644 ${WORKDIR}/10-eth.network ${D}${sysconfdir}/10-eth.network.factory
     install -m 0644 ${WORKDIR}/30-wlan.network ${D}${sysconfdir}/systemd/network/
     install -m 0644 ${WORKDIR}/60-usb.network ${D}${sysconfdir}/systemd/network/
 
