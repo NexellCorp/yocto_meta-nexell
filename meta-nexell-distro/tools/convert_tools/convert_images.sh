@@ -96,6 +96,7 @@ user_partition_size["daudio-ref"]="6G"
 user_partition_size["daudio-covi"]="0"
 user_partition_size["smart-voice"]="1G"
 user_partition_size["ff-voice"]="1G"
+user_partition_size["convergence-svmc"]="6G"
 #------------------------------------
 # dev_portnum define
 declare -A targets_dev_portnum
@@ -106,6 +107,7 @@ targets_dev_portnum["daudio-ref"]=0
 targets_dev_portnum["daudio-covi"]=0
 targets_dev_portnum["smart-voice"]=0
 targets_dev_portnum["ff-voice"]=0
+targets_dev_portnum["convergence-svmc"]=0
 #------------------------------------
 # NSIH header address
 declare -A targets_load_start_address
@@ -118,6 +120,7 @@ targets_load_start_address["smart-voice"]="83c00000"
 targets_load_start_address["ff-voice"]="a2000000"
 targets_load_start_address["svm-ref"]="63c00000"
 targets_load_start_address["cluster-ref"]="63c00000"
+targets_load_start_address["convergence-svmc"]="63c00000"
 #------------------------------------
 # kernel image define
 declare -A kernel_image_name

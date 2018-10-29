@@ -28,6 +28,7 @@ function usage()
     echo "    ex) $0 s5p6818-avn-ref"
     echo "    ex) $0 s5p4418-avn-ref"
     echo "    ex) $0 s5p4418-navi-ref"
+    echo "    ex) $0 s5p4418-convergence-svmc"
 }
 
 function get_board_prefix()
@@ -81,6 +82,15 @@ function run_by_usb()
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x83c00000 -j 0x83c00000
+        elif [ ${BOARD_PREFIX} == "convergence" ]; then
+            echo ${TOOLS_PATH}
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
+            sleep 1
+            sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
+                 -f ${RESULT_DIR}/fip-nonsecure-usb.bin -a 0x63c00000 -j 0x63c00000
+            fi
         else
             echo "Not supported board type"
         fi

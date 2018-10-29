@@ -1,5 +1,6 @@
 inherit post-process-qt
 inherit post-process
+inherit post-process-convergence-svm
 require recipes-graphics/images/core-image-weston.bb
 
 DESCRIPTION ?= "Nexell qt images"
@@ -38,7 +39,8 @@ ETC_TOOLS = " \
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"
 NX_QT_LAUNCHER = "qtcinema-launcher"
-NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
+NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher',    \
+                bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', '', '${NX_QT_LAUNCHER}', d), d)}"
 
 ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
@@ -51,7 +53,6 @@ NEXELL_CUSTOMIZE_INSTALL = " \
     nexell-nxreboot \
     nexell-qt5-touchsetup \
 "
-
 IMAGE_INSTALL_append = " \
     kernel-modules \
     ${SYSTEMD_INSTALL} \
@@ -63,6 +64,7 @@ IMAGE_INSTALL_append = " \
     ${TOUCH_IMAGE_INSTALL} \
     ${ETC_TOOLS} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'convergence-svmc-init', '', d)} \
 "
 
 # pyro -> sumo
