@@ -25,7 +25,7 @@ case "$1" in
 #		/sbin/ip link set can0 up type can bitrate 500000
 #		echo "enable can0"
 #		echo "start nx_3d_avm"
-		/nexell/avm_app/nx_3d_avm
+#		/nexell/avm_app/nx_3d_avm
 #		/nexell/avm_app/nx_3d_avm_no_brightness
 #		echo "start TiaPlayer"
 #		/nexell/convergence-svmc/TiaPlayer.elf -w1920 -h720 -c/nexell/convergence-svmc/ -r/nexell/convergence-svmc/
@@ -34,7 +34,7 @@ case "$1" in
   stop)
         echo "Stopping Weston"
 #        killproc TiaPlayer.elf
-        killproc nx_3d_avm
+#        killproc nx_3d_avm
 #        killproc nx_3d_avm_no_brightness
   ;;
 
