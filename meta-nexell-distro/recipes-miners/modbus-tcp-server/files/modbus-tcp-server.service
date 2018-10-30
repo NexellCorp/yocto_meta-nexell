@@ -8,7 +8,6 @@ Type=forking
 ExecStart=@BINDIR@/screen -LdmS modbus-tcp-server @BINDIR@/modbus-tcp-server tcp
 Restart=always
 RestartSec=5s
-WatchdogSec=3min
 StartLimitInterval=10
 StartLimitBurst=5
 StartLimitAction=reboot
