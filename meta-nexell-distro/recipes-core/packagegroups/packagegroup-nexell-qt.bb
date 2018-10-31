@@ -107,6 +107,9 @@ QT_ALSA_UTILS_IMAGE_INSTALL = " \
     alsa-utils-aseqdump \
     alsa-utils-alsactl \
 "
+QT_V4L_UTILS_IMAGE_INSTALL = " \
+    v4l-utils \
+"
 
 QT_WEBKIT = " \
     qtwebkit \
@@ -161,4 +164,5 @@ RDEPENDS_${PN} = " \
     ${NEXELL_LIBS} \
     ${UTILS_INSTALL} \
     ${QT_ALSA_UTILS_IMAGE_INSTALL} \
+    ${QT_V4L_UTILS_IMAGE_INSTALL} \
 "
