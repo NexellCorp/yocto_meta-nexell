@@ -34,7 +34,10 @@ ETC_TOOLS = " \
     openssl \
     curl \
     procps \
-    id3lib \
+"
+
+ETC_LIBS = " \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'support-ffmpeg', 'ffmpeg', '', d)} \
 "
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"
@@ -48,6 +51,7 @@ NEXELL_CUSTOMIZE_INSTALL = " \
     ${NX_LAUNCHER} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-bootanim nexell-nxlogrotate', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'support-adanis-bt', 'nexell-bluetooth', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
     ${ALLGO_CONNECTIVITY} \
     user-fonts \
     nexell-nxreboot \
@@ -63,6 +67,7 @@ IMAGE_INSTALL_append = " \
     testsuite \
     ${TOUCH_IMAGE_INSTALL} \
     ${ETC_TOOLS} \
+    ${ETC_LIBS} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'convergence-svmc-init', '', d)} \
 "
