@@ -20,9 +20,6 @@ inherit autotools
 #Nexell code : for /usr/include search QA issue: compile-host-path QA issue avoid
 EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
-    '--with-extrapath=${STAGING_EXECPREFIXDIR}' \
-    '--with-extrapath_lib=${STAGING_LIBDIR}' \
-    '--with-extrapath_include=${STAGING_INCDIR}' \
     "
 
 EXTRA_OEMAKE += " \
