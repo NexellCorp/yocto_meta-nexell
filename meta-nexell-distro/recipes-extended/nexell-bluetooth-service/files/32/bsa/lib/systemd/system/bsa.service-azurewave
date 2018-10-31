@@ -1,0 +1,11 @@
+[Unit]
+Description=BSA Server
+Requires=sysinit.target
+After=sysinit.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/bsa_server -p /etc/bluetooth/BCM434545.hcd -all=0
+
+[Install]
+WantedBy=multi-user.target

@@ -16,6 +16,9 @@ SRC_URI = " \
 
 S = "${WORKDIR}/${ARCH_TYPE_NUM}/bsa"
 
+BSA_SERVICE = "${@bb.utils.contains('DISTRO_FEATURES', 'support-adanis-bt', 'bsa.service-adanis', \
+				bb.utils.contains('DISTRO_FEATURES', 'support-azurewave-bt', 'bsa.service-azurewave', 'not_supported', d), d)}"
+
 do_install() {
 	install -d ${D}${sysconfdir}/bluetooth
 	install -d ${D}${bindir}
@@ -29,8 +32,13 @@ do_install() {
 		echo "Requires 64bit bsa_server."
 	fi
 
-	install -m 0644 ${S}${systemd_system_unitdir}/bsa.service ${D}${systemd_system_unitdir}/
-	cp -aR ${S}${systemd_system_unitdir}/multi-user.target.wants/bsa.service ${D}${systemd_system_unitdir}/multi-user.target.wants/
+	if [ ${BSA_SERVICE} != "not_supported" ]; then
+		install -m 0644 ${S}${systemd_system_unitdir}/${BSA_SERVICE} ${D}${systemd_system_unitdir}/bsa.service
+		cd ${D}${systemd_system_unitdir}/multi-user.target.wants
+		ln -sf ../bsa.service bsa.service
+	else
+		echo "Can't find supported BSA service."
+	fi
 }
 
 FILES_${PN} = "${sysconfdir}/bluetooth ${bindir} ${systemd_system_unitdir} ${systemd_system_unitdir}/multi-user.target.wants"
