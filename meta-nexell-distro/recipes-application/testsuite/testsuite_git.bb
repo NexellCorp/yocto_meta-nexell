@@ -36,10 +36,10 @@ do_configure() {
     #oe_runconf
 
     # uvc test
-    cd ${S}/uvc_test
-    ./bootstrap.sh
-    NOCONFIGURE=true ./autogen.sh
-    oe_runconf
+    #cd ${S}/uvc_test
+    #./bootstrap.sh
+    #NOCONFIGURE=true ./autogen.sh
+    #oe_runconf
 
 }
 
@@ -127,9 +127,9 @@ do_compile() {
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/alsa" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 
     # uvc test
-    cd ${S}/uvc_test
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
-    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR}" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+    #cd ${S}/uvc_test
+    #oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    #oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR}" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 }
 
 do_install() {
