@@ -15,15 +15,15 @@
 #include <sys/stat.h>
 #include <asm/unistd.h>
 
-#define SYSTEM_SLEEP	1600000	// us
+#define SYSTEM_SLEEP	1300000	// us
 
 #define	LAUNCHER_CONF	"/etc/qboot/launcher.conf"
 
 #define CHK_BOOTTIME
-//#undef CHK_BOOTTIME
+#undef CHK_BOOTTIME
 
 #define ENABLE_CONSOLE
-//#undef ENABLE_CONSOLE
+#undef ENABLE_CONSOLE
 
 #define ENABLE_PRELOAD
 #undef ENABLE_PRELOAD
@@ -64,8 +64,9 @@ static launcher_t launcher_info[] = {
 	{ .s = "QT_QPA_EGLFS_KMS_CONFIG", },
 	{ .s = "QT_QPA_EGLFS_HIDECURSOR", },
 	{ .s = "QT_QPA_FONTDIR", },
+	{ .s = "QT_QPA_EGLFS_DEBUG", },
 	{ .s = "QT_PLUGIN_PATH", },
-	{ .s = "QT_LOGGING_RULES", },
+	{ .s = "QT_LOGGING_RULES", }
 };
 
 /**
