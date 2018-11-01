@@ -8,22 +8,29 @@ postprocess_qt_function() {
 
     if [ "${DEFAULT_QT_PLATFORM}" = "EGLFS" ]; then
         echo "export QT_QPA_PLATFORM=eglfs" >> usr/bin/nexell-qt5-touchsetup.sh
+        echo "export QT_QPA_EGLFS_KMS_CONFIG=/etc/qboot/eglfs_config.json" >> usr/bin/nexell-qt5-touchsetup.sh
+        echo "export QT_QPA_EGLFS_HIDECURSOR=0" >> usr/bin/nexell-qt5-touchsetup.sh
+        echo "export QT_QPA_EGLFS_DEBUG=0" >> usr/bin/nexell-qt5-touchsetup.sh
     else
         echo "export QT_QPA_PLATFORM=wayland" >> usr/bin/nexell-qt5-touchsetup.sh
     fi
 
     echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0:invertx:rotate=180" >> usr/bin/nexell-qt5-touchsetup.sh
-
-    echo "export QT_PLUGIN_PATH=/usr/lib/qt5/plugins" >> usr/bin/nexell-qt5-touchsetup.sh
     echo "export TSLIB_CALIBFILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
     echo "export POINTERCAL_FILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
+    echo "export TSLIB_PLUGINDIR=/usr/lib/ts" >> usr/bin/nexell-qt5-touchsetup.sh
 
     if [ "${NEXELL_TOUCH_CLASS}" = "CAPACITIVE" ]; then
         echo "export QT_QPA_EGLFS_NO_LIBINPUT=0" >> usr/bin/nexell-qt5-touchsetup.sh
         echo "export QT_QPA_EGLFS_TSLIB=0" >> usr/bin/nexell-qt5-touchsetup.sh
     else
         echo "export QT_QPA_EGLFS_NO_LIBINPUT=1" >> usr/bin/nexell-qt5-touchsetup.sh
+        echo "export QT_QPA_EGLFS_TSLIB=1" >> usr/bin/nexell-qt5-touchsetup.sh
     fi
+
+    echo "export QT_PLUGIN_PATH=/usr/lib/qt5/plugins" >> usr/bin/nexell-qt5-touchsetup.sh
+    echo "export QT_QPA_FONTDIR=/usr/share/fonts/ttf" >> usr/bin/nexell-qt5-touchsetup.sh
+    echo "export QT_LOGGING_RULES=qt.qpa.*=false" >> usr/bin/nexell-qt5-touchsetup.sh
 
     cd ${IMAGE_ROOTFS}/usr/lib
     touch libMali_for_${DEFAULT_QT_PLATFORM}
