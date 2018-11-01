@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://Makefile;md5=d5743c4d7fa2b466a875bac2c6176aa1"
 SRCREV = "b9b288d64ffb44cb512cb4fe5f009c6fa66e7806"
 SRC_URI = "git://git.nexell.co.kr/nexell/linux/apps/testsuite;protocol=git;branch=nexell"
 
-DEPENDS = "nx-drm-allocator nx-renderer nx-scaler nx-gst-meta nx-v4l2 libdrm-nx "
+DEPENDS = "nx-drm-allocator nx-renderer nx-scaler nx-gst-meta nx-v4l2 libdrm-nx libv4l jpeg"
 
 S = "${WORKDIR}/git"
 
@@ -21,8 +21,7 @@ INHIBIT_PACKAGE_STRIP = "1"
 
 inherit autotools pkgconfig gettext
 
-#AUTOTOOLS_SCRIPT_PATH = "${S}/video_api_test"
-AUTOTOOLS_SCRIPT_PATH = "${S}/uvc_test"
+AUTOTOOLS_SCRIPT_PATH = "${S}/video_api_test"
 
 EXTRA_OECONF = " \
     '--prefix=${STAGING_DIR_HOST}' \
@@ -31,18 +30,11 @@ TARGET_CC_ARCH += "${LDFLAGS}"
 
 do_configure() {
     #video_api_test
-    #cd ${S}/video_api_test
-    #NOCONFIGURE=true ./autogen.sh
-    #oe_runconf
-
-    # uvc test
-    #cd ${S}/uvc_test
-    #./bootstrap.sh
-    #NOCONFIGURE=true ./autogen.sh
-    #oe_runconf
+    cd ${S}/video_api_test
+    NOCONFIGURE=true ./autogen.sh
+    oe_runconf
 
 }
-
 do_compile() {
     #allocator_test
     cd ${S}/allocator_test
@@ -126,10 +118,11 @@ do_compile() {
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/alsa" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 
-    # uvc test
-    #cd ${S}/uvc_test
-    #oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
-    #oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR}" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+    #uvc_test
+    cd ${S}/uvc_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR}" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+
 }
 
 do_install() {
@@ -198,12 +191,8 @@ do_install() {
     #uac_test
     install -m 0755 ${S}/uac_test/uac-test ${D}${bindir}
 
-    # uvc test
-    #install -d ${D}${libdir}/libv4l/plugins
-    #install -m 0755 ${S}/uvc_test/contrib/test/.libs/v4l2grab ${D}${bindir}
-    #install -m 0644 ${S}/uvc_test/install/lib/*.* ${D}${libdir}
-    #install -m 0644 ${S}/uvc_test/install/lib/libv4l/*.* ${D}${libdir}
-    #install -m 0644 ${S}/uvc_test/install/lib/libv4l/plugins/*.* ${D}${libdir}/libv4l/plugins
+    #uvc
+    install -m 0755 ${S}/uvc_test/uvc-test ${D}${bindir}
 
 }
 
@@ -213,7 +202,7 @@ INSANE_SKIP_${PN} = "ldflags file-rdeps"
 INSANE_SKIP_${PN}-dev = "ldflags"
 INSANE_SKIP_${PN}-dev += "dev-elf"
 FILES_${PN} = "${bindir} ${libdir}"
-RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter libasound"
+RDEPENDS_${PN} += "libavformat libavcodec libavdevice libavfilter libasound libv4l jpeg"
 RDEPENDS_${PN} += "nx-drm-allocator nx-v4l2 nx-renderer nx-scaler nx-gst-meta nx-video-api libdrm-nx "
 FILES_libavresample = "${libdir}/libavresample${SOLIBS}"
 ALLOW_EMPTY_${PN} = "1"
