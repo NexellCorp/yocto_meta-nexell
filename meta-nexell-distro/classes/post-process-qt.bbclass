@@ -9,6 +9,7 @@ postprocess_qt_function() {
     if [ "${DEFAULT_QT_PLATFORM}" = "EGLFS" ]; then
         echo "export QT_QPA_PLATFORM=eglfs" >> usr/bin/nexell-qt5-touchsetup.sh
         echo "export QT_QPA_EGLFS_KMS_CONFIG=/etc/qboot/eglfs_config.json" >> usr/bin/nexell-qt5-touchsetup.sh
+        echo "export QT_QPA_EGLFS_SWAPINTERVAL=0" >> usr/bin/nexell-qt5-touchsetup.sh
         echo "export QT_QPA_EGLFS_HIDECURSOR=0" >> usr/bin/nexell-qt5-touchsetup.sh
         echo "export QT_QPA_EGLFS_DEBUG=0" >> usr/bin/nexell-qt5-touchsetup.sh
     else
