@@ -62,6 +62,7 @@ static launcher_t launcher_info[] = {
 	{ .s = "QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS", },
 	{ .s = "QT_QPA_EGLFS_NO_LIBINPUT", },
 	{ .s = "QT_QPA_EGLFS_KMS_CONFIG", },
+	{ .s = "QT_QPA_EGLFS_SWAPINTERVAL", },
 	{ .s = "QT_QPA_EGLFS_HIDECURSOR", },
 	{ .s = "QT_QPA_FONTDIR", },
 	{ .s = "QT_QPA_EGLFS_DEBUG", },
