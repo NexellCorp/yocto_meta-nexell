@@ -2,15 +2,6 @@ DESCRIPTION = "Nexell convergence-svmc SDK for rootfs"
 LICENSE = "CLOSED"
 
 postprocess_install_convergence_svmc_sdk_function() {
-    install -d ${IMAGE_ROOTFS}/nexell/convergence-svmc/
-    cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/linux/convergence-svmc-sdk/files/convergence-svmc_ui/* 	${IMAGE_ROOTFS}/nexell/convergence-svmc/
-    install -m0755 --owner=root --group=root -s --strip-program=${STRIP} ${PWD}/../meta-nexell/recipes-sdk/linux/convergence-svmc-sdk/files/convergence-svmc_ui/TiaPlayer.elf	${IMAGE_ROOTFS}/nexell/convergence-svmc/TiaPlayer.elf
-
-    chmod 755 ${IMAGE_ROOTFS}/nexell/convergence-svmc/run.sh
-	cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/linux/convergence-svmc-sdk/files/script/autorun_convergence-svmc.sh       ${IMAGE_ROOTFS}/nexell/
-    chmod 755 ${IMAGE_ROOTFS}/nexell/autorun_convergence-svmc.sh
-
-	install -Dm755  ${PWD}/../meta-nexell/recipes-sdk/linux/convergence-svmc-sdk/files/script/convergence-svmc.init.d   ${IMAGE_ROOTFS}/etc/init.d/convergence-svmc
 
     cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/linux/convergence-svmc-sdk/files/convergence-svmc_lib_fb/libMali.so		${IMAGE_ROOTFS}/usr/lib/
     cp -aRfv ${PWD}/../meta-nexell/recipes-sdk/linux/convergence-svmc-sdk/files/convergence-svmc_lib_fb/libVR.so			${IMAGE_ROOTFS}/usr/lib/
