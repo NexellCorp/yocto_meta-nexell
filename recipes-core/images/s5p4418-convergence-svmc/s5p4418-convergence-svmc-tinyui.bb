@@ -11,7 +11,4 @@ IMAGE_INSTALL += " \
     packagegroup-nexell-common \
     packagegroup-s5p4418-tinyui \
     "
-
-#IMAGE_INSTALL += " \
-#    convergence-svmc-init 
-#    "
+	
