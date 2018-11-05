@@ -4,5 +4,5 @@
     <dl_dir       text='DL_DIR = "${TOPDIR}/../downloads"'/>
     <sstate_dir   text='SSTATE_DIR = "${TOPDIR}/sstate-cache"'/>
 <!--  board specified features -->
-    <feature      text='DISTRO_FEATURES_append = " nexell-convergence-svmc"'/>
+    <feature      text='DISTRO_FEATURES_append = " nexell-convergence-svmc nexell-daudio support-daudio-sdk ffmpeg support-azurewave-bt support-allgo-connectivity no-use-tslib"'/>
 </boardconfig>
