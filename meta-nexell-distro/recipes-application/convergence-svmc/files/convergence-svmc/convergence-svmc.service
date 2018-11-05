@@ -1,10 +1,10 @@
 [Unit]
 Description=convergence-svmc
 
-[Service]
-User=root
-ExecStart=/etc/init.d/convergence-svmc start
-ExecStop=/etc/init.d/convergence-svmc stop
+#[Service]
+#User=root
+#ExecStart=/etc/init.d/convergence-svmc start
+#ExecStop=/etc/init.d/convergence-svmc stop
 
 [Install]
 WantedBy=multi-user.target

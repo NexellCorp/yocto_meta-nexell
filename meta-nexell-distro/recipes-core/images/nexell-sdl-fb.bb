@@ -4,6 +4,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d
 
 inherit core-image
 inherit post-process
+inherit post-process-convergence-svm
 require recipes-core/images/core-image-minimal.bb
 
 DEPENDS += " libsdl2"
@@ -25,4 +26,5 @@ IMAGE_INSTALL_append = " \
     packagegroup-nexell-sdl \
     rtl-8188eus-${ARCH_TYPE_NUM} \
     testsuite \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'convergence-svmc-init', '', d)} \
 "
