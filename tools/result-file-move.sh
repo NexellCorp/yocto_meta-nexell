@@ -198,9 +198,9 @@ function copy_osversion_file()
 {
     echo -e "\033[40;33m  >>>>   copy_osversion_file        \033[0m"
     if [ ${BOARD_NAME} == "daudio-covi" ]; then
-        cp ${META_NEXELL_PATH}/recipes-sdk/daudio-covi-sdk/files/nexell/daudio/fms.os.sdk.version ${RESULT_PATH}
+        cp ${META_NEXELL_PATH}/recipes-sdk/qt/daudio-covi-sdk/files/nexell/daudio/fms.os.sdk.version ${RESULT_PATH}
     elif [ ${BOARD_NAME} == "daudio-cona" ]; then
-        cp ${META_NEXELL_PATH}/recipes-sdk/daudio-cona-sdk/files/nexell/daudio/fms.os.sdk.version ${RESULT_PATH}
+        cp ${META_NEXELL_PATH}/recipes-sdk/qt/daudio-cona-sdk/files/nexell/daudio/fms.os.sdk.version ${RESULT_PATH}
     fi
 }
 
