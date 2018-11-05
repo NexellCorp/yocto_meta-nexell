@@ -1,6 +1,5 @@
 inherit post-process-qt
 inherit post-process
-inherit post-process-convergence-svm
 require recipes-graphics/images/core-image-weston.bb
 
 DESCRIPTION ?= "Nexell qt images"
@@ -18,13 +17,7 @@ DEVEL_TOOLS = " \
     android-tools-nexell \
 "
 
-TOUCH_IMAGE_INSTALL = " \
-    tslib \
-    tslib-conf \
-    tslib-tests \
-    tslib-calibrate \
-    tslib-nexell \
-"
+TOUCH_IMAGE_INSTALL = "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', '', 'tslib tslib-conf tslib-tests tslib-calibrate tslib-nexell', d)}"
 
 ETC_TOOLS = " \
     tinyalsa \
@@ -42,8 +35,7 @@ ETC_LIBS = " \
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"
 NX_QT_LAUNCHER = "qtcinema-launcher"
-NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher',    \
-                bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', '', '${NX_QT_LAUNCHER}', d), d)}"
+NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
 
 ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
@@ -68,7 +60,6 @@ IMAGE_INSTALL_append = " \
     ${ETC_TOOLS} \
     ${ETC_LIBS} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'convergence-svmc-init', '', d)} \
 "
 
 # pyro -> sumo

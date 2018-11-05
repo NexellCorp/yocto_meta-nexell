@@ -45,20 +45,26 @@ typedef struct {
 #define RUN_LAUNCHER		"BOOT_LAUNCHER"
 #define RUN_LAUNCHER_ARGS	"BOOT_LAUNCHER_ARGS"
 
+#ifdef TSLIB
 #define SET_TSDEVICE		"TSLIB_TSDEVICE"
 #define SET_TSCAL			"TSLIB_CALIBFILE"
 #define SET_TSPLUG			"TSLIB_PLUGINDIR"
 #define SET_PCAL			"POINTERCAL_FILE"
+#endif
 
 static launcher_t launcher_info[] = {
 	{ .s = RUN_LAUNCHER, },
 	{ .s = RUN_LAUNCHER_ARGS, },
+#ifdef TSLIB
 	{ .s = "TSLIB_TSDEVICE", },
 	{ .s = "TSLIB_CALIBFILE", },
 	{ .s = "TSLIB_PLUGINDIR", },
 	{ .s = "POINTERCAL_FILE", },
+#endif
 	{ .s = "QT_QPA_PLATFORM", },
+#ifdef TSLIB
 	{ .s = "QT_QPA_EGLFS_TSLIB", },
+#endif
 	{ .s = "QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS", },
 	{ .s = "QT_QPA_EGLFS_NO_LIBINPUT", },
 	{ .s = "QT_QPA_EGLFS_KMS_CONFIG", },
@@ -410,7 +416,9 @@ static int boot_preload(bool load) {
 static int bootlauncher(const char *file, bool debug) {
 	char **envp = NULL;
 	char prog[256] = {0, }, args[256] = {0, };
+#ifdef TSLIB
 	char tsdev[256] = {0, }, tscal[256] = {0, }, tsplug[256] = {0, }, pcal[256] = {0, };
+#endif
 	char tmp[256] = {0, };
 	launcher_t *li = launcher_info;
 	int size = ARRAY_SIZE(launcher_info);
@@ -464,6 +472,7 @@ static int bootlauncher(const char *file, bool debug) {
 			continue;
 		}
 
+#ifdef TSLIB
 		if (!parse_option(li[i].d, SET_TSDEVICE, tmp, NULL)) {
 			strcpy(tsdev, tmp);
 			continue;
@@ -483,6 +492,7 @@ static int bootlauncher(const char *file, bool debug) {
 			strcpy(pcal, tmp);
 			continue;
 		}
+#endif
 	}
 
 	if (debug) {
@@ -521,11 +531,13 @@ static int bootlauncher(const char *file, bool debug) {
 				dup2(fd, STDERR_FILENO);
 			}
 
+#ifdef TSLIB
 			/* set TS */
 			setenv(SET_TSDEVICE, tsdev, 1);
 			setenv(SET_TSCAL, tscal, 1);
 			setenv(SET_TSPLUG, tsplug, 1);
 			setenv(SET_PCAL, pcal, 1);
+#endif
 
 			/* execute launcher */
 			execle(prog, prog, args, NULL, envp);
