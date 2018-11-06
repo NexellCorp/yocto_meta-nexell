@@ -35,6 +35,8 @@ NAVI_REF_WIFI_INSTALL = " \
 "
 
 IMAGE_INSTALL_append = " \
+    udev-extraconf \
+    tzdata \
     watchevent \
     net-tools \
     spidevtest \
