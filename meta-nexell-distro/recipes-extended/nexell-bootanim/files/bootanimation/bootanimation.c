@@ -392,6 +392,7 @@ static void signal_register(void)
   	sact.sa_flags = 0;
 
 	sigaction(SIGTERM, &sact, 0);
+	sigaction(SIGINT, &sact, 0);
 }
 
 /**

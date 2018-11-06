@@ -256,6 +256,10 @@ void fb_png_draw(fb_t *fb, png_t *png, int pan)
 			t[2] = r[0];
 			t[1] = r[1];
 			t[0] = r[2];
+
+			/* set alpla */
+			if (pixel_byte == 4)
+				t[3] = 0xff;
 		}
 	}
 }
