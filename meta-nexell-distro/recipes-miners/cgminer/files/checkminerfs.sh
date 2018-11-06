@@ -6,6 +6,10 @@ CONFIG_MMC_FS=`/sbin/blkid | /bin/grep mmcblk0p5`
 if [ ! "$CONFIG_MMC_FS" ]; then
 	/sbin/mkfs.ext4 -j -F /dev/mmcblk0p5
 	sync;
+	mount /dev/mmcblk0p5 /config
+	sync;
+	cat /sys/class/net/eth0/address > /config/eth0addr
+	sync;
 	REBOOT_FLAG=1
 fi
 
@@ -31,6 +35,11 @@ fi
 if [ ! -e /config/cgminer.conf ]; then
 	cp /etc/cgminer.conf.factory /config/cgminer.conf
 	sync
+fi
+
+if [ ! -e /config/eth0addr ]; then
+	cat /sys/class/net/eth0/address > /config/eth0addr
+	sync;
 fi
 
 if [ ! -e /etc/systemd/network/10-eth.network ]; then
