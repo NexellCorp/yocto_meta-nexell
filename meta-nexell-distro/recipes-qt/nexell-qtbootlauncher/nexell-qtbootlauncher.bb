@@ -22,10 +22,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_compile() {
 	if [ "${NEXELL_TOUCH_CLASS}" != "CAPACITIVE" ]; then
-		CFLAGS_prepend = " -DTSLIB"
+		oe_runmake CROSS_COMPILE="${TARGET_PREFIX}" CC="${CC}" CFLAGS="${CFLAGS} -DTSLIB"
+	else
+		oe_runmake CROSS_COMPILE="${TARGET_PREFIX}" CC="${CC}" CFLAGS="${CFLAGS}"
 	fi
-
-	oe_runmake
 }
 
 do_install() {
