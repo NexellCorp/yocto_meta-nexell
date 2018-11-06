@@ -1,0 +1,17 @@
+[Unit]
+Description=Watch power key press for reset
+After=network.target
+After=cgminer.service
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/watchevent
+Restart=always
+RestartSec=10s
+StartLimitInterval=10
+StartLimitBurst=5
+StartLimitAction=reboot
+
+[Install]
+WantedBy=multi-user.target
+
