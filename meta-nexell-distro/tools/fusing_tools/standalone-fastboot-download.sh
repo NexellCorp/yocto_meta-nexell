@@ -296,7 +296,7 @@ else
     update_bootloader ${RESULT_DIR}/bootloader.img
 fi
 
-update_env ${RESULT_DIR}/params.bin
+#update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
 update_root ${RESULT_DIR}/rootfs.img
 
