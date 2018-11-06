@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-SRC_URI = "file://fstab"
+SRC_URI += "file://fstab"
 
 dirs755 += " ${localstatedir}/mmclog "
 
