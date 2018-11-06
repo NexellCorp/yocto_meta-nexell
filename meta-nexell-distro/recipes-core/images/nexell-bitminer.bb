@@ -35,6 +35,7 @@ NAVI_REF_WIFI_INSTALL = " \
 "
 
 IMAGE_INSTALL_append = " \
+    watchevent \
     net-tools \
     spidevtest \
 	e2fsprogs	\
