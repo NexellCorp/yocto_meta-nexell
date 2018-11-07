@@ -14,7 +14,7 @@ CXXFLAGS	+= $(CXXOPTS)
 AFLAGS		+=
 
 ARFLAGS		+= crv
-LDFLAGS		+= #-static
+LDFLAGS		+= -static
 
 LIBRARY		:=
 
