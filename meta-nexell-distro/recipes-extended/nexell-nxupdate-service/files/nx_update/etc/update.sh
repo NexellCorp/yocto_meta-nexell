@@ -49,7 +49,7 @@ function update_process()
 
 ## Start at here##
 echo "Enter the nexell update"
-/usr/bin/psplash-nexell -n &
+/usr/bin/psplash -n &
 /usr/bin/psplash-write "MSG Update ready..."
 sleep 3
 /usr/bin/psplash-write "MSG Check mount block devices"
