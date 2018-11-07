@@ -7,7 +7,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = " \
 	file://launcher-capacitive.conf \
 	file://launcher-resistive.conf \
-	file://eglfs_config.json \
+	file://eglfs_config-daudio_ref.json \
+	file://eglfs_config-conv_svmc.json \
 	file://nx_platform_env.sh \
 	file://Makefile \
 	file://nx_qtbootlauncher.c \
@@ -28,6 +29,9 @@ do_compile() {
 	fi
 }
 
+EGLFS_CONF = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'eglfs_config-daudio_ref.json', \
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'eglfs_config-conv_svmc.json', 'not_supported', d), d)}"
+
 do_install() {
 	install -d ${D}${systemd_unitdir}/system-generators
 	install -d ${D}${sysconfdir}/profile.d
@@ -42,7 +46,11 @@ do_install() {
 		install -m 0755 ${S}/launcher-resistive.conf ${D}${sysconfdir}/qboot/launcher.conf
 	fi
 
-	install -m 0755 ${S}/eglfs_config.json ${D}${sysconfdir}/qboot/
+	if [ ${EGLFS_CONF} != "not_supported" ]; then
+		install -m 0755 ${S}/${EGLFS_CONF} ${D}${sysconfdir}/qboot/eglfs_config.json
+	else
+		echo "Can't find supported EGLFS configuration."
+	fi
 }
 
 FILES_${PN} = "${systemd_unitdir}/system-generators ${sysconfdir}/profile.d ${sysconfdir}/qboot"
