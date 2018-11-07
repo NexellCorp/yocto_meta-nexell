@@ -19,6 +19,6 @@ IMAGE_FSTYPES_forcevariable = "cpio.gz"
 # We don't need depmod data here
 KERNELDEPMODDEPEND = ""
 USE_DEPMOD = "0"
-PACKAGE_INSTALL += "systemd busybox android-tools-nexell e2fsprogs bash psplash-nexell util-linux-sfdisk nexell-nxupdate"
+PACKAGE_INSTALL += "systemd busybox android-tools-nexell e2fsprogs bash psplash util-linux-sfdisk nexell-nxupdate"
 
 inherit core-image
