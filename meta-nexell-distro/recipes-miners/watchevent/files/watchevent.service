@@ -5,7 +5,9 @@ After=cgminer.service
 
 [Service]
 Type=forking
-ExecStart=/usr/sbin/watchevent
+#ExecStart=/usr/sbin/watchevent
+ExecStart=/usr/bin/screen -LdmS watchevent /usr/sbin/watchevent
+ExecReload=/usr/bin/screen -S watchevent -X stuff ^C
 Restart=always
 RestartSec=10s
 StartLimitInterval=10
