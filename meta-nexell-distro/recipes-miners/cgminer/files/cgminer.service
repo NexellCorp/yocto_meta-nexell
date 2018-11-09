@@ -1,6 +1,6 @@
 [Unit]
 Description=Multi-threaded Multi-pool FPGA and ASIC Miner for Bitcoin
-After=network.target
+After=network.target time-sync.target
 
 [Service]
 Type=forking
