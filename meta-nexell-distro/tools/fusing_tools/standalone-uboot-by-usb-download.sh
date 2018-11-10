@@ -15,6 +15,7 @@ BOARD_SOCNAME=
 BOARD_NAME=
 BOARD_PREFIX=
 BOARD_POSTFIX=
+TEMP_ARRAY=
 
 function get_board_prefix()
 {
@@ -25,7 +26,13 @@ function get_board_prefix()
     local RESULT_NAME="${array[1]}"
 
     BUILD_NAME=${RESULT_NAME#*-}
-    MACHINE_NAME=${BUILD_NAME%-*}
+    OLD_IFS=$IFS
+    IFS=-
+    TEMP_ARRAY=($BUILD_NAME)
+    IFS=$OLD_IFS
+
+#    MACHINE_NAME=${BUILD_NAME%-*}
+    MACHINE_NAME=${TEMP_ARRAY[0]}-${TEMP_ARRAY[1]}-${TEMP_ARRAY[2]}
     BOARD_SOCNAME=${MACHINE_NAME%-*-*}
     BOARD_NAME=${MACHINE_NAME#*-}
     BOARD_PREFIX=${BOARD_NAME%-*}
@@ -65,7 +72,7 @@ function run_by_usb()
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
                  -a 0xFFFF0000 -j 0xFFFF0000
-            sleep 1
+            sleep 3
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
                  -f ${RESULT_DIR}/fip-loader-usb.img -m
         fi

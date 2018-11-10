@@ -194,6 +194,7 @@ function usage()
     echo "    ex) $0 s5p4418-navi-ref qt"
     echo "    ex) $0 s5p4418-navi-ref tiny"
     echo "    ex) $0 s5p4418-smart-voice smartvoice"
+    echo "    ex) $0 s5p4418-convergence-svmc qt"
 }
 
 function mem_addr_setup()
@@ -223,6 +224,10 @@ function convert_env_setup()
         mem_addrs=("${mem_2G_addrs[@]}")
     else
 	ARM_ARCH="arm"
+	if [ ${BOARD_NAME} == 'convergence-svmc' ]; then
+		echo "board name convergence-svmc"
+		mem_addrs=("${mem_2G_addrs[@]}")
+	fi
     fi
 
     if [ -a secure.cfg ]; then
