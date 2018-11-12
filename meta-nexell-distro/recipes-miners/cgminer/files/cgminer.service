@@ -1,6 +1,8 @@
 [Unit]
 Description=Multi-threaded Multi-pool FPGA and ASIC Miner for Bitcoin
-After=network.target time-sync.target
+After=network.target systemd-timesyncd.service
+ConditionPathExists=/var/lib/systemd/clock
+
 
 [Service]
 Type=forking
