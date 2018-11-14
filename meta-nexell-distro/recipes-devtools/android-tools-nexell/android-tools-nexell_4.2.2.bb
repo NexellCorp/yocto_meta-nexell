@@ -17,10 +17,10 @@ SRC_URI = " \
     file://android-tools.tar.gz \
     file://android-tools-debian.tar.gz \
     file://android-tools-adbd.service \
-    file://android-tools-adbd-daudio.service \
+    file://android-tools-adbd-daudio_ref.service \
     file://start_adbd-32.sh \
     file://start_adbd-64.sh \
-    file://start_adbd-daudio.sh \
+    file://start_adbd-daudio_ref.sh \
     file://stop_adbd.sh \
     "
 
@@ -30,8 +30,8 @@ inherit systemd
 
 SYSTEMD_SERVICE_${PN} = "android-tools-adbd.service"
 
-ADBD_SERVICE = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'android-tools-adbd-daudio.service', 'android-tools-adbd.service', d)}"
-ADBD_START_SCRIPT = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'start_adbd-daudio.sh', 'start_adbd-${ARCH_TYPE_NUM}.sh', d)}"
+ADBD_SERVICE = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'android-tools-adbd-daudio_ref.service', 'android-tools-adbd.service', d)}"
+ADBD_START_SCRIPT = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'start_adbd-daudio_ref.sh', 'start_adbd-${ARCH_TYPE_NUM}.sh', d)}"
 
 do_compile() {
     unset CFLAGS

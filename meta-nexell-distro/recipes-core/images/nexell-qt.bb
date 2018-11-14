@@ -35,14 +35,14 @@ ETC_LIBS = " \
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"
 NX_QT_LAUNCHER = "qtcinema-launcher"
-NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
+NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
 
 ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
 NEXELL_CUSTOMIZE_INSTALL = " \
     ${NX_LAUNCHER} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio', 'nexell-bootanim nexell-nxlogrotate nexell-bluetooth', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio', 'nexell-bootanim nexell-nxlogrotate nexell-bluetooth', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
     ${ALLGO_CONNECTIVITY} \
     user-fonts \
     nexell-nxreboot \

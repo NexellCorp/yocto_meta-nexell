@@ -3,6 +3,7 @@
   "hwcursor": false,
   "pbuffers": true,
   "outputs": [
-	{"name": "LVDS1", "mode": "current", "primary": true}
+        {"name": "LVDS1", "mode": "current", "primary": true}
   ]
 }
+

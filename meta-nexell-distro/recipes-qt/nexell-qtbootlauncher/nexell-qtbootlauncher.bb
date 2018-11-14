@@ -8,10 +8,10 @@ SRC_URI = " \
 	file://launcher-capacitive.conf \
 	file://launcher-resistive.conf \
 	file://eglfs_config-daudio_ref.json \
-	file://eglfs_config-conv_svmc.json \
+	file://eglfs_config-conv_daudio.json \
 	file://nx_platform_env.sh \
 	file://Makefile \
-	file://nx_qtbootlauncher.c \
+	file://nx_qtbootlauncher.c
 "
 
 S = "${WORKDIR}"
@@ -30,7 +30,7 @@ do_compile() {
 }
 
 EGLFS_CONF = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'eglfs_config-daudio_ref.json', \
-				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'eglfs_config-conv_svmc.json', 'not_supported', d), d)}"
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-daudio', 'eglfs_config-conv_daudio.json', 'not_supported', d), d)}"
 
 do_install() {
 	install -d ${D}${systemd_unitdir}/system-generators
