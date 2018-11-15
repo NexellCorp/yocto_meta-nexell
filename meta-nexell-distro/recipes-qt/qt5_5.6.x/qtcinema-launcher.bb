@@ -6,7 +6,7 @@ SRC_URI = " \
     file://qt_cinema_run.sh \
     file://qt_cinema.service \
     file://eglfs_config-navi_ref.json \
-    file://eglfs_config-conv_svmc.json
+    file://eglfs_config-conv_svmc.json \
 "
 
 S = "${WORKDIR}"
