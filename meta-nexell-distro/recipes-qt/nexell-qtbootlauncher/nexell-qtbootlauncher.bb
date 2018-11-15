@@ -11,7 +11,7 @@ SRC_URI = " \
 	file://eglfs_config-conv_daudio.json \
 	file://nx_platform_env.sh \
 	file://Makefile \
-	file://nx_qtbootlauncher.c
+	file://nx_qtbootlauncher.c \
 "
 
 S = "${WORKDIR}"
