@@ -3,5 +3,5 @@
     <machine_name text='MACHINE = "s5p4418-navi-ref"'/>
     <dl_dir       text='DL_DIR = "${TOPDIR}/../downloads"'/>
     <sstate_dir   text='SSTATE_DIR = "${TOPDIR}/sstate-cache"'/>
-    <feature      text='DISTRO_FEATURES_append = " nexell-navi-ref"'/>
+    <feature      text='DISTRO_FEATURES_append = " nexell-navi-ref support-ffmpeg"'/>
 </boardconfig>

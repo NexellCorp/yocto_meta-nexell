@@ -31,6 +31,10 @@ ETC_TOOLS = " \
 
 ETC_LIBS = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'support-ffmpeg', 'ffmpeg', '', d)} \
+    id3lib \
+    libid3tag \
+    libjpeg-turbo \
+    icu \
 "
 
 #NX_QT_LAUNCHER = "qtsmarthome qt5-smarthome-launcher"

@@ -9,7 +9,6 @@ SRC_URI = " \
 	file://launcher-resistive.conf \
 	file://eglfs_config-daudio_ref.json \
 	file://eglfs_config-conv_daudio.json \
-	file://nx_platform_env.sh \
 	file://Makefile \
 	file://nx_qtbootlauncher.c \
 "
@@ -34,11 +33,9 @@ EGLFS_CONF = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'eglf
 
 do_install() {
 	install -d ${D}${systemd_unitdir}/system-generators
-	install -d ${D}${sysconfdir}/profile.d
 	install -d ${D}${sysconfdir}/qboot
 
 	install -m 0755 ${S}/nx_qtbootlauncher ${D}${systemd_unitdir}/system-generators/
-	install -m 0644 ${S}/nx_platform_env.sh ${D}${sysconfdir}/profile.d/
 
 	if [ "${NEXELL_TOUCH_CLASS}" = "CAPACITIVE" ]; then
 		install -m 0755 ${S}/launcher-capacitive.conf ${D}${sysconfdir}/qboot/launcher.conf
@@ -53,5 +50,5 @@ do_install() {
 	fi
 }
 
-FILES_${PN} = "${systemd_unitdir}/system-generators ${sysconfdir}/profile.d ${sysconfdir}/qboot"
+FILES_${PN} = "${systemd_unitdir}/system-generators ${sysconfdir}/qboot"
 INSANE_SKIP_${PN} = "installed-vs-shipped already-stripped"
