@@ -11,6 +11,10 @@ SYSTEMD_INSTALL = " \
     rsyslog-systemd \
 "
 
+DEVEL_TOOLS = " \
+    android-tools-nexell \
+"
+
 NEXELL_KERNEL_TEST_IMAGE_INSTALL = " \
     can-utils \
 "
@@ -19,9 +23,5 @@ IMAGE_INSTALL_append = " \
     kernel-modules \
     ${SYSTEMD_INSTALL} \
     ${NEXELL_KERNEL_TEST_IMAGE_INSTALL} \
+    ${DEVEL_TOOLS} \
 "
-
-
-
-
-
