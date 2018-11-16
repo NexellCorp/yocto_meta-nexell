@@ -7,7 +7,8 @@ SRC_URI = " \
 	file://calibration \
 "
 
-TS_POINTERCAL = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref nexell-navi-ref', 'pointercal', 'not_supported', d)}"
+TS_POINTERCAL = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'pointercal', \
+                bb.utils.contains('DISTRO_FEATURES', 'nexell-navi-ref', 'pointercal', 'not_supported', d), d)}"
 
 do_install () {
 	install -d ${D}${bindir}
