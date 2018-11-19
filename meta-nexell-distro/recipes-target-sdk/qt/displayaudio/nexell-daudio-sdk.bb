@@ -8,7 +8,6 @@ SRC_URI = " \
 	file://sdk \
 "
 
-
 DEPENDS = " \
 	nx-drm-allocator \
 	nx-video-api \
@@ -43,7 +42,7 @@ PR = "r0"
 S = "${WORKDIR}/sdk"
 SDK_RESULT = "${S}/result"
 
-export OECORE_SDK_VERSION = "2.5.1"
+export OECORE_SDK_VERSION = "${SDK_VERSION}"
 
 export NX_DAUDIO_ENABLE_BT = "yes"
 export NX_DAUDIO_ENABLE_CAM = "yes"
