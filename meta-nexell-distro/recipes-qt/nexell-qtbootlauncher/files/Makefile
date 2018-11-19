@@ -26,7 +26,7 @@ $(TARGET) : depend $(OBJS)
 .PHONY: clean
 
 clean :
-	rm -rf $(OBJS) $(TARGET) core .depend
+	rm -rf $(OBJS) $(TARGET) .depend
 
 distclean : clean
 
