@@ -1,0 +1,12 @@
+--- a/main.cpp
++++ b/main.cpp
+@@ -8,6 +8,9 @@
+     view.setResizeMode(QQuickView::SizeRootObjectToView);
+     view.setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + QLatin1String("/Qt5_CinematicExperience.qml")));
+
++    // bootanimation exit
++    system("killall bootanimation");
++
+     const QString lowerArgument = QString::fromLatin1(argv[1]).toLower();
+     if (lowerArgument == QLatin1String("--fullscreen")) {
+         view.showFullScreen();
