@@ -25,5 +25,6 @@ IMAGE_INSTALL_append = " \
     packagegroup-nexell-sdl \
     rtl-8188eus-${ARCH_TYPE_NUM} \
     testsuite \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'convergence-svmc-init', '', d)} \
+    can-utils \
+    iproute2 \
 "
