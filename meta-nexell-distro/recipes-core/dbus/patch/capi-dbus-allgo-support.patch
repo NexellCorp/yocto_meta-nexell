@@ -1039,7 +1039,7 @@
        if (status == DBUS_DISPATCH_NEED_MEMORY)
          {
            /* Try sleeping a bit, as we aren't sure we need to block for reading,
-@@ -2524,7 +2523,7 @@
+@@ -2524,10 +2523,10 @@
            _dbus_memory_pause_based_on_timeout (timeout_milliseconds - elapsed_milliseconds);
          }
        else
@@ -1047,7 +1047,11 @@
 +        {
            /* block again, we don't have the reply buffered yet. */
            _dbus_connection_do_iteration_unlocked (connection,
-                                                   NULL,
+-                                                  NULL,
++                                                  pending,
+                                                   DBUS_ITERATION_DO_READING |
+                                                   DBUS_ITERATION_BLOCK,
+                                                   timeout_milliseconds - elapsed_milliseconds);
 @@ -2540,7 +2539,7 @@
                   elapsed_milliseconds);
  
