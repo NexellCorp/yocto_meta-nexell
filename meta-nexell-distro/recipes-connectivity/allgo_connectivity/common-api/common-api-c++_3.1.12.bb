@@ -7,12 +7,10 @@ PR = "r0"
 
 inherit autotools cmake lib_package pkgconfig
 
-SRCREV = "77d9cdaf6acee03a1e360e0e1a3cd0b01a95b407"
-SRC_URI = "file://common-api-runtime.tar.gz"
+SRCREV = "5152d31a5607393103ef01f2bb034bd267064b81"
+SRC_URI = "git://github.com/GENIVI/capicxx-core-runtime.git"
 INHIBIT_PACKAGE_STRIP="1"
-S = "${WORKDIR}/common-api-runtime/"
-SRC_URI[md5sum] = "80a73aaeb2bdd2a133d76d4107534b53"
-SRC_URI[sha256sum] = "1c42e31761d622806409ddd40dcc85e184c506019b9706a0546868ae91a6c96f"
+S = "${WORKDIR}/git"
 
 EXTRA_OECMAKE += "-DCMAKE_INSTALL_PREFIX=/usr"
 
