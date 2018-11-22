@@ -56,9 +56,9 @@ ExecStart=@BINDIR@/screen -LdmS cgminer @BINDIR@/cgminer -T --api-network --api-
 ExecReload=@BINDIR@/screen -S cgminer -X stuff 'scy'
 Restart=always
 RestartSec=10s
-StartLimitInterval=10
-StartLimitBurst=5
-StartLimitAction=reboot
+StartLimitInterval=2m
+StartLimitBurst=3
+StartLimitAction=none
 
 [Install]
 WantedBy=multi-user.target
