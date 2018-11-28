@@ -8,6 +8,11 @@ ConditionPathExists=/var/lib/systemd/clock
 Type=forking
 #Environment="TERM=dumb"
 
+#-------------------------
+#- HASH BD TEST GPIO -----
+#-------------------------
+ExecStartPre=/bin/sh -c '/bin/echo 15 > /sys/class/gpio/export; /bin/echo in > /sys/class/gpio/gpio15/direction'
+
 #----------------------
 #- HASH BD 0 GPIO -----
 #----------------------
@@ -52,7 +57,7 @@ ExecStartPre=/bin/sh -c '/bin/echo 9 > /sys/class/gpio/export; /bin/echo out > /
 
 ExecStartPre=/bin/sh -c '/usr/bin/checkminerfs.sh'
 #ExecStart=@BINDIR@/cgminer --api-network --api-listen --default-config /config/cgminer.conf
-ExecStart=@BINDIR@/screen -LdmS cgminer @BINDIR@/cgminer -T --api-network --api-listen --default-config /config/cgminer.conf --syslog
+ExecStart=@BINDIR@/screen -LdmS cgminer @BINDIR@/cgminer -D -T --api-network --api-listen --default-config /config/cgminer.conf --syslog
 ExecReload=@BINDIR@/screen -S cgminer -X stuff 'scy'
 Restart=always
 RestartSec=10s
