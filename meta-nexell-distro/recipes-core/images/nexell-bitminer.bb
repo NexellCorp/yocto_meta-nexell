@@ -40,6 +40,7 @@ IMAGE_INSTALL_append = " \
     net-tools \
     spidevtest \
 	e2fsprogs	\
+	cronie \
     ${WEB_INSTALL} \
     ${CGMINER_INSTALL} \
     ${SYSTEMD_INSTALL} \
