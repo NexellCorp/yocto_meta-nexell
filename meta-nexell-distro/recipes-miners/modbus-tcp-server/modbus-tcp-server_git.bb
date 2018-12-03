@@ -21,8 +21,11 @@ SRCREV = "${AUTOREV}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-do_compile() {
+do_compile_prepend() {
 	oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+}
+
+do_compile() {
 	oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/nexell -I${S}" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 #	oe_runmake
 }
