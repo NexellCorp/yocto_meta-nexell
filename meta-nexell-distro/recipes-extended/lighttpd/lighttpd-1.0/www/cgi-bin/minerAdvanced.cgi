@@ -27,8 +27,8 @@ cat <<'EOF'
 "api-listen" : true,
 "api-network" : true,
 "api-allow" : "W:0/0",
-"miner-freq": "7:200:0782",
-"miner-voltage": "0725"
+"temp-cutoff" : 100,
+"tsb1101-volt": "400"
 }
 
 EOF
@@ -72,8 +72,8 @@ cat <<EOT
 function f_get_miner_conf() {
 	try
 	{
-		document.getElementById("nexell_freq").value=nexell_data["miner-freq"];
-		document.getElementById("nexell_voltage").value=nexell_data["miner-voltage"];
+		document.getElementById("nexell_cutoff").value=nexell_data["temp-cutoff"];
+		document.getElementById("nexell_voltage").value=nexell_data["tsb1101-volt"];
 	}
 	catch(err)
 	{
@@ -129,7 +129,7 @@ function f_submit_miner_conf() {
 		alert('Invalid Miner configuration file. Edit manually or reset to default.'+err);
 	}
 	
-	_nexell_freq=jQuery("#nexell_freq").val();
+	_nexell_cutoff=jQuery("#nexell_cutoff").val();
 	_nexell_voltage=jQuery("#nexell_voltage").val();
 	
 	jQuery("#cbi_apply_cgminer_fieldset").show();
@@ -140,7 +140,7 @@ function f_submit_miner_conf() {
 		dataType: 'json',
 		timeout: 30000,
 		cache: false,
-		data: {_nexell_pool1url:_nexell_pool1url, _nexell_pool1user:_nexell_pool1user, _nexell_pool1pw:_nexell_pool1pw,_nexell_pool2url:_nexell_pool2url, _nexell_pool2user:_nexell_pool2user, _nexell_pool2pw:_nexell_pool2pw,_nexell_pool3url:_nexell_pool3url, _nexell_pool3user:_nexell_pool3user, _nexell_pool3pw:_nexell_pool3pw, _nexell_nobeeper:_nexell_nobeeper, _nexell_notempoverctrl:_nexell_notempoverctrl, _nexell_freq:_nexell_freq, _nexell_voltage:_nexell_voltage},
+		data: {_nexell_pool1url:_nexell_pool1url, _nexell_pool1user:_nexell_pool1user, _nexell_pool1pw:_nexell_pool1pw,_nexell_pool2url:_nexell_pool2url, _nexell_pool2user:_nexell_pool2user, _nexell_pool2pw:_nexell_pool2pw,_nexell_pool3url:_nexell_pool3url, _nexell_pool3user:_nexell_pool3user, _nexell_pool3pw:_nexell_pool3pw, _nexell_nobeeper:_nexell_nobeeper, _nexell_notempoverctrl:_nexell_notempoverctrl, _nexell_cutoff:_nexell_cutoff, _nexell_voltage:_nexell_voltage},
 		success: function(data) {
 			window.location.reload();
 		},
@@ -209,59 +209,21 @@ jQuery(document).ready(function() {
 					<div class="cbi-section-descr"></div>
 					<fieldset class="cbi-section" id="cbi-cgminer-default">
 						<legend>Settings</legend>
-						<div class="cbi-value" id="cbi-cgminer-default-freq">
-							<label class="cbi-value-title" for="cbid.cgminer.default.freq">Frequency</label>
+						<div class="cbi-value" id="cbi-cgminer-default-cutoff">
+							<label class="cbi-value-title" for="cbid.cgminer.default.cutoff">Cutoff Temperature</label>
 							<div class="cbi-value-field">
-								<select id="nexell_freq" class="cbi-input-text">
-								    <option value="4:350:0d82">350M</option>
-								    <option value="4:343.75:1b06">343.75M</option>                          
-								    <option value="4:337.5:0d02">337.5M</option> 
-								    <option value="4:331.25:1a06">331.25M</option> 
-								    <option value="4:325:0c82">325M</option>
-								    <option value="4:318.75:1906">318.75M</option>    						
-    								<option value="5:312.5:0c02">312.5M</option> 
-								    <option value="5:306.25:1806">306.25M</option>    						
-									<option value="5:300:0b82">300M</option>    						
-    								<option value="5:293.75:1706">293.75M</option> 
-								    <option value="5:287.5:0b02">287.5M</option>    						
-    								<option value="5:281.25:1606">281.25M</option>    								
-								    <option value="5:275:0a82">275M</option>
-									<option value="5:268.75:1506">268.75M</option>    						
-    								<option value="5:262.5:0a02">262.5M</option> 
-								    <option value="6:256.25:1406">256.25M</option>    						
-    								<option value="6:250:0982">250M</option>    								
-    								<option value="6:243.75:1306">243.75M</option>
-    								<option value="6:237.5:1286">237.5M</option>
-    								<option value="6:231.25:1206">231.25M</option>
-    								<option value="6:225:0882">225M</option>
-    								<option value="7:218.75:1106">218.75M</option>
-    								<option value="7:212.5:1086">212.5M</option>
-    								<option value="7:206.25:1006">206.25M</option>
-    								<option value="7:200:0782">200M (default)</option>    								
-    								<option value="8:193.75:0f03">193.75M</option>
-    								<option value="8:187.5:0e83">187.5M</option>
-    								<option value="8:181.25:0e03">181.25M</option>
-    								<option value="8:175:0d83">175M</option>   
-    								<option value="9:168.75:1a87">168.75M</option>   								
-    								<option value="9:162.5:0c83">162.5M</option>
-									<option value="10:156.25:0c03">156.25M</option>
-									<option value="10:150:0b83">150M</option>
-									<option value="10:143.75:1687">143.75M</option>
-									<option value="11:137.5:0a83">137.5M</option>
-    								<option value="11:131.25:0a03">131.25M</option>
-									<option value="12:125:0983">125M</option>
-									<option value="13:118.75:0903">118.75M</option>
-									<option value="13:112.5:0883">112.5M</option>
-									<option value="14:106.25:0803">106.25M</option>
-    								<option value="15:100:0783">100M</option>
-    							</select>
+								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.cutoff" id="nexell_cutoff" value="" />
+								<span style="color:red;">Modify Cutoff Temperature, clkick Save&Apply, and then re-power the miner.</span>
 							</div>
 						</div>
 						<div class="cbi-value" id="cbi-cgminer-default-voltage">
 							<label class="cbi-value-title" for="cbid.cgminer.default.pool3url">Voltage</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" name="cbid.cgminer.default.voltage" id="nexell_voltage" value="" />
-								<span style="color:red;">Modify voltage, clkick Save&Apply, and then re-power the miner.</span>
+								<select id="nexell_voltage" class="cbi-input-text">
+									<option value="400">0.40V</option>
+									<option value="420">0.42V</option>
+								</select>
+								<span style="color:red;">Select voltage, clkick Save&Apply, and then re-power the miner.</span>
 							</div>
 						</div>
 					</fieldset>
