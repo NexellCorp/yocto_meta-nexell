@@ -63,7 +63,7 @@ Restart=always
 RestartSec=10s
 StartLimitInterval=2m
 StartLimitBurst=3
-StartLimitAction=none
+StartLimitAction=reboot
 
 [Install]
 WantedBy=multi-user.target
