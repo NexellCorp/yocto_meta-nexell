@@ -817,7 +817,7 @@ if [ "${nexell_tmp}" != "Socket connect failed: Connection refused" ]; then
 		echo "</td>"
 		
 		nexell_hot_chip=${nexell_tmp#*hot_chip=}
-		nexell_hot_chip=${nexell_hot_chip%%,chain_id_end=*}
+		nexell_hot_chip=${nexell_hot_chip%%,status=*}
 		echo "<td class=\"cbi-value-field\">"
 		echo "<div id=\"cbi-table-1-url\">${nexell_hot_chip}</div>"
 		echo "<div id=\"cbip-table-1-url\"></div>"
