@@ -11,7 +11,7 @@ SRCREV = "${AUTOREV}"
 
 SRC_URI = " \
 	file://nx_reboot \
-	"
+"
 
 S = "${WORKDIR}/nx_reboot"
 

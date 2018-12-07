@@ -11,7 +11,7 @@ SRCREV = "${AUTOREV}"
 
 SRC_URI = " \
 	file://nx_update \
-	"
+"
 
 S = "${WORKDIR}/nx_update"
 

@@ -1,15 +1,9 @@
 #
 # Make options
 #
-# DEBUG=y		: use debug build
-#
 
 CFLAGS  := -Wall -O3
 LIBRARY	:= -lpthread -ldl
-
-ifeq ($(DEBUG),y)
-CFLAGS  += -DDEBUG
-endif
 
 LDFLAGS += -static
 

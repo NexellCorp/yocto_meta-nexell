@@ -11,7 +11,7 @@ SRCREV = "${AUTOREV}"
 
 SRC_URI = " \
 	file://nxlogrotate \
-	"
+"
 
 S = "${WORKDIR}/nxlogrotate"
 

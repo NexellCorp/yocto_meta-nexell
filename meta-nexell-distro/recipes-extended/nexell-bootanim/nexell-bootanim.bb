@@ -13,7 +13,7 @@ SRCREV = "${AUTOREV}"
 
 SRC_URI = " \
 	file://bootanimation \
-	"
+"
 
 S = "${WORKDIR}/bootanimation"
 

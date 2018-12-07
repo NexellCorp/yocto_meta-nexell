@@ -19,14 +19,9 @@
 
 #define	LAUNCHER_CONF	"/etc/qboot/launcher.conf"
 
-#define CHK_BOOTTIME
-#undef CHK_BOOTTIME
-
-#define ENABLE_CONSOLE
-#undef ENABLE_CONSOLE
-
-#define ENABLE_PRELOAD
-#undef ENABLE_PRELOAD
+//#define CHK_BOOTTIME
+//#define ENABLE_CONSOLE
+//#define ENABLE_PRELOAD
 
 /**
  * launcher_t:
