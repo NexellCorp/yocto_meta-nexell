@@ -12,7 +12,7 @@ PR = "r0"
 
 SRC_URI = " \
 	file://${ARCH_TYPE_NUM}/bsa \
-	"
+"
 
 S = "${WORKDIR}/${ARCH_TYPE_NUM}/bsa"
 
