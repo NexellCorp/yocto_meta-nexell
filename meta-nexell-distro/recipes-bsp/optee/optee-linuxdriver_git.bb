@@ -31,11 +31,11 @@ PATH_KBUILD_OUTPUT = "${@env_setup_kernel(d,"-standard-build")}"
 do_configure() {
     if [ -n "${CONFIGURESTAMPFILE}" -a -e "${CONFIGURESTAMPFILE}" ]; then
         if [ "`cat ${CONFIGURESTAMPFILE}`" != "${BB_TASKHASH}" ]; then
-            cd /home/suker/buildYocto/sumoYocto/secure/optee/optee_linuxdriver
+            cd ${S}
             # if [ "0" != "1" -a \( -e Makefile -o -e makefile -o -e GNUmakefile \) ]; then
             #     oe_runmake clean
             # fi
-            find /home/suker/buildYocto/sumoYocto/secure/optee/optee_linuxdriver -ignore_readdir_race -name \*.la -delete
+            find ${S} -ignore_readdir_race -name \*.la -delete
         fi
     fi
 
