@@ -2,6 +2,7 @@ inherit qmake5_paths
 
 export NX_OE_QMAKE_AR = "${AR}"
 export NX_OE_QMAKE_CC = "${CC}"
+export NX_OE_QMAKE_STRIP = "${STRIP}"
 export NX_OE_QMAKE_CFLAGS = "${CFLAGS}"
 export NX_OE_QMAKE_CXX = "${CXX}"
 export NX_OE_QMAKE_CXXFLAGS = "${CXXFLAGS}"

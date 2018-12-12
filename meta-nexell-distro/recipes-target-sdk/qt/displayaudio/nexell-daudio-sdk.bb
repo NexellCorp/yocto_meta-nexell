@@ -85,7 +85,7 @@ do_install() {
 FILES_${PN} = "${bindir} ${libdir} nexell/daudio"
 FILES_${PN}-dev = "${includedir}"
 
-INSANE_SKIP_${PN} = "dev-deps dev-so textrel"
+INSANE_SKIP_${PN} = "dev-deps dev-so textrel already-stripped"
 INSANE_SKIP_${PN}-dev = "dev-elf textrel"
 
 addtask do_generate_qt_config_file before do_compile
