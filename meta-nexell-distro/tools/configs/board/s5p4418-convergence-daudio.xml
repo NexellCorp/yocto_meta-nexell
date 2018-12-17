@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<boardconfig>
+    <machine_name text='MACHINE = "s5p4418-convergence-daudio"'/>
+    <dl_dir       text='DL_DIR = "${TOPDIR}/../downloads"'/>
+    <sstate_dir   text='SSTATE_DIR = "${TOPDIR}/sstate-cache"'/>
+<!--  board specified features -->
+    <feature      text='DISTRO_FEATURES_append = " nexell-convergence-daudio support-daudio support-daudio-sdk support-ffmpeg support-adanis-bt support-allgo-connectivity"'/>
+</boardconfig>
