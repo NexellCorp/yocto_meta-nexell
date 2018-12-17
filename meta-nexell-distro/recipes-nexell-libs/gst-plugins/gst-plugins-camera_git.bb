@@ -52,7 +52,7 @@ do_install() {
     cd ${S}
     install -d ${D}${libdir}
     oe_runmake install DESTDIR=${D}
-    cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
+    cp -aprf ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
 }
 
 INSANE_SKIP_${PN} = "compile-host-path dev-so debug-files invalid-packageconfig"
