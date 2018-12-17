@@ -5,8 +5,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = " \
 	file://eglfs_config-daudio_ref.json \
 	file://eglfs_config-navi_ref.json \
-	file://eglfs_config-conv_daudio.json \
 	file://eglfs_config-conv_svmc.json \
+	file://eglfs_config-convergence_daudio.json \
 "
 
 S = "${WORKDIR}"
@@ -16,8 +16,9 @@ PR = "0.1"
 
 EGLFS_CONF = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'eglfs_config-daudio_ref.json', \
 				bb.utils.contains('DISTRO_FEATURES', 'nexell-navi-ref', 'eglfs_config-navi_ref.json', \
-				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-daudio', 'eglfs_config-conv_daudio.json', \
-				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'eglfs_config-conv_svmc.json', 'not_supported', d), d), d), d)}"
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-svmc', 'eglfs_config-conv_svmc.json', \
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-convergence-daudio', 'eglfs_config-convergence_daudio.json', \
+				'not_supported', d), d), d), d)}"
 
 do_install() {
 	install -d ${D}${sysconfdir}/qboot
