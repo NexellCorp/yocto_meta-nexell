@@ -375,7 +375,7 @@ function make_sparse_rootfs_img()
     fi
 
     pushd $result_dir
-    ext2simg nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 rootfs.img
+    ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 rootfs.img
 
     local partition_size=${user_partition_size[${BOARD_NAME}]}
     rm -rf userdata    
