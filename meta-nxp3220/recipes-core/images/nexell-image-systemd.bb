@@ -1,6 +1,7 @@
 inherit core-image
 inherit post-process
 include classes/nexell_rootfsimg.inc
+include classes/nexell_dataimg.inc
 
 LICENSE = "MIT"
 
