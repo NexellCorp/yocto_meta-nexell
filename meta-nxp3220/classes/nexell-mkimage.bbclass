@@ -18,6 +18,7 @@ make_ext4_bootimg() {
 	IMAGE=${DEPLOY_DIR_IMAGE}/boot.img
 
 	if [ -z ${PART_BOOT_SIZE} ]; then
+		echo "WARNING: NOT DEFINED 'PART_BOOT_SIZE'"
 		return
 	fi
 
@@ -38,54 +39,34 @@ make_ext4_bootimg() {
 
 PART_ROOTFS_LABEL ?= "rootfs"
 PART_ROOTFS_SIZE ?= ""
-EXTRA_ROOTFS_DIR ?= "${BASE_WORKDIR}/extra-rootfs-support"
 
 make_ext4_rootfsimg() {
 	ROOT_FS=$1
-	EXTRA_DIR=${EXTRA_ROOTFS_DIR}
 	ROOT_DIR=${DEPLOY_DIR_IMAGE}/rootfs
 	IMAGE=${DEPLOY_DIR_IMAGE}/rootfs.img
 
 	if [ -z ${PART_ROOTFS_SIZE} ]; then
-		echo "NOT DEFINED PART_ROOTFS_SIZE: ${PART_ROOTFS_SIZE}"
+		echo "WARNING: NOT DEFINED 'PART_ROOTFS_SIZE'"
 		return
 	fi
 
-	if [ -e "${ROOT_FS}.tar.gz" ]; then
-		if [ -d "${ROOT_DIR}" ]; then
-			rm -rf ${ROOT_DIR}
-		fi
-		mkdir -p ${ROOT_DIR}
-		tar xvzfp ${ROOT_FS}.tar.gz -C ${ROOT_DIR};
-		deploy_image=1
-	elif [ -e "${ROOT_FS}.cpio.gz" ]; then
-		if [ -d "${ROOT_DIR}" ]; then
-			rm -rf ${ROOT_DIR}
-		fi
-		mkdir -p ${ROOT_DIR}
-		gzip -dc ${ROOT_FS}.cpio.gz > ${DEPLOY_DIR_IMAGE}/${ROOT_FS}.cpio
-		cd ${ROOT_DIR}
-		cpio -idv < ${DEPLOY_DIR_IMAGE}/${ROOT_FS}.cpio;
-		deploy_image=1
-	elif [ -e "${ROOT_FS}.ext4" ]; then
-		resize2fs ${ROOT_FS}.ext4 ${PART_ROOTFS_SIZE};
-		e2fsck -y -f ${PART_ROOTFS_SIZE};
-		deploy_image=0
-		return;
-	elif [ -d "${ROOT_FS}" ]; then
-		ROOT_DIR=${ROOT_FS}
-		deploy_image=0
-	else
-		echo "NOT FIND ROOT FS: ${ROOT_FS}"
+	if [ ! -e "${ROOT_FS}.ext4" ]; then
+		echo "WARNING: NOT FOUND EXT4 ROOT FS: ${ROOT_FS}"
 		return
 	fi
 
-	# copy extra rootfs
-	if [ -d ${EXTRA_DIR} ]; then
-		cp -rp ${EXTRA_DIR}/* ${ROOT_DIR}/
+	resize2fs ${ROOT_FS}.ext4 ${PART_ROOTFS_SIZE};
+	e2fsck -y -f ${ROOT_FS}.ext4;
+	cp ${ROOT_FS}.ext4 ${IMAGE}
+}
+
+EXTRA_ROOTFS_DIR ?= "${BASE_WORKDIR}/extra-rootfs-support"
+
+make_extra_rootfs() {
+	if [ ! -d ${EXTRA_ROOTFS_DIR} ]; then
+		echo "WARNING: not found ${EXTRA_ROOTFS_DIR}"
+		return
 	fi
 
-	make_ext4_image ${PART_ROOTFS_LABEL} ${PART_ROOTFS_SIZE} \
-		${ROOT_DIR} ${IMAGE}
-
+	cp -dr ${EXTRA_ROOTFS_DIR}/* ${IMAGE_ROOTFS}
 }
