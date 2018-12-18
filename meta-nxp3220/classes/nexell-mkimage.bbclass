@@ -70,3 +70,20 @@ make_extra_rootfs() {
 
 	cp -dr ${EXTRA_ROOTFS_DIR}/* ${IMAGE_ROOTFS}
 }
+
+PART_DATA_LABEL ?= "boot"
+PART_DATA_SIZE ?= ""
+
+make_ext4_dataimg() {
+	S_DIR=$1
+	D_DIR=${DEPLOY_DIR_IMAGE}/data
+	IMAGE=${DEPLOY_DIR_IMAGE}/userdata.img
+
+	if [ -z ${PART_DATA_SIZE} ]; then
+		echo "WARNING: NOT DEFINED 'PART_DATA_SIZE'"
+		return
+	fi
+
+	mkdir -p ${D_DIR}
+	make_ext4_image ${PART_DATA_LABEL} ${PART_DATA_SIZE} ${D_DIR} ${IMAGE}
+}
