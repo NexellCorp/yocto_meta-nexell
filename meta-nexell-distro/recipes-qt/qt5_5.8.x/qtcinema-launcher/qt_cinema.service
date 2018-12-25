@@ -1,0 +1,9 @@
+[Unit]
+Description=QT5 cinema demo
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/qt_cinema_run.sh
+
+[Install]
+WantedBy=multi-user.target
