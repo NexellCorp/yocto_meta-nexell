@@ -1,0 +1,9 @@
+{
+  "device": "/dev/dri/card0",
+  "hwcursor": false,
+  "pbuffers": true,
+  "outputs": [
+        {"name": "LVDS1", "mode": "current", "primary": true}
+  ]
+}
+

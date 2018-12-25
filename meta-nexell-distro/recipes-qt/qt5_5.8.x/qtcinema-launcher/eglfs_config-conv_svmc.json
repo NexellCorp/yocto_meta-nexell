@@ -1,0 +1,10 @@
+{
+  "device": "/dev/dri/card0",
+  "hwcursor": false,
+  "pbuffers": true,
+  "outputs": [
+        {"name": "VGA1", "mode": "current", "primary": true},
+        {"name": "LVDS1", "mode": "current"}
+  ]
+}
+
