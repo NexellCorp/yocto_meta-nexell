@@ -51,6 +51,7 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs nexell-qt5.6 support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'eglfs-kms', '', d)} \
 	${ALLGO_CONNECTIVITY} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs nexell-qt5.6 support-daudio support-daudio-sdk support-allgo-connectivity support-carconn-sdk', 'nexell-carconn-sdk', '', d)} \
 	user-fonts \
 	nexell-bootanim \
 	nexell-nxreboot \
