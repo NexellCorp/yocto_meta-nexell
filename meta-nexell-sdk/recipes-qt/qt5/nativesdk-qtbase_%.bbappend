@@ -8,6 +8,7 @@ fakeroot do_generate_qt_environment_file() {
     echo 'export OE_QMAKE_LDFLAGS="$LDFLAGS"' >> $script
     echo 'export OE_QMAKE_CC=$CC' >> $script
     echo 'export OE_QMAKE_CXX=$CXX' >> $script
+    echo 'export OE_QMAKE_STRIP=$STRIP' >> $script
     echo 'export OE_QMAKE_LINK=$CXX' >> $script
     echo 'export OE_QMAKE_AR=$AR' >> $script
     echo 'export QT_CONF_PATH=${OE_QMAKE_PATH_HOST_BINS}/qt.conf' >> $script
