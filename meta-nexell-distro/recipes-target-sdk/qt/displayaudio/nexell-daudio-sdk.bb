@@ -1,4 +1,4 @@
-DESCRIPTION = "Nexell displayaudio SDK"
+DESCRIPTION = "Nexell daudio SDK"
 HOMEPAGE = "http://www.nexell.co.kr"
 SECTION = "devel"
 LICENSE = "MIT"
@@ -34,9 +34,9 @@ RPROVIDES_${PN} = " \
 	libnxrearcam.so \
 "
 
-inherit nexell-daudio-sdk-env
+inherit nexell-sdk-qt-env
 
-PV = "1.0"
+PV = "1.1.0"
 PR = "r0"
 
 S = "${WORKDIR}/sdk"
@@ -47,26 +47,15 @@ export OECORE_SDK_VERSION = "${SDK_VERSION}"
 export NX_DAUDIO_ENABLE_BT = "yes"
 export NX_DAUDIO_ENABLE_CAM = "yes"
 
-D_SDK_INC =  " -I./"
-D_SDK_INC += " -I../../include -I../../../include -I../../library/include -I../../../library/include"
-D_SDK_INC += " -I../../prebuilt/include -I../../../prebuilt/include -I../../prebuilt/include -I../../../library/include"
-D_SDK_INC += " -I${STAGING_INCDIR} -I${STAGING_INCDIR}/libxml2 -I${STAGING_INCDIR}/drm"
+D_SDK_INC += " -I${STAGING_INCDIR}/libxml2 -I${STAGING_INCDIR}/drm"
 
-D_SDK_LIB =  " -L./"
-D_SDK_LIB += " -L../../library/lib -L../../../library/lib"
-D_SDK_LIB += " -L../../prebuilt/library/lib -L../../../prebuilt/library/lib"
-D_SDK_LIB += " -L${STAGING_LIBDIR}"
-
-CFLAGS_remove_arm = "-g"
-CFLAGS_append = " -fPIC"
 CFLAGS_prepend = "${D_SDK_INC}"
-CXXFLAGS_remove_arm = "-g"
-CXXFLAGS_append = " -fPIC"
+CFLAGS_remove_arm = "-g"
 CXXFLAGS_prepend = "${D_SDK_INC}"
-LDFLAGS_prepend = "${D_SDK_LIB} "
+CXXFLAGS_remove_arm = "-g"
 
 do_install() {
-	echo "Installing displayaudio SDK..."
+	echo "Installing daudio SDK..."
 
 	install -d ${D}${libdir}
 	install -d ${D}${bindir}
@@ -76,7 +65,6 @@ do_install() {
 	chown -R root:root ${D}${libdir}/
 	cp -apR ${SDK_RESULT}${bindir}/* ${D}${bindir}/
 	chown -R root:root ${D}${bindir}/
-
 	cp -apR ${SDK_RESULT}/nexell/daudio/* ${D}/nexell/daudio/
 	chmod -R 755 ${D}/nexell/daudio/*
 	chown -R root:root ${D}/nexell/daudio/*
