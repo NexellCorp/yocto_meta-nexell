@@ -1,12 +1,15 @@
+DEPENDS += "android-tools-native"
+
 make_ext4_image() {
 	PART_LABEL=$1
 	PART_SIZE=$2
 	PART_DIR=$3
 	OUTPUT_IMAGE=$4
 
-	echo "MAKE EXT4: ${PART_LABEL} (${PART_SIZE}) ${PART_DIR} -> ${OUTPUT_IMAGE}"
-        dd if=/dev/zero of=${OUTPUT_IMAGE} seek=${PART_SIZE} bs=1 count=0
- 	mkfs.ext4 -L ${PART_LABEL} -d ${PART_DIR} ${OUTPUT_IMAGE}
+	echo "NOTE: MAKE EXT4: ${PART_LABEL} (${PART_SIZE}) ${PART_DIR} -> ${OUTPUT_IMAGE}"
+
+	# change to sparse image "-s" optioin
+	make_ext4fs -L ${PART_LABEL} -s -b 4k -l ${PART_SIZE} ${OUTPUT_IMAGE} ${PART_DIR}
 }
 
 PART_BOOT_LABEL ?= "boot"
@@ -55,9 +58,15 @@ make_ext4_rootfsimg() {
 		return
 	fi
 
+	fsname=$(readlink -f ${ROOT_FS}.ext4)
+	fssize=$(wc -c < ${fsname})
+	echo "DEBUG: Resize ROOTS minimun size : ${fssize}:${fsname}"
+
 	resize2fs ${ROOT_FS}.ext4 ${PART_ROOTFS_SIZE};
 	e2fsck -y -f ${ROOT_FS}.ext4;
-	cp ${ROOT_FS}.ext4 ${IMAGE}
+
+	# change to sparse image
+	ext2simg ${ROOT_FS}.ext4 ${IMAGE}
 }
 
 EXTRA_ROOTFS_DIR ?= "${BASE_WORKDIR}/extra-rootfs-support"
