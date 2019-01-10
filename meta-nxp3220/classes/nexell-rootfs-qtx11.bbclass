@@ -1,4 +1,14 @@
-python postprocess_rootfs_qtx11() {
+postprocess_qtx11_func1() {
+    cd ${IMAGE_ROOTFS}
+    # X11 touch pointer default calibrate running prevent
+    # If tslib use, have to remove 30xinput_calibrate.sh
+    # rm etc/X11/Xsession.d/30xinput_calibrate.sh
+
+    # If xf86_tslib use, have to remove xinput_calibrator.desktop
+    # rm etc/xdg/autostart/xinput_calibrator.desktop
+}
+
+python postprocess_qtx11_func2() {
     import os
 
     os.chdir(d.getVar("IMAGE_ROOTFS", d, True))
@@ -14,4 +24,4 @@ python postprocess_rootfs_qtx11() {
          f.writelines(contents)
 }
 
-ROOTFS_POSTPROCESS_COMMAND += " postprocess_rootfs_qtx11;"
+ROOTFS_POSTPROCESS_COMMAND += " postprocess_qtx11_func1; postprocess_qtx11_func2;"
