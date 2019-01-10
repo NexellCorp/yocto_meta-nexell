@@ -1,6 +1,4 @@
-DESCRIPTION = "Tiny Root Filesystem Image."
-
-inherit post-process
+inherit nexell-rootfs
 include classes/nexell_rootfsimg.inc
 
 PACKAGE_INSTALL = "initramfs-boot \
