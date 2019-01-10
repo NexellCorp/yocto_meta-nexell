@@ -1,4 +1,4 @@
-postprocess_fs_function() {
+postprocess_rootfs() {
     cd ${IMAGE_ROOTFS}
 
     ln -sf bin/busybox linuxrc
@@ -19,4 +19,4 @@ postprocess_fs_function() {
     echo "/dev/mmcblk0p4 /data         ext4     noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "postprocess_fs_function;"
+ROOTFS_POSTPROCESS_COMMAND += "postprocess_rootfs;"
