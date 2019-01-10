@@ -25,6 +25,10 @@ UTILS_INSTALL = " \
     strace \
 "
 
+MULTIMEDIA_INSTALL = " \
+    ffmpeg \
+"
+
 PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-alsa-utils \
     packagegroup-nxp3220-tslib \
@@ -35,6 +39,7 @@ PACAKGEGROUPS_INSTALL = " \
 
 IMAGE_INSTALL_append = " \
     ${SYSTEMD_INSTALL} \
-    ${UTILS_INSTALL} \
     ${PACAKGEGROUPS_INSTALL} \
+    ${MULTIMEDIA_INSTALL} \
+    ${UTILS_INSTALL} \
 "
