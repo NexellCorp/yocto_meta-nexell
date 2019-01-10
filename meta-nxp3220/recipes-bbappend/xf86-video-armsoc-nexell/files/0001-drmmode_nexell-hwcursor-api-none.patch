@@ -1,0 +1,13 @@
+diff --git a/src/drmmode_nexell/drmmode_nexell.c b/src/drmmode_nexell/drmmode_nexell.c
+index 52a612a..b7f48b5 100644
+--- a/src/drmmode_nexell/drmmode_nexell.c
++++ b/src/drmmode_nexell/drmmode_nexell.c
+@@ -127,7 +127,7 @@ struct drmmode_interface nexell_interface = {
+ 	CURSORW               /* cursor width */,
+ 	CURSORH               /* cursor_height */,
+ 	CURSORPAD             /* cursor padding */,
+-	HWCURSOR_API_PLANE    /* cursor_api */,
++	HWCURSOR_API_NONE     /* cursor_api */,
+ 	init_plane_for_cursor /* init_plane_for_cursor */,
+ 	0                     /* vblank_query_supported */,
+ 	create_custom_gem     /* create_custom_gem */,
