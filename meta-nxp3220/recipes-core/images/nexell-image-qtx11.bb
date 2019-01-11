@@ -35,6 +35,7 @@ PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-x11 \
     packagegroup-nxp3220-qt5.6 \
     packagegroup-nxp3220-gstreamer \
+    packagegroup-nxp3220-libs \
 "
 
 IMAGE_INSTALL_append = " \
