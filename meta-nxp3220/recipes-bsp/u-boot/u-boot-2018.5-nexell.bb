@@ -63,7 +63,7 @@ do_compile_append() {
 do_deploy_append () {
 	${BINGEN} -n ${NSIH} -i ${B}/${UBOOT_BIN} \
 		-b ${BOOTKEY} -u ${USERKEY} \
-		-k bl33 -l ${UBOOT_TEXTBASE} -s ${UBOOT_TEXTBASE} -t;
+		-k bl33 -l ${UBOOT_LOADADDR} -s ${UBOOT_LOADADDR} -t;
 	install -m 0644 ${B}/${UBOOT_BIN}.* ${DEPLOYDIR}
 
 	if [ -f ${B}/params_env.txt ]; then

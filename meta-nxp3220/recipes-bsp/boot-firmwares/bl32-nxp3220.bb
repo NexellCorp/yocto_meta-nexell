@@ -32,9 +32,9 @@ do_deploy () {
 	${AESCBC} -n ${DEPLOYDIR}/${BL32_BIN} \
 		-k $(cat ${AESKEY}) -v $(cat ${AESVECTOR}) -m enc -b 128;
 	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BL32_BIN}.enc \
-		-b ${BOOTKEY} -u ${USERKEY} -k bl32 -l 0x5F000000 -s 0x5F000000 -t;
+		-b ${BOOTKEY} -u ${USERKEY} -k bl32 -l ${BL32_LOADADDR} -s ${BL32_LOADADDR} -t;
 	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BL32_BIN} \
-		-b ${BOOTKEY} -u ${USERKEY} -k bl32 -l 0x5F000000 -s 0x5F000000 -t
+		-b ${BOOTKEY} -u ${USERKEY} -k bl32 -l ${BL32_LOADADDR} -s ${BL32_LOADADDR} -t
 }
 addtask deploy before do_build after do_compile
 

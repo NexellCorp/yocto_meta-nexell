@@ -5,7 +5,7 @@
 UBOOT_NSIH ?= "nsih_uboot.txt"
 UBOOT_BOOTKEY ?= "bootkey"
 UBOOT_USERKEY ?= "userkey"
-UBOOT_TEXTBASE ?= "0x43c00000"
+UBOOT_LOADADDR ?= "0x43c00000"
 
 # for BL2
 BL2_CHIP ?= "nxp3220"
@@ -21,6 +21,7 @@ BL32_BOOTKEY ?= "bootkey"
 BL32_USERKEY ?= "userkey"
 BL32_AESKEY ?= "aeskey.txt"
 BL32_VECTOR ?= "aesvector.txt"
+BL32_LOADADDR ?= "0x5F000000"
 
 # for disk partition image
 PART_BOOT_LABEL ?= "boot"
