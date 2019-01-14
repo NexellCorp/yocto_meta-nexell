@@ -4,8 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
 SRCREV = "012a0a25ca79de075f68a24105c1cf1a3c5127c4"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-video-api;protocol=git;branch=nexell \
-          "
+SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-video-api;protocol=git;branch=nexell"
 
 S = "${WORKDIR}/git"
 
@@ -14,7 +13,7 @@ PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base glib-2.0 libdrm-nx "
+DEPENDS = "libdrm-nx"
 
 inherit autotools
 
