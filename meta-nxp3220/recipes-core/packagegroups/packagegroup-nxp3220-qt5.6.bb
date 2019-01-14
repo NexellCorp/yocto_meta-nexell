@@ -14,6 +14,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 PACKAGE_QT5_6_ESSENTIAL = " \
+    qtbase \
     qtscript \
     qtquick1 \
     qtquick1-plugins \
