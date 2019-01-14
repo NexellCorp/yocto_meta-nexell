@@ -14,7 +14,11 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 PACKAGE_NEXELL_LIBS = " \
+    nx-v4l2 \
     nx-video-api \
+    nx-gst-meta \
+    gst-plugins-video-dec \
+    gst-plugins-video-sink \
 "
 
 RDEPENDS_${PN} = " \
