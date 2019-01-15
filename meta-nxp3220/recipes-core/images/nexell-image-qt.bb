@@ -1,5 +1,7 @@
 inherit core-image
 inherit nexell-rootfs
+inherit nexell-rootfs-qt
+
 include classes/nexell_rootfsimg.inc
 include classes/nexell_dataimg.inc
 
@@ -42,4 +44,5 @@ IMAGE_INSTALL_append = " \
     ${PACAKGEGROUPS_INSTALL} \
     ${MULTIMEDIA_INSTALL} \
     ${UTILS_INSTALL} \
+    nexell-qt5-touchsetup \
 "
