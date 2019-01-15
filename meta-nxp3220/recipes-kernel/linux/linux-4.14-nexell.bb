@@ -25,6 +25,26 @@ do_configure_prepend() {
 	make distclean
 }
 
+# symblolic link work-shared/<machine>/kernel-source
+python do_symlink_staging_dir () {
+    s = d.getVar("S")
+    if s[-1] == '/':
+        # drop trailing slash, so that os.symlink(kernsrc, s) doesn't use s as directory name and fail
+        s=s[:-1]
+    kernsrc = d.getVar("STAGING_KERNEL_DIR")
+    if s != kernsrc:
+        bb.utils.mkdirhier(kernsrc)
+        bb.utils.remove(kernsrc, recurse=True)
+        if d.getVar("EXTERNALSRC"):
+            # With EXTERNALSRC S will not be wiped so we can symlink to it
+            os.symlink(s, kernsrc)
+        else:
+            import shutil
+            shutil.move(s, kernsrc)
+            os.symlink(kernsrc, s)
+}
+addtask do_symlink_staging_dir after do_unpack before do_patch do_configure
+
 # make boot.img
 inherit classes/nexell-mkimage.bbclass
 do_deploy_append () {
@@ -32,6 +52,5 @@ do_deploy_append () {
 }
 
 # not execute tasks
-#INITRAMFS_IMAGE = ""
 do_bundle_initramfs[noexec] = "1"
 do_rootfs[noexec] = "1"
