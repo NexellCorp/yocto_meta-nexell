@@ -1,6 +1,10 @@
 FILESEXTRAPATHS_append := ":${THISDIR}/files"
 
 SRC_URI += " \
+	file://adbd-property_get-ro-secure-disable.patch \
+"
+
+SRC_URI += " \
 	file://android-tools-adbd.service \
 	file://start_adbd.sh \
 	file://stop_adbd.sh \
