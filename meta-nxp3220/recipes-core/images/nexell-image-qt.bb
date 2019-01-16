@@ -20,15 +20,30 @@ SYSTEMD_INSTALL = " \
 UTILS_INSTALL = " \
     android-tools \
     udev-extraconf \
-    libdrm \
     libdrm-tests \
-    tinyalsa \
     strace \
+    openssl \
+    curl \
+    procps \
+    net-tools \
+    tzdata \
+    bash \
+"
+LIBS_INSTALL = " \
+    libdrm \
     dbus \
+    libpcre \
+    libpcreposix \
+    id3lib \
+    libid3tag \
+    libjpeg-turbo \
+    icu \
 "
 
 MULTIMEDIA_INSTALL = " \
+    tinyalsa \
     ffmpeg \
+    v4l-utils \
 "
 
 PACAKGEGROUPS_INSTALL = " \
@@ -37,6 +52,12 @@ PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-qt5.6 \
     packagegroup-nxp3220-gstreamer \
     packagegroup-nxp3220-libs \
+    packagegroup-nxp3220-qt-utils \
+"
+
+NEXELL_CUSTOMIZE_INSTALL = " \
+    nexell-qt5-touchsetup \
+    user-fonts \
 "
 
 IMAGE_INSTALL_append = " \
@@ -44,5 +65,6 @@ IMAGE_INSTALL_append = " \
     ${PACAKGEGROUPS_INSTALL} \
     ${MULTIMEDIA_INSTALL} \
     ${UTILS_INSTALL} \
-    nexell-qt5-touchsetup \
+    ${LIBS_INSTALL} \
+    ${NEXELL_CUSTOMIZE_INSTALL} \
 "
