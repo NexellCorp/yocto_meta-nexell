@@ -50,6 +50,30 @@
     },
     {
       "key": {
+        "uuid": "4578dd85_43d15dd1",
+        "filename": "meta-nxp3220/recipes-core/images/nexell-image-qt.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-16T03:38:23Z",
+      "side": 1,
+      "message": "please re-oreder like:\n-----------------------------------\nNEXELL_CUSTOMIZE_INSTALL \u003d \" \\\n    nexell-qt5-touchsetup \\\n    user-fonts \\\n\"\n\nIMAGE_INSTALL_append \u003d \" \\\n    ${SYSTEMD_INSTALL} \\\n    ${PACAKGEGROUPS_INSTALL} \\\n    ${MULTIMEDIA_INSTALL} \\\n    ${UTILS_INSTALL} \\\n    ${LIBS_INSTALL} \\\n    ${NEXELL_CUSTOMIZE_INSTALL} \\\n\"\n-----------------------------------",
+      "parentUuid": "1ddcea6b_cb3cad78",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 1
+      },
+      "revId": "b53cc2b4ca3ad9895783ddebed656114bf812692",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec26d197_2dbace90",
         "filename": "meta-nxp3220/recipes-core/packagegroups/packagegroup-nxp3220-qt5.6.bb",
         "patchSetId": 1
