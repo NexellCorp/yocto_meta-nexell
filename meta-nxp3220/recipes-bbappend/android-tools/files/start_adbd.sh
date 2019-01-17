@@ -45,7 +45,7 @@ mkdir -p /dev/usb-ffs/adb
 mount -o uid=2000,gid=2000 -t functionfs adb /dev/usb-ffs/adb
 
 adbd &
-sleep 2
+sleep 1
 
 #
 # Bring up USB (RESET)
