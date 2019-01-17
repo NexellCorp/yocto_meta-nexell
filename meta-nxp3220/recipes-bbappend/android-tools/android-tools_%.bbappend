@@ -2,6 +2,8 @@ FILESEXTRAPATHS_append := ":${THISDIR}/files"
 
 SRC_URI += " \
 	file://adbd-property_get-ro-secure-disable.patch \
+	file://adbd-support-reboot-service.patch \
+	file://adbd.mk;subdir=${BPN} \
 "
 
 SRC_URI += " \
