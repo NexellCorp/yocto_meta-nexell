@@ -1,0 +1,29 @@
+diff --git a/system/core/adb/services.c b/system/core/adb/services.c
+index 21b08dc201..7bbf3b0ca7 100644
+--- a/system/core/adb/services.c
++++ b/system/core/adb/services.c
+@@ -135,7 +135,11 @@ void reboot_service(int fd, void *arg)
+     }
+     // Don't return early. Give the reboot command time to take effect
+     // to avoid messing up scripts which do "adb reboot && adb wait-for-device"
+-    while(1) { pause(); }
++    ret = android_reboot(ANDROID_RB_RESTART2, 0, (char *) arg);
++    if (ret < 0) {
++        snprintf(buf, sizeof(buf), "reboot failed: %s\n", strerror(errno));
++        writex(fd, buf, strlen(buf));
++    }
+ cleanup:
+     free(arg);
+     adb_close(fd);
+diff --git a/system/core/libcutils/android_reboot.c b/system/core/libcutils/android_reboot.c
+index 5d982958d6..1d75a5fac1 100644
+--- a/system/core/libcutils/android_reboot.c
++++ b/system/core/libcutils/android_reboot.c
+@@ -22,6 +22,7 @@
+ #include <fcntl.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <linux/reboot.h>
+ 
+ #include <cutils/android_reboot.h>
+ 
