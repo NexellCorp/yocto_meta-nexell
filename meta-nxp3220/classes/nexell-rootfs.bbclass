@@ -2,8 +2,6 @@ postprocess_rootfs() {
     cd ${IMAGE_ROOTFS}
 
     ln -sf bin/busybox linuxrc
-    rm -rf run
-    ln -sf tmp run
 
     # ---bootscript.sh create---
     echo "#!/bin/sh" > ./etc/bootscript.sh
