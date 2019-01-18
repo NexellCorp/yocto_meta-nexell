@@ -20,7 +20,6 @@ PACKAGE_NEXELL_LIBS = " \
     gst-plugins-video-dec \
     gst-plugins-video-sink \
 "
-
 RDEPENDS_${PN} = " \
     ${PACKAGE_NEXELL_LIBS} \
 "
