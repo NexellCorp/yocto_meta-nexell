@@ -21,6 +21,11 @@ PACKAGE_NEXELL_LIBS = " \
     gst-plugins-video-sink \
 "
 
+PACKAGE_COMMON_LIBS = " \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'append-sdk', 'libpng-dev', '', d)} \
+"
+
 RDEPENDS_${PN} = " \
     ${PACKAGE_NEXELL_LIBS} \
+    ${PACKAGE_COMMON_LIBS} \
 "
