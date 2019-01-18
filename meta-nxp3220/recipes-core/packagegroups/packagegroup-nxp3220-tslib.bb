@@ -14,10 +14,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 PACKAGE_TSLIB = " \
-     tslib \
-     tslib-conf \
-     tslib-tests \
-     tslib-calibrate \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', '', 'tslib tslib-conf tslib-tests tslib-calibrate tslib-nexell', d)} \
 "
 
 RDEPENDS_${PN} = " \
