@@ -1,6 +1,7 @@
 inherit core-image
 inherit nexell-rootfs
 inherit nexell-rootfs-qt
+inherit ${@bb.utils.contains('DISTRO_FEATURES', 'append-sdk', 'populate_sdk_qt5', '', d)}
 
 include classes/nexell_rootfsimg.inc
 include classes/nexell_dataimg.inc
@@ -38,6 +39,7 @@ LIBS_INSTALL = " \
     libid3tag \
     libjpeg-turbo \
     icu \
+    libpng \
 "
 
 MULTIMEDIA_INSTALL = " \
