@@ -32,3 +32,6 @@ PART_ROOTFS_SIZE ?= "50M"
 
 PART_DATA_LABEL ?= "data"
 PART_DATA_SIZE ?= "200M"
+
+# for bluethooth
+BSA_SERVICE_COMMAND ?= "/usr/bin/bsa_server -d /dev/ttyS0 -p /etc/bluetooth/BCM434545.hcd -all=0"
