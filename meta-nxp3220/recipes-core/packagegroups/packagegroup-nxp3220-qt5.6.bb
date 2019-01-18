@@ -16,12 +16,29 @@ inherit packagegroup
 PACKAGE_QT5_6_ESSENTIAL = " \
     qtbase \
     qtbase-plugins \
+    qtconnectivity \
+    qtdeclarative \
+    qtdeclarative-plugins \
+    qtenginio \
+    qtimageformats \
+    qtimageformats-plugins \
     qtlocation \
     qtlocation-plugins \
+    qtmultimedia \
     qtmultimedia-plugins \
     qtscript \
+    qtsensors \
+    qtsensors-plugins \
+    qtserialport \
+    qtsvg \
+    qtsvg-plugins \
+    qtsystems \
     qtquick1 \
     qtquick1-plugins \
+    qtwebkit \
+    qtwebsockets \
+    qtwebchannel \
+    qtxmlpatterns \
 "
 
 RDEPENDS_${PN} = " \
