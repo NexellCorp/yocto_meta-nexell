@@ -8,7 +8,8 @@ SRC_URI = " \
 "
 
 TS_POINTERCAL = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'pointercal-daudio_ref', \
-                bb.utils.contains('DISTRO_FEATURES', 'nexell-navi-ref', 'pointercal-navi_ref', 'not_supported', d), d)}"
+                bb.utils.contains('DISTRO_FEATURES', 'nexell-navi-ref', 'pointercal-navi_ref', \
+                bb.utils.contains('DISTRO_FEATURES', 'nexell-nxp3220-evb', 'pointercal-nxp3220_evb', 'not_supported', d), d), d)}"
 
 do_install () {
 	install -d ${D}${bindir}
@@ -19,7 +20,7 @@ do_install () {
 	if [ ${TS_POINTERCAL} != "not_supported" ]; then
 	    install -m 0644 ${WORKDIR}/calibration/${TS_POINTERCAL} ${D}${sysconfdir}/pointercal
 	else
-		echo "Can't find supporetd calibration file."
+		echo "Can't find supported calibration file."
 	fi
 }
 
