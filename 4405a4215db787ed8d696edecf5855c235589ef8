@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d13f9fba_f3788c6b",
+        "filename": "meta-nxp3220/recipes-core/images/nexell-image-qt.bb",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-18T07:12:22Z",
+      "side": 1,
+      "message": "this is not need",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 85
+      },
+      "revId": "4405a4215db787ed8d696edecf5855c235589ef8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "edc3bb35_06210760",
+        "filename": "meta-nxp3220/recipes-core/packagegroups/packagegroup-nxp3220-libs.bb",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-18T07:12:22Z",
+      "side": 1,
+      "message": "this is not need",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "4405a4215db787ed8d696edecf5855c235589ef8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "866250c5_ebae0170",
+        "filename": "meta-nxp3220/recipes-core/packagegroups/packagegroup-nxp3220-libs.bb",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-18T07:12:22Z",
+      "side": 1,
+      "message": "this is not need",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 28
+      },
+      "revId": "4405a4215db787ed8d696edecf5855c235589ef8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
