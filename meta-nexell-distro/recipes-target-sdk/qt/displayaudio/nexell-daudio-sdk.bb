@@ -43,9 +43,13 @@ S = "${WORKDIR}/sdk"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
-
 export NX_DAUDIO_ENABLE_BT = "yes"
 export NX_DAUDIO_ENABLE_CAM = "yes"
+
+export alsa_playback = "${NXBT_ALSA_AUDIO_PATH_PLAYBACK}"
+export alsa_capture = "${NXBT_ALSA_AUDIO_PATH_CAPTURE}"
+export alsa_sco_playback = "${NXBT_ALSA_AUDIO_PATH_SCO_PLAYBACK}"
+export alsa_sco_capture  = "${NXBT_ALSA_AUDIO_PATH_SCO_CAPTURE}"
 
 D_SDK_INC += " -I${STAGING_INCDIR}/libxml2 -I${STAGING_INCDIR}/drm"
 
