@@ -41,22 +41,23 @@ NX_QT_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'qtcin
                      bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'qtcinema-launcher', \
                      bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qtsmarthome qt5-smarthome-launcher', '', d), d), d)}"
 
-NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs nexell-qt5.6 support-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
+NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
 
 ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
 NEXELL_CUSTOMIZE_INSTALL = " \
 	${NX_LAUNCHER} \
-	${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio', 'nexell-nxlogrotate nexell-bluetooth', '', d)} \
-	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs nexell-qt5.6 support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
-	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'eglfs-kms', '', d)} \
 	${ALLGO_CONNECTIVITY} \
-	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs nexell-qt5.6 support-daudio support-daudio-sdk support-allgo-connectivity support-carconn-sdk', 'nexell-carconn-sdk', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'eglfs-kms', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'systemd support-daudio', 'nexell-nxlogrotate nexell-bluetooth', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6 support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6 support-daudio support-daudio-sdk support-allgo-connectivity support-carconn-sdk', 'nexell-carconn-sdk', '', d)} \
 	user-fonts \
 	nexell-bootanim \
 	nexell-nxreboot \
 	nexell-qt5-touchsetup \
 "
+
 IMAGE_INSTALL_append = " \
 	kernel-modules \
 	${SYSTEMD_INSTALL} \
@@ -70,7 +71,3 @@ IMAGE_INSTALL_append = " \
 	${ETC_LIBS} \
 	${NEXELL_CUSTOMIZE_INSTALL} \
 "
-
-# pyro -> sumo
-# gcc 6.3.0 -> 7.3.0 update: compile error
-#${@bb.utils.contains('NEXELL_BOARD_SOCNAME', 's5p4418', 'NxAudioPlayer NxQuickRearCam NxVideoPlayer', '', d)}

@@ -2,6 +2,7 @@ inherit linux-nexell-base
 
 DEFAULT_QT_PLATFORM ?= "${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'EGLFS', \
 						bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-wayland', 'WAYLAND', '', d), d)}"
+TSLIB_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', 'false', 'true', d)}"
 
 postprocess_qt_function() {
 	cd ${IMAGE_ROOTFS}
@@ -12,7 +13,7 @@ postprocess_qt_function() {
 		echo "export QT_QPA_EGLFS_SWAPINTERVAL=0" >> usr/bin/nexell-qt5-touchsetup.sh
 		echo "export QT_QPA_EGLFS_HIDECURSOR=0" >> usr/bin/nexell-qt5-touchsetup.sh
 		echo "export QT_QPA_EGLFS_DEBUG=0" >> usr/bin/nexell-qt5-touchsetup.sh
-		if [ "${NEXELL_TOUCH_CLASS}" = "CAPACITIVE" ]; then
+		if [ "${TSLIB_ENABLED}" = "false" ]; then
 			echo "export QT_QPA_EGLFS_NO_LIBINPUT=0" >> usr/bin/nexell-qt5-touchsetup.sh
 			echo "export QT_QPA_EGLFS_TSLIB=0" >> usr/bin/nexell-qt5-touchsetup.sh
 		else
@@ -23,7 +24,7 @@ postprocess_qt_function() {
 		echo "export QT_QPA_PLATFORM=wayland" >> usr/bin/nexell-qt5-touchsetup.sh
 	fi
 
-	if [ "${NEXELL_TOUCH_CLASS}" = "CAPACITIVE" ]; then
+	if [ "${TSLIB_ENABLED}" = "false" ]; then
 		echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/touchscreen0" >> usr/bin/nexell-qt5-touchsetup.sh
 	else
 		echo "export TSLIB_CALIBFILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
