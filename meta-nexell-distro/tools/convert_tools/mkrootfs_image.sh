@@ -20,7 +20,9 @@ mkdir -p $TARGET_DIR/rootfs
 mkfs.ext4 -F -b 4096 -L rootfs $TARGET_DIR/${OUTPUT_NAME}
 sudo mount -o loop $TARGET_DIR/${OUTPUT_NAME} $TARGET_DIR/rootfs
 sudo tar xvzfp $TARGET_DIR/rootfs.tar.gz -C $TARGET_DIR/rootfs
-sudo cp -rp ${EXTRA_ROOTFS}/* $TARGET_DIR/rootfs/
+sudo chown -R 1000:1000 ${EXTRA_ROOTFS}
+sudo chown -R 1000:1000 $TARGET_DIR/rootfs/home/nexell/
+sudo cp -arp ${EXTRA_ROOTFS}/* $TARGET_DIR/rootfs/
 
 sync
 
