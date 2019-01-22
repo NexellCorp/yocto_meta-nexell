@@ -26,12 +26,13 @@ declare -A KERNEL_BIN_NAME
 KERNEL_BIN_NAME["s5p4418"]="zImage"
 KERNEL_BIN_NAME["s5p6818"]="Image"
 
-NEXELL_RELEASE_SERVER_ADDRESS="http://files.nexell.co.kr:8070"
-UBUNTU_IMAGE_LOCATION="/s5p4418/yocto/pyro/ubuntu/rootfs/"
-UBUNTU_CONSOLE_VERSION="ubuntu-rootfs-mini.tar.gz"
-UBUNTU_DESKTOP_VERSION="ubuntu-rootfs-desktop.tar.gz"
+NEXELL_RELEASE_SERVER_ADDRESS="http://192.168.1.25:8070"
+UBUNTU_IMAGE_LOCATION="/s5p4418/yocto/sumo/ubuntu/rootfs/"
+UBUNTU_CONSOLE_VERSION_TRUSTY="ubuntu-rootfs-mini.tar.gz"
+UBUNTU_CONSOLE_VERSION_XENIAL="ubuntu-rootfs-console-xenial.tar.gz"
+UBUNTU_DESKTOP_VERSION_TRUSTY="ubuntu-rootfs-desktop.tar.gz"
 UBUNTU_DESKTOP_LXDE_VERSION="ubuntu-rootfs-desktop-lxde.tar.gz"
-UBUNTU_ROOTFS=${UBUNTU_CONSOLE_VERSION}
+UBUNTU_ROOTFS=${UBUNTU_CONSOLE_VERSION_XENIAL}
 
 function check_usage()
 {
@@ -165,7 +166,11 @@ function copy_rootfs_image()
 
 function copy_partmap_file()
 {
-    cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+    if [ "${IMAGE_TYPE}" == "ubuntu" ]; then
+        cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}_ubuntu.txt ${RESULT_PATH}/partmap_emmc.txt
+    else
+        cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+    fi
 }
 
 function post_process()
