@@ -28,10 +28,10 @@ postprocess_common_function() {
     cp -rp ./etc/rc.local            ${BASE_WORKDIR}/extra-rootfs-support/etc/
     cp -rp ./etc/fstab               ${BASE_WORKDIR}/extra-rootfs-support/etc/
 
-    cp -rp ./usr/lib/libMali.so      ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
-    cp -rp ./usr/lib/libEGL.so       ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
-    cp -rp ./usr/lib/libGLESv1_CM.so ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
-    cp -rp ./usr/lib/libGLESv2.so    ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
+    cp -rp ./usr/lib/nexell/libMali-32-X11.so    ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/libMali.so
+    cp -rp ./usr/lib/libEGL.so                   ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
+    cp -rp ./usr/lib/libGLESv1_CM.so             ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
+    cp -rp ./usr/lib/libGLESv2.so                ${BASE_WORKDIR}/extra-rootfs-support/usr/lib/
 
     cp -a ./usr/bin/start_adbd.sh     ${BASE_WORKDIR}/extra-rootfs-support/usr/bin/
 }
