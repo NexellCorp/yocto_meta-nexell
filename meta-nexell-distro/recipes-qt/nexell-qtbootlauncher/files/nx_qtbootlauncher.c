@@ -57,16 +57,24 @@ static launcher_t launcher_info[] = {
 	{ .s = "POINTERCAL_FILE", },
 #endif
 	{ .s = "QT_QPA_PLATFORM", },
-#ifdef TSLIB
+#if defined (TSLIB) && (EGLFS)
 	{ .s = "QT_QPA_EGLFS_TSLIB", },
+#elif defined (TSLIB) && (LINUXFB)
+	{ .s = "QT_QPA_FB_TSLIB", },
 #endif
 	{ .s = "QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS", },
+#ifdef EGLFS
 	{ .s = "QT_QPA_EGLFS_NO_LIBINPUT", },
 	{ .s = "QT_QPA_EGLFS_KMS_CONFIG", },
 	{ .s = "QT_QPA_EGLFS_SWAPINTERVAL", },
 	{ .s = "QT_QPA_EGLFS_HIDECURSOR", },
+#elif LINUXFB
+	{ .s = "QT_QPA_FB_NO_LIBINPUT", },
+#endif
 	{ .s = "QT_QPA_FONTDIR", },
+#ifdef EGLFS
 	{ .s = "QT_QPA_EGLFS_DEBUG", },
+#endif
 	{ .s = "QT_PLUGIN_PATH", },
 	{ .s = "QT_LOGGING_RULES", }
 };
