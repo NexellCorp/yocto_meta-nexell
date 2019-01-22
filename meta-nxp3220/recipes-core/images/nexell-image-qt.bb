@@ -54,6 +54,7 @@ PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-qt5.6 \
     packagegroup-nxp3220-gstreamer \
     packagegroup-nxp3220-libs \
+    packagegroup-nxp3220-apps \
     packagegroup-nxp3220-qt-utils \
 "
 
