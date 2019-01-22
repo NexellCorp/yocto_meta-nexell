@@ -158,6 +158,10 @@ NEXELL_LIBS = " \
     nx-video-api \
 "
 
+NEXELL_APPS = "\
+    nx-video-api-test \
+"
+
 UTILS_INSTALL = " \
     glibc-utils \
     localedef \
@@ -183,6 +187,7 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.10', '${QT5_10_ESSENTIAL_IMAGES}', '', d)}  \
     ${NEXELL_LIBS} \
+    ${NEXELL_APPS} \
     ${UTILS_INSTALL} \
     ${QT_ALSA_UTILS_IMAGE_INSTALL} \
     ${QT_V4L_UTILS_IMAGE_INSTALL} \
