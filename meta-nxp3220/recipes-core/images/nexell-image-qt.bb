@@ -58,8 +58,9 @@ PACAKGEGROUPS_INSTALL = " \
 "
 
 NEXELL_CUSTOMIZE_INSTALL = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio', 'nexell-nxlogrotate nexell-bluetooth', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio', 'nexell-qtbootlauncher', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd support-daudio', 'nexell-nxlogrotate nexell-bluetooth', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6 support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
     nexell-qt5-touchsetup \
     user-fonts \
 "
