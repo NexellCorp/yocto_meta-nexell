@@ -10,6 +10,8 @@ create_sdk_files() {
     # NEXELL append codes
     echo "export LDFLAGS+=\" --sysroot=\$SDKTARGETSYSROOT \"" >> ${SDK_OUTPUT}/${SDKPATH}/environment-setup-${REAL_MULTIMACH_TARGET_SYS}
     echo "export CFLAGS+=\"${TARGET_CC_ARCH} --sysroot=\$SDKTARGETSYSROOT \"" >> ${SDK_OUTPUT}/${SDKPATH}/environment-setup-${REAL_MULTIMACH_TARGET_SYS}
+
+    echo "export OECORE_SOCNAME=\"${NEXELL_BOARD_SOCNAME}\"" >> ${SDK_OUTPUT}/${SDKPATH}/environment-setup-${REAL_MULTIMACH_TARGET_SYS}
 }
 
 # STAGING_KERNEL_DIR => kernel source path
