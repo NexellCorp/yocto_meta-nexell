@@ -43,6 +43,7 @@ S = "${WORKDIR}/sdk"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
+export OECORE_SOCNAME = "${NEXELL_BOARD_SOCNAME}"
 export NX_DAUDIO_ENABLE_BT = "yes"
 export NX_DAUDIO_ENABLE_CAM = "yes"
 
