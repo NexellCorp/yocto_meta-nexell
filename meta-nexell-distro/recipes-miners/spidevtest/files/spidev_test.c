@@ -35,7 +35,10 @@ static uint32_t mode;
 static uint8_t bits = 8;
 static uint32_t speed = 500000;
 static uint16_t delay;
+static uint16_t delaye = 0;
 static int verbose;
+static int test;
+static int test_cnt = 0;
 
 uint8_t default_tx[] = {
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -65,10 +68,39 @@ static void hex_dump(const void *src, size_t length, size_t line_size, char *pre
 					printf("__ ");
 			}
 			printf(" | ");  /* right close */
-			while (line < address) {
-				c = *line++;
-				printf("%c", (c < 33 || c == 255) ? 0x2E : c);
+//			while (line < address) {
+//				c = *line++;
+//				printf("%c", (c < 33 || c == 255) ? 0x2E : c);
+//			}
+			printf("\n");
+			if (length > 0)
+				printf("%s | ", prefix);
+		}
+	}
+}
+
+static void hex_dump_inv(const void *src, size_t length, size_t line_size, char *prefix)
+{
+	int i = 0;
+	const unsigned char *address = src;
+	const unsigned char *line = address;
+	unsigned char c;
+
+	printf("%s | ", prefix);
+	while (length-- > 0) {
+		c = *address++;
+		c ^= 0xff;
+		printf("%02X ", c);
+		if (!(++i % line_size) || (length == 0 && i % line_size)) {
+			if (length == 0) {
+				while (i++ % line_size)
+					printf("__ ");
 			}
+			printf(" | ");  /* right close */
+//			while (line < address) {
+//				c = *line++;
+//				printf("%c", (c < 33 || c == 255) ? 0x2E : c);
+//			}
 			printf("\n");
 			if (length > 0)
 				printf("%s | ", prefix);
@@ -129,15 +161,75 @@ static void transfer(int fd, uint8_t const *tx, uint8_t const *rx, size_t len)
 			tr.tx_buf = 0;
 	}
 
-	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
-	if (ret < 1) {
-		printf("ret = %d\n", ret);
-		pabort("can't send spi message");
+	if(test&1) {
+		while(ret > 0) {
+			if(test&2)
+				system("echo 1 > /sys/class/gpio/gpio20/value");
+			ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+			if(test&2)
+				system("echo 0 > /sys/class/gpio/gpio20/value");
+			test_cnt++;
+
+			if (ret < 1) {
+				printf("ret = %d\n", ret);
+				if(test)
+					printf("test_cnt = %d\n", test_cnt);
+				if(delaye) {
+					close(fd);
+					printf("sleep %d seconds\n", delaye);
+					sleep(delaye);
+					fd = open(device, O_RDWR);
+
+					ret = ioctl(fd, SPI_IOC_WR_MODE32, &mode);
+					if (ret == -1)
+						pabort("can't set spi mode");
+
+					ret = ioctl(fd, SPI_IOC_RD_MODE32, &mode);
+					if (ret == -1)
+						pabort("can't get spi mode");
+
+					/*
+					 * bits per word
+					 */
+					ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
+					if (ret == -1)
+						pabort("can't set bits per word");
+
+					ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
+					if (ret == -1)
+						pabort("can't get bits per word");
+
+					/*
+					 * max speed hz
+					 */
+					ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
+					if (ret == -1)
+						pabort("can't set max speed hz");
+
+					ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
+					if (ret == -1)
+						pabort("can't get max speed hz");
+
+					ret = 1;
+					test_cnt = 0;
+				}
+				else
+					pabort("can't send spi message");
+			}
+		}
+	}
+	else {
+		ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+		if (ret < 1) {
+			printf("ret = %d\n", ret);
+			pabort("can't send spi message");
+		}
 	}
 
-	if (verbose)
+	if (verbose) {
 		hex_dump(tx, len, 32, "TX");
-	hex_dump(rx, len, 32, "RX");
+	hex_dump_inv(rx, len, 32, "RX");
+	}
 }
 
 static void print_usage(const char *prog)
@@ -169,6 +261,7 @@ static void parse_opts(int argc, char *argv[])
 			{ "device",  1, 0, 'D' },
 			{ "speed",   1, 0, 's' },
 			{ "delay",   1, 0, 'd' },
+			{ "delaye",  1, 0, 'x' },
 			{ "bpw",     1, 0, 'b' },
 			{ "loop",    0, 0, 'l' },
 			{ "cpha",    0, 0, 'H' },
@@ -180,12 +273,14 @@ static void parse_opts(int argc, char *argv[])
 			{ "ready",   0, 0, 'R' },
 			{ "dual",    0, 0, '2' },
 			{ "verbose", 0, 0, 'v' },
+			{ "test",    0, 0, 't' },
+			{ "TEST",    0, 0, 'T' },
 			{ "quad",    0, 0, '4' },
 			{ NULL, 0, 0, 0 },
 		};
 		int c;
 
-		c = getopt_long(argc, argv, "D:s:d:b:lHOLC3NR24p:v", lopts, NULL);
+		c = getopt_long(argc, argv, "D:s:d:b:x:lHOLC3NR24p:vtT", lopts, NULL);
 
 		if (c == -1)
 			break;
@@ -202,6 +297,9 @@ static void parse_opts(int argc, char *argv[])
 			break;
 		case 'b':
 			bits = atoi(optarg);
+			break;
+		case 'x':
+			delaye = atoi(optarg);
 			break;
 		case 'l':
 			mode |= SPI_LOOP;
@@ -226,6 +324,12 @@ static void parse_opts(int argc, char *argv[])
 			break;
 		case 'v':
 			verbose = 1;
+			break;
+		case 't':
+			test |= 1;
+			break;
+		case 'T':
+			test |= 2;
 			break;
 		case 'R':
 			mode |= SPI_READY;
@@ -252,10 +356,10 @@ static void parse_opts(int argc, char *argv[])
 	}
 }
 
+int fd;
 int main(int argc, char *argv[])
 {
 	int ret = 0;
-	int fd;
 	uint8_t *tx;
 	uint8_t *rx;
 	int size;
@@ -299,10 +403,12 @@ int main(int argc, char *argv[])
 	if (ret == -1)
 		pabort("can't get max speed hz");
 
+	if (verbose) {
 	printf("spi mode:  0x%x\n", mode);
 	printf("bits per word: %d\n", bits);
 	printf("max speed: %d Hz (%d KHz)\n", speed, speed/1000);
 /*	printf("cs_change : 1\n");*/
+	}
 
 	if (input_tx) {
 		size = strlen(input_tx+1);
