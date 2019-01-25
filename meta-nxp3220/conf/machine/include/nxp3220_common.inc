@@ -1,8 +1,6 @@
 #@TYPE: Machine
 #@NAME: nxp3220
 
-NEXELL_BOARD_SOCNAME = "nxp3220"
-
 # for u-boot
 UBOOT_NSIH ?= "nsih_uboot.txt"
 UBOOT_BOOTKEY ?= "bootkey"
