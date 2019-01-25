@@ -30,7 +30,7 @@ do_install_append() {
     install -m 0755 ${WORKDIR}/usb2-rules.sh ${D}${sysconfdir}/udev/scripts/
 
     install -d ${D}${sysconfdir}/systemd/network/
-    install -m 0644 ${WORKDIR}/10-eth.network ${D}${sysconfdir}/systemd/network/
+#    install -m 0644 ${WORKDIR}/10-eth.network ${D}${sysconfdir}/systemd/network/
     install -m 0644 ${WORKDIR}/10-eth.network ${D}${sysconfdir}/10-eth.network.factory
     install -m 0644 ${WORKDIR}/30-wlan.network ${D}${sysconfdir}/systemd/network/
     install -m 0644 ${WORKDIR}/60-usb.network ${D}${sysconfdir}/systemd/network/
