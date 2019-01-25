@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "bd73b220_9ec1963f",
+        "filename": "meta-nexell-distro/recipes-extended/nexell-init/files/nx_init/nx_init.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-25T05:28:36Z",
+      "side": 1,
+      "message": "remove not necessary codes",
+      "range": {
+        "startLine": 14,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 72
+      },
+      "revId": "792bcf6c639c75baa0626a685730f492227998ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef3c544f_c7f841a5",
+        "filename": "meta-nexell-distro/recipes-extended/nexell-init/files/nx_init/nx_init.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-25T05:28:36Z",
+      "side": 1,
+      "message": "remove not necessary codes",
+      "range": {
+        "startLine": 29,
+        "startChar": 3,
+        "endLine": 29,
+        "endChar": 112
+      },
+      "revId": "792bcf6c639c75baa0626a685730f492227998ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "326f11d0_7d877f2f",
+        "filename": "meta-nexell-distro/recipes-extended/nexell-init/files/nx_init/nx_init.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-25T05:28:36Z",
+      "side": 1,
+      "message": "remove not necessary codes",
+      "range": {
+        "startLine": 36,
+        "startChar": 3,
+        "endLine": 36,
+        "endChar": 89
+      },
+      "revId": "792bcf6c639c75baa0626a685730f492227998ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "464dd96b_56d960d2",
         "filename": "meta-nexell-distro/recipes-extended/nexell-init/nexell-init.bb",
         "patchSetId": 2
