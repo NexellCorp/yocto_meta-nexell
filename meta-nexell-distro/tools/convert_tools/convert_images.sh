@@ -795,7 +795,7 @@ function make_upgradefw() {
 
 	echo "fw_setenv restore_bootcmd 'setenv bootcmd \"run mmcboot\"'" >> fw/fwup_cmd.sh
 
-	echo "fw_setenv do_fw 'run up_bl1 up_ldr up_sec up_nsc up_prm up_bt up_fs restore_bootcmd clr_fwupenv; saveenv'" >> fw/fwup_cmd.sh
+	echo "fw_setenv do_fw 'run up_bl1; run up_ldr; run up_sec; run up_nsc; run up_prm; run up_bt; run up_fs; run restore_bootcmd; run clr_fwupenv; saveenv'" >> fw/fwup_cmd.sh
 
 	echo "fw_setenv bootcmd 'run do_fw; reset'" >> fw/fwup_cmd.sh
 
