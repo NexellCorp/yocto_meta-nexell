@@ -1,0 +1,6 @@
+<service-group>
+	<name replace-wildcards="yes">%h</name>
+	<service>
+		<type>_miner._tcp</type>
+	</service>
+</service-group>
