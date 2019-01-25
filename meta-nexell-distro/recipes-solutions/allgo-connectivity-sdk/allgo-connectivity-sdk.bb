@@ -1,4 +1,4 @@
-DESCRIPTION = "Nexell carconn SDK"
+DESCRIPTION = "Nexell allgo connectivity SDK"
 HOMEPAGE = "http://www.nexell.co.kr"
 SECTION = "devel"
 LICENSE = "MIT"
@@ -41,7 +41,7 @@ CFLAGS_remove_arm = "-g"
 CXXFLAGS_remove_arm = "-g"
 
 do_install() {
-	echo "Installing carconn SDK..."
+	echo "Installing allgo connectivity SDK..."
 
 	install -d ${D}${sysconfdir}
 	install -d ${D}${libdir}
