@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <sys/mount.h>
+
+int main(int argc, char *argv[])
+{
+	pid_t pid;
+	int status;
+
+	mount("sysfs", "/sys", "sysfs", 0, NULL);
+
+	pid = fork();
+
+	switch(pid)
+	{
+		case -1:
+		{
+			printf("fail create child process \n");
+			return -1;
+		}
+
+		case 0:
+		{
+			execl("/sbin/NxQuickRearCam", "NxQuickRearCam", "-m1", "-b1", "-c26", "-r960x480", NULL);
+			break;
+		}
+
+		default:
+		{
+			execl("/lib/systemd/systemd","systemd", NULL);
+			break;
+		}
+	}
+
+	waitpid(pid, &status, 0);
+
+	return 0;
+}
