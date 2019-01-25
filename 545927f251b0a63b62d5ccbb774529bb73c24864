@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ef4c34c_7a2cc919",
+        "filename": "meta-nexell-distro/recipes-extended/nexell-init/files/nx_init/nx_init.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-25T08:28:02Z",
+      "side": 1,
+      "message": "check file status : use \"access\" or \"stat\" function",
+      "range": {
+        "startLine": 27,
+        "startChar": 2,
+        "endLine": 27,
+        "endChar": 3
+      },
+      "revId": "545927f251b0a63b62d5ccbb774529bb73c24864",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "070148b4_9ae7a8c2",
+        "filename": "meta-nexell-distro/recipes-extended/nexell-init/nexell-init.bb",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-25T08:28:02Z",
+      "side": 1,
+      "message": "check file status:\nEX\u003e if [ -f ${S}/NxQuickRearCam_not_strip ]; then\n           install -m 0755 ${S}/NxQuickRearCam_not_strip ${D}${base_sbindir}/NxQuickRearCam\n     fi",
+      "range": {
+        "startLine": 22,
+        "startChar": 18,
+        "endLine": 22,
+        "endChar": 46
+      },
+      "revId": "545927f251b0a63b62d5ccbb774529bb73c24864",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
