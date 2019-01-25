@@ -1,48 +1,53 @@
 #!/bin/sh -e
 #set -x
 
-create_default_conf_file()
-{
-(
-cat <<'EOF'
-{
-"pools" : [
-{
-"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker1",
-"pass" : "123"
-},
-{
-"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker1",
-"pass" : "123"
-},
-{
-"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker1",
-"pass" : "123"
-}
-]
-,
-"api-listen" : true,
-"api-network" : true,
-"api-allow" : "W:0/0",
-"miner-freq": "18:218.75:1106",
-"miner-voltage": "0725"
-}
+#create_default_conf_file()
+#{
+#(
+#cat <<'EOF'
+#{
+#"pools" : [
+#{
+#"url" : "stratum+tcp://hansandopool.com:3333",
+#"user" : "12ships_DaeJeon.macxxxxxx",
+#"pass" : "x"
+#},
+#{
+#"url" : "stratum+tcp://hansandopool.com:3333",
+#"user" : "12ships_DaeJeon.macxxxxxx",
+#"pass" : "x"
+#}
+#]
+#,
+#"api-listen" : true,
+#"api-network" : true,
+#"api-allow" : "W:0/0",
+#"temp-cutoff" : 100,
+#"tsb1101-volt": "400"
+#}
+#
+#EOF
+#) > /etc/cgminer.conf.factory
+#}
+#
+#if [ ! -f /config/cgminer.conf ] ; then
+#    if [ ! -f /etc/cgminer.conf.factory ] ; then
+#		create_default_conf_file
+#		MACAD=$(cat /sys/class/net/eth0/address | tr -d : | tr 'a-z' 'A-Z')
+#		sed -i -e 's/macxxxxxx/'"$MACAD"'/g' /etc/cgminer.conf.factory
+#    fi
+#	cp /etc/cgminer.conf.factory /config/cgminer.conf
+#fi
 
-EOF
-) > /config/cgminer.conf
-}
-
-if [ ! -f /config/cgminer.conf ] ; then
-    if [ -f /config/cgminer.conf.factory ] ; then
-		cp /config/cgminer.conf.factory /config/cgminer.conf
-    else
-		create_default_conf_file
-		cp /config/cgminer.conf /config/cgminer.conf.factory
-    fi
-fi
+TIMEOUT_CGMINER_CONF=0
+while [ ! -f /config/cgminer.conf ]
+do
+	TIMEOUT_CGMINER_CONF=$((TIMEOUT_CGMINER_CONF+1))
+	if [ $TIMEOUT_CGMINER_CONF -lt 100 ]; then
+		/usr/bin/logger -p local0.error "no /config/cgminer.conf (reported by minerConfiguration.cgi)"
+	fi
+	sleep 1
+done
 
 nexell_result=`cat /config/cgminer.conf`
 

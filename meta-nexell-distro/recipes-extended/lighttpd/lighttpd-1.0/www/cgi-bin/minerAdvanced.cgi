@@ -1,47 +1,53 @@
 #!/bin/sh -e
 #set -x
 
-create_default_conf_file()
-{
-(
-cat <<'EOF'
-{
-"pools" : [
-{
-"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker1",
-"pass" : "x"
-},
-{
-"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker2",
-"pass" : "x"
-},
-{
-"url" : "stratum+tcp://sg.stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker3",
-"pass" : "x"
-}
-]
-,
-"api-listen" : true,
-"api-network" : true,
-"api-allow" : "W:0/0",
-"temp-cutoff" : 100,
-"tsb1101-volt": "400"
-}
+#create_default_conf_file()
+#{
+#(
+#cat <<'EOF'
+#{
+#"pools" : [
+#{
+#"url" : "stratum+tcp://hansandopool.com:3333",
+#"user" : "12ships_DaeJeon.macxxxxxx",
+#"pass" : "x"
+#},
+#{
+#"url" : "stratum+tcp://hansandopool.com:3333",
+#"user" : "12ships_DaeJeon.macxxxxxx",
+#"pass" : "x"
+#}
+#]
+#,
+#"api-listen" : true,
+#"api-network" : true,
+#"api-allow" : "W:0/0",
+#"temp-cutoff" : 100,
+#"tsb1101-volt": "400"
+#}
+#
+#EOF
+#) > /etc/cgminer.conf.factory
+#}
+#
+#if [ ! -f /config/cgminer.conf ] ; then
+#    if [ ! -f /etc/cgminer.conf.factory ] ; then
+#		create_default_conf_file
+#		MACAD=$(cat /sys/class/net/eth0/address | tr -d : | tr 'a-z' 'A-Z')
+#		sed -i -e 's/macxxxxxx/'"$MACAD"'/g' /etc/cgminer.conf.factory
+#    fi
+#	cp /etc/cgminer.conf.factory /config/cgminer.conf
+#fi
 
-EOF
-) > /config/cgminer.conf
-}
-
-if [ ! -f /config/cgminer.conf ] ; then
-    if [ -f /config/cgminer.conf.factory ] ; then
-		cp /config/cgminer.conf.factory /config/cgminer.conf
-    else
-		create_default_conf_file
-    fi
-fi
+TIMEOUT_CGMINER_CONF=0
+while [ ! -f /config/cgminer.conf ]
+do
+	TIMEOUT_CGMINER_CONF=$((TIMEOUT_CGMINER_CONF+1))
+	if [ $TIMEOUT_CGMINER_CONF -lt 100 ]; then
+		/usr/bin/logger -p local0.error "no /config/cgminer.conf (reported by minerAdvanced.cgi)"
+	fi
+	sleep 1
+done
 
 nexell_result=`cat /config/cgminer.conf`
 
@@ -81,15 +87,15 @@ function f_get_miner_conf() {
 	}
 }
 function f_submit_miner_conf() {
-	_nexell_pool1url = "stratum+tcp://sg.stratum.slushpool.com:3333";
-	_nexell_pool1user = "maekdal.bcworker1";
-	_nexell_pool1pw = "123";
-	_nexell_pool2url = "stratum+tcp://sg.stratum.slushpool.com:3333";
-	_nexell_pool2user = "maekdal.bcworker2";
-	_nexell_pool2pw = "123";
-	_nexell_pool3url = "stratum+tcp://sg.stratum.slushpool.com:3333";
-	_nexell_pool3user = "maekdal.bcworker3";
-	_nexell_pool3pw = "123";
+	_nexell_pool1url = "stratum+tcp://hansandopool.com:3333",
+	_nexell_pool1user = "12ships_DaeJeon.macxxxxxx";
+	_nexell_pool1pw = "x";
+	_nexell_pool2url = "stratum+tcp://hansandopool.com:3333",
+	_nexell_pool2user = "12ships_DaeJeon.macxxxxxx";
+	_nexell_pool2pw = "x";
+	_nexell_pool3url = "";
+	_nexell_pool3user = "";
+	_nexell_pool3pw = "";
 	_nexell_nobeeper = "false";
 	_nexell_notempoverctrl = "false";
 	try

@@ -11,6 +11,8 @@
 # ^M    <--------- extra empty line
 # -----------------------------29995809218093749221856446032--^M
 
+systemctl stop cgminer
+
 file=/config/$$
 
 trap atexit 0
