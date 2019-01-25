@@ -8,6 +8,9 @@ SRC_URI_append = " \
 		   file://cgminer.conf.factory \
 		   file://cgminer.sh \
 		   file://checkminerfs.sh \
+		   file://set_autoip.sh \
+		   file://set_reqip.sh \
+		   file://checkminerfs.sh \
 		   file://checkminerfs.service \
 		   file://cgminer.service \
 "
@@ -44,4 +47,6 @@ do_install_append() {
 	install -m 0400 ${WORKDIR}/cgminer.conf.factory ${D}/config/cgminer.conf
 	install -d ${D}${sysconfdir}
 	install -m 0400 ${WORKDIR}/cgminer.conf.factory ${D}${sysconfdir}
+	install -m 0755 ${WORKDIR}/set_autoip.sh ${D}${sysconfdir}
+	install -m 0755 ${WORKDIR}/set_reqip.sh ${D}${sysconfdir}
 }
