@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e878ac5_7b42ce82",
+        "filename": "meta-nxp3220/conf/machine/nxp3220-evb.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-25T02:20:42Z",
+      "side": 1,
+      "message": "if fixed for nxp3220, move to nxp3220_common.inc",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 32
+      },
+      "revId": "932a96200e0aebb16628fc9da25711d61db6f2dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
