@@ -37,9 +37,13 @@ NAVI_REF_WIFI_INSTALL = " \
 IMAGE_INSTALL_append = " \
     tzdata \
     watchevent \
+	avahi \
+	avahi-autoipd \
+	avahi-utils \
     net-tools \
     spidevtest \
 	e2fsprogs	\
+	nfs-utils \
 	cronie \
     ${WEB_INSTALL} \
     ${CGMINER_INSTALL} \
