@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "464dd96b_56d960d2",
+        "filename": "meta-nexell-distro/recipes-extended/nexell-init/nexell-init.bb",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-01-25T04:47:46Z",
+      "side": 1,
+      "message": "this binary is also available on nxp3220?",
+      "range": {
+        "startLine": 22,
+        "startChar": 22,
+        "endLine": 22,
+        "endChar": 46
+      },
+      "revId": "792bcf6c639c75baa0626a685730f492227998ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
