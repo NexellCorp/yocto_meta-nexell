@@ -1,25 +1,20 @@
 {
 "pools" : [
 {
-"url" : "stratum+tcp://stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker1",
-"pass" : "123"
+"url" : "stratum+tcp://hansandopool.com:3333",
+"user" : "12ships_DaeJeon.macxxxxxx",
+"pass" : "x"
 },
 {
-"url" : "stratum+tcp://stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker2",
-"pass" : "123"
-},
-{
-"url" : "stratum+tcp://stratum.slushpool.com:3333",
-"user" : "maekdal.bcworker3",
-"pass" : "123"
+"url" : "stratum+tcp://hansandopool.com:3333",
+"user" : "12ships_DaeJeon.macxxxxxx",
+"pass" : "x"
 }
 ]
 ,
 "api-listen" : true,
 "api-network" : true,
 "api-allow" : "W:0/0",
-"miner-freq" : "16:250:0982",
-"miner-voltage" : "0760"
+"temp-cutoff" : 100,
+"tsb1101-volt": "400"
 }
