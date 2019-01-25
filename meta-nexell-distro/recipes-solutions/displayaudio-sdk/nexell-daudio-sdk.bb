@@ -1,4 +1,4 @@
-DESCRIPTION = "Nexell carconn SDK"
+DESCRIPTION = "Nexell daudio SDK"
 HOMEPAGE = "http://www.nexell.co.kr"
 SECTION = "devel"
 LICENSE = "MIT"
@@ -9,60 +9,72 @@ SRC_URI = " \
 "
 
 DEPENDS = " \
-	common-api-c++-dbus \
-	common-api-c++ \
+	nx-drm-allocator \
+	nx-video-api \
+	nx-scaler \
+	nx-v4l2 \
+	ffmpeg \
+	id3lib \
+	libid3tag \
+	libjpeg-turbo \
+    icu \
 	qtbase-native \
 	qtmultimedia \
-	json-glib \
 "
 
 RPROVIDES_${PN} = " \
-	nexell-carconn-sdk-dev \
-	libheromanager.so \
-	libQt5WaylandCompositor.so.5 \
-"
-
-RDEPENDS_${PN} = " \
-	bash \
+	nexell-daudio-sdk-dev \
+	libnxbt.so \
+	libnxconfig.so \
+	libnxdaudioutils.so \
+	libnxfilter.so \
+	libnxfilterhelper.so \
+	libnxkeyreceiver.so \
+	libnxmpmanager.so \
+	libnxrearcam.so \
 "
 
 inherit nexell-sdk-qt-env
 
-PV = "1.0.0"
+PV = "1.1.0"
 PR = "r0"
 
 S = "${WORKDIR}/sdk"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
+export NX_DAUDIO_ENABLE_BT = "yes"
+export NX_DAUDIO_ENABLE_CAM = "yes"
 
+export alsa_playback = "${NXBT_ALSA_AUDIO_PATH_PLAYBACK}"
+export alsa_capture = "${NXBT_ALSA_AUDIO_PATH_CAPTURE}"
+export alsa_sco_playback = "${NXBT_ALSA_AUDIO_PATH_SCO_PLAYBACK}"
+export alsa_sco_capture  = "${NXBT_ALSA_AUDIO_PATH_SCO_CAPTURE}"
+
+D_SDK_INC += " -I${STAGING_INCDIR}/libxml2 -I${STAGING_INCDIR}/drm"
+
+CFLAGS_prepend = "${D_SDK_INC}"
 CFLAGS_remove_arm = "-g"
+CXXFLAGS_prepend = "${D_SDK_INC}"
 CXXFLAGS_remove_arm = "-g"
 
 do_install() {
-	echo "Installing carconn SDK..."
+	echo "Installing daudio SDK..."
 
-	install -d ${D}${sysconfdir}
 	install -d ${D}${libdir}
 	install -d ${D}${bindir}
-	install -d ${D}/home/root
 	install -d ${D}/nexell/daudio
 
-	cp -apR ${SDK_RESULT}${sysconfdir}/* ${D}${sysconfdir}/
-	chown -R root:root ${D}${sysconfdir}/
 	cp -apR ${SDK_RESULT}${libdir}/* ${D}${libdir}/
 	chown -R root:root ${D}${libdir}/
 	cp -apR ${SDK_RESULT}${bindir}/* ${D}${bindir}/
 	chown -R root:root ${D}${bindir}/
-	cp -apR ${SDK_RESULT}/home/root/* ${D}/home/root/
-	chmod -R 755 ${D}/home/root/*
-	chown -R root:root ${D}/home/root/*
 	cp -apR ${SDK_RESULT}/nexell/daudio/* ${D}/nexell/daudio/
 	chmod -R 755 ${D}/nexell/daudio/*
 	chown -R root:root ${D}/nexell/daudio/*
 }
 
-FILES_${PN} = "${sysconfdir} ${bindir} ${libdir} home/root nexell/daudio"
+FILES_${PN} = "${bindir} ${libdir} nexell/daudio"
 FILES_${PN}-dev = "${includedir}"
 
 INSANE_SKIP_${PN} = "dev-deps dev-so textrel already-stripped"
