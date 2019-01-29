@@ -5,20 +5,23 @@ LICENSE = "CLOSED"
 inherit deploy
 inherit externalsrc
 
-EXTERNALSRC = "${BSP_ROOT_DIR}/firmwares/binary"
+EXTERNALSRC = "${BL1_SOURCE}"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""
 
-BL1_BIN = "bl1-nxp3220.bin.raw"
 
 do_install() {
+	BIN=${BL1_BIN}
+
 	install -d ${D}/${datadir}/${PN}
-	install -m 0644 ${S}/${BL1_BIN} ${D}/${datadir}/${PN}
+	install -m 0644 ${S}/${BIN} ${D}/${datadir}/${PN}
 }
 
 do_deploy () {
+	BIN=${BL1_BIN}
+
 	install -d ${DEPLOYDIR}
-	install -m 0644 ${S}/${BL1_BIN} ${DEPLOYDIR}
+	install -m 0644 ${S}/${BIN} ${DEPLOYDIR}
 }
 addtask deploy before do_build after do_compile
 
