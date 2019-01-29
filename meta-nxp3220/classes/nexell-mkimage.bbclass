@@ -14,11 +14,13 @@ make_ext4_image() {
 
 PART_BOOT_LABEL ?= "boot"
 PART_BOOT_SIZE ?= ""
+UBOOT_LOGO_BMP ?= ""
 
 make_ext4_bootimg() {
 	S_DIR=$1
 	D_DIR=${DEPLOY_DIR_IMAGE}/boot
 	IMAGE=${DEPLOY_DIR_IMAGE}/boot.img
+	LOGO=${UBOOT_LOGO_BMP}
 
 	if [ -z ${PART_BOOT_SIZE} ]; then
 		echo "WARNING: NOT DEFINED 'PART_BOOT_SIZE'"
@@ -36,6 +38,10 @@ make_ext4_bootimg() {
 	IMGFILE=${S_DIR}/${KERNEL_IMAGETYPE}
 	cp ${IMGFILE} ${D_DIR}
 	cp ${DTBFILE} ${D_DIR}/${KERNEL_DEVICETREE}
+
+	if [ -f ${UBOOT_LOGO_BMP} ]; then
+		install -m 0644 ${LOGO} ${D_DIR};
+	fi
 
 	make_ext4_image ${PART_BOOT_LABEL} ${PART_BOOT_SIZE} ${D_DIR} ${IMAGE}
 }
