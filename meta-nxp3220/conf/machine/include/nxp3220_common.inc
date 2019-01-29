@@ -6,6 +6,7 @@ UBOOT_NSIH ?= "nsih_uboot.txt"
 UBOOT_BOOTKEY ?= "bootkey"
 UBOOT_USERKEY ?= "userkey"
 UBOOT_LOADADDR ?= "0x43c00000"
+UBOOT_LOGO_BMP ?= "${BSP_ROOT_DIR}/tools/files/logo.bmp"
 
 # for BL2
 BL2_CHIP ?= "nxp3220"
