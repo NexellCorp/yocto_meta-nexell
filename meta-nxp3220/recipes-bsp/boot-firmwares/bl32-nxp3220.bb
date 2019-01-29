@@ -5,35 +5,29 @@ LICENSE = "CLOSED"
 inherit deploy
 inherit externalsrc
 
-EXTERNALSRC = "${BSP_ROOT_DIR}/firmwares/bl32-nxp3220"
+EXTERNALSRC = "${BL32_SOURCE}"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""
 
 EXTRA_OEMAKE = "CROSS_COMPILE=${TARGET_PREFIX}"
 PARALLEL_MAKE = "-j 1"
 
-TOOL_DIR = "${BSP_ROOT_DIR}/tools"
-FILE_DIR = "${TOOL_DIR}/files"
-BL32_DIR = "${EXTERNALSRC}"
-
-BINGEN= "${TOOL_DIR}/bin/bingen"
-AESCBC= "${TOOL_DIR}/bin/aescbc_enc"
-
-NSIH = "${BL32_DIR}/reference-nsih/${BL32_NSIH}"
-BOOTKEY = "${FILE_DIR}/${BL32_BOOTKEY}"
-USERKEY = "${FILE_DIR}/${BL32_USERKEY}"
-AESKEY = "${FILE_DIR}/${BL32_AESKEY}"
-AESVECTOR = "${FILE_DIR}/${BL32_VECTOR}"
-
-BL32_BIN = "bl32.bin"
-
 do_deploy () {
-	install -m 0644 ${S}/out/${BL32_BIN} ${DEPLOYDIR};
-	${AESCBC} -n ${DEPLOYDIR}/${BL32_BIN} \
+	NSIH=${BL32_NSIH}
+	BINGEN=${TOOL_BINGEN}
+	AESCBC=${TOOL_BINENC}
+	BOOTKEY=${BL32_BOOTKEY}
+	USERKEY=${BL32_USERKEY}
+	AESKEY=${BL32_AESKEY}
+	AESVECTOR=${BL32_VECTOR}
+	BIN=${BL32_BIN}
+
+	install -m 0644 ${S}/out/${BIN} ${DEPLOYDIR};
+	${AESCBC} -n ${DEPLOYDIR}/${BIN} \
 		-k $(cat ${AESKEY}) -v $(cat ${AESVECTOR}) -m enc -b 128;
-	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BL32_BIN}.enc \
+	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BIN}.enc \
 		-b ${BOOTKEY} -u ${USERKEY} -k bl32 -l ${BL32_LOADADDR} -s ${BL32_LOADADDR} -t;
-	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BL32_BIN} \
+	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BIN} \
 		-b ${BOOTKEY} -u ${USERKEY} -k bl32 -l ${BL32_LOADADDR} -s ${BL32_LOADADDR} -t
 }
 addtask deploy before do_build after do_compile

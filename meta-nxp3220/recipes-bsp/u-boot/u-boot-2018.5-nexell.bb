@@ -26,17 +26,6 @@ do_configure_prepend() {
 	make distclean
 }
 
-ROOT_DIR = "${BSP_ROOT_DIR}"
-TOOL_DIR = "${BSP_ROOT_DIR}/tools"
-FILE_DIR = "${TOOL_DIR}/files"
-
-BINGEN= "${TOOL_DIR}/bin/bingen"
-NSIH = "${FILE_DIR}/${UBOOT_NSIH}"
-BOOTKEY = "${FILE_DIR}/${UBOOT_BOOTKEY}"
-USERKEY = "${FILE_DIR}/${UBOOT_USERKEY}"
-
-UBOOT_BIN = "u-boot.bin"
-
 do_compile_append() {
 	find ./env -name "common.o"
 
@@ -61,10 +50,16 @@ do_compile_append() {
 }
 
 do_deploy_append () {
-	${BINGEN} -n ${NSIH} -i ${B}/${UBOOT_BIN} \
+	NSIH=${UBOOT_NSIH}
+	BINGEN=${TOOL_BINGEN}
+	BIN=${UBOOT_BIN}
+	BOOTKEY=${UBOOT_BOOTKEY}
+	USERKEY=${UBOOT_USERKEY}
+
+	${BINGEN} -n ${NSIH} -i ${B}/${BIN} \
 		-b ${BOOTKEY} -u ${USERKEY} \
 		-k bl33 -l ${UBOOT_LOADADDR} -s ${UBOOT_LOADADDR} -t;
-	install -m 0644 ${B}/${UBOOT_BIN}.* ${DEPLOYDIR}
+	install -m 0644 ${B}/${BIN}.* ${DEPLOYDIR}
 
 	if [ -f ${B}/params_env.txt ]; then
 		install -m 0644 ${B}/params_env.txt ${DEPLOYDIR}
