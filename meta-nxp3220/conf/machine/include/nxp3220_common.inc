@@ -1,6 +1,8 @@
 #@TYPE: Machine
 #@NAME: nxp3220
 
+NEXELL_BOARD_SOCNAME = "nxp3220"
+
 TOOL_BINGEN ?= "${BSP_ROOT_DIR}/tools/bin/bingen"
 TOOL_BINENC ?= "${BSP_ROOT_DIR}/tools/bin/aescbc_enc"
 
@@ -51,8 +53,8 @@ BSA_SERVICE_COMMAND ?= "/usr/bin/bsa_server -d /dev/ttyS0 -p /etc/bluetooth/BCM4
 # for bt alsa audio path
 NXBT_ALSA_AUDIO_PATH_PLAYBACK ?= "plughw:2,0"
 NXBT_ALSA_AUDIO_PATH_CAPTURE ?= "plughw:2,0"
-NXBT_ALSA_AUDIO_PATH_SCO_PLAYBACK ?= "plughw:4,0"
-NXBT_ALSA_AUDIO_PATH_SCO_CAPTURE ?= "plughw:4,0"
+NXBT_ALSA_AUDIO_PATH_SCO_PLAYBACK ?= "plughw:3,0"
+NXBT_ALSA_AUDIO_PATH_SCO_CAPTURE ?= "plughw:3,0"
 
 # for touchscreen device
 TSDEVICE ?= "/dev/input/event1"
