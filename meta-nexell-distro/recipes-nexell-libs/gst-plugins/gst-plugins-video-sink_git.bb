@@ -3,13 +3,12 @@ DESCRIPTION = "gst-plugins-video-sink"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
-SRCREV = "3fdbf2d88e25c9ca463adf4d64db9c41b541124e"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/gst-plugins-video-sink;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_gst-plugins-video-sink;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "NEXELL"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

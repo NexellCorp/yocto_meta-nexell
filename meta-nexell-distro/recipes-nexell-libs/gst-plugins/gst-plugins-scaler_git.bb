@@ -3,13 +3,12 @@ DESCRIPTION = "gst-plugins-scaler"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=d4e4d3ffd18ad8cf7d8b31e70366a8ca"
 
-SRCREV = "168b91a000c3c27e6d4a6820de7fb3310b17415f"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/gst-plugins-scaler;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_gst-plugins-scaler;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "1"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

@@ -3,13 +3,12 @@ DESCRIPTION = "nx-gst-meta"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=1c29f522bb1f7e5686af40aff4032b50"
 
-SRCREV = "23a97a7a53b1a817f4dc8bd22b0dfc639f649ab1"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-gst-meta;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_nx-gst-meta;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "1"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

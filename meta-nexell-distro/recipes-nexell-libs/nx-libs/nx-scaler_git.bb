@@ -3,13 +3,12 @@ DESCRIPTION = "nx-scaler"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=e5a392bc8627d4e7a7a28a76203e8239"
 
-SRCREV = "79c9146d92b38e5407af675c959196c6aaaa889a"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-scaler;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_nx-scaler;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "1"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

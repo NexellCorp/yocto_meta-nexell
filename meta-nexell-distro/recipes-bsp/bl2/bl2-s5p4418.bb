@@ -1,12 +1,13 @@
 LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://pyrope_bl2.lds;md5=c81ae199c8ac9bc25a4389a9c6b387b6"
-SRCREV = "12675947b00e416ea4775cafa29748cea04f4f24"
-SRC_URI = "git://git.nexell.co.kr/nexell/bl2/bl2-s5p4418;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/bl2_s5p4418;protocol=https;branch=nexell \
+           file://0001-bl2-link-error-__aeabi_idiv.patch"
 
 S = "${WORKDIR}/git"
-PV = "NEXELL"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

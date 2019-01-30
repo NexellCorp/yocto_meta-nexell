@@ -3,13 +3,12 @@ DESCRIPTION = "gst-plugins-camera"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=ce23c541b32b443603093d2be5f59a24"
 
-SRCREV = "d005024198dea6f3b4df9654696860119cfabb8d"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/gst-plugins-camera;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_gst-plugin-camera;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "1"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

@@ -3,13 +3,12 @@ DESCRIPTION = "nx-v4l2"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=50caa96ef586a321a3228191e14a18ea"
 
-SRCREV = "6c75b1e01b26fbebab45428e194a1b1809b5e029"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/nx-v4l2;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_nx-v4l2;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "1"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
