@@ -41,7 +41,7 @@ NX_QT_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'qtcin
                      bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'qtcinema-launcher', \
                      bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qtsmarthome qt5-smarthome-launcher', '', d), d), d)}"
 
-NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
+NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd support-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
 
 ALLGO_CONNECTIVITY = "${@bb.utils.contains('DISTRO_FEATURES', 'support-allgo-connectivity', 'common-api-c++-dbus common-api-c++', '', d)}"
 
@@ -50,8 +50,8 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 	${ALLGO_CONNECTIVITY} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'eglfs-kms', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'systemd support-daudio', 'nexell-nxlogrotate nexell-bluetooth', '', d)} \
-	${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6 support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
-	${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6 support-daudio support-daudio-sdk support-allgo-connectivity support-allgo-connectivity-sdk', 'allgo-connectivity-sdk', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio support-daudio-sdk support-allgo-connectivity support-allgo-connectivity-sdk', 'allgo-connectivity-sdk', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init', 'nexell-init', '', d)} \
 	user-fonts \
 	nexell-bootanim \
