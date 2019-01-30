@@ -3,13 +3,12 @@ DESCRIPTION = "gst-plugins-renderer"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=17ed5b4c1158fe2f827528f761c39970"
 
-SRCREV = "1e81fd567ed9b6394aae56a7068f975ca3b5ba6f"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/gst-plugins-renderer;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_gst-plugins-renderer;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "1"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

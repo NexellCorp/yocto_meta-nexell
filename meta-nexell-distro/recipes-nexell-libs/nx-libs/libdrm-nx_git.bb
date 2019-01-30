@@ -3,13 +3,12 @@ DESCRIPTION = "nexell libdrm"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://Makefile.am;md5=b8808a8f91016e96e050886b9076009a"
 
-SRCREV = "5017ac7f9cf4aaf56f3761c662e72e517b05de91"
-SRC_URI = "git://git.nexell.co.kr/nexell/linux/library/libdrm;protocol=git;branch=nexell"
+PV ?= "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
+
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_libdrm;protocol=https;branch=nexell"
 
 S = "${WORKDIR}/git"
-
-PV = "NEXELL"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
