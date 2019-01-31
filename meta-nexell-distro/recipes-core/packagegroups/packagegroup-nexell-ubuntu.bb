@@ -42,10 +42,16 @@ X11_VIDEO_ARMSOC = " \
     xf86-video-armsoc-nexell \
 "
 
+BENCHMARK_TOOLS = " \
+    sysbench \
+    memtester \
+"
+
 RDEPENDS_${PN} = " \
     nexell-drm-mali-sato \
     ${GSTREAMER10} \
     ${NEXELL_LIBS} \
     ${X11_INPUT_IMAGE_INSTALL} \
     ${X11_VIDEO_ARMSOC} \
+    ${BENCHMARK_TOOLS} \
 "

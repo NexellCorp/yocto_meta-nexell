@@ -19,11 +19,19 @@ dd if=/dev/zero of=$TARGET_DIR/${OUTPUT_NAME} seek=${ROOTFS_SIZE_M} bs=1M count=
 mkdir -p $TARGET_DIR/rootfs
 mkfs.ext4 -F -b 4096 -L rootfs $TARGET_DIR/${OUTPUT_NAME}
 sudo mount -o loop $TARGET_DIR/${OUTPUT_NAME} $TARGET_DIR/rootfs
+
+sleep 3
+
 sudo tar xvzfp $TARGET_DIR/rootfs.tar.gz -C $TARGET_DIR/rootfs
-sudo cp -rp ${EXTRA_ROOTFS}/* $TARGET_DIR/rootfs/
 
-sync
+sudo chown -R 1000:1000 ${EXTRA_ROOTFS}
+sudo cp -arp ${EXTRA_ROOTFS}/* $TARGET_DIR/rootfs/
 
-sudo umount $TARGET_DIR/rootfs
+sudo chown -R 1000:1000 $TARGET_DIR/rootfs/home/nexell/
+
+sleep 3
+
+sudo losetup -D
+sudo umount -l $TARGET_DIR/rootfs
 e2fsck -y -f $TARGET_DIR/${OUTPUT_NAME}
 sudo rm -rf $TARGET_DIR/rootfs
