@@ -35,6 +35,7 @@ ETC_LIBS = " \
 	libid3tag \
 	libjpeg-turbo \
 	icu \
+	protobuf-c \
 "
 
 NX_QT_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'qtcinema-launcher', \
