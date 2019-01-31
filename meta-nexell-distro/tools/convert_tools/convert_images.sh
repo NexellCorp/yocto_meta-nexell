@@ -97,7 +97,9 @@ user_partition_size["daudio-covi"]="0"
 user_partition_size["smart-voice"]="1G"
 user_partition_size["ff-voice"]="1G"
 user_partition_size["convergence-svmc"]="6G"
-user_partition_size["convergence-daudio"]="6G"
+user_partition_size["navi-ref-ubuntu"]="2G"
+user_partition_size["avn-ref-ubuntu"]="2G"
+user_partition_size["convergence-svmc-ubuntu"]="2G"
 #------------------------------------
 # dev_portnum define
 declare -A targets_dev_portnum
@@ -378,20 +380,26 @@ function make_sparse_rootfs_img()
         ${META_NEXELL_CONVERT_TOOLS_PATH}/mkrootfs_image.sh \
             $result_dir \
             nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 \
-            7288 \
+            4096 \
             $result_dir/extra-rootfs-support
     fi
 
     pushd $result_dir
     ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 rootfs.img
 
-    local partition_size=${user_partition_size[${BOARD_NAME}]}
-    rm -rf userdata    
-    mkdir -p userdata    
+    local partition_size=
+
+    if [ "${IMAGE_TYPE}" == "ubuntu" ]; then
+        partition_size=${user_partition_size[${BOARD_NAME}"-ubuntu"]}
+    else
+        partition_size=${user_partition_size[${BOARD_NAME}]}
+    fi
+    rm -rf userdata
+    mkdir -p userdata
 
     ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l ${partition_size} -b 4K -a user userdata.img ./userdata
     echo "userdata partition size : ${partition_size}byte"
-    
+
     popd
 }
 

@@ -26,13 +26,20 @@ declare -A KERNEL_BIN_NAME
 KERNEL_BIN_NAME["s5p4418"]="zImage"
 KERNEL_BIN_NAME["s5p6818"]="Image"
 
-NEXELL_RELEASE_SERVER_ADDRESS="http://files.nexell.co.kr:8070"
-UBUNTU_IMAGE_LOCATION="/s5p4418/yocto/pyro/ubuntu/rootfs/"
-UBUNTU_CONSOLE_VERSION="ubuntu-rootfs-mini.tar.gz"
-UBUNTU_DESKTOP_VERSION="ubuntu-rootfs-desktop.tar.gz"
-UBUNTU_DESKTOP_LXDE_VERSION="ubuntu-rootfs-desktop-lxde.tar.gz"
-UBUNTU_ROOTFS=${UBUNTU_CONSOLE_VERSION}
+declare -A UBUNTU_IMAGE_LOCATION
+UBUNTU_IMAGE_LOCATION["s5p4418"]="/s5p4418/ubuntu/rootfs/"
+#UBUNTU_IMAGE_LOCATION["s5p6818"]="/s5p6818/ubuntu/rootfs/"
+UBUNTU_IMAGE_LOCATION["s5p6818"]="/s5p4418/ubuntu/rootfs/"
 
+NEXELL_RELEASE_SERVER_ADDRESS="http://192.168.1.25:8070"
+UBUNTU_CONSOLE_VERSION_TRUSTY="ubuntu-rootfs-console-trusty.tar.gz"
+UBUNTU_CONSOLE_VERSION_XENIAL="ubuntu-rootfs-console-xenial.tar.gz"
+UBUNTU_DESKTOP_VERSION_TRUSTY="ubuntu-rootfs-desktop.tar.gz"
+UBUNTU_DESKTOP_LXDE_VERSION="ubuntu-rootfs-desktop-lxde.tar.gz"
+UBUNTU_ROOTFS=${UBUNTU_CONSOLE_VERSION_TRUSTY}
+
+UBUNTU_KSELFTESTS="kselftests.tar.gz"
+                   
 function check_usage()
 {
     if [ $argc -lt 3 ];then
@@ -117,6 +124,12 @@ function copy_kernel_image()
     rm -rf ${RESULT_PATH}/boot.img
 
     cp ${TMP_DEPLOY_PATH}/${KERNEL_BIN_NAME[${BOARD_SOCNAME}]} ${RESULT_PATH}/
+
+    if [ "${IMAGE_TYPE}" == "ubuntu" ];then
+        if [ -d ${BUILD_PATH}/tmp/work/linux-kernel-selftests ]; then
+            cp -a ${BUILD_PATH}/tmp/work/selftests ${BUILD_PATH}/tmp/work/extra-rootfs-support/usr/bin/
+        fi
+    fi
 }
 
 function copy_dtb_file()
@@ -153,9 +166,20 @@ function copy_rootfs_image()
         rm -rf ${RESULT_PATH}/*.ext4
         rm -rf ${RESULT_PATH}/rootfs.img
 
-        wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION}${UBUNTU_ROOTFS} -P ${RESULT_PATH}
+        echo -e "\033[40;33m  >>>>   download ubuntu image        \033[0m"
+        wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_ROOTFS} -P ${RESULT_PATH}
         mv ${RESULT_PATH}/${UBUNTU_ROOTFS} ${RESULT_PATH}/rootfs.tar.gz
-        cp -a ${BUILD_PATH}/tmp/work/extra-rootfs-support ${RESULT_PATH}
+
+        echo -e "\033[40;33m  >>>>   copy_extra-rootfs-support to result dir        \033[0m"
+        sudo cp -a ${BUILD_PATH}/tmp/work/extra-rootfs-support ${RESULT_PATH}
+
+        # s5p6818 binary use armhf version, so kselftest used armhf version too.
+        # kselftest do not build. using prebuilt binary
+        if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
+            echo -e "\033[40;33m  >>>>   extract kselftests        \033[0m"
+            wget ${NEXELL_RELEASE_SERVER_ADDRESS}${UBUNTU_IMAGE_LOCATION[${BOARD_SOCNAME}]}${UBUNTU_KSELFTESTS} -P ${RESULT_PATH}
+            tar xzf ${RESULT_PATH}/kselftests.tar.gz -C ${RESULT_PATH}/extra-rootfs-support/usr/bin/
+        fi
     else
         cp ${TMP_DEPLOY_PATH}/"nexell-${IMAGE_TYPE}-${MACHINE_NAME}.tar.bz2" ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/"nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4" ${RESULT_PATH}
@@ -165,7 +189,11 @@ function copy_rootfs_image()
 
 function copy_partmap_file()
 {
-    cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+    if [ "${IMAGE_TYPE}" == "ubuntu" ]; then
+        cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}_ubuntu.txt ${RESULT_PATH}/partmap_emmc.txt
+    else
+        cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+    fi
 }
 
 function post_process()
