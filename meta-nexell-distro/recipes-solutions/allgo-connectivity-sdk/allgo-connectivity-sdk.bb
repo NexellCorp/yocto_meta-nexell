@@ -14,6 +14,8 @@ DEPENDS = " \
 	qtbase-native \
 	qtmultimedia \
 	json-glib \
+	protobuf-c \
+	icu \
 "
 
 RPROVIDES_${PN} = " \
@@ -37,8 +39,14 @@ SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
 
-CFLAGS_remove_arm = "-g"
-CXXFLAGS_remove_arm = "-g"
+export alternate_out_path = "${NX_CARPLAY_ALTERNATE_OUT_PATH}"
+export default_out_path = "${NX_CARPLAY_DEFAULT_OUT_PATH}"
+export media_out_path = "${NX_CARPLAY_MEDIA_OUT_PATH}"
+export telephony_in_path = "${NX_CARPLAY_TELEPHONY_IN_PATH}"
+export telephony_out_path = "${NX_CARPLAY_TELEPHONY_OUT_PATH}"
+export siri_in_path = "${NX_CARPLAY_SIRI_IN_PATH}"
+export siri_out_path = "${NX_CARPLAY_SIRI_OUT_PATH}"
+export alert_out_path = "${NX_CARPLAY_ALERT_OUT_PATH}"
 
 do_install() {
 	echo "Installing allgo connectivity SDK..."
