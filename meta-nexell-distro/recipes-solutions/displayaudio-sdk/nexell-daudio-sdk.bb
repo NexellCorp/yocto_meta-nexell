@@ -54,9 +54,7 @@ export alsa_sco_capture  = "${NXBT_ALSA_AUDIO_PATH_SCO_CAPTURE}"
 D_SDK_INC += " -I${STAGING_INCDIR}/libxml2 -I${STAGING_INCDIR}/drm"
 
 CFLAGS_prepend = "${D_SDK_INC}"
-CFLAGS_remove_arm = "-g"
 CXXFLAGS_prepend = "${D_SDK_INC}"
-CXXFLAGS_remove_arm = "-g"
 
 do_install() {
 	echo "Installing daudio SDK..."
