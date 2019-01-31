@@ -16,5 +16,6 @@ IMAGE_INSTALL_append = " \
     kernel-modules \
     rtl-8188eus-${ARCH_TYPE_NUM} \
     ubuntu-support \
-    testsuite-${NEXELL_BOARD_SOCNAME} \
+    testsuite \
+    kselftests \
 "
