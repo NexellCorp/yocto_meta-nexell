@@ -26,6 +26,11 @@
         <feature text='PREFERRED_PROVIDER_libgbm = "nexell-drm-mali-sato"'/>
         <feature text='PREFERRED_PROVIDER_libgbm-dev = "nexell-drm-mali-sato"'/>
         <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
+        <feature text=''/>
+        <feature text='KERNEL_MODULE_AUTOLOAD += "test_user_copy "'/>
+        <feature text='KBUILD_DEFCONFIG_s5p4418-navi-ref := "s5p4418_navi_ref_test_defconfig"'/>
+        <feature text='KBUILD_DEFCONFIG_s5p4418-convergence-svmc := "s5p4418_convergence_svmc_test_defconfig"'/>
+        <feature text='KBUILD_DEFCONFIG_s5p6818-avn-ref := "s5p6818_avn_ref_test_defconfig"'/>
     </common>
     <s5p4418>
         <feature text='SERIAL_CONSOLE = "115200 ttyAMA3"'/>
