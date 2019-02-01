@@ -15,7 +15,9 @@
 #include <sys/stat.h>
 #include <asm/unistd.h>
 
-#define SYSTEM_SLEEP	1300000	// us
+#ifndef BOOTTIME_LAUNCHER
+#define BOOTTIME_LAUNCHER 0 // us
+#endif
 
 #define	LAUNCHER_CONF	"/etc/qboot/launcher.conf"
 
@@ -554,7 +556,7 @@ static int bootlauncher(const char *file, bool debug) {
 	 	 * wait for launcher run
 	 	 * During this time, the system will be hold.
 	 	*/
-		usleep(SYSTEM_SLEEP);
+		usleep(BOOTTIME_LAUNCHER);
 	}
 
 #ifdef CHK_BOOTTIME
