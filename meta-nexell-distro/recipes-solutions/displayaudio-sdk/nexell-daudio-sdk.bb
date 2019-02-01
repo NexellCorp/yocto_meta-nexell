@@ -50,7 +50,7 @@ export alsa_playback = "${NXBT_ALSA_AUDIO_PATH_PLAYBACK}"
 export alsa_capture = "${NXBT_ALSA_AUDIO_PATH_CAPTURE}"
 export alsa_sco_playback = "${NXBT_ALSA_AUDIO_PATH_SCO_PLAYBACK}"
 export alsa_sco_capture  = "${NXBT_ALSA_AUDIO_PATH_SCO_CAPTURE}"
-export target_machine = "${MACHINE}"
+export TARGET_MACHINE = "${MACHINE}"
 
 D_SDK_INC += " -I${STAGING_INCDIR}/libxml2 -I${STAGING_INCDIR}/drm"
 
