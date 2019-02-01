@@ -4,7 +4,6 @@ PID_ADBD=`pidof adbd`
 
 if [ -f "/run/adbd.pid" ]; then
     kill $PID_ADBD
-    rm /run/adbd.pid
 fi
 
 if [ -d "${GADGET_DIR}/functions/ffs.adb" ]; then
