@@ -16,6 +16,7 @@ DEPENDS = " \
 	json-glib \
 	protobuf-c \
 	icu \
+	openssl \
 "
 
 RPROVIDES_${PN} = " \
