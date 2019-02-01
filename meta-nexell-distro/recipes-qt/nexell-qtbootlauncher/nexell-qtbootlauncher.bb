@@ -28,8 +28,10 @@ USECASE_TSLIB = "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', 'no_tsl
 TSDEVICE ?= ""
 EVDEV_TOUCHSCREEN_PARAMETERS ?= ""
 
+BOOTTIME_LAUNCHER ?= "0"
+
 do_compile() {
-	oe_runmake CROSS_COMPILE="${TARGET_PREFIX}" CC="${CC}" CFLAGS="${CFLAGS} -D${@convert_to_upper_string(d, "${PLATFORM_TYPE}")} -D${@convert_to_upper_string(d, "${USECASE_TSLIB}")}"
+	oe_runmake CROSS_COMPILE="${TARGET_PREFIX}" CC="${CC}" CFLAGS="${CFLAGS} -D${@convert_to_upper_string(d, "${PLATFORM_TYPE}")} -D${@convert_to_upper_string(d, "${USECASE_TSLIB}")} -DBOOTTIME_LAUNCHER=${BOOTTIME_LAUNCHER}"
 }
 
 do_install() {
