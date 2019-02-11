@@ -5,5 +5,10 @@
     <sstate_dir   text='SSTATE_DIR = "${TOPDIR}/sstate-cache"'/>
 <!-- board specified features -->
     <feature      text='BBMASK_append = " /meta-nexell/meta-nexell-distro/recipes-multimedia/smart-voice-app "'/>
-    <feature      text='DISTRO_FEATURES_append = " nexell-daudio-ref support-daudio support-daudio-sdk support-ffmpeg support-adanis-bt support-allgo-connectivity"'/>
+    <feature      text='DISTRO_FEATURES_append = " nexell-daudio-ref
+						support-daudio
+						support-daudio-sdk
+						support-ffmpeg
+						support-adanis-bt
+						support-allgo-connectivity"'/>
 </boardconfig>
