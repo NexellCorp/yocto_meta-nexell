@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 		{
 			access_ret = access("/sbin/NxQuickRearCam", 0);
 			if (access_ret == 0)
-				execl("/sbin/NxQuickRearCam", "NxQuickRearCam", "-m1", "-b1", "-c26", "-r960x480", NULL);
+				execl("/sbin/NxQuickRearCam", "NxQuickRearCam", "-m1", "-b1", "-c26", "-r704x480", NULL);
 			break;
 		}
 
