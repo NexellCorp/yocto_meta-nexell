@@ -17,7 +17,7 @@ EXTRA_ROOTFS=$4
 dd if=/dev/zero of=$TARGET_DIR/${OUTPUT_NAME} seek=${ROOTFS_SIZE_M} bs=1M count=0
 
 mkdir -p $TARGET_DIR/rootfs
-mkfs.ext4 -F -b 4096 -L rootfs $TARGET_DIR/${OUTPUT_NAME}
+sudo mkfs.ext4 -F -b 4096 -L rootfs $TARGET_DIR/${OUTPUT_NAME}
 sudo mount -o loop $TARGET_DIR/${OUTPUT_NAME} $TARGET_DIR/rootfs
 
 sleep 3
@@ -33,5 +33,5 @@ sleep 3
 
 sudo losetup -D
 sudo umount -l $TARGET_DIR/rootfs
-e2fsck -y -f $TARGET_DIR/${OUTPUT_NAME}
+sudo e2fsck -y -f $TARGET_DIR/${OUTPUT_NAME}
 sudo rm -rf $TARGET_DIR/rootfs
