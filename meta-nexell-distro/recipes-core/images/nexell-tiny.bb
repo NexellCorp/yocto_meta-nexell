@@ -24,4 +24,5 @@ IMAGE_INSTALL_append = " \
     ${SYSTEMD_INSTALL} \
     ${NEXELL_KERNEL_TEST_IMAGE_INSTALL} \
     ${DEVEL_TOOLS} \
+    testsuite \
 "
