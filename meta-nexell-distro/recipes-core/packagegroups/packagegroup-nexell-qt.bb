@@ -108,25 +108,13 @@ QT5_10_ESSENTIAL_IMAGES = " \
     liberation-fonts \
 "
 
-#qtwebengine-qmlplugins
-#qtdeclarative-plugins
-
 QT_ALSA_LIB_IMAGE_INSTALL = " \
 "
 
 QT_ALSA_UTILS_IMAGE_INSTALL = " \
     alsa-utils \
-    alsa-utils-alsamixer \
-    alsa-utils-midi \
-    alsa-utils-aplay \
-    alsa-utils-amixer \
-    alsa-utils-aconnect \
-    alsa-utils-iecset \
-    alsa-utils-speakertest \
-    alsa-utils-aseqnet \
-    alsa-utils-aseqdump \
-    alsa-utils-alsactl \
 "
+
 QT_V4L_UTILS_IMAGE_INSTALL = " \
     v4l-utils \
 "
