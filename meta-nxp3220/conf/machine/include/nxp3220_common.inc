@@ -16,7 +16,13 @@ UBOOT_LOGO_BMP ?= "${BSP_ROOT_DIR}/tools/files/logo.bmp"
 
 # for BL1
 BL1_SOURCE ?= "${BSP_ROOT_DIR}/firmwares/binary"
-BL1_BIN ?= "bl1-nxp3220.bin.raw"
+BL1_BIN ?= "bl1-nxp3220.bin"
+BL1_LOADADDR ?= "0xFFFF0000"
+BL1_NSIH ?= "${BSP_ROOT_DIR}/tools/files/nsih_bl1.txt"
+BL1_BOOTKEY ?= "${BSP_ROOT_DIR}/tools/files/bootkey"
+BL1_USERKEY ?= "${BSP_ROOT_DIR}/tools/files/userkey"
+BL1_AESKEY ?= "${BSP_ROOT_DIR}/tools/files/aeskey.txt"
+BL1_VECTOR ?= "${BSP_ROOT_DIR}/tools/files/aesvector.txt"
 
 # for BL2
 BL2_CHIP ?= "nxp3220"
@@ -27,7 +33,7 @@ BL2_NSIH ?= "${BL2_SOURCE}/reference-nsih/nsih_evb_ddr3_800Mhz.txt"
 BL2_BOOTKEY ?= "${BSP_ROOT_DIR}/tools/files/bootkey"
 BL2_USERKEY ?= "${BSP_ROOT_DIR}/tools/files/userkey"
 
-# for bl32
+# for BL32
 BL32_LOADADDR ?= "0x5F000000"
 BL32_BIN ?= "bl32.bin"
 BL32_SOURCE ?= "${BSP_ROOT_DIR}/firmwares/bl32-nxp3220"
