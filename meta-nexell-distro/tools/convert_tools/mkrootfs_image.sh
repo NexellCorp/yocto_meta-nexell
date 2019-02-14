@@ -22,12 +22,12 @@ sudo mount -o loop $TARGET_DIR/${OUTPUT_NAME} $TARGET_DIR/rootfs
 
 sleep 3
 
-sudo tar xvzfp $TARGET_DIR/rootfs.tar.gz -C $TARGET_DIR/rootfs
+sudo tar xzfp $TARGET_DIR/rootfs.tar.gz -C $TARGET_DIR/rootfs
 
-sudo chown -R 1000:1000 ${EXTRA_ROOTFS}
+sudo chown -R 2254:2254 ${EXTRA_ROOTFS}
 sudo cp -arp ${EXTRA_ROOTFS}/* $TARGET_DIR/rootfs/
 
-sudo chown -R 1000:1000 $TARGET_DIR/rootfs/home/nexell/
+sudo chown -R 2254:2254 $TARGET_DIR/rootfs/home/nexell/
 
 sleep 3
 
