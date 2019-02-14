@@ -15,17 +15,8 @@ inherit packagegroup
 
 PACKAGE_ALSA_UTILS = " \
     alsa-utils \
-    alsa-utils-alsamixer \
-    alsa-utils-midi \
-    alsa-utils-aplay \
-    alsa-utils-amixer \
-    alsa-utils-aconnect \
-    alsa-utils-iecset \
-    alsa-utils-speakertest \
-    alsa-utils-aseqnet \
-    alsa-utils-aseqdump \
-    alsa-utils-alsactl \
 "
+
 RDEPENDS_${PN} = " \
     ${PACKAGE_ALSA_UTILS} \
 "
