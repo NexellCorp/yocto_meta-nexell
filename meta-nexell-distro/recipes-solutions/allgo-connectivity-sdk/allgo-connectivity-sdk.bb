@@ -13,6 +13,7 @@ DEPENDS = " \
 	common-api-c++ \
 	qtbase-native \
 	qtmultimedia \
+	qtwayland \
 	json-glib \
 	protobuf-c \
 	icu \
@@ -30,7 +31,8 @@ RDEPENDS_${PN} = " \
 	nexell-daudio-sdk \
 "
 
-inherit nexell-sdk-qt-env
+inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
+           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'nexell-sdk-qt5.8.x-env', '', d), d)}
 
 PV = "1.0.0"
 PR = "r0"
