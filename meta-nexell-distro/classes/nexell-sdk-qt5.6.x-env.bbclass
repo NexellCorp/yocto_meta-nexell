@@ -20,33 +20,42 @@ export NX_OE_QMAKE_RCC = "${NX_OE_QMAKE_PATH_HOST_BINS}/rcc"
 export NX_OE_QMAKE_UIC = "${NX_OE_QMAKE_PATH_HOST_BINS}/uic"
 
 export NX_OE_QMAKESPEC = "${QMAKE_MKSPEC_PATH_NATIVE}/mkspecs/linux-oe-g++"
-export NX_OE_XQMAKESPEC = "${QMAKE_MKSPEC_PATH_TARGET}/mkspecs/linux-oe-g++"
 
 export NX_QT_CONF_PATH = "${WORKDIR}/qt.conf"
 
+OE_QMAKE_PLATFORM_NATIVE = "linux-oe-g++"
+OE_QMAKE_PLATFORM = "linux-oe-g++"
+OE_QMAKE_PATH_TRANSLATIONS = "${datadir}/qt5/translations"
+OE_QMAKE_PATH_EXAMPLES = "${datadir}/qt5/examples"
+OE_QMAKE_PATH_TESTS = "${datadir}/qt5/tests"
+OE_QMAKESPEC = "${QMAKE_MKSPEC_PATH_NATIVE}/mkspecs/${OE_QMAKE_PLATFORM_NATIVE}"
+OE_XQMAKESPEC = "${QMAKE_MKSPEC_PATH}/mkspecs/${OE_QMAKE_PLATFORM}"
+
+export QT_CONF_PATH = "${NX_QT_CONF_PATH}"
+
 do_generate_qt_config_file() {
-	cat > ${NX_QT_CONF_PATH} << EOF
+	cat > ${QT_CONF_PATH} <<EOF
 [Paths]
 Prefix = ${OE_QMAKE_PATH_PREFIX}
 Headers = ${OE_QMAKE_PATH_HEADERS}
 Libraries = ${OE_QMAKE_PATH_LIBS}
-ArchData = ${OE_QMAKE_PATH_ARCHDATA}
-Data = ${OE_QMAKE_PATH_DATA}
-Binaries = ${OE_QMAKE_PATH_BINS}
+ArchData = ${OE_QMAKE_PATH_ARCHDATA}/qt5
+Data = ${OE_QMAKE_PATH_DATA}/qt5
+Binaries = ${OE_QMAKE_PATH_BINS}/qt5
 LibraryExecutables = ${OE_QMAKE_PATH_LIBEXECS}
 Plugins = ${OE_QMAKE_PATH_PLUGINS}
 Imports = ${OE_QMAKE_PATH_IMPORTS}
 Qml2Imports = ${OE_QMAKE_PATH_QML}
 Translations = ${OE_QMAKE_PATH_TRANSLATIONS}
-Documentation = ${OE_QMAKE_PATH_DOCS}
-Settings = ${OE_QMAKE_PATH_SETTINGS}
+Documentation = ${OE_QMAKE_PATH_DOCS}/qt5
+Settings = ${OE_QMAKE_PATH_SETTINGS}/qt5
 Examples = ${OE_QMAKE_PATH_EXAMPLES}
 Tests = ${OE_QMAKE_PATH_TESTS}
 HostBinaries = ${OE_QMAKE_PATH_HOST_BINS}
 HostData = ${OE_QMAKE_PATH_HOST_DATA}
 HostLibraries = ${OE_QMAKE_PATH_HOST_LIBS}
-HostSpec = ${NX_OE_QMAKESPEC}
-TartgetSpec = ${NX_OE_XQMAKESPEC}
+HostSpec = ${OE_QMAKESPEC}
+TartgetSpec = ${OE_XQMAKESPEC}
 ExternalHostBinaries = ${OE_QMAKE_PATH_EXTERNAL_HOST_BINS}
 Sysroot = ${STAGING_DIR_TARGET}
 EOF
