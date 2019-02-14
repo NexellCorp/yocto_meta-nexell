@@ -34,7 +34,8 @@ RPROVIDES_${PN} = " \
 	libnxrearcam.so \
 "
 
-inherit nexell-sdk-qt-env
+inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
+		   bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'nexell-sdk-qt5.8.x-env', '', d), d)}
 
 PV = "1.1.0"
 PR = "r0"
