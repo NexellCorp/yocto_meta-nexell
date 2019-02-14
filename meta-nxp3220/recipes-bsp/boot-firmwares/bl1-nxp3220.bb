@@ -9,7 +9,6 @@ EXTERNALSRC = "${BL1_SOURCE}"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""
 
-
 do_install() {
 	BIN=${BL1_BIN}
 
@@ -18,10 +17,24 @@ do_install() {
 }
 
 do_deploy () {
+	NSIH=${BL1_NSIH}
+	BINGEN=${TOOL_BINGEN}
+	AESCBC=${TOOL_BINENC}
+	BOOTKEY=${BL1_BOOTKEY}
+	USERKEY=${BL1_USERKEY}
+	AESKEY=${BL1_AESKEY}
+	AESVECTOR=${BL1_VECTOR}
 	BIN=${BL1_BIN}
 
 	install -d ${DEPLOYDIR}
 	install -m 0644 ${S}/${BIN} ${DEPLOYDIR}
+
+	${AESCBC} -n ${DEPLOYDIR}/${BIN} \
+		-k $(cat ${AESKEY}) -v $(cat ${AESVECTOR}) -m enc -b 128;
+	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BIN}.enc \
+		-b ${BOOTKEY} -u ${USERKEY} -k bl1 -l ${BL1_LOADADDR} -s ${BL1_LOADADDR} -t;
+	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BIN} \
+		-b ${BOOTKEY} -u ${USERKEY} -k bl1 -l ${BL1_LOADADDR} -s ${BL1_LOADADDR} -t
 }
 addtask deploy before do_build after do_compile
 
