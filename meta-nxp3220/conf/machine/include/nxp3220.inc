@@ -20,4 +20,4 @@ PREFERRED_PROVIDER_virtual/kernel ?= "linux-${LINUX_VERSION}-nexell"
 
 IMAGE_FSTYPES ?= "tar.gz"
 
-MACHINE_FEATURES = "usbgadget usbhost alsa emmc sdio"
+MACHINE_FEATURES = "usbgadget usbhost emmc sdio"
