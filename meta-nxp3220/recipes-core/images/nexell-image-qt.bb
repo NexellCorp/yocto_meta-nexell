@@ -74,4 +74,5 @@ IMAGE_INSTALL_append = " \
     ${UTILS_INSTALL} \
     ${LIBS_INSTALL} \
     ${NEXELL_CUSTOMIZE_INSTALL} \
+    kernel-modules \
 "
