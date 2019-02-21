@@ -1,4 +1,4 @@
-require recipes-bsp/u-boot/u-boot.inc
+inherit nexell-u-boot
 
 HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
 SECTION = "bootloaders"
@@ -11,6 +11,8 @@ DEPENDS += "bl1-nxp3220 bl2-nxp3220 bl32-nxp3220"
 PROVIDES += "u-boot"
 
 # externalsrc
+# EXTERNALSRC_BUILD = "${WORKDIR}/build"
+# EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 inherit externalsrc
 EXTERNALSRC = "${BSP_ROOT_DIR}/u-boot-2018.5"
 EXTERNALSRC_BUILD = "${WORKDIR}/build"
@@ -20,11 +22,6 @@ EXTERNALSRC_SYMLINKS = ""
 # and not dirty the source directory
 KBUILD_OUTPUT = "${B}"
 OE_TERMINAL_EXPORTS += "KBUILD_OUTPUT"
-
-do_configure_prepend() {
-	cd "${S}"
-	make distclean
-}
 
 do_compile_append() {
 	find ./env -name "common.o"
