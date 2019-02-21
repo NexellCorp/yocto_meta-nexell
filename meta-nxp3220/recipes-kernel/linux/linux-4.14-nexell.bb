@@ -3,6 +3,8 @@ inherit kernel-uboot
 require recipes-kernel/linux/linux-yocto.inc
 
 # externalsrc
+# EXTERNALSRC_BUILD = "${WORKDIR}/build"
+# EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 inherit externalsrc
 EXTERNALSRC = "${BSP_ROOT_DIR}/kernel-4.14"
 EXTERNALSRC_BUILD = "${WORKDIR}/build"
@@ -20,10 +22,22 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 # The defconfig was created with make_savedefconfig so not all the configs are in place
 KCONFIG_MODE="--alldefconfig"
 
-do_configure_prepend() {
-	cd "${S}"
-	make distclean
+do_configure_prepend () {
+    if [ "${EXTERNALSRC}" != "${EXTERNALSRC_BUILD}" ]; then
+	make -C ${S} distclean
+    fi
+
+    if [ ! -f ${B}/.config ]; then
+	make ARCH=arm -C ${S} O=${B} ${KBUILD_DEFCONFIG}
+    fi
 }
+
+do_clean_distclean () {
+    if [ "${EXTERNALSRC}" = "${EXTERNALSRC_BUILD}" ]; then
+	make -C ${S} distclean
+    fi
+}
+addtask do_clean_distclean before do_cleansstate after do_clean
 
 # symblolic link work-shared/<machine>/kernel-source
 python do_symlink_staging_dir () {
