@@ -23,6 +23,7 @@
         <feature text='PREFERRED_PROVIDER_virtual/mesa = "mesa-gl"'/>
         <feature text='PREFERRED_PROVIDER_libgbm = "nexell-drm-mali-sato"'/>
         <feature text='PREFERRED_PROVIDER_libgbm-dev = "nexell-drm-mali-sato"'/>
+        <feature text='BBMASK = " /meta-nexell/meta-nexell-distro/recipes-solutions "'/>
         <feature text=''/>
         <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
     </common>
