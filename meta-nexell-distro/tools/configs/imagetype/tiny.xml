@@ -5,6 +5,7 @@
         <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
         <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
         <feature text='DISTRO_FEATURES_append = " systemd"'/>
+        <feature text='BBMASK = " /meta-nexell/meta-nexell-distro/recipes-solutions "'/>
     </common>
     <s5p4418>
         <feature text='SERIAL_CONSOLE = "115200 ttyAMA3"'/>
