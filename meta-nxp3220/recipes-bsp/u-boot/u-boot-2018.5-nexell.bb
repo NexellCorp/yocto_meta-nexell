@@ -15,7 +15,7 @@ PROVIDES += "u-boot"
 # EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 inherit externalsrc
 EXTERNALSRC = "${BSP_ROOT_DIR}/u-boot-2018.5"
-EXTERNALSRC_BUILD = "${WORKDIR}/build"
+EXTERNALSRC_BUILD = "${EXTERNALSRC}"
 EXTERNALSRC_SYMLINKS = ""
 
 # This allows the kernel to be incrementally build within the shell
