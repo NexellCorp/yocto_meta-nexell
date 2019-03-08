@@ -15,6 +15,7 @@ inherit packagegroup
 
 PACKAGE_NEXELL_APPS = " \
     nx-video-api-test \
+    hwio \
 "
 
 RDEPENDS_${PN} = " \
