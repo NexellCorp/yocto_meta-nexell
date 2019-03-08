@@ -204,9 +204,9 @@ function copy_rootfs_image()
 function copy_partmap_file()
 {
     if [ "${IMAGE_TYPE}" == "ubuntu" ]; then
-        cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}_ubuntu.txt ${RESULT_PATH}/partmap_emmc.txt
+        cp ${META_NEXELL_PATH}/tools/configs/board_partmap/partmap_emmc_${MACHINE_NAME}-ubuntu.txt ${RESULT_PATH}/partmap_emmc.txt
     else
-        cp ${META_NEXELL_PATH}/tools/fusing_tools/partmap_emmc_${BOARD_SOCNAME}.txt ${RESULT_PATH}/partmap_emmc.txt
+        cp ${META_NEXELL_PATH}/tools/configs/board_partmap/partmap_emmc_${MACHINE_NAME}.txt ${RESULT_PATH}/partmap_emmc.txt
     fi
 }
 
