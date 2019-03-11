@@ -24,17 +24,29 @@ KCONFIG_MODE="--alldefconfig"
 
 do_configure_prepend () {
     if [ "${EXTERNALSRC}" != "${EXTERNALSRC_BUILD}" ]; then
-	make -C ${S} distclean
+	oe_runmake -C ${S} distclean
+    else
+        file=${B}/.kernel_defconfig
+	if [ -e ${file} ]; then
+	    conf=$(cat ${file})
+	    if [ "${conf}" != "${KBUILD_DEFCONFIG}" ]; then
+		rm ${file}; echo ${KBUILD_DEFCONFIG} >> ${file};
+	        oe_runmake -C ${S} distclean
+	    fi
+	else
+	    echo ${KBUILD_DEFCONFIG} >> ${file};
+	    oe_runmake -C ${S} distclean
+	fi
     fi
 
     if [ ! -f ${B}/.config ]; then
-	make ARCH=arm -C ${S} O=${B} ${KBUILD_DEFCONFIG}
+	oe_runmake ARCH=arm -C ${S} O=${B} ${KBUILD_DEFCONFIG}
     fi
 }
 
 do_clean_distclean () {
     if [ "${EXTERNALSRC}" = "${EXTERNALSRC_BUILD}" ]; then
-	make -C ${S} distclean
+	oe_runmake -C ${S} distclean
     fi
 }
 addtask do_clean_distclean before do_cleansstate after do_clean

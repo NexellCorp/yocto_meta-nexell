@@ -26,6 +26,18 @@ OE_TERMINAL_EXPORTS += "KBUILD_OUTPUT"
 do_configure_prepend () {
     if [ "${EXTERNALSRC}" != "${EXTERNALSRC_BUILD}" ]; then
 	oe_runmake -C ${S} distclean
+    else
+        file=${B}/.uboot_defconfig
+	if [ -e ${file} ]; then
+	    conf=$(cat ${file})
+	    if [ "${conf}" != "${UBOOT_MACHINE}" ]; then
+		rm ${file}; echo ${UBOOT_MACHINE} >> ${file};
+	        oe_runmake -C ${S} distclean
+	    fi
+	else
+	    echo ${UBOOT_MACHINE} >> ${file};
+	    oe_runmake -C ${S} distclean
+	fi
     fi
 
     if [ ! -f ${B}/.config ]; then
