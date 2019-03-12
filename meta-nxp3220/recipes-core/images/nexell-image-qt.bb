@@ -43,13 +43,13 @@ LIBS_INSTALL = " \
 "
 
 MULTIMEDIA_INSTALL = " \
+    alsa-utils \
     tinyalsa \
     ffmpeg \
     v4l-utils \
 "
 
 PACAKGEGROUPS_INSTALL = " \
-    packagegroup-nxp3220-alsa-utils \
     packagegroup-nxp3220-tslib \
     packagegroup-nxp3220-qt5.6 \
     packagegroup-nxp3220-gstreamer \
