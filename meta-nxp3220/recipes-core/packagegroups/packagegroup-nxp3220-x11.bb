@@ -34,7 +34,6 @@ PACKAGE_X11_ESSENTIAL = " \
     v4l-utils \
     libpcre \
     libpcreposix \
-    alsa-states \
 "
 
 PACKAGE_X11_EXTENSION = " \
