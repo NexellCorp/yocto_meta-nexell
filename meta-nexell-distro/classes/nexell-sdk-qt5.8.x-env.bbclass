@@ -72,3 +72,5 @@ HostData = ${OE_QMAKE_PATH_HOST_DATA}
 HostPrefix = ${STAGING_DIR_NATIVE}${prefix_native}
 EOF
 }
+
+addtask do_generate_qt_config_file before do_compile
