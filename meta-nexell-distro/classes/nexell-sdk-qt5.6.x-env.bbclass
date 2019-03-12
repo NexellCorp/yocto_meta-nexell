@@ -60,3 +60,5 @@ ExternalHostBinaries = ${OE_QMAKE_PATH_EXTERNAL_HOST_BINS}
 Sysroot = ${STAGING_DIR_TARGET}
 EOF
 }
+
+addtask do_generate_qt_config_file before do_compile
