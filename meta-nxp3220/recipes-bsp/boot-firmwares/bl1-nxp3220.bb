@@ -41,7 +41,6 @@ addtask deploy before do_build after do_compile
 # not execute tasks
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
-do_package[noexec] = "1"
 do_packagedata[noexec] = "1"
 do_package_qa[noexec] = "1"
 do_package_write_rpm[noexec] = "1"
