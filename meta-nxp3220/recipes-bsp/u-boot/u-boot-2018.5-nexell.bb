@@ -89,7 +89,6 @@ do_deploy_append () {
 }
 
 # not execute tasks
-do_package[noexec] = "1"
 do_packagedata[noexec] = "1"
 do_package_qa[noexec] = "1"
 do_package_write_rpm[noexec] = "1"
