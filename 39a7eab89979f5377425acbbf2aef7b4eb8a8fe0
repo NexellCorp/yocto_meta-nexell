@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76402a7c_13d99c83",
+        "filename": "meta-nexell-distro/recipes-graphics/tslib-nexell/tslib-nexell.bb",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-03-21T08:32:37Z",
+      "side": 1,
+      "message": "Align the lines. please",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 63
+      },
+      "revId": "39a7eab89979f5377425acbbf2aef7b4eb8a8fe0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
