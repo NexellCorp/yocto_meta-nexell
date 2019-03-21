@@ -29,7 +29,7 @@ EXTRA_OEMAKE += " \
 do_configure() {
     cd ${S}
     NOCONFIGURE=true ./autogen.sh
-    oe_runconf
+    oe_runconf --enable-static
 }
 
 do_compile() {
