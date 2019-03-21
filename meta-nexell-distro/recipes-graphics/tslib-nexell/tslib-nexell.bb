@@ -8,18 +8,19 @@ SRC_URI = " \
 "
 
 TS_POINTERCAL = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-daudio-ref', 'pointercal-daudio_ref', \
-                bb.utils.contains('DISTRO_FEATURES', 'nexell-navi-ref', 'pointercal-navi_ref', \
-                bb.utils.contains('DISTRO_FEATURES', 'nexell-avn-ref', 'pointercal-avn_ref', \
-				bb.utils.contains('DISTRO_FEATURES', 'nexell-nxp3220-evb', 'pointercal-nxp3220_evb', 'not_supported', d), d), d),d)}"
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-navi-ref', 'pointercal-navi_ref', \
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-avn-ref', 'pointercal-avn_ref', \
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-nxp3220-daudio', 'pointercal-nxp3220_daudio', \
+				bb.utils.contains('DISTRO_FEATURES', 'nexell-nxp3220-evb', 'pointercal-nxp3220_evb', 'not_supported', d), d), d), d), d)}"
 
 do_install () {
 	install -d ${D}${bindir}
 	install -d ${D}${sysconfdir}
 
-    install -m 0755 ${WORKDIR}/ts_recalibrate.sh ${D}${bindir}/
+	install -m 0755 ${WORKDIR}/ts_recalibrate.sh ${D}${bindir}/
 
 	if [ ${TS_POINTERCAL} != "not_supported" ]; then
-	    install -m 0644 ${WORKDIR}/calibration/${TS_POINTERCAL} ${D}${sysconfdir}/pointercal
+		install -m 0644 ${WORKDIR}/calibration/${TS_POINTERCAL} ${D}${sysconfdir}/pointercal
 	else
 		echo "Can't find supported calibration file."
 	fi
