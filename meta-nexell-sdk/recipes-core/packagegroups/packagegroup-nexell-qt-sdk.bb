@@ -91,18 +91,6 @@ QT_ALSA_LIB_IMAGE_INSTALL = " \
 QT_ALSA_IMAGE_INSTALL = " \
     alsa-utils \
 "
-QT_ALSA_EXTRA_IMAGE_INSTALL = " \
-    alsa-utils-alsamixer \
-    alsa-utils-midi \
-    alsa-utils-aplay \
-    alsa-utils-amixer \
-    alsa-utils-aconnect \
-    alsa-utils-iecset \
-    alsa-utils-speakertest \
-    alsa-utils-aseqnet \
-    alsa-utils-aseqdump \
-    alsa-utils-alsactl \
-"
 
 RDEPENDS_${PN} = " \
     nexell-drm-mali-qt \
@@ -116,5 +104,4 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', '${QT5_6_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.10', '${QT5_10_ESSENTIAL_IMAGES}', '', d)}  \
     ${QT_ALSA_IMAGE_INSTALL} \
-    ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
 "
