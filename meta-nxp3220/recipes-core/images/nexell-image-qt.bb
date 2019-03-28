@@ -40,6 +40,7 @@ LIBS_INSTALL = " \
     libjpeg-turbo \
     icu \
     libpng \
+    protobuf-c \
 "
 
 MULTIMEDIA_INSTALL = " \
