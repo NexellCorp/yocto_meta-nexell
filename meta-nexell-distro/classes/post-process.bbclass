@@ -16,6 +16,10 @@ postprocess_common_function() {
 
     # data partition add
     echo "/dev/mmcblk0p4 /data         ext4     noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+
+    if [ "${ARCH_TYPE_NUM}" -eq "64" ]; then
+        rm ${IMAGE_ROOTFS}/etc/modules-load.d/optee*.conf
+    fi    
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_common_function;"
