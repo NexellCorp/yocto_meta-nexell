@@ -13,22 +13,20 @@ DEPENDS = " \
 	common-api-c++ \
 	qtbase-native \
 	qtmultimedia \
-	qtwayland \
 	json-glib \
 	protobuf-c \
 	icu \
 	openssl \
-"
-
-RPROVIDES_${PN} = " \
-	nexell-carconn-sdk-dev \
-	libheromanager.so \
-	libQt5WaylandCompositor.so.5 \
+	gstreamer1.0-plugins-base \
 "
 
 RDEPENDS_${PN} = " \
 	bash \
-	nexell-daudio-sdk \
+"
+
+RPROVIDES_${PN} = " \
+	libnxconfig.so \
+	libnxunixdomainsocket_udp.so \
 "
 
 inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
@@ -41,15 +39,6 @@ S = "${WORKDIR}/sdk"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
-
-export alternate_out_path = "${NX_CARPLAY_ALTERNATE_OUT_PATH}"
-export default_out_path = "${NX_CARPLAY_DEFAULT_OUT_PATH}"
-export media_out_path = "${NX_CARPLAY_MEDIA_OUT_PATH}"
-export telephony_in_path = "${NX_CARPLAY_TELEPHONY_IN_PATH}"
-export telephony_out_path = "${NX_CARPLAY_TELEPHONY_OUT_PATH}"
-export siri_in_path = "${NX_CARPLAY_SIRI_IN_PATH}"
-export siri_out_path = "${NX_CARPLAY_SIRI_OUT_PATH}"
-export alert_out_path = "${NX_CARPLAY_ALERT_OUT_PATH}"
 
 do_install() {
 	echo "Installing allgo connectivity SDK..."
