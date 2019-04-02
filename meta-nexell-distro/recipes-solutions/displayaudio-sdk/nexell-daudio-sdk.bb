@@ -20,6 +20,7 @@ DEPENDS = " \
     icu \
 	qtbase-native \
 	qtmultimedia \
+	gstreamer1.0-plugins-base \
 "
 
 RPROVIDES_${PN} = " \
