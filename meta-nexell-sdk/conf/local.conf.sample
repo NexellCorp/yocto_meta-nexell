@@ -240,4 +240,4 @@ TOOLCHAIN_TARGET_TASK += " libgl-mesa-dev libegl-mesa-dev libgles1-mesa-dev libg
 TOOLCHAIN_TARGET_TASK += " id3lib-dev libid3tag-dev "
 TOOLCHAIN_TARGET_TASK += " ffmpeg-dev "
 TOOLCHAIN_TARGET_TASK += " common-api-c++-dev common-api-c++-dbus-dev "
-TOOLCHAIN_TARGET_TASK += " libdrm-nx-dev nx-drm-allocator-dev nx-gst-meta-dev nx-renderer-dev nx-scaler-dev nx-v4l2-dev nx-video-api-dev nx-uds-dev "
+TOOLCHAIN_TARGET_TASK += " libdrm-nx-dev nx-drm-allocator-dev nx-gst-meta-dev nx-renderer-dev nx-scaler-dev nx-v4l2-dev nx-video-api-dev nx-uds-dev nx-config-dev "
