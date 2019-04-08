@@ -27,7 +27,7 @@ do_configure_prepend () {
 	oe_runmake -C ${S} distclean
     else
         file=${B}/.kernel_defconfig
-	if [ -e ${file} ]; then
+	if [ -e ${file} ] && [ -d ${WORKDIR} ]; then
 	    conf=$(cat ${file})
 	    if [ "${conf}" != "${KBUILD_DEFCONFIG}" ]; then
 		rm ${file}; echo ${KBUILD_DEFCONFIG} >> ${file};
