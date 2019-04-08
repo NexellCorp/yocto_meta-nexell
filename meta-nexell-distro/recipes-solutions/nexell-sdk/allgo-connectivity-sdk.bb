@@ -6,6 +6,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 DEPENDS = " \
 	libxml2 \
+	libusb1 \
 	nx-uds \
 	nx-config \
 	common-api-c++-dbus \
