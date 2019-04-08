@@ -28,7 +28,7 @@ do_configure_prepend () {
 	oe_runmake -C ${S} distclean
     else
         file=${B}/.uboot_defconfig
-	if [ -e ${file} ]; then
+	if [ -e ${file} ] && [ -d ${WORKDIR} ]; then
 	    conf=$(cat ${file})
 	    if [ "${conf}" != "${UBOOT_MACHINE}" ]; then
 		rm ${file}; echo ${UBOOT_MACHINE} >> ${file};
