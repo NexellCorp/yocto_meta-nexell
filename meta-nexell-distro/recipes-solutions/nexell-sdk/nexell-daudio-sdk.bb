@@ -5,14 +5,17 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = " \
-	file://sdk \
+	git://github.com/NexellCorp/linux_sdk_displayaudio.git \
 "
 
 DEPENDS = " \
+	libxml2 \
 	nx-drm-allocator \
 	nx-video-api \
 	nx-scaler \
 	nx-v4l2 \
+	nx-uds \
+	nx-config \
 	ffmpeg \
 	id3lib \
 	libid3tag \
@@ -21,18 +24,6 @@ DEPENDS = " \
 	qtbase-native \
 	qtmultimedia \
 	gstreamer1.0-plugins-base \
-"
-
-RPROVIDES_${PN} = " \
-	nexell-daudio-sdk-dev \
-	libnxbt.so \
-	libnxconfig.so \
-	libnxdaudioutils.so \
-	libnxfilter.so \
-	libnxfilterhelper.so \
-	libnxkeyreceiver.so \
-	libnxmpmanager.so \
-	libnxrearcam.so \
 "
 
 inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
