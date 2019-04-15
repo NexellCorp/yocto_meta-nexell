@@ -34,6 +34,7 @@ S = "${WORKDIR}/sdk"
 SDK_RESULT = "${S}/result"
 
 export OECORE_SDK_VERSION = "${SDK_VERSION}"
+export TARGET_MACHINE = "${MACHINE}"
 
 do_install() {
 	echo "Installing allgo connectivity SDK..."
