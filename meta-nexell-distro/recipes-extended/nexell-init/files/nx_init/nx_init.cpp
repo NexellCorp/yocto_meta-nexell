@@ -6,6 +6,9 @@
 #include <sys/wait.h>
 #include <sys/mount.h>
 
+#define NXQUICKREARCAM
+#undef NXQUICKSVM
+
 int main(int argc, char *argv[])
 {
 	pid_t pid;
@@ -26,14 +29,24 @@ int main(int argc, char *argv[])
 
 		case 0:
 		{
+#ifdef NXQUICKREARCAM
 			access_ret = access("/sbin/NxQuickRearCam", 0);
-			if (access_ret == 0)
+			if (access_ret == 0){
+				printf("start NxQuickRearCam \n");
 				execl("/sbin/NxQuickRearCam", "NxQuickRearCam", "-m1", "-b1", "-c26", "-r704x480", NULL);
+			}
+#endif
+#ifdef NXQUICKSVM
+				printf("start nx_3d_avm_daemon \n");
+				execl("/sbin/nx_3d_avm_daemon", "nx_3d_avm_daemon", NULL);
+#endif
 			break;
 		}
 
 		default:
 		{
+			usleep(500000);
+			printf("start systemd \n");
 			execl("/lib/systemd/systemd","systemd", NULL);
 			break;
 		}
