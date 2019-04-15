@@ -1,0 +1,5 @@
+system = drmkms
+accelerator = 12832
+no-cursor-updates
+#desktop-buffer-mode = windows
+tslib-devices = /dev/input/touchscreen0

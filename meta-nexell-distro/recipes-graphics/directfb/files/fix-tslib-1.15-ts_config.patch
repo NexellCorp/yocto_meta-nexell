@@ -1,0 +1,42 @@
+diff --git a/inputdrivers/tslib/tslib.c b/inputdrivers/tslib/tslib.c
+index a06cd68c6..48d2afe7d 100644
+--- a/inputdrivers/tslib/tslib.c
++++ b/inputdrivers/tslib/tslib.c
+@@ -131,15 +131,10 @@ check_device( const char *device )
+ {
+      struct tsdev *ts;
+
+-     ts = ts_open( device, 0 );
++     ts = ts_setup( device, 0 );
+      if (!ts)
+           return false;
+
+-     if (ts_config( ts )) {
+-          ts_close( ts );
+-          return false;
+-     }
+-
+      ts_close( ts );
+
+      return true;
+@@ -220,19 +215,12 @@ driver_open_device( CoreInputDevice  *device,
+      struct tsdev *ts;
+
+      /* open device */
+-     ts = ts_open( device_names[number], 0 );
++     ts = ts_setup( device_names[number], 0 );
+      if (!ts) {
+           D_ERROR( "DirectFB/tslib: Error opening `%s'!\n", device_names[number] );
+           return DFB_INIT;
+      }
+
+-     /* configure device */
+-     if (ts_config( ts )) {
+-          D_ERROR( "DirectFB/tslib: Error configuring `%s'!\n", device_names[number] );
+-          ts_close( ts );
+-          return DFB_INIT;
+-     }
+-
+      /* fill device info structure */
+      snprintf( info->desc.name,
+                DFB_INPUT_DEVICE_DESC_NAME_LENGTH, "tslib touchscreen %d", number );
