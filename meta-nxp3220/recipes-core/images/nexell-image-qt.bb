@@ -30,6 +30,7 @@ UTILS_INSTALL = " \
     tzdata \
     bash \
 "
+
 LIBS_INSTALL = " \
     libdrm \
     dbus \
@@ -57,6 +58,7 @@ PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-libs \
     packagegroup-nxp3220-apps \
     packagegroup-nxp3220-qt-utils \
+    packagegroup-nxp3220-directfb \
 "
 
 NEXELL_CUSTOMIZE_INSTALL = " \
