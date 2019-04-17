@@ -15,6 +15,9 @@ DFB_PACKAGE_CONFIGURE_DEPENDS ??= ""
 
 PACKAGECONFIG[configure] = "${DFB_PACKAGE_CONFIGURE},,${DFB_PACKAGE_CONFIGURE_DEPENDS}"
 
+# Default set drmkms for libdirectfb-nexell
+PACKAGECONFIG_append = " drmkms"
+
 do_install_append () {
 	install -d ${D}${sysconfdir}
 	install -m 644 ${WORKDIR}/directfbrc ${D}${sysconfdir}
