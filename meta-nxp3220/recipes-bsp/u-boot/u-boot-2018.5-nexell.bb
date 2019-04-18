@@ -88,6 +88,9 @@ do_deploy_append () {
 	fi
 }
 
+# To ensure that the board config has changed, always run the config command
+do_configure[nostamp] = "1"
+
 # not execute tasks
 do_packagedata[noexec] = "1"
 do_package_qa[noexec] = "1"
