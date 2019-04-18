@@ -77,6 +77,9 @@ do_deploy_append () {
 	make_ext4_bootimg ${D}/${KERNEL_IMAGEDEST}
 }
 
+# To ensure that the board config has changed, always run the config command
+do_configure[nostamp] = "1"
+
 # not execute tasks
 do_bundle_initramfs[noexec] = "1"
 do_rootfs[noexec] = "1"
