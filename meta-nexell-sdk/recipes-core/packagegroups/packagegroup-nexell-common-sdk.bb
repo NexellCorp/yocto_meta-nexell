@@ -6,11 +6,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
-ALLGO_CONNECTIVITY = " \
-    common-api-c++-dbus \
-    common-api-c++ \
-"
-
 NEXELL_LIBS = " \
     gst-plugins-camera \
     gst-plugins-renderer \
@@ -56,5 +51,4 @@ RDEPENDS_${PN} = " \
     ncurses-dev \
     util-linux-dev \
     ${NEXELL_LIBS} \
-    ${ALLGO_CONNECTIVITY} \
 "
