@@ -31,6 +31,14 @@ EXTRA_OEMAKE = " \
     'MODULEDIR=${GFXDRIVERS_MODULEDIR}' \
 "
 
+# Fix build error when EXTERNALSRC equal EXTERNALSRC_BUILD
+# Error : source directory already configured
+do_configure_prepend() {
+    if [ -f ${S}/config.status ]; then
+	oe_runmake -C ${S} distclean
+    fi
+}
+
 INSANE_SKIP_${PN} = "dev-so invalid-packageconfig"
 FILES_${PN} = "${GFXDRIVERS_MODULEDIR}/* "
 RDEPENDS_${PN} += "libdrm directfb"
