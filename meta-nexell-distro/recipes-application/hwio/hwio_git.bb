@@ -9,30 +9,20 @@ SRCREV = "${AUTOREV}"
 S = "${WORKDIR}/git"
 
 PV ?= "1.0+git${SRCPV}"
-PR = "0.1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit autotools pkgconfig
 
 EXTRA_OECONF = "'--prefix=${STAGING_DIR_HOST}'"
-
-do_configure() {
-    cd ${S}
-    NOCONFIGURE=true ./autogen.sh
-    oe_runconf ${EXTRA_OECONF}
-}
-
-do_compile() {
-    cd ${S}
-    oe_runmake clean
-    oe_runmake AM_CPPFLAGS+="$(WARN_CFLAGS)"
-}
-
-do_install() {
-    cd ${S}
-    install -d ${D}${bindir}
-    oe_runmake install DESTDIR=${D}
+EXTRA_OEMAKE = "$(WARN_CFLAGS)"
+ 
+# Fix build error when EXTERNALSRC equal EXTERNALSRC_BUILD
+# Error : source directory already configured
+do_configure_prepend() {
+    if [ -f ${S}/config.status ]; then
+	oe_runmake -C ${S} distclean
+    fi
 }
 
 INSANE_SKIP_${PN} = "installed-vs-shipped"
