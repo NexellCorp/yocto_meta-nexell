@@ -1,3 +1,4 @@
+# Fix build error for qt5 SDK !!!
 fakeroot do_generate_qt_environment_file() {
     install -d -m 755 ${D}${SDKPATHNATIVE}/environment-setup.d/
     script=${D}${SDKPATHNATIVE}/environment-setup.d/qt5.sh
@@ -26,13 +27,3 @@ fakeroot do_generate_qt_environment_file() {
     # Use relocable sysroot
     sed -i -e 's:${SDKPATHNATIVE}:$OECORE_NATIVE_SYSROOT:g' $script
 }
-
-# # nativesdk-qtbase_%.bbappend content
-
-# do_generate_qt_environment_file[umask] = "022"
-
-# fakeroot do_generate_qt_environment_file()
-# { -    mkdir -p ${D}${SDKPATHNATIVE}/environment-setup.d/
-#   +    install -d -m 755 ${D}${SDKPATHNATIVE}/environment-setup.d/
-#   script=${D}${SDKPATHNATIVE}/environment-setup.d/qt5.sh
-#   echo 'export PATH=${OE_QMAKE_PATH_HOST_BINS}:$PATH' > $script
