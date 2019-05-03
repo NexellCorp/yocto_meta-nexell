@@ -49,6 +49,8 @@ typedef struct {
 #define SET_PCAL			"POINTERCAL_FILE"
 #endif
 
+#define SET_LANG			"LANG"
+
 static launcher_t launcher_info[] = {
 	{ .s = RUN_LAUNCHER, },
 	{ .s = RUN_LAUNCHER_ARGS, },
@@ -78,7 +80,8 @@ static launcher_t launcher_info[] = {
 	{ .s = "QT_QPA_EGLFS_DEBUG", },
 #endif
 	{ .s = "QT_PLUGIN_PATH", },
-	{ .s = "QT_LOGGING_RULES", }
+	{ .s = "QT_LOGGING_RULES", },
+	{ .s = "LANG", }
 };
 
 /**
@@ -424,6 +427,7 @@ static int bootlauncher(const char *file, bool debug) {
 #ifdef TSLIB
 	char tsdev[256] = {0, }, tscal[256] = {0, }, tsplug[256] = {0, }, pcal[256] = {0, };
 #endif
+	char lang[256] = {0, };
 	char tmp[256] = {0, };
 	launcher_t *li = launcher_info;
 	int size = ARRAY_SIZE(launcher_info);
@@ -498,6 +502,10 @@ static int bootlauncher(const char *file, bool debug) {
 			continue;
 		}
 #endif
+		if (!parse_option(li[i].d, SET_LANG, tmp, NULL)) {
+			strcpy(lang, tmp);
+			continue;
+		}
 	}
 
 	if (debug) {
@@ -543,6 +551,7 @@ static int bootlauncher(const char *file, bool debug) {
 			setenv(SET_TSPLUG, tsplug, 1);
 			setenv(SET_PCAL, pcal, 1);
 #endif
+			setenv(SET_LANG, lang, 1);
 
 			/* execute launcher */
 			execle(prog, prog, args, NULL, envp);
