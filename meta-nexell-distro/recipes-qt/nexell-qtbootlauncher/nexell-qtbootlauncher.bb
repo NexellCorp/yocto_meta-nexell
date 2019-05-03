@@ -4,9 +4,11 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = " \
 	file://launcher-eglfs-no_tslib.conf \
-	file://launcher-eglfs-tslib.conf \
+	file://launcher-eglfs-tslib-no_invertx.conf \
+	file://launcher-eglfs-tslib-invertx.conf \
 	file://launcher-linuxfb-no_tslib.conf \
-	file://launcher-linuxfb-tslib.conf \
+	file://launcher-linuxfb-tslib-no_invertx.conf \
+	file://launcher-linuxfb-tslib-invertx.conf \
 	file://Makefile \
 	file://nx_qtbootlauncher.c \
 "
@@ -24,6 +26,7 @@ PLATFORM_TYPE = "${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eg
 				bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-linuxfb', 'linuxfb', 'not_supported', d), d)}"
 
 USECASE_TSLIB = "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', 'no_tslib', 'tslib', d)}"
+INVERTX_TSLIB = "${@bb.utils.contains('DISTRO_FEATURES', 'no-invertx-tslib', 'no_invertx', 'invertx', d)}"
 
 TSDEVICE ?= ""
 EVDEV_TOUCHSCREEN_PARAMETERS ?= ""
@@ -41,7 +44,11 @@ do_install() {
 	install -m 0755 ${S}/nx_qtbootlauncher ${D}${systemd_unitdir}/system-generators/
 
 	if [ "${PLATFORM_TYPE}" != "not_supported" ]; then
-		install -m 0755 ${S}/launcher-${PLATFORM_TYPE}-${USECASE_TSLIB}.conf ${D}${sysconfdir}/qboot/launcher.conf
+		if [ "${USECASE_TSLIB}" != "no_tslib" ]; then
+			install -m 0755 ${S}/launcher-${PLATFORM_TYPE}-${USECASE_TSLIB}-${INVERTX_TSLIB}.conf ${D}${sysconfdir}/qboot/launcher.conf
+		else
+			install -m 0755 ${S}/launcher-${PLATFORM_TYPE}-${USECASE_TSLIB}.conf ${D}${sysconfdir}/qboot/launcher.conf
+		fi
 
 		if [ ! -z "${TSDEVICE}" ]; then
 			sed -i -e 's,TSLIB_TSDEVICE=.*,TSLIB_TSDEVICE=${TSDEVICE},g' ${D}${sysconfdir}/qboot/launcher.conf
