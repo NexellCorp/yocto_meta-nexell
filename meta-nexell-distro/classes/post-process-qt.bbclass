@@ -3,6 +3,7 @@ inherit linux-nexell-base
 DEFAULT_QT_PLATFORM ?= "${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'EGLFS', \
 						bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-wayland', 'WAYLAND', '', d), d)}"
 TSLIB_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', 'false', 'true', d)}"
+TSLIB_INVERTX ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-invertx-tslib', 'false', 'true', d)}"
 
 postprocess_qt_function() {
 	cd ${IMAGE_ROOTFS}
@@ -13,12 +14,13 @@ postprocess_qt_function() {
 		echo "export QT_QPA_EGLFS_SWAPINTERVAL=0" >> usr/bin/nexell-qt5-touchsetup.sh
 		echo "export QT_QPA_EGLFS_HIDECURSOR=0" >> usr/bin/nexell-qt5-touchsetup.sh
 		echo "export QT_QPA_EGLFS_DEBUG=0" >> usr/bin/nexell-qt5-touchsetup.sh
+
 		if [ "${TSLIB_ENABLED}" = "false" ]; then
-			echo "export QT_QPA_EGLFS_NO_LIBINPUT=0" >> usr/bin/nexell-qt5-touchsetup.sh
 			echo "export QT_QPA_EGLFS_TSLIB=0" >> usr/bin/nexell-qt5-touchsetup.sh
+			echo "export QT_QPA_EGLFS_NO_LIBINPUT=0" >> usr/bin/nexell-qt5-touchsetup.sh
 		else
-			echo "export QT_QPA_EGLFS_NO_LIBINPUT=1" >> usr/bin/nexell-qt5-touchsetup.sh
 			echo "export QT_QPA_EGLFS_TSLIB=1" >> usr/bin/nexell-qt5-touchsetup.sh
+			echo "export QT_QPA_EGLFS_NO_LIBINPUT=1" >> usr/bin/nexell-qt5-touchsetup.sh
 		fi
 	else
 		echo "export QT_QPA_PLATFORM=wayland" >> usr/bin/nexell-qt5-touchsetup.sh
@@ -27,10 +29,15 @@ postprocess_qt_function() {
 	if [ "${TSLIB_ENABLED}" = "false" ]; then
 		echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/touchscreen0" >> usr/bin/nexell-qt5-touchsetup.sh
 	else
+		if [ "${TSLIB_INVERTX}" = "false" ]; then
+			echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0" >> usr/bin/nexell-qt5-touchsetup.sh
+		else
+			echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0:invertx:rotate=180" >> usr/bin/nexell-qt5-touchsetup.sh
+		fi
+
 		echo "export TSLIB_CALIBFILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
-		echo "export POINTERCAL_FILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
 		echo "export TSLIB_PLUGINDIR=/usr/lib/ts" >> usr/bin/nexell-qt5-touchsetup.sh
-		echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0:invertx:rotate=180" >> usr/bin/nexell-qt5-touchsetup.sh
+		echo "export POINTERCAL_FILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
 	fi
 
 	echo "export QT_PLUGIN_PATH=/usr/lib/qt5/plugins" >> usr/bin/nexell-qt5-touchsetup.sh
