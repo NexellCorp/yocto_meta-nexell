@@ -159,7 +159,6 @@ function copy_build_scripts()
     # post process, for rootfs customize
     #-----------------------------------------------
     mkdir -p ${TMP_WORK_PATH}/use-post-process
-    cp ${META_NEXELL_PATH}/recipes-core/udev/udev-extraconf/mount.sh ${TMP_WORK_PATH}/use-post-process/
 }
 
 function secure_select() {
