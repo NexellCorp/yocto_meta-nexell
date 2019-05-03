@@ -1,0 +1,11 @@
+--- a/mount.sh	2019-01-11 14:08:37.894319543 +0900
++++ b/mount.sh	2019-05-03 11:28:32.011628285 +0900
+@@ -31,7 +31,7 @@
+ 	# grant it with  w/r/x permissions.
+ 	case $ID_FS_TYPE in
+ 	vfat|fat)
+-		MOUNT="$MOUNT -o umask=007,gid=`awk -F':' '/^disk/{print $3}' /etc/group`"
++		MOUNT="$MOUNT -o umask=007,gid=`awk -F':' '/^disk/{print $3}' /etc/group`,utf8=1"
+ 		;;
+ 	# TODO
+ 	*)
