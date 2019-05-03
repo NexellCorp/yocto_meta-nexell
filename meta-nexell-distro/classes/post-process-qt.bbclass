@@ -39,10 +39,6 @@ postprocess_qt_function() {
 
 	cd ${IMAGE_ROOTFS}/usr/lib
 	touch libMali_for_${DEFAULT_QT_PLATFORM}
-
-	# automount iocharset modified
-	cd ${IMAGE_ROOTFS}
-	cp ${BASE_WORKDIR}/use-post-process/mount.sh etc/udev/scripts/
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_qt_function;"
