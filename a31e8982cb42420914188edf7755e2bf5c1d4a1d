@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6baa7271_bf246c6e",
+        "filename": "meta-nexell-distro/recipes-application/nx_vip_test/nx-vip-test_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-05-08T05:16:01Z",
+      "side": 1,
+      "message": "is this need ?",
+      "range": {
+        "startLine": 16,
+        "startChar": 49,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "a31e8982cb42420914188edf7755e2bf5c1d4a1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b8e8b05_0fea0e33",
+        "filename": "meta-nexell-distro/recipes-application/nx_vip_test/nx-vip-test_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-05-08T05:16:01Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 5
+      },
+      "revId": "a31e8982cb42420914188edf7755e2bf5c1d4a1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2e39a17_0618ae34",
+        "filename": "meta-nexell-distro/recipes-application/nx_vip_test/nx-vip-test_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-05-08T05:16:01Z",
+      "side": 1,
+      "message": "fix lines",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 30
+      },
+      "revId": "a31e8982cb42420914188edf7755e2bf5c1d4a1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "307301b7_073aa62f",
+        "filename": "meta-nexell-distro/recipes-application/nx_vip_test/nx-vip-test_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-05-08T05:16:01Z",
+      "side": 1,
+      "message": "fix lines",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 3
+      },
+      "revId": "a31e8982cb42420914188edf7755e2bf5c1d4a1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fb6ae02_17e38c6a",
+        "filename": "meta-nexell-distro/recipes-application/nx_vip_test/nx-vip-test_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-05-08T05:16:01Z",
+      "side": 1,
+      "message": "fix lines",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 35
+      },
+      "revId": "a31e8982cb42420914188edf7755e2bf5c1d4a1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
