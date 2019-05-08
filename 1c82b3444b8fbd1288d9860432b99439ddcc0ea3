@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be8e0f0a_5c7125b3",
+        "filename": "meta-nexell-distro/recipes-core/packagegroups/packagegroup-nexell-qt.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-05-08T05:16:49Z",
+      "side": 1,
+      "message": "is this support s5pxx18 ?",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 17
+      },
+      "revId": "1c82b3444b8fbd1288d9860432b99439ddcc0ea3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
