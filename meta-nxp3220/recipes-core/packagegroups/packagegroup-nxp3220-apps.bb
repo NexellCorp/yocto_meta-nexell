@@ -14,6 +14,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 PACKAGE_NEXELL_APPS = " \
+    nx-vip-test \
     nx-video-api-test \
     hwio \
 "
