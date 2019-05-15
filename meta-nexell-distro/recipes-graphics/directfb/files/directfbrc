@@ -1,5 +1,12 @@
 system = drmkms
 accelerator = 12832
+
 no-cursor-updates
-#desktop-buffer-mode = windows
 tslib-devices = /dev/input/touchscreen0
+
+# back buffer mode : uto|triple|backvideo|backsystem|frontonly|windows
+desktop-buffer-mode = triple
+
+vsync-none
+no-vt
+no-trace
