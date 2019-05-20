@@ -20,7 +20,8 @@ DEPENDS = " \
 	id3lib \
 	libid3tag \
 	libjpeg-turbo \
-    icu \
+	taglib \
+	icu \
 	qtbase-native \
 	qtmultimedia \
 	gstreamer1.0-plugins-base \
