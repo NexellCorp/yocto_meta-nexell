@@ -20,6 +20,7 @@ DEPENDS = " \
 	id3lib \
 	libid3tag \
 	libjpeg-turbo \
+	taglib \
     icu \
 	qtbase-native \
 	qtmultimedia \
