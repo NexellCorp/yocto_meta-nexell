@@ -1,4 +1,5 @@
 inherit nexell-u-boot
+inherit nexell-bingen
 
 HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
 SECTION = "bootloaders"
@@ -69,16 +70,21 @@ do_compile_append() {
 }
 
 do_deploy_append () {
-	NSIH=${UBOOT_NSIH}
-	BINGEN=${TOOL_BINGEN}
-	BIN=${UBOOT_BIN}
-	BOOTKEY=${UBOOT_BOOTKEY}
-	USERKEY=${UBOOT_USERKEY}
+	# Binary + NSIH : $BIN.raw
+	do_bingen_raw bl33 ${B}/${UBOOT_BIN} ${UBOOT_NSIH} \
+			${UBOOT_BOOTKEY} ${UBOOT_USERKEY} ${UBOOT_LOADADDR};
 
-	${BINGEN} -n ${NSIH} -i ${B}/${BIN} \
-		-b ${BOOTKEY} -u ${USERKEY} \
-		-k bl33 -l ${UBOOT_LOADADDR} -s ${UBOOT_LOADADDR} -t;
-	install -m 0644 ${B}/${BIN}.* ${DEPLOYDIR}
+	if ${@bb.utils.contains('BINARY_FEATURES','nand','true','false',d)}; then
+		if [ -z ${NAND_PAGE_SIZE} ]; then
+			echo "ERROR: NOT Defined 'NAND_PAGE_SIZE'"
+			exit 1
+		fi
+
+		# (Binary + NSIH) + ECC : $BIN.raw.ecc
+		do_bingen_ecc ${DEPLOYDIR}/${UBOOT_BIN}.raw ${NAND_PAGE_SIZE}
+	fi
+
+	install -m 0644 ${B}/${UBOOT_BIN}.* ${DEPLOYDIR}
 
 	if [ -f ${B}/params_env.txt ]; then
 		install -m 0644 ${B}/params_env.txt ${DEPLOYDIR}
