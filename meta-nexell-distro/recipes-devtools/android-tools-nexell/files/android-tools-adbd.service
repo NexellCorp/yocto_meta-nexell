@@ -5,6 +5,7 @@ Description=Android Debug Bridge daemon
 Type=forking
 ExecStart=/usr/bin/start_adbd.sh
 PIDFile=/run/adbd.pid
+TimeoutSec=3
 
 [Install]
 WantedBy=multi-user.target
