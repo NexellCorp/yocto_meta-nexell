@@ -4,6 +4,7 @@ LICENSE = "CLOSED"
 
 inherit deploy
 inherit externalsrc
+inherit nexell-bingen
 
 EXTERNALSRC = "${BL2_SOURCE}"
 EXTERNALSRC_BUILD = "${EXTERNALSRC}"
@@ -13,17 +14,28 @@ EXTRA_OEMAKE = "CROSS_COMPILE=${TARGET_PREFIX} CHIPNAME=${BL2_CHIP} BOARD=${BL2_
 PARALLEL_MAKE = "-j 1"
 
 do_deploy () {
-	BINGEN=${TOOL_BINGEN}
-	NSIH=${BL2_NSIH}
-	BOOTKEY=${BL2_BOOTKEY}
-	USERKEY=${BL2_USERKEY}
-	BIN=${BL2_BIN}
+	install -d ${DEPLOYDIR}
+	install -m 0644 ${S}/out/${BL2_BIN} ${DEPLOYDIR};
 
-	install -m 0644 ${S}/out/${BIN} ${DEPLOYDIR};
-	${BINGEN} -n ${NSIH} -i ${DEPLOYDIR}/${BIN} \
-		-b ${BOOTKEY} -u ${USERKEY} -k bl2 -l 0xFFFF9000 -s 0xFFFF9000 -t;
-	cp ${DEPLOYDIR}/${BIN}.raw ${DEPLOYDIR}/bl2.bin.raw;
+	# Binary + NSIH : $BIN.raw
+	do_bingen_raw bl2 ${DEPLOYDIR}/${BL2_BIN} \
+		${BL2_NSIH} ${BL2_BOOTKEY} ${BL2_USERKEY} ${BL2_LOADADDR};
+
+	cp ${DEPLOYDIR}/${BL2_BIN}.raw ${DEPLOYDIR}/bl2.bin.raw;
+
+	if ${@bb.utils.contains('BINARY_FEATURES','nand.ecc','true','false',d)}; then
+		if [ -z ${FLASH_PAGE_SIZE} ]; then
+			echo "ERROR: NOT Defined 'FLASH_PAGE_SIZE'"
+			exit 1
+		fi
+
+		# (Binary + NSIH) + ECC : $BIN.raw.ecc
+		do_bingen_ecc ${DEPLOYDIR}/${BL2_BIN}.raw ${FLASH_PAGE_SIZE}
+
+		cp ${DEPLOYDIR}/${BL2_BIN}.raw.ecc ${DEPLOYDIR}/bl2.bin.raw.ecc;
+	fi
 }
+
 addtask deploy before do_build after do_compile
 
 # not execute tasks
