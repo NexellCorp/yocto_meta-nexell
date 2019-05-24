@@ -27,6 +27,7 @@ ETC_TOOLS = " \
 	openssl \
 	curl \
 	procps \
+	dlt-daemon \
 "
 
 ETC_LIBS = " \
