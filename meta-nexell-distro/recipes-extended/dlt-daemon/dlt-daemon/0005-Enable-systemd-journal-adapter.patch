@@ -1,0 +1,68 @@
+From f17829da8ab46d29ac7e37bf7aeff554e5c3f476 Mon Sep 17 00:00:00 2001
+From: michelle337 <michelle.lee@nexell.co.kr>
+Date: Wed, 22 May 2019 03:30:56 -0700
+Subject: [PATCH] Enable systemd journal adapter
+
+Signed-off-by: michelle337 <michelle.lee@nexell.co.kr>
+---
+ src/daemon/dlt.conf              | 2 +-
+ src/system/dlt-system.conf       | 2 +-
+ systemd/dlt-system.service.cmake | 2 +-
+ systemd/dlt.service.cmake        | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/daemon/dlt.conf b/src/daemon/dlt.conf
+index 1e4f566..1745493 100644
+--- a/src/daemon/dlt.conf
++++ b/src/daemon/dlt.conf
+@@ -62,7 +62,7 @@ RingbufferStepSize = 500000
+ 
+ # Initial log-level that is sent when an application registers (Default: 4)
+ # DLT_LOG_OFF = 0, DLT_LOG_FATAL = 1, DLT_LOG_ERROR = 2, DLT_LOG_WARN = 3, DLT_LOG_INFO = 4, DLT_LOG_DEBUG = 5, DLT_LOG_VERBOSE = 6
+-# ContextLogLevel = 4
++ContextLogLevel = 4
+ 
+ # Initial trace-status that is sent when an application registers (Default: 0)
+ # DLT_TRACE_STATUS_OFF = 0, DLT_TRACE_STATUS_ON = 1
+diff --git a/src/system/dlt-system.conf b/src/system/dlt-system.conf
+index b3677f9..a71f12c 100644
+--- a/src/system/dlt-system.conf
++++ b/src/system/dlt-system.conf
+@@ -49,7 +49,7 @@ SyslogPort = 47111
+ # it causes bind error (can see on connected client).
+ 
+ # Enable the Systemd Journal Adapter (Default: 0)
+-JournalEnable = 0
++JournalEnable = 1
+ 
+ # The Context Id of the journal adapter (Default: JOUR)
+ JournalContextId = JOUR
+diff --git a/systemd/dlt-system.service.cmake b/systemd/dlt-system.service.cmake
+index 1a5b913..b4d493e 100755
+--- a/systemd/dlt-system.service.cmake
++++ b/systemd/dlt-system.service.cmake
+@@ -22,7 +22,7 @@ Wants=dlt.service
+ 
+ [Service]
+ Type=simple
+-ExecStart=@CMAKE_INSTALL_PREFIX@/bin/dlt-system
++ExecStart=@CMAKE_INSTALL_PREFIX@/bin/dlt-system -c /etc/dlt-system.conf
+ WatchdogSec=@DLT_WatchdogSec@
+ NotifyAccess=main
+ LimitCORE=infinity
+diff --git a/systemd/dlt.service.cmake b/systemd/dlt.service.cmake
+index e4753a2..c841c2a 100755
+--- a/systemd/dlt.service.cmake
++++ b/systemd/dlt.service.cmake
+@@ -21,7 +21,7 @@ Documentation=man:dlt-daemon(1) man:dlt.conf(5)
+ 
+ [Service]
+ Type=simple
+-ExecStart=@CMAKE_INSTALL_PREFIX@/bin/dlt-daemon
++ExecStart=@CMAKE_INSTALL_PREFIX@/bin/dlt-daemon -c /etc/dlt.conf
+ WatchdogSec=@DLT_WatchdogSec@
+ NotifyAccess=main
+ LimitCORE=infinity
+-- 
+2.7.4
+
