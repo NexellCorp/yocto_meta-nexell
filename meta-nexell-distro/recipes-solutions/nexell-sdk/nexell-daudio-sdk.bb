@@ -30,7 +30,7 @@ DEPENDS = " \
 inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
            bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'nexell-sdk-qt5.8.x-env', '', d), d)}
 
-PV = "1.1.0"
+PV = "1.3.0"
 PR = "r0"
 
 S = "${WORKDIR}/sdk"
