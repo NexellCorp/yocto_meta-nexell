@@ -401,6 +401,12 @@ function make_sparse_rootfs_img()
     ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l ${partition_size} -b 4K -a user userdata.img ./userdata
     echo "userdata partition size : ${partition_size}byte"
 
+	if [ "${BOARD_NAME}" == "convergence-daudio" ]; then
+		rm -rf svmdata
+		cp -af ../../meta-nexell/meta-nexell-distro/recipes-extended/nexell-init/files/nx_init/svmdata .
+		${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l 33554432 -b 4K -a user svmdata.img ./svmdata
+	fi
+
     popd
 }
 

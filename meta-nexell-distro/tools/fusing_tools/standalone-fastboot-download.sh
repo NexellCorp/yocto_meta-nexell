@@ -34,6 +34,7 @@ UPDATE_BOOTLOADER=false
 UPDATE_ENV=false
 UPDATE_BOOT=false
 UPDATE_MODULES=false
+UPDATE_SVMDATA=false
 UPDATE_ROOT=false
 UPDATE_SYSTEM=false
 UPDATE_DATA=false
@@ -135,6 +136,9 @@ function print_args()
 		fi
 		if [ ${UPDATE_MODULES} == "true" ]; then
 			vmsg -e "Update:\t\t\tmodules"
+		fi
+		if [ ${UPDATE_SVMDATA} == "true" ]; then
+			vmsg -e "Update:\t\t\tsvmdata"
 		fi
 		if [ ${UPDATE_ROOT} == "true" ]; then
 			vmsg -e "Update:\t\t\troot"
@@ -250,6 +254,15 @@ function update_modules()
 	fi
 }
 
+function update_svmdata()
+{
+	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_SVMDATA} == "true" ]; then
+		local file=${1}
+		vmsg "update svmdata: ${file}"
+		flash svmdata ${file}
+	fi
+}
+
 function update_root()
 {
 	if [ ${UPDATE_ALL} == "true" ] || [ ${UPDATE_ROOT} == "true" ]; then
@@ -300,6 +313,9 @@ fi
 
 update_env ${RESULT_DIR}/params.bin
 update_boot ${RESULT_DIR}/boot.img
+if [ "${MACHINE_NAME}" == "s5p4418-convergence-daudio-qt" ]; then
+update_svmdata ${RESULT_DIR}/svmdata.img
+fi
 update_root ${RESULT_DIR}/rootfs.img
 update_data ${RESULT_DIR}/userdata.img
 
