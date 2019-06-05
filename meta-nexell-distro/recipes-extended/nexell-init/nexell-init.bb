@@ -23,6 +23,9 @@ do_install() {
 	if [ -f ${S}/NxQuickRearCam ]; then
 		install -m 0755 ${S}/NxQuickRearCam ${D}${base_sbindir}/NxQuickRearCam
 	fi
+
 }
 
 FILES_${PN} = "${base_sbindir}"
+
+INSANE_SKIP_${PN} = "already-stripped"
