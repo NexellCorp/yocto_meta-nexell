@@ -16,8 +16,10 @@ int main(int argc, char *argv[])
 	int access_ret = 0;
 
 	mount("sysfs", "/sys", "sysfs", 0, NULL);
+#ifdef NXQUICKSVM
 	mkdir("/svmdata", 0755);
 	mount("/dev/mmcblk0p2", "/svmdata", "ext4", 0, NULL);
+#endif
 
 	pid = fork();
 
