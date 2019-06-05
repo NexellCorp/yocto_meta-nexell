@@ -1,0 +1,43 @@
+#
+# Installation paths.
+PREFIX		?= /usr/local
+BINDIR		?= $(PREFIX)/bin
+SBINDIR		?= $(PREFIX)/sbin
+MANDIR		?= $(PREFIX)/share/man
+INCLUDEDIR	?= $(PREFIX)/include
+LIBEXECDIR	?= $(PREFIX)/libexec
+RUNDIR		?= /run
+
+# LIBDIR falls back to the standard path.
+LIBDIR ?= $(PREFIX)/lib
+
+export PREFIX BINDIR SBINDIR MANDIR RUNDIR
+export LIBDIR INCLUDEDIR LIBEXECDIR
+
+install-man:
+#	$(Q) $(MAKE) -C Documentation install
+.PHONY: install-man
+
+install-lib: lib
+	$(Q) $(MAKE) $(build)=lib install
+.PHONY: install-lib
+
+install-criu: criu
+	$(Q) $(MAKE) $(build)=criu install
+.PHONY: install-criu
+
+install-compel: $(compel-install-targets)
+	$(Q) $(MAKE) $(build)=compel install
+	$(Q) $(MAKE) $(build)=compel/plugins install
+.PHONY: install-compel
+
+install: install-man install-lib install-criu install-compel ;
+.PHONY: install
+
+uninstall:
+	$(Q) $(MAKE) -C Documentation $@
+	$(Q) $(MAKE) $(build)=lib $@
+	$(Q) $(MAKE) $(build)=criu $@
+	$(Q) $(MAKE) $(build)=compel $@
+	$(Q) $(MAKE) $(build)=compel/plugins $@
+.PHONY: uninstall

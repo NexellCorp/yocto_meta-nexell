@@ -61,6 +61,13 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 	nexell-qt5-touchsetup \
 "
 
+CRIU_INSTALL = " \
+        criu \
+        python-protobuf \
+        python-ipaddress \
+        python-ujson \
+"
+
 IMAGE_INSTALL_append = " \
 	kernel-modules \
 	${SYSTEMD_INSTALL} \
@@ -73,4 +80,5 @@ IMAGE_INSTALL_append = " \
 	${ETC_TOOLS} \
 	${ETC_LIBS} \
 	${NEXELL_CUSTOMIZE_INSTALL} \
+        ${CRIU_INSTALL} \
 "
