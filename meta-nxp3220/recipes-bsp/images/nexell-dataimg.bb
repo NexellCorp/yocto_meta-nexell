@@ -2,10 +2,10 @@ DESCRIPTION = "Nexell Make User Data Filesystem Image For NXP3220"
 SECTION = "kernel"
 LICENSE = "GPLv2+"
 
-inherit classes/nexell-mkimage.bbclass
+inherit nexell-mkimage
 
 do_deploy() {
-	make_ext4_dataimg ${DEPLOY_DIR_IMAGE}
+	make_image_dataimg ${DEPLOY_DIR_IMAGE}
 }
 addtask deploy after do_package
 

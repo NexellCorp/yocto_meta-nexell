@@ -52,13 +52,13 @@ BL32_VECTOR ?= "${BSP_ROOT_DIR}/tools/files/aesvector.txt"
 
 # for disk partition image
 PART_BOOT_LABEL ?= "boot"
-PART_BOOT_SIZE ?= "32M"
+PART_BOOT_SIZE ?= ""
 
 PART_ROOTFS_LABEL ?= "rootfs"
-PART_ROOTFS_SIZE ?= "50M"
+PART_ROOTFS_SIZE ?= ""
 
 PART_DATA_LABEL ?= "data"
-PART_DATA_SIZE ?= "200M"
+PART_DATA_SIZE ?= ""
 
 # for flash (NAND) parameter
 FLASH_PAGE_SIZE ?= ""

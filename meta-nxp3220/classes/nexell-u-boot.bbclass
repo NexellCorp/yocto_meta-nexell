@@ -1,3 +1,5 @@
+# uboot append commands
+
 require recipes-bsp/u-boot/u-boot.inc
 
 do_compile () {
