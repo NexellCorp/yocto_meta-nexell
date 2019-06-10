@@ -72,9 +72,9 @@ python do_symlink_staging_dir () {
 addtask do_symlink_staging_dir after do_unpack before do_patch do_configure
 
 # make boot.img
-inherit classes/nexell-mkimage.bbclass
+inherit nexell-mkimage
 do_deploy_append () {
-	make_ext4_bootimg ${D}/${KERNEL_IMAGEDEST}
+	make_image_bootimg ${D}/${KERNEL_IMAGEDEST}
 }
 
 # To ensure that the board config has changed, always run the config command

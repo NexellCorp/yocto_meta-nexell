@@ -2,12 +2,12 @@ DESCRIPTION = "Nexell Make Kernel Boot Image For NXP3220"
 SECTION = "kernel"
 LICENSE = "GPLv2+"
 
-inherit classes/nexell-mkimage.bbclass
+inherit nexell-mkimage
 
 DEPENDS += "virtual/kernel"
 
 do_deploy() {
-	make_ext4_bootimg ${DEPLOY_DIR_IMAGE}
+	make_image_bootimg ${DEPLOY_DIR_IMAGE}
 }
 addtask deploy after do_package
 

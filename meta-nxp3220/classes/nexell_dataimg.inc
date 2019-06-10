@@ -1,7 +1,7 @@
-inherit classes/nexell-mkimage.bbclass
+inherit nexell-mkimage
 
 do_data_image() {
-	make_ext4_dataimg ${DEPLOY_DIR_IMAGE}
+	make_image_dataimg ${DEPLOY_DIR_IMAGE}
 }
 addtask data_image after do_image_complete before do_build
 

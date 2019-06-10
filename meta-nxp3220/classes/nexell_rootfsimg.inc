@@ -1,10 +1,7 @@
-inherit classes/nexell-mkimage.bbclass
-
-IMAGE_FSTYPES += "ext4"
-IMAGE_FSTYPES_DEBUGFS += "ext4"
+inherit nexell-mkimage
 
 do_rootfs_image() {
-	make_ext4_rootfsimg ${DEPLOY_DIR_IMAGE}/${PN}-${MACHINE}
+	make_image_rootfsimg ${DEPLOY_DIR_IMAGE}/${PN}-${MACHINE}
 }
 addtask rootfs_image after do_image_complete before do_build
 
