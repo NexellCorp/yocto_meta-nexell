@@ -12,6 +12,38 @@ SRC_URI += " \
 	file://stop_adbd.sh \
 "
 
+do_compile() {
+    # Setting both variables below causing our makefiles to not work with
+    # implicit make rules
+    unset CFLAGS
+    unset CPPFLAGS
+
+    export SRCDIR=${S}
+
+    case "${HOST_ARCH}" in
+      arm)
+        export android_arch=linux-arm
+      ;;
+      aarch64)
+        export android_arch=linux-arm64
+      ;;
+      mips|mipsel)
+        export android_arch=linux-mips
+      ;;
+      powerpc|powerpc64)
+        export android_arch=linux-ppc
+      ;;
+      i686|i586|x86_64)
+        export android_arch=linux-x86
+      ;;
+    esac
+
+    for tool in ${TOOLS}; do
+      mkdir -p ${B}/${tool}
+      oe_runmake -f ${B}/${tool}.mk -C ${B}/${tool}
+    done
+}
+
 do_install_append() {
     # skip native build system
     if [ -z ${TARGET_PREFIX} ]; then
