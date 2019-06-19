@@ -160,8 +160,9 @@ UTILS_INSTALL = " \
     glibc-gconv-iso8859-1 \
     glibc-gconv-iso8859-15 \
     glibc-gconv-euc-kr \
+    libusb1 \
+    usbutils \
 "
-
 RDEPENDS_${PN} = " \
     nexell-drm-mali-qt \
     weston-conf \
