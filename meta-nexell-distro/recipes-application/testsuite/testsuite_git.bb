@@ -129,6 +129,12 @@ do_compile() {
     cd ${S}/cam_enumeration
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libdrm -I${STAGING_INCDIR}/nexell" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+
+    #usb_test
+    cd ${S}/usb_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libusb-1.0 -I${S}/usb_test/include/ -I" LDFLAGS="-L${STAGING_LIBDIR} -L{STAGING_LIBDIR}/lib/ -L${S}/usb_test/lib/" CC="$CC"
+
 }
 
 do_install() {
@@ -203,6 +209,9 @@ do_install() {
     #camera_test
     install -m 0755 ${S}/cam_test/cam_test ${D}${bindir}
     install -m 0755 ${S}/cam_enumeration/cam_enumeration ${D}${bindir}
+
+    #usb_test
+    install -m 0755 ${S}/usb_test/usb_test ${D}${bindir}
 }
 
 PREFERRED_VERSION_libavcodec = "56.60.100"
