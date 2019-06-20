@@ -12,7 +12,7 @@ SRCREV = "${AUTOREV}"
 
 SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_apps_testsuite;protocol=https;branch=nexell"
 
-DEPENDS = "nx-drm-allocator nx-renderer nx-scaler nx-gst-meta nx-v4l2 libdrm-nx libv4l jpeg"
+DEPENDS = "nx-drm-allocator nx-renderer nx-scaler nx-gst-meta nx-v4l2 libdrm-nx libv4l jpeg libusb1"
 
 S = "${WORKDIR}/git"
 
@@ -129,6 +129,11 @@ do_compile() {
     cd ${S}/cam_enumeration
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
     oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libdrm -I${STAGING_INCDIR}/nexell" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
+
+    #aoa_test
+    cd ${S}/aoa_test
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} INCLUDES="-I${STAGING_INCDIR} -I${STAGING_INCDIR}/libusb-1.0" LDFLAGS="-L${STAGING_LIBDIR}" CC="$CC"
 }
 
 do_install() {
@@ -203,6 +208,9 @@ do_install() {
     #camera_test
     install -m 0755 ${S}/cam_test/cam_test ${D}${bindir}
     install -m 0755 ${S}/cam_enumeration/cam_enumeration ${D}${bindir}
+
+    #aoa_test
+    install -m 0755 ${S}/aoa_test/aoa_test ${D}${bindir}
 }
 
 PREFERRED_VERSION_libavcodec = "56.60.100"
