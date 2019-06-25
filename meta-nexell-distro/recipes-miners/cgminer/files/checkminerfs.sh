@@ -8,6 +8,7 @@ if [ ! "$CONFIG_MMC_FS" ]; then
 	sync;
 	mount /dev/mmcblk0p5 /config
 	sync;
+	echo "config is not formated" > /dev/ttySAC3
 	REBOOT_FLAG=1
 fi
 
@@ -18,9 +19,10 @@ fi
 #fi
 
 HOSTNAME_PREFIX=`/bin/hostname | awk -F- '{print $1$2}'`
-if [ "$HOSTNAME_PREFIX" != "poc2-ctrlbd" ]; then
+if [ "$HOSTNAME_PREFIX" != "poc2ctrlbd" ]; then
 	ENVMAC=`/sbin/fw_printenv | grep ethaddr=a4 | awk -F= '{print $2}'| tr -d : | tr 'a-z' 'A-Z'`
 	echo "poc2-ctrlbd-$ENVMAC" > /etc/hostname
+	echo "hostname is not set" > /dev/ttySAC3
 	REBOOT_FLAG=1
 fi
 
