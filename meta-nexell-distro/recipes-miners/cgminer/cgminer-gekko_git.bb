@@ -23,10 +23,9 @@ FILES_${PN} += " ${sysconfdir} config"
 SRCREV = "${AUTOREV}"
 #PV = "4.9+gitr${SRCPV}"
 
-#PACKAGECONFIG_append 	= " gekko"
-#PACKAGECONFIG[gekko]  	= "--enable-gekko,,"
-PACKAGECONFIG_append 	= " tsb1101"
-PACKAGECONFIG[tsb1101] 	= "--enable-tsb1101,,"
+PACKAGECONFIG_append   = " dragonmint_t1"
+PACKAGECONFIG[dragonmint_t1]   = "--enable-dragonmint_t1,,"
+
 
 INITSCRIPT_NAME = "cgminer"
 INITSCRIPT_PARAMS = "defaults 99"
