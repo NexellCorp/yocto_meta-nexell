@@ -29,6 +29,7 @@ UTILS_INSTALL = " \
     net-tools \
     tzdata \
     bash \
+    dlt-daemon \
 "
 
 LIBS_INSTALL = " \
