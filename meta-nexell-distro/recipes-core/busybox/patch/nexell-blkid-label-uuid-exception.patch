@@ -5,7 +5,7 @@
  		if (uc->label[0])
  			printf(" LABEL=\"%s\"", uc->label);
 +		else
-+            printf(" LABEL=\"\"");
++			printf(" LABEL=\"\"");
 +
  		if (uc->uc_uuid[0])
  			printf(" UUID=\"%s\"", uc->uc_uuid);
