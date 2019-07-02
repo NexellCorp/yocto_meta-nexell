@@ -7,13 +7,12 @@ postprocess_qt_function() {
 
 	if [ "${DEFAULT_QT_PLATFORM}" = "LINUXFB" ]; then
 		echo "export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb0:nographicsmodeswitch" >> usr/bin/nexell-qt5-touchsetup.sh
+			echo "export QT_QPA_FB_NO_LIBINPUT=1" >> usr/bin/nexell-qt5-touchsetup.sh
 
 		if [ "${TSLIB_ENABLED}" = "false" ]; then
 			echo "export QT_QPA_FB_TSLIB=0" >> usr/bin/nexell-qt5-touchsetup.sh
-			echo "export QT_QPA_FB_NO_LIBINPUT=0" >> usr/bin/nexell-qt5-touchsetup.sh
 		else
 			echo "export QT_QPA_FB_TSLIB=1" >> usr/bin/nexell-qt5-touchsetup.sh
-			echo "export QT_QPA_FB_NO_LIBINPUT=1" >> usr/bin/nexell-qt5-touchsetup.sh
 		fi
 	else
 		echo "Can't find supported Qt platform"
