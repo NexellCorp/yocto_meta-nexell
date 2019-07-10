@@ -20,6 +20,11 @@ do_configure() {
     oe_runconf --enable-static
 }
 
+do_compile_prepend() {
+    #overwrite v4l2-controls.h to latest linux_libc_header
+    cp ${BASE_WORKDIR}/clone_kernel_src/include/uapi/linux/v4l2-controls.h ${STAGING_INCDIR}/linux/
+}
+
 do_compile() {
     cd ${S}
     oe_runmake clean
