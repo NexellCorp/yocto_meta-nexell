@@ -1,3 +1,5 @@
+inherit linux-nexell-base
+
 DESCRIPTION = "Nexell init process"
 HOMEPAGE = "http://www.nexell.co.kr"
 SECTION = "base"
@@ -9,21 +11,21 @@ PR = "r0"
 
 SRCREV = "${AUTOREV}"
 
-SRC_URI = " \
-	file://nx_init \
-"
+SRC_URI = "git://review.gerrithub.io/NexellCorp/nx_init;protocol=https;branch=master"
 
-S = "${WORKDIR}/nx_init"
+S = "${WORKDIR}/git"
+
+inherit autotools pkgconfig gettext
+
+do_compile() {
+	cd ${S}
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC" clean
+    oe_runmake CROSS_COMPILE=${TARGET_PREFIX} CC="$CC"
+}
 
 do_install() {
 	install -d ${D}${base_sbindir}
-
 	install -m 0755 ${S}/nx_init ${D}${base_sbindir}
-
-	if [ -f ${S}/NxQuickRearCam ]; then
-		install -m 0755 ${S}/NxQuickRearCam ${D}${base_sbindir}/NxQuickRearCam
-	fi
-
 }
 
 FILES_${PN} = "${base_sbindir}"
