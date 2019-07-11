@@ -55,6 +55,8 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio support-daudio-sdk', 'nexell-daudio-sdk', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-daudio support-daudio-sdk support-allgo-connectivity support-allgo-connectivity-sdk', 'allgo-connectivity-sdk', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init', 'nexell-init', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init support-nx-quickrearcam', 'nx-quickrearcam', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init support-svm-daemon', 'svm-daemon', '', d)} \
 	user-fonts \
 	nexell-bootanim \
 	nexell-nxreboot \
