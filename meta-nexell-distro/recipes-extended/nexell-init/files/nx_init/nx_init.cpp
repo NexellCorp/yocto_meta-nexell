@@ -8,6 +8,7 @@
 
 #define NXQUICKREARCAM
 #undef NXQUICKSVM
+#define QUICKBOOT_LOG 1
 
 #ifdef NXQUICKREARCAM
 #include <linux/fs.h>
@@ -172,8 +173,15 @@ int main(int argc, char *argv[])
 
 		default:
 		{
+#if QUICKBOOT_LOG
+			printf("End of start kernel!\n");
+			system("echo 147 > /sys/class/gpio/export");
+			system("echo out > /sys/class/gpio/gpio147/direction");
+			system("echo 0 > /sys/class/gpio/gpio147/value");
+#else
 			usleep(500000);
-			printf("start systemd \n");
+			printf("start systemd \n");			
+#endif
 			execl("/lib/systemd/systemd","systemd", NULL);
 			break;
 		}
