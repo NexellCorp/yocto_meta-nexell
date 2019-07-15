@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f25dda82_676ac585",
+        "filename": "meta-nexell-distro/recipes-application/nx-quickrearcam/nx-quickrearcam_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1015389
+      },
+      "writtenOn": "2019-07-15T09:05:16Z",
+      "side": 1,
+      "message": "Remove this unintended spaces",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "3111d8244d106de25cc130a92645f3f10906f770",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
