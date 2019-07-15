@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82e7cb71_19b85ae3",
+        "filename": "meta-nexell-distro/recipes-application/svm-daemon/svm-daemon_git.bb",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1015389
+      },
+      "writtenOn": "2019-07-15T09:06:24Z",
+      "side": 1,
+      "message": "Why did you add this empty function?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "8ad8224cd14bbbe346e440d5e5553d0e53dcc136",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
