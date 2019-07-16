@@ -46,6 +46,30 @@
       "revId": "3111d8244d106de25cc130a92645f3f10906f770",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebd9fb52_d1864eb5",
+        "filename": "meta-nexell-distro/recipes-application/nx-quickrearcam/nx-quickrearcam_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1015389
+      },
+      "writtenOn": "2019-07-16T05:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d50887a1_5d2a40a4",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "3111d8244d106de25cc130a92645f3f10906f770",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
