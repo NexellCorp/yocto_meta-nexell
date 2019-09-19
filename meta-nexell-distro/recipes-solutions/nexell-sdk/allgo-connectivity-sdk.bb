@@ -44,6 +44,7 @@ do_install() {
 	install -d ${D}${bindir}
 	install -d ${D}/home/root
 	install -d ${D}/nexell/daudio
+	install -d ${D}${baselibdir}
 
 	cp -apR ${SDK_RESULT}${sysconfdir}/* ${D}${sysconfdir}/
 	chown -R root:root ${D}${sysconfdir}/
@@ -57,10 +58,12 @@ do_install() {
 	cp -apR ${SDK_RESULT}/nexell/daudio/* ${D}/nexell/daudio/
 	chmod -R 755 ${D}/nexell/daudio/*
 	chown -R root:root ${D}/nexell/daudio/*
+	cp -apR ${SDK_RESULT}${baselibdir}/* ${D}${baselibdir}/
+	chown -R root:root ${D}${baselibdir}/
 }
 
-FILES_${PN} = "${sysconfdir} ${bindir} ${libdir} home/root nexell/daudio"
+FILES_${PN} = "${sysconfdir} ${bindir} ${libdir} home/root nexell/daudio ${baselibdir}"
 FILES_${PN}-dev = "${includedir}"
 
-INSANE_SKIP_${PN} = "dev-deps dev-so textrel already-stripped"
+INSANE_SKIP_${PN} = "dev-deps dev-so textrel already-stripped installed-vs-shipped"
 INSANE_SKIP_${PN}-dev = "dev-elf textrel"
