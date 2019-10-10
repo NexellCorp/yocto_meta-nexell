@@ -6,6 +6,12 @@ if [ -f "/run/adbd.pid" ]; then
     kill $PID_ADBD
 fi
 
+while [ -d "/dev/usb-ffs/adb" ]
+do
+    umount /dev/usb-ffs/adb
+    rmdir /dev/usb-ffs/adb
+done
+
 if [ -d "${GADGET_DIR}/functions/ffs.adb" ]; then
     rm ${GADGET_DIR}/configs/c.1/ffs.adb
     rmdir ${GADGET_DIR}/configs/c.1/strings/0x409
@@ -14,7 +20,3 @@ if [ -d "${GADGET_DIR}/functions/ffs.adb" ]; then
     rmdir ${GADGET_DIR}/strings/0x409
 fi
 
-if [ -d "/dev/usb-ffs/adb" ]; then
-    umount /dev/usb-ffs/adb
-    rmdir /dev/usb-ffs/adb
-fi
