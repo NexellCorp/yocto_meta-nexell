@@ -5,7 +5,7 @@ LICENSE = "CLOSED"
 PV ?= "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-SRC_URI = "git://github.com/NexellCorp/linux_library_nx_config.git;protocol=https;branch=master"
+SRC_URI = "git://review.gerrithub.io/NexellCorp/linux_library_nx_config.git;protocol=https;branch=master"
 
 S = "${WORKDIR}/git"
 
