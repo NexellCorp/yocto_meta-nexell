@@ -145,6 +145,8 @@ NEXELL_LIBS = " \
     nx-v4l2 \
     nx-video-api \
     nx-uds \
+    nx-config \
+    nx-gl-tools \
 "
 
 NEXELL_APPS = "\
