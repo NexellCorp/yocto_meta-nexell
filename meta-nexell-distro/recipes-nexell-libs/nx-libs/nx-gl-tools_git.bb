@@ -13,7 +13,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit autotools
 
-DEPENDS = "mesa libdrm nx-v4l2 nx-renderer"
+DEPENDS = "mesa libdrm nx-v4l2 nx-renderer nexell-drm-mali-qt"
 
 EXTRA_OECONF = " \
 	'--prefix=${STAGING_DIR_HOST} AR_FLAGS="crU"' \
@@ -21,10 +21,10 @@ EXTRA_OECONF = " \
 
 EXTRA_OEMAKE += " \
 	'AM_CFLAGS=$(WARN_CFLAGS) -I./include -I${STAGING_INCDIR}' \
-	'libnx_gl_tools_la_LDFLAGS=-L${STAGING_LIBDIR} -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux -lnxgpusurf' \
+	'libnx_gl_tools_la_LDFLAGS=-L${STAGING_LIBDIR} -lEGL -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux -lnxgpusurf' \
 "
 
-LDFLAGS_append = " -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux -lnxgpusurf"
+LDFLAGS_append = " -lEGL -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux -lnxgpusurf"
 
 do_configure() {
 	cd ${S}
@@ -47,6 +47,6 @@ do_install() {
 	cp -apr ${D}/* ${BASE_WORKDIR}/extra-rootfs-support/
 }
 
-INSANE_SKIP_${PN} = "dev-so invalid-packageconfig"
+INSANE_SKIP_${PN} = "dev-so invalid-packageconfig file-rdeps"
 FILES_${PN} = "${libdir} ${includedir}"
 FILES_${PN}-dev = "${includedir}"
