@@ -91,6 +91,7 @@ declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
 declare -A user_partition_size
 user_partition_size["avn-ref"]="6G"
 user_partition_size["navi-ref"]="6G"
+user_partition_size["svt-ref"]="6G"
 user_partition_size["zh-dragon"]="1G"
 user_partition_size["daudio-ref"]="6G"
 user_partition_size["daudio-covi"]="0"
@@ -107,6 +108,7 @@ user_partition_size["svt-ref"]="1G"
 declare -A targets_dev_portnum
 targets_dev_portnum["avn-ref"]=2
 targets_dev_portnum["navi-ref"]=0
+targets_dev_portnum["svt-ref"]=0
 targets_dev_portnum["zh-dragon"]=0
 targets_dev_portnum["daudio-ref"]=0
 targets_dev_portnum["daudio-covi"]=0
@@ -125,6 +127,7 @@ targets_load_start_address["daudio-cona"]="83c00000"
 targets_load_start_address["smart-voice"]="83c00000"
 targets_load_start_address["ff-voice"]="a2000000"
 targets_load_start_address["svm-ref"]="63c00000"
+targets_load_start_address["svt-ref"]="83c00000"
 targets_load_start_address["cluster-ref"]="63c00000"
 targets_load_start_address["convergence-svmc"]="63c00000"
 targets_load_start_address["convergence-daudio"]="63c00000"
@@ -183,6 +186,10 @@ S5P4418_UBOOT_EMMC_LOAD_ADDR_DAUDIO_COVI=0x74C00000
 S5P4418_UBOOT_EMMC_JUMP_ADDR_DAUDIO_COVI=0x74C00000
 #------------------------------------
 
+# SVT -------------------------------
+S5P4418_UBOOT_EMMC_LOAD_ADDR_SVT=0x74C00000
+S5P4418_UBOOT_EMMC_JUMP_ADDR_SVT=0x74C00000
+#------------------------------------
 function check_usage()
 {
     if [ $argc != 2 ]
@@ -465,6 +472,10 @@ function post_process()
             if [ ${BOARD_NAME} == "daudio-covi" ];then
                 uboot_emmc_load_addr=${S5P4418_UBOOT_EMMC_LOAD_ADDR_DAUDIO_COVI}
                 uboot_emmc_jump_addr=${S5P4418_UBOOT_EMMC_JUMP_ADDR_DAUDIO_COVI}
+            fi
+            if [ ${BOARD_NAME} == "svt-ref" ];then
+                uboot_emmc_load_addr=${S5P4418_UBOOT_EMMC_LOAD_ADDR_SVT}
+                uboot_emmc_jump_addr=${S5P4418_UBOOT_EMMC_JUMP_ADDR_SVT}
             fi
         fi
 

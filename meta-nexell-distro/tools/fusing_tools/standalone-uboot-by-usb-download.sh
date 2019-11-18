@@ -67,6 +67,13 @@ function run_by_usb()
             sleep 1
             sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
                  -f ${RESULT_DIR}/fip-loader-usb.img -m
+        elif [ ${BOARD_PREFIX} == "svt" ]; then
+            sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
+                 -b ${RESULT_DIR}/bl1-${BOARD_PREFIX}.bin \
+                 -a 0xFFFF0000 -j 0xFFFF0000
+            sleep 1
+            sudo ${TOOLS_PATH}/usb-downloader -t slsiap \
+                 -f ${RESULT_DIR}/fip-loader-usb.img -m
         else
             echo ${TOOLS_PATH}
             sudo ${TOOLS_PATH}/usb-downloader -t nxp4330 \
