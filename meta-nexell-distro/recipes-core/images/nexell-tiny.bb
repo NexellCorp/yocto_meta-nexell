@@ -13,6 +13,7 @@ SYSTEMD_INSTALL = " \
 
 DEVEL_TOOLS = " \
     android-tools-nexell \
+    procps \
 "
 
 NEXELL_KERNEL_TEST_IMAGE_INSTALL = " \
