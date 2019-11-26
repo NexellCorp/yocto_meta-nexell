@@ -54,6 +54,12 @@ function run_by_usb()
             sleep 1
             sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
                 -f fip-loader-usb.img -m
+        elif [ "${BOARD_NAME}" == "svt-ref" ]; then
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -b bl1-svt.bin
+            sleep 1
+            sudo ${META_NEXELL_TOOLS_DIR}/usb-downloader -t slsiap \
+                -f fip-loader-usb.img -m
         fi
     else
         if [ ${BOARD_PREFIX} == "avn" ]; then

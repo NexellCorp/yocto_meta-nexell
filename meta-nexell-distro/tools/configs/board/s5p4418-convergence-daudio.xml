@@ -10,6 +10,7 @@
 						support-ffmpeg
 						support-azurewave-bt
 						support-allgo-connectivity
+						support-allgo-connectivity-sdk
 						support-nx-init
 						support-nx-quickrearcam
 						support-svm-daemon

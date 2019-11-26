@@ -16,7 +16,7 @@ SECURE_TOOL=${META_NEXELL_TOOLS_PATH}/secure_tools/SECURE_BINGEN
 RSA_SIGN_TOOL=${META_NEXELL_TOOLS_PATH}/secure_tools/rsa_sign_pss
 
 IMAGE_TYPE=$2
-MEM_SIZE=1024
+MEM_SIZE=
 MACHINE_NAME=$1
 BOARD_SOCNAME=
 BOARD_NAME=
@@ -36,11 +36,11 @@ PORT_SD=0
 DEVIDS=("usb" "spi" "nand" "sdmmc" "sdfs" "uart")
 PORTS=("emmc" "sd")
 
-MEM_512MB_LOAD_ADDR=0x9fcc0000
-MEM_512MB_JUMP_ADDR=0x9fd00800
-MEM_512MB_SECURE_LOAD_ADDR=0x9fb00000
+MEM_512MB_LOAD_ADDR=0x5fcc0000
+MEM_512MB_JUMP_ADDR=0x5fd00800
+MEM_512MB_SECURE_LOAD_ADDR=0x5fb00000
 MEM_512MB_SECURE_JUMP_ADDR=0x00000000
-MEM_512MB_NON_SECURE_LOAD_ADDR=0x9df00000
+MEM_512MB_NON_SECURE_LOAD_ADDR=0x5df00000
 MEM_512MB_NON_SECURE_JUMP_ADDR=0x00000000
 
 MEM_1G_LOAD_ADDR=0x7fcc0000
@@ -101,6 +101,7 @@ user_partition_size["convergence-daudio"]="6G"
 user_partition_size["navi-ref-ubuntu"]="2G"
 user_partition_size["avn-ref-ubuntu"]="2G"
 user_partition_size["convergence-svmc-ubuntu"]="2G"
+user_partition_size["svt-ref"]="1G"
 #------------------------------------
 # dev_portnum define
 declare -A targets_dev_portnum
@@ -140,9 +141,9 @@ boot_partition_size["s5p6818"]=67108864 #64MB
 
 #------------------------------------
 # RAM 1G USE
-mem_addrs=("${mem_1G_addrs[@]}")
+#mem_addrs=("${mem_1G_addrs[@]}")
 # RAM 2G USE
-#mem_addrs=("${mem_2G_addrs[@]}")
+mem_addrs=("${mem_2G_addrs[@]}")
 # RAM 512MB USE
 #mem_addrs=("${mem_512MB_addrs[@]}")
 #------------------------------------
@@ -226,20 +227,26 @@ function convert_env_setup()
     BOARD_POSTFIX=${BOARD_NAME#*-}
 
     if [ ${BOARD_SOCNAME} == 's5p6818' ]; then
-	ARM_ARCH="arm64"
-        #OPTEE_PLAT_DRAM_SIZE=2048
-        mem_addrs=("${mem_2G_addrs[@]}")
-    else
-	ARM_ARCH="arm"
-	if [ ${BOARD_NAME} == 'convergence-svmc' ]; then
-		echo "board name convergence-svmc"
-		mem_addrs=("${mem_2G_addrs[@]}")
+		ARM_ARCH="arm64"
+		if [ ${BOARD_NAME} == 'svt-ref' ]; then
+			#OPTEE_PLAT_DRAM_SIZE=1024
+			mem_addrs=("${mem_1G_addrs[@]}")
+		fi
+	else
+		ARM_ARCH="arm"
+		if [ ${BOARD_NAME} == 'convergence-svmc' ]; then
+			echo "board name convergence-svmc"
+			mem_addrs=("${mem_2G_addrs[@]}")
+		fi
+		if [ ${BOARD_NAME} == 'convergence-daudio' ]; then
+			echo "board name convergence-daudio"
+			mem_addrs=("${mem_2G_addrs[@]}")
+		fi
+		if [ ${BOARD_NAME} == 'smart-voice' ]; then
+			echo "board name smart-voice"
+			mem_addrs=("${mem_1G_addrs[@]}")
+		fi
 	fi
-	if [ ${BOARD_NAME} == 'convergence-daudio' ]; then
-		echo "board name convergence-daudio"
-		mem_addrs=("${mem_2G_addrs[@]}")
-	fi
-    fi
 
     if [ -a secure.cfg ]; then
         exec < secure.cfg
@@ -421,7 +428,7 @@ function post_process()
         if [ ${SECURE_BOOT} == "true" ]; then
             echo -e "Yocto build not support secure boot, something wrong!"
             exit 1
-	fi
+        fi
 
         make_2ndboot_for_emmc ${aes_key}
 
@@ -429,7 +436,7 @@ function post_process()
         gen_loader_sd ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
         gen_secure ${result_dir} fip-secure.bin ${PRIVATE_KEY}
         gen_nonsecure ${result_dir} fip-nonsecure.bin ${PRIVATE_KEY}
-	gen_loader_usb ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
+        gen_loader_usb ${result_dir} fip-loader.bin ${PRIVATE_KEY} ${aes_key}
     else
 	make_2ndboot_for_emmc
         # 1:${soc} |  2:${in} | 3:${load_addr} | 4:${jump_addr} | 5:${out} | 6:${extra_opts}
