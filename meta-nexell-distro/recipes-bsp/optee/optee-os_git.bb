@@ -11,7 +11,7 @@ SRC_URI = "git://review.gerrithub.io/NexellCorp/secure_optee_optee-os;protocol=h
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st|s5p6818-svt-ref)"
 
 S = "${WORKDIR}/git"
 

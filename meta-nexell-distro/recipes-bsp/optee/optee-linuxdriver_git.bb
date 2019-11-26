@@ -15,7 +15,7 @@ DEPENDS = "virtual/kernel gcc-linaro-4.9-2015.05-x86-64-aarch64-linux-gnu"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st)"
+COMPATIBLE_MACHINE = "(s5p6818-artik710-raptor|s5p6818-avn-ref|s5p6818-kick-st|s5p6818-svt-ref)"
 inherit module
 
 KERNEL_MODULE_AUTOLOAD += "optee optee_armtz"
