@@ -98,6 +98,8 @@ function copy_bin_files()
 	    cp ${TMP_DEPLOY_PATH}/bl1-raptor.bin ${RESULT_PATH}
         elif [ "${BOARD_NAME}" == "avn-ref" ]; then
             cp ${TMP_DEPLOY_PATH}/bl1-avn.bin ${RESULT_PATH}
+        elif [ "${BOARD_NAME}" == "svt-ref" ]; then
+            cp ${TMP_DEPLOY_PATH}/bl1-svt.bin ${RESULT_PATH}
         fi
         cp ${TMP_DEPLOY_PATH}/fip-loader.bin ${RESULT_PATH}
         cp ${TMP_DEPLOY_PATH}/fip-nonsecure.bin ${RESULT_PATH}

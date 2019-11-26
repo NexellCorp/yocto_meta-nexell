@@ -98,6 +98,8 @@ function parse_args()
     MACHINE_NAME=${temp#*-}
     BOARD_SOCNAME=${MACHINE_NAME%-*-*-*}
     IMAGE_TYPE=${MACHINE_NAME#*-*-*-}
+    BOARD_NAME=${MACHINE_NAME#*-}
+    BOARD_PREFIX=${BOARD_NAME%-*}
 
     IFS=''
 }
@@ -301,7 +303,11 @@ update_partmap ${PARTMAP}
 
 if [ "${BOARD_SOCNAME}" == "s5p6818" ]; then
     update_bl1 ${RESULT_DIR}/bl1-emmcboot.img
-    update_fip1 ${RESULT_DIR}/fip-loader-emmc.img
+    if [ "${BOARD_PREFIX}" == "svt-ref" ]; then
+        update_fip1 ${RESULT_DIR}/fip-loader-sd.img
+    else
+        update_fip1 ${RESULT_DIR}/fip-loader-emmc.img
+    fi
     update_fip2 ${RESULT_DIR}/fip-secure.img
     update_fip3 ${RESULT_DIR}/fip-nonsecure.img
 else
