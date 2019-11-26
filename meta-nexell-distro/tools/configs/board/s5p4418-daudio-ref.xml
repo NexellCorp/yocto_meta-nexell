@@ -10,5 +10,5 @@
 						support-daudio-sdk
 						support-ffmpeg
 						support-adanis-bt
-						support-allgo-connectivity"'/>
+						support-allgo-connectivity support-allgo-connectivity-sdk"'/>
 </boardconfig>
