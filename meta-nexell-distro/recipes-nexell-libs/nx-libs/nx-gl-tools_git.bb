@@ -1,3 +1,5 @@
+inherit linux-nexell-base
+
 DESCRIPTION = "nexell gl tools wrapper"
 
 LICENSE = "CLOSED"
@@ -21,10 +23,10 @@ EXTRA_OECONF = " \
 
 EXTRA_OEMAKE += " \
 	'AM_CFLAGS=$(WARN_CFLAGS) -I./include -I${STAGING_INCDIR}' \
-	'libnx_gl_tools_la_LDFLAGS=-L${STAGING_LIBDIR} -lEGL -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux -lnxgpusurf' \
+	'libnx_gl_tools_la_LDFLAGS=-L${STAGING_LIBDIR} -lEGL -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux/${ARCH_TYPE_NUM} -lnxgpusurf' \
 "
 
-LDFLAGS_append = " -lEGL -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux -lnxgpusurf"
+LDFLAGS_append = " -lEGL -ldrm -lnx_v4l2 -lnx_renderer -L./lib/linux/${ARCH_TYPE_NUM} -lnxgpusurf"
 
 do_configure() {
 	cd ${S}
