@@ -53,12 +53,24 @@ BL32_VECTOR ?= "${BSP_ROOT_DIR}/tools/files/aesvector.txt"
 # for disk partition image
 PART_BOOT_LABEL ?= "boot"
 PART_BOOT_SIZE ?= ""
+PART_BOOT_IMAGE ?= "boot.img"
 
 PART_ROOTFS_LABEL ?= "rootfs"
 PART_ROOTFS_SIZE ?= ""
+PART_ROOTFS_IMAGE ?= "rootfs.img"
 
 PART_DATA_LABEL ?= "data"
 PART_DATA_SIZE ?= ""
+PART_DATA_IMAGE ?= "userdata.img"
+# for fstab to auto mount at boot-time
+PART_DATA_NODE ?= "/dev/mmcblk0p4"
+
+# for misc partition image
+PART_MISC_LABEL ?= "misc"
+PART_MISC_SIZE ?= ""
+PART_MISC_IMAGE ?= "misc.img"
+# for fstab to auto mount at boot-time
+PART_MISC_NODE ?= ""
 
 # for flash (NAND) parameter
 FLASH_PAGE_SIZE ?= ""
@@ -76,9 +88,15 @@ FLASH_DEVICE_SIZE ?= ""
 #  -l : ubi volume size
 #
 # Reserved ubi images type
-#  boot.img    : KUBIFS_ARGS_boot = "-r ${DEPLOY_DIR_IMAGE}/boot -v boot -i <id> -l <size>"
-#  rootfs.img  : KUBIFS_ARGS_rootfs = "-r ${IMAGE_ROOTFS} -v rootfs -i <id> -l <size>"
-#  userdata.img: KUBIFS_ARGS_data = "-r ${DEPLOY_DIR_IMAGE}/data -v userdata -i <id> -l <size>"
+#  boot.img    : MKUBIFS_ARGS_boot = "-r ${DEPLOY_DIR_IMAGE}/boot -v boot -i <id> -l <size>"
+#  rootfs.img  : MKUBIFS_ARGS_rootfs = "-r ${IMAGE_ROOTFS} -v rootfs -i <id> -l <size>"
+#  userdata.img: MKUBIFS_ARGS_data = "-r ${DEPLOY_DIR_IMAGE}/data -v userdata -i <id> -l <size>"
+#  misc.img    : MKUBIFS_ARGS_misc = "-r ${DEPLOY_DIR_IMAGE}/misc -v misc -i <id> -l <size>"
+#  Note>
+#   If use 'MKUBIFS_ARGS_data' and want automount at boot-time for data partition,
+#   you must be set 'PART_DATA_NODE = "ubiX"' for "/etc/fstab".
+#   If use 'MKUBIFS_ARGS_misc' and want automount at boot-time for misc partition,
+#   you must be set 'PART_MISC_NODE = "ubiX"' for "/etc/fstab".
 
 # for bluethooth
 BSA_SERVICE_COMMAND ?= "/usr/bin/bsa_server -d /dev/ttyS0 -p /etc/bluetooth/BCM434545.hcd -all=0"

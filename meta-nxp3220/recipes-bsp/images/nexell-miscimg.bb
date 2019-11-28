@@ -1,13 +1,10 @@
-DESCRIPTION = "Nexell boot image"
-SECTION = "kernel"
+DESCRIPTION = "Nexell misc image"
 LICENSE = "GPLv2+"
 
 inherit nexell-mkimage
 
-DEPENDS += "virtual/kernel"
-
 do_deploy() {
-	make_boot_image "${DEPLOY_DIR_IMAGE}"
+	make_misc_image "${DEPLOY_DIR_IMAGE}"
 }
 addtask deploy after do_package
 

@@ -74,7 +74,7 @@ addtask do_symlink_staging_dir after do_unpack before do_patch do_configure
 # make boot.img
 inherit nexell-mkimage
 do_deploy_append () {
-	make_image_bootimg ${D}/${KERNEL_IMAGEDEST}
+	make_boot_image ${D}/${KERNEL_IMAGEDEST}
 }
 
 # To ensure that the board config has changed, always run the config command

@@ -15,32 +15,32 @@ make_ext4_image() {
 
 PART_BOOT_LABEL ?= "boot"
 PART_BOOT_SIZE ?= ""
+PART_BOOT_IMAGE ?= "boot.img"
 UBOOT_LOGO_BMP ?= ""
 
-make_image_bootimg() {
-	local S_DIR=$1 D_DIR=${DEPLOY_DIR_IMAGE}/boot
-	local IMAGE=${DEPLOY_DIR_IMAGE}/boot.img
+make_boot_image() {
+	local S_DIR=$1
+	local D_DIR=${DEPLOY_DIR_IMAGE}/${PART_BOOT_LABEL}
+	local KERNEL=${S_DIR}/${KERNEL_IMAGETYPE}
+	local IMAGE=${DEPLOY_DIR_IMAGE}/${PART_BOOT_IMAGE}
 	local LOGO=${UBOOT_LOGO_BMP}
 
 	mkdir -p ${D_DIR}
 
 	if [ -e ${S_DIR}/${KERNEL_DEVICETREE} ]; then
-		DTBFILE=${S_DIR}/${KERNEL_DEVICETREE}
+		DTB=${S_DIR}/${KERNEL_DEVICETREE}
 	else
-		DTBFILE=${S_DIR}/${KERNEL_IMAGETYPE}-${KERNEL_DEVICETREE}
+		DTB=${S_DIR}/${KERNEL_IMAGETYPE}-${KERNEL_DEVICETREE}
 	fi
 
-	local IMGFILE=${S_DIR}/${KERNEL_IMAGETYPE}
+	cp ${KERNEL} ${D_DIR}
+	cp ${DTB} ${D_DIR}/${KERNEL_DEVICETREE}
 
-	cp ${IMGFILE} ${D_DIR}
-	cp ${DTBFILE} ${D_DIR}/${KERNEL_DEVICETREE}
-
-	if [ -f ${UBOOT_LOGO_BMP} ]; then
+	if [ -f "${UBOOT_LOGO_BMP}" ]; then
 		install -m 0644 ${LOGO} ${D_DIR};
 	fi
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
-
 		if [ -z ${PART_BOOT_SIZE} ]; then
 			echo "WARNING: NOT DEFINED 'PART_BOOT_SIZE'"
 			return
@@ -68,47 +68,45 @@ make_image_bootimg() {
 		        i=`expr $i + 1`
 		done;
 	fi
-
 }
 
-PART_ROOTFS_LABEL ?= "rootfs"
-PART_ROOTFS_SIZE ?= ""
-
-make_image_rootfsimg() {
-	local ROOT_FS=$1
-	local ROOT_DIR=${DEPLOY_DIR_IMAGE}/rootfs
-	local IMAGE=${DEPLOY_DIR_IMAGE}/rootfs.img
+make_rootfs_image() {
+	local ROOT=$1
+	local IMAGE=${DEPLOY_DIR_IMAGE}/$2
+	local SIZE=$3
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
-
-		if [ -z ${PART_ROOTFS_SIZE} ]; then
-			echo "WARNING: NOT DEFINED 'PART_ROOTFS_SIZE'"
+		if [ -z ${SIZE} ]; then
+			echo "WARNING: NOT DEFINED 'SIZE'"
 			return
 		fi
 
-		if [ ! -e "${ROOT_FS}.ext4" ]; then
-			echo "WARNING: NOT FOUND EXT4 ROOT FS: ${ROOT_FS}"
+		if [ ! -e "${ROOT}.ext4" ]; then
+			echo "WARNING: NOT FOUND EXT4 ROOT FS: ${ROOT}"
 			return
 		fi
 
-		local fsname=$(readlink -f ${ROOT_FS}.ext4)
+		local fsname=$(readlink -f ${ROOT}.ext4)
 		local fssize=$(wc -c < ${fsname})
 		echo "DEBUG: Resize ROOTS minimun size : ${fssize}:${fsname}"
 
-		resize2fs ${ROOT_FS}.ext4 ${PART_ROOTFS_SIZE};
-		e2fsck -y -f ${ROOT_FS}.ext4;
+		resize2fs ${ROOT}.ext4 ${SIZE};
+		e2fsck -y -f ${ROOT}.ext4;
 
 		# change to sparse image
-		ext2simg ${ROOT_FS}.ext4 ${IMAGE}
+		ext2simg ${ROOT}.ext4 ${IMAGE}
 	fi
 }
 
-PART_DATA_LABEL ?= "boot"
+PART_DATA_LABEL ?= "data"
 PART_DATA_SIZE ?= ""
+PART_DATA_IMAGE ?= "userdata.img"
 
-make_image_dataimg() {
-	local S_DIR=$1 D_DIR=${DEPLOY_DIR_IMAGE}/data
-	local IMAGE=${DEPLOY_DIR_IMAGE}/userdata.img
+make_data_image() {
+	local S_DIR=$1 D_DIR=${DEPLOY_DIR_IMAGE}/${PART_DATA_LABEL}
+	local IMAGE=${DEPLOY_DIR_IMAGE}/${PART_DATA_IMAGE}
+
+	mkdir -p ${D_DIR}
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
 		if [ -z ${PART_DATA_SIZE} ]; then
@@ -116,7 +114,6 @@ make_image_dataimg() {
 			return
 		fi
 
-		mkdir -p ${D_DIR}
 		make_ext4_image ${PART_DATA_LABEL} ${PART_DATA_SIZE} ${D_DIR} ${IMAGE}
 	fi
 
@@ -141,10 +138,54 @@ make_image_dataimg() {
 	fi
 }
 
+PART_MISC_LABEL ?= "misc"
+PART_MISC_SIZE ?= ""
+PART_MISC_IMAGE ?= "misc.img"
+
+make_misc_image() {
+	local S_DIR=$1 D_DIR=${DEPLOY_DIR_IMAGE}/${PART_MISC_LABEL}
+	local IMAGE=${DEPLOY_DIR_IMAGE}/${PART_MISC_IMAGE}
+	local ETCDIR=${D_DIR}/etc
+
+	mkdir -p ${D_DIR}
+	mkdir -p ${ETCDIR}
+
+	# generate misc.img
+	#
+	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
+		if [ -z ${PART_MISC_SIZE} ]; then
+			echo "WARNING: NOT DEFINED 'PART_MISC_SIZE'"
+			return
+		fi
+
+		make_ext4_image ${PART_MISC_LABEL} ${PART_MISC_SIZE} ${D_DIR} ${IMAGE}
+	fi
+
+	if ${@bb.utils.contains('IMAGE_FSTYPES','multiubi2','true','false',d)}; then
+		if [ -z ${FLASH_PAGE_SIZE} ] || [ -z ${FLASH_BLOCK_SIZE} ] ||
+		   [ -z ${FLASH_DEVICE_SIZE} ]; then
+			bbfatal "Not defined 'FLASH_PAGE_SIZE or FLASH_BLOCK_SIZE or FLASH_DEVICE_SIZE'"
+		fi
+
+		local images="$(echo ${MKUBIFS_ARGS_misc} | awk -F',' '{ print NF }')"
+		local i=1
+
+		while [ $i -le $images ];
+		do
+		        args="$(echo $(echo ${MKUBIFS_ARGS_misc}| cut -d',' -f $i))"
+			args="$args -p ${FLASH_PAGE_SIZE} -b ${FLASH_BLOCK_SIZE} -c ${FLASH_DEVICE_SIZE}"
+
+			make_ubi_image ${args}
+
+		        i=`expr $i + 1`
+		done;
+	fi
+}
+
 EXTRA_ROOTFS_DIR ?= "${BASE_WORKDIR}/extra-rootfs-support"
 
-make_extra_rootfs() {
-	if [ ! -d ${EXTRA_ROOTFS_DIR} ]; then
+make_rootfs_extra() {
+	if [ ! -d "${EXTRA_ROOTFS_DIR}" ]; then
 		echo "WARNING: not found ${EXTRA_ROOTFS_DIR}"
 		return
 	fi
@@ -195,7 +236,6 @@ create_ubi_ini_file() {
 # -s : sub page size
 # -b : block size
 # -c : flash size
-
 make_ubi_image() {
 	ARGS=$(getopt -o p:s:b:c:r:v:l:i: -- "$@");
 	eval set -- "$ARGS";
