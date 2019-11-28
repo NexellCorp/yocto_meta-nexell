@@ -1,8 +1,7 @@
 require recipes-sato/images/core-image-sato.bb
 inherit nexell-rootfs
 inherit nexell-rootfs-qtx11
-include classes/nexell_rootfsimg.inc
-include classes/nexell_dataimg.inc
+include classes/nexell_image.inc
 
 DESCRIPTION ?= "Nexell Qt-X11 images"
 LICENSE = "MIT"

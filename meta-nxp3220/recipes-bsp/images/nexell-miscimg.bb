@@ -1,11 +1,13 @@
-DESCRIPTION = "Nexell Make User Data Filesystem Image For NXP3220"
+DESCRIPTION = "Nexell Make Kernel MISC Image For NXP3220"
 SECTION = "kernel"
 LICENSE = "GPLv2+"
 
 inherit nexell-mkimage
 
+DEPENDS += "virtual/kernel"
+
 do_deploy() {
-	make_data_image ${DEPLOY_DIR_IMAGE}
+	make_misc_image "${DEPLOY_DIR_IMAGE}"
 }
 addtask deploy after do_package
 

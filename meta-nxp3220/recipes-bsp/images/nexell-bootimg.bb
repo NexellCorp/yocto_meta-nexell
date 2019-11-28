@@ -7,7 +7,7 @@ inherit nexell-mkimage
 DEPENDS += "virtual/kernel"
 
 do_deploy() {
-	make_image_bootimg ${DEPLOY_DIR_IMAGE}
+	make_boot_image "${DEPLOY_DIR_IMAGE}"
 }
 addtask deploy after do_package
 

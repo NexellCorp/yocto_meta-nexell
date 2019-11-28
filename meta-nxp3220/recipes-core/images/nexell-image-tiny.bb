@@ -1,7 +1,6 @@
 inherit core-image
 inherit nexell-rootfs
-include classes/nexell_rootfsimg.inc
-include classes/nexell_dataimg.inc
+include classes/nexell_image.inc
 
 PACKAGE_INSTALL = "initramfs-boot \
 		   busybox \
