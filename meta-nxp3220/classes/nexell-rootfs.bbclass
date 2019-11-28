@@ -15,17 +15,23 @@ postprocess_rootfs() {
     echo "inet:x:3003:root"    >> etc/group
     echo "net_raw:x:3004:root" >> etc/group
 
-    # data partition add to fstab for ext4
+    # data/misc partition add to fstab for ext4
     if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
-	if [ ! -z "${PART_DATA_SIZE}" ]; then
-            echo "/dev/mmcblk0p4 /data ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+	if [ ! -z "${PART_DATA_SIZE}" ] && [ ! -z "${PART_DATA_NODE}" ]; then
+            echo "${PART_DATA_NODE} /data ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
+        fi
+	if [ ! -z "${PART_MISC_SIZE}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
+            echo "${PART_MISC_NODE} /misc ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" >> etc/fstab
         fi
     fi
 
-    # data partition add to fstab for ubi
+    # data/misc partition add to fstab for ubi
     if ${@bb.utils.contains('IMAGE_FSTYPES','multiubi2','true','false',d)}; then
-	if [ ! -z "${MKUBIFS_ARGS_data}" ]; then
-	    echo "ubi1:userdata /data ubifs defaults,auto 0 0" >> etc/fstab
+	if [ ! -z "${MKUBIFS_ARGS_data}" ] && [ ! -z "${PART_DATA_NODE}" ]; then
+	    echo "${PART_DATA_NODE}:userdata /data ubifs defaults,auto 0 0" >> etc/fstab
+        fi
+	if [ ! -z "${MKUBIFS_ARGS_misc}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
+	    echo "${PART_MISC_NODE}:misc /misc ubifs defaults,auto 0 0" >> etc/fstab
         fi
     fi
 }
