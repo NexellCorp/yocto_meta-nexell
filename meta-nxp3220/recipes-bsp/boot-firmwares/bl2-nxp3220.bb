@@ -39,10 +39,10 @@ do_deploy () {
 addtask deploy before do_build after do_compile
 
 # not execute tasks
-do_packagedata[noexec] = "1"
-do_package_qa[noexec] = "1"
-do_package_write_rpm[noexec] = "1"
-do_populate_sysroot[noexec] = "1"
+deltask do_packagedata
+deltask do_package_qa
+deltask do_package_write_rpm
+deltask do_populate_sysroot
 
 FILES_${PN}-dev = "${datadir}/${PN}"
 
