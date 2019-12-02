@@ -1,0 +1,18 @@
+diff --git a/core/parser.c b/core/parser.c
+index c10d712..3941aaf 100644
+--- a/core/parser.c
++++ b/core/parser.c
+@@ -68,10 +68,12 @@ static int check_missing_hash(struct imglist *list)
+ 
+ 	LIST_FOREACH(image, list, next) {
+ 		/*
+-		 * Skip "ubipartition" because there is no image
++		 * Skip "ubipartition" and "gpt", "dos" because there is no image
+ 		 * associated for this type
+ 		 */
+ 		if ( (strcmp(image->type, "ubipartition")) &&
++		     (strcmp(image->type, "gpt")) &&
++		     (strcmp(image->type, "dos")) &&
+ 				(!IsValidHash(image->sha256))) {
+ 			ERROR("Hash not set for %s Type %s",
+ 				image->fname,
