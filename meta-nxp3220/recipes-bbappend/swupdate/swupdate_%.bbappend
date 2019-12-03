@@ -2,9 +2,10 @@
 RDEPENDS_${PN} = "parted"
 
 FILESEXTRAPATHS_append := ":${THISDIR}/files"
-SRC_URI_append = " \
-    file://sources/handlers \
-    "
+SRC_URI_append += " \
+	file://sources/handlers \
+	file://swupdate.rules \
+	"
 
 do_patch[postfuncs] += "do_patch_sources"
 do_patch_sources() {
