@@ -1,12 +1,12 @@
-diff --git a/tools/progress.c b/tools/progress.c
-index 579f167..ec8f2ce 100644
---- a/tools/progress.c
-+++ b/tools/progress.c
+diff --git a/tools/swupdate-progress.c b/tools/swupdate-progress.c
+index 579f167..1147881 100644
+--- a/tools/swupdate-progress.c
++++ b/tools/swupdate-progress.c
 @@ -24,6 +24,7 @@
  #include <getopt.h>
  
  #include <progress_ipc.h>
-+#include <linux/reboot.h> 
++#include <linux/reboot.h>
  
  #define PSPLASH_MSG_SIZE	64
  

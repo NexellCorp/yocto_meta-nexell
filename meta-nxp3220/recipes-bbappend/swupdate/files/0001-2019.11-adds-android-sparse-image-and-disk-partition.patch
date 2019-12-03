@@ -1,5 +1,5 @@
 diff --git a/handlers/Config.in b/handlers/Config.in
-index 1137acd..f6db62d 100644
+index 41eac1c..56aed03 100644
 --- a/handlers/Config.in
 +++ b/handlers/Config.in
 @@ -5,6 +5,15 @@
@@ -18,9 +18,9 @@ index 1137acd..f6db62d 100644
  config UBIVOL
  	bool "ubivol"
  	default n
-@@ -198,4 +207,11 @@ config UCFWHANDLER
- comment "Microcontroller handler depends on libgpiod"
- 	depends on !HAVE_LIBGPIOD
+@@ -246,4 +255,11 @@ config UCFW_OLD_LIBGPIOD
+ 	  Rather there is no way to get this changes from the library
+ 	  at build time.
  
 +config ANDROID_SPARSE_IMAGE
 +	bool "Android sparse image"
@@ -31,11 +31,11 @@ index 1137acd..f6db62d 100644
 +
  endmenu
 diff --git a/handlers/Makefile b/handlers/Makefile
-index 8db9e41..934cb57 100644
+index 61e4f76..b446520 100644
 --- a/handlers/Makefile
 +++ b/handlers/Makefile
-@@ -19,3 +19,5 @@ obj-$(CONFIG_SHELLSCRIPTHANDLER) += shell_scripthandler.o
- obj-$(CONFIG_SWUFORWARDER_HANDLER) += swuforward_handler.o
+@@ -21,3 +21,5 @@ obj-$(CONFIG_SSBLSWITCH) += ssbl_handler.o
+ obj-$(CONFIG_SWUFORWARDER_HANDLER) += swuforward_handler.o swuforward-ws.o
  obj-$(CONFIG_UBIVOL)	+= ubivol_handler.o
  obj-$(CONFIG_UCFWHANDLER)	+= ucfw_handler.o
 +obj-$(CONFIG_ANDROID_SPARSE_IMAGE) += libsparse/ android_sparse_image_handler.o

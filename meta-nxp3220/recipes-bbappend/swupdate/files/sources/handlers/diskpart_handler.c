@@ -90,6 +90,8 @@ static int install_dos_part(struct img_type *img,
 __attribute__((constructor))
 void disk_part_handler(void)
 {
-	register_handler("gpt", install_gpt_part, PARTITION_HANDLER, NULL);
-	register_handler("dos", install_dos_part, PARTITION_HANDLER, NULL);
+	register_handler("gpt", install_gpt_part,
+			PARTITION_HANDLER | NO_DATA_HANDLER, NULL);
+	register_handler("dos", install_dos_part,
+			PARTITION_HANDLER | NO_DATA_HANDLER, NULL);
 }
