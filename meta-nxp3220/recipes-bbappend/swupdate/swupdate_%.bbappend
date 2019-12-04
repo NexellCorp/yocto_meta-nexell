@@ -11,3 +11,6 @@ do_patch[postfuncs] += "do_patch_sources"
 do_patch_sources() {
 	cp -a ${WORKDIR}/sources/* ${S}
 }
+
+# Replace swupdate services
+require swupdate-services.inc

@@ -1,0 +1,7 @@
+# swupdate with USB cards
+ACTION=="add", KERNEL=="sd*", SUBSYSTEM=="block", RUN+="/etc/init.d/swupdate start %k"
+ACTION=="remove", KERNEL=="sd*", SUBSYSTEM=="block", RUN+="/etc/init.d/swupdate stop %k"
+
+# swupdate with SD [mmcblk1pN] cards
+ACTION=="add", KERNEL=="mmcblk1p[0-9]", SUBSYSTEM=="block", ATTRS{type}!="MMC", RUN+="/etc/init.d/swupdate start %k"
+ACTION=="remove", KERNEL=="mmcblk1p[0-9]", SUBSYSTEM=="block", RUN+="/etc/init.d/swupdate stop %k"

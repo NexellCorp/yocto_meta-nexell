@@ -1,56 +1,11 @@
-#@TYPE: Machine
-#@NAME: nxp3220
+#@TYPE: COMMON
+#
+# Environments for agetty (automatic login)
+AGETTY_AUTOLOGIN_INITTAB_ARGUMENTS ?= "--autologin root 115200 ttyS2"
 
-NEXELL_BOARD_SOCNAME = "nxp3220"
-
-TOOL_BINGEN ?= "${BSP_ROOT_DIR}/tools/bin/bingen"
-TOOL_BINENC ?= "${BSP_ROOT_DIR}/tools/bin/aescbc_enc"
-TOOL_BINECC ?= "${BSP_ROOT_DIR}/tools/bin/nandbingen"
-
-# for u-boot
-# set BINARY_FEATURES_pn-u-boot-2018.5-nexell = "nand.ecc" for ecc image
-UBOOT_BIN ?= "u-boot.bin"
-UBOOT_NSIH ?= "${BSP_ROOT_DIR}/tools/files/nsih_uboot.txt"
-UBOOT_BOOTKEY ?= "${BSP_ROOT_DIR}/tools/files/bootkey"
-UBOOT_USERKEY ?= "${BSP_ROOT_DIR}/tools/files/userkey"
-UBOOT_LOADADDR ?= "0x43c00000"
-UBOOT_LOGO_BMP ?= "${BSP_ROOT_DIR}/tools/files/logo.bmp"
-
-# for BL1
-# set BINARY_FEATURES_pn-bl1-nxp3220 = "nand.ecc" for ecc image
-BL1_SOURCE ?= "${BSP_ROOT_DIR}/firmwares/binary"
-BL1_BIN ?= "bl1-nxp3220.bin"
-BL1_LOADADDR ?= "0xFFFF0000"
-BL1_NSIH ?= "${BSP_ROOT_DIR}/tools/files/nsih_bl1.txt"
-BL1_BOOTKEY ?= "${BSP_ROOT_DIR}/tools/files/bootkey"
-BL1_USERKEY ?= "${BSP_ROOT_DIR}/tools/files/userkey"
-BL1_AESKEY ?= "${BSP_ROOT_DIR}/tools/files/aeskey.txt"
-BL1_VECTOR ?= "${BSP_ROOT_DIR}/tools/files/aesvector.txt"
-
-# for BL2
-# Note: BL2_LOADADDR is fixed
-# set BINARY_FEATURES_pn-bl2-nxp3220 = "nand.ecc" for ecc image
-BL2_CHIP ?= "nxp3220"
-BL2_PMIC ?= "nxe1500"
-BL2_BIN ?= "bl2-${BL2_BOARD}.bin"
-BL2_LOADADDR ?= "0xFFFF9000"
-BL2_SOURCE ?= "${BSP_ROOT_DIR}/firmwares/bl2-nxp3220"
-BL2_NSIH ?= "${BL2_SOURCE}/reference-nsih/nsih_evb_ddr3_800Mhz.txt"
-BL2_BOOTKEY ?= "${BSP_ROOT_DIR}/tools/files/bootkey"
-BL2_USERKEY ?= "${BSP_ROOT_DIR}/tools/files/userkey"
-
-# for BL32
-# set BINARY_FEATURES_pn-bl32-nxp3220 = "nand.ecc" for ecc image
-BL32_LOADADDR ?= "0x5F000000"
-BL32_BIN ?= "bl32.bin"
-BL32_SOURCE ?= "${BSP_ROOT_DIR}/firmwares/bl32-nxp3220"
-BL32_NSIH ?= "${BL32_SOURCE}/reference-nsih/nsih_general.txt"
-BL32_BOOTKEY ?= "${BSP_ROOT_DIR}/tools/files/bootkey"
-BL32_USERKEY ?= "${BSP_ROOT_DIR}/tools/files/userkey"
-BL32_AESKEY ?= "${BSP_ROOT_DIR}/tools/files/aeskey.txt"
-BL32_VECTOR ?= "${BSP_ROOT_DIR}/tools/files/aesvector.txt"
-
-# for disk partition image
+#
+# Environments for disk partition images
+#
 PART_BOOT_LABEL ?= "boot"
 PART_BOOT_SIZE ?= ""
 PART_BOOT_IMAGE ?= "boot.img"
@@ -71,6 +26,9 @@ PART_MISC_SIZE ?= ""
 PART_MISC_IMAGE ?= "misc.img"
 # for fstab to auto mount at boot-time
 PART_MISC_NODE ?= ""
+
+# for recovery filesystem
+RECOVERY_IMAGE ?= "recovery.uinitrd"
 
 # for flash (NAND) parameter
 FLASH_PAGE_SIZE ?= ""
@@ -94,9 +52,84 @@ FLASH_DEVICE_SIZE ?= ""
 #  misc.img    : MKUBIFS_ARGS_misc = "-r ${DEPLOY_DIR_IMAGE}/misc -v misc -i <id> -l <size>"
 #  Note>
 #   If use 'MKUBIFS_ARGS_data' and want automount at boot-time for data partition,
-#   you must be set 'PART_DATA_NODE = "ubiX"' for "/etc/fstab".
+#   you must be set 'PART_DATA_NODE = "ubiX:data"' for "/etc/fstab".
 #   If use 'MKUBIFS_ARGS_misc' and want automount at boot-time for misc partition,
-#   you must be set 'PART_MISC_NODE = "ubiX"' for "/etc/fstab".
+#   you must be set 'PART_MISC_NODE = "ubiX:misc"' for "/etc/fstab".
 
+#
+# Environments for recovery with SWUpdate
+#
+# Depend swupdate build config at meta-nxp3220/recipes-bbappend/swupdate/files/defconfig
+#
+# SWUpdate recipe:
+#  DISTRO_FEATURES_append = " swupdate"
+# -Set swupdate version
+#  PREFERRED_VERSION_swupdate = "2019.11"
+#
+# General options for image:
+# -Set swupdate output image name, default nxp3220-1.0.swu
+#  SWU_UPDATE_SWU_IMAGE = "nxp3220-1.0.swu"
+# -Set sw-description file
+#  SWU_SWDESCRIPTION = "${BSP_ROOT_DIR}/tools/files/sw-description"
+# -Set script files in sw-description
+#  SWU_SCRIPT_FILES = "${BSP_ROOT_DIR}/tools/files/swu-script.sh"
+#
+# -Install versions to /etc/hwrevision, /etc/sw-versions:
+#  SWU_HW_REVISION_TARGET = "nxp3220 2.0"
+#  SWU_SW_VERSION_FILE = "${BSP_ROOT_DIR}/tools/files/sw-version_n.x"
+#
+# Signing options for image:
+# -Enable signing with password
+#  SWU_SIGN_ENABLE = "true"  <- sha256 with no password
+#  SWU_SIGN_PASSWORD = "nxp3220" <- aes256 with password
+# -Set private key file to signing swuimage
+#  SWU_SIGN_PRIVATE_KEY = "${BSP_ROOT_DIR}/tools/files/swu.private.key"
+# -Install public key file to /etc/swu.public.key
+#  SWU_SIGN_PUBLIC_KEY = "${BSP_ROOT_DIR}/tools/files/swu.public.key"
+#
+# Service options:
+# swupdate options : -k <key>: public key file, -v: verbose, -n: not install -l <num>: log level
+# progress options : -r: reboot, -m recovery: reboot recovery, -w: wait -p: psplash progress
+#
+# -Register swupdate udev rules and daemon, progress service and for swu root:
+#  -udev-rules : /etc/udev/rules.d/swupdate.rules
+#  -swupdate-daemon : /etc/init.d/swupdate.sh
+#  -swupdate progress service : /etc/init.d/swupdate.sh
+#  SWU_SERVICE_SWUPDATE_ROOT = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /mnt/*.swu -v -l6 -n"
+#  SWU_SERVICE_PROGRESS_ROOT = "/usr/bin/swupdate-progress -r -w -m recovery"
+# -Register swupdate udev rules and daemon, progress service and for recovery root:
+#  -udev-rules : /etc/udev/rules.d/swupdate.rules
+#  -swupdate-daemon : /etc/init.d/swupdate.sh
+#  -swupdate progress service : /etc/init.d/swupdate-progress.sh <- /etc/rcS.d/S03swupdate-progress.sh
+#  SWU_SERVICE_SWUPDATE_RECOVERY = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /mnt/*.swu -v -l6"
+#  SWU_SERVICE_PROGRESS_RECOVERY = "/usr/bin/swupdate-progress -w -r"
+# -Install psplash to show update progress
+#  SWU_PROGRESS_PSPLASH ?= true
+
+# Generate swu image (SWU_UPDATE_SWU_IMAGE) with sw-descriptioin
+SWU_TOOL_IMAGE_GEN = "swu_image.sh"
+# Generate sha256 key with sha256 = "@<name>" in sw-descriptioin's
+SWU_TOOL_HASH_GEN = "swu_hash.py"
+
+PREFERRED_VERSION_swupdate ?= "2019.11"
+SWU_RECOVERY_ROOTFS_IMAGE ?= "nexell-recoveryimg-${MACHINE_ARCH}.cpio.gz.u-boot"
+
+SWU_UPDATE_SWU_IMAGE ?= "nxp3220-image-2.0.swu"
+SWU_SWDESCRIPTION ?= "${BSP_ROOT_DIR}/tools/files/swu-sw-description_emmc"
+SWU_SCRIPT_FILES ?= "${BSP_ROOT_DIR}/tools/files/swu-script-preinstall.sh ${BSP_ROOT_DIR}/tools/files/swu-script-postinstall.sh"
+SWU_HW_REVISION_TARGET ?= "nxp3220 2.0"
+SWU_SW_VERSION_FILE ?= "${BSP_ROOT_DIR}/tools/files/swu-sw-versions_2.0"
+SWU_SIGN_PASSWORD ?= "nxp3220"
+SWU_SIGN_PRIVATE_KEY ?= "${BSP_ROOT_DIR}/tools/files/swu.private.key"
+SWU_SIGN_PUBLIC_KEY ?= "${BSP_ROOT_DIR}/tools/files/swu.public.key"
+
+SWU_SERVICE_SWUPDATE_RECOVERY ?= "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /mnt/*.swu -v -l6"
+SWU_SERVICE_PROGRESS_RECOVERY ?= "/usr/bin/swupdate-progress -r -w"
+
+SWU_PROGRESS_PSPLASH ?= "false"
+
+#
+# Environments for devices
+#
 # for bluethooth
 BSA_SERVICE_COMMAND ?= "/usr/bin/bsa_server -d /dev/ttyS0 -p /etc/bluetooth/BCM434545.hcd -all=0"

@@ -18,11 +18,13 @@ UTILS_INSTALL = " \
     libdrm-tests \
     tinyalsa \
     strace \
+    ${@bb.utils.contains('IMAGE_FSTYPES', 'multiubi2', 'mtd-utils mtd-utils-ubifs', '', d)} \
 "
 
 PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-alsa-utils \
     packagegroup-nxp3220-tslib \
+    packagegroup-nxp3220-swupdate \
 "
 
 IMAGE_INSTALL_append = " \
