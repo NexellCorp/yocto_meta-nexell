@@ -150,6 +150,22 @@ make_misc_image() {
 	mkdir -p ${D_DIR}
 	mkdir -p ${ETCDIR}
 
+        # install swupdate signing key file
+        #
+        if [ ! -z ${SWU_SIGN_PUBLIC_KEY} ] && [ -f ${SWU_SIGN_PUBLIC_KEY} ]; then
+                install -m 644 ${SWU_SIGN_PUBLIC_KEY} ${ETCDIR}/swu.public.key
+        fi
+
+        # install swupdate version
+        #
+        if [ ! -z "${SWU_HW_REVISION_TARGET}" ]; then
+                echo ${SWU_HW_REVISION_TARGET} > ${ETCDIR}/hwrevision
+        fi
+
+        if [ ! -z ${SWU_SW_VERSION_FILE} ] && [ -f ${SWU_SW_VERSION_FILE} ]; then
+                install -m 644 ${SWU_SW_VERSION_FILE} ${ETCDIR}/sw-versions
+        fi
+
 	# generate misc.img
 	#
 	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then

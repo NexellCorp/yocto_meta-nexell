@@ -29,6 +29,7 @@ UTILS_INSTALL = " \
     tzdata \
     bash \
     dlt-daemon \
+    ${@bb.utils.contains('IMAGE_FSTYPES', 'multiubi2', 'mtd-utils mtd-utils-ubifs', '', d)} \
 "
 
 LIBS_INSTALL = " \
@@ -58,6 +59,7 @@ PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-libs \
     packagegroup-nxp3220-apps \
     packagegroup-nxp3220-qt-utils \
+    packagegroup-nxp3220-swupdate \
     ${@bb.utils.contains('DISTRO_FEATURES', 'support-directfb', 'packagegroup-nxp3220-directfb', '', d)} \
 "
 
