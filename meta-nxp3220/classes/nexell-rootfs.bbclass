@@ -34,6 +34,10 @@ postprocess_rootfs() {
 	    echo "${PART_MISC_NODE} /misc ubifs defaults,auto 0 0" >> etc/fstab
         fi
     fi
+
+    # remove include directories
+    #
+    find ${IMAGE_ROOTFS} -name include | xargs rm -rf
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_rootfs;"
