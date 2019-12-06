@@ -15,6 +15,8 @@ BBLAYERS ?= " \
   ${BSPPATH}/meta-qt5 \
   ${BSPPATH}/meta-openembedded/meta-multimedia \
   ${BSPPATH}/meta-openembedded/meta-oe \
+  ${BSPPATH}/meta-openembedded/meta-python \
+  ${BSPPATH}/meta-openembedded/meta-networking \
   ${BSPPATH}/openembedded-core/meta \
   "
 
