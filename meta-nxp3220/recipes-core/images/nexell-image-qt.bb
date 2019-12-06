@@ -59,6 +59,7 @@ PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-libs \
     packagegroup-nxp3220-apps \
     packagegroup-nxp3220-qt-utils \
+    packagegroup-nxp3220-testsuite \
     packagegroup-nxp3220-swupdate \
     ${@bb.utils.contains('DISTRO_FEATURES', 'support-directfb', 'packagegroup-nxp3220-directfb', '', d)} \
 "
