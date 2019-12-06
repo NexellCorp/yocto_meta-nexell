@@ -24,6 +24,7 @@ UTILS_INSTALL = " \
 PACAKGEGROUPS_INSTALL = " \
     packagegroup-nxp3220-alsa-utils \
     packagegroup-nxp3220-tslib \
+    packagegroup-nxp3220-testsuite \
     packagegroup-nxp3220-swupdate \
 "
 
