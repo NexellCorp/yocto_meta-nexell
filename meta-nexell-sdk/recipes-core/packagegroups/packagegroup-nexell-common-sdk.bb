@@ -26,6 +26,7 @@ RDEPENDS_${PN} = " \
     libgcc-dev \
     libstdc++-dev \
     libsegfault \
+    gdbserver \
     glibc \
     glibc-dbg \
     glibc-dev \
@@ -52,3 +53,5 @@ RDEPENDS_${PN} = " \
     util-linux-dev \
     ${NEXELL_LIBS} \
 "
+
+RPROVIDES_${PN} += " gdbserver"

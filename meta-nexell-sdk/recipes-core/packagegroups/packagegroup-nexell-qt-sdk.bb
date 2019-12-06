@@ -84,6 +84,30 @@ QT5_10_ESSENTIAL_IMAGES = " \
     qtvirtualkeyboard-qmlplugins \
     liberation-fonts \
 "
+QT5_11_ESSENTIAL_IMAGES = " \                                                   
+    qtscript \                                                                  
+    liberation-fonts \                                                          
+    qtbase-examples \                                                           
+    qtsystems-examples \                                                        
+    qtmultimedia-examples \                                                     
+    qtscript-examples \                                                         
+    qtquickcontrols-examples \                                                  
+    qt3d-examples \                                                             
+    cinematicexperience \                                                       
+    qtdeclarative \                                                             
+    qtdeclarative-qmlplugins \                                                  
+    qtdeclarative-tools \                                                       
+    qtdeclarative-examples \                                                    
+    qtlocation-plugins \                                                        
+    qtlocation-qmlplugins \                                                     
+    qtmultimedia-plugins \                                                      
+    qtmultimedia-qmlplugins \                                                   
+    qt3d-qmlplugins \                                                           
+    qtwebkit-qmlplugins \                                                       
+    qtquickcontrols-qmlplugins \                                                
+    qtquickcontrols2-qmlplugins \                                               
+    qtgraphicaleffects-qmlplugins \                                             
+" 
 
 QT_ALSA_LIB_IMAGE_INSTALL = " \
 "
@@ -91,10 +115,21 @@ QT_ALSA_LIB_IMAGE_INSTALL = " \
 QT_ALSA_IMAGE_INSTALL = " \
     alsa-utils \
 "
+QT_ALSA_EXTRA_IMAGE_INSTALL = " \
+    alsa-utils-alsamixer \
+    alsa-utils-midi \
+    alsa-utils-aplay \
+    alsa-utils-amixer \
+    alsa-utils-aconnect \
+    alsa-utils-iecset \
+    alsa-utils-speakertest \
+    alsa-utils-aseqnet \
+    alsa-utils-aseqdump \
+    alsa-utils-alsactl \
+"
 
 RDEPENDS_${PN} = " \
     nexell-drm-mali-qt \
-    weston-conf \
     ${GSTREAMER10} \
     ${QT_WAYLAND} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT5_4_ESSENTIAL_IMAGES}', '', d)}  \
@@ -103,5 +138,7 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${QT_ALSA_LIB_IMAGE_INSTALL}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', '${QT5_6_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.10', '${QT5_10_ESSENTIAL_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.11', '${QT5_11_ESSENTIAL_IMAGES}', '', d)}  \
     ${QT_ALSA_IMAGE_INSTALL} \
+    ${QT_ALSA_EXTRA_IMAGE_INSTALL} \
 "
