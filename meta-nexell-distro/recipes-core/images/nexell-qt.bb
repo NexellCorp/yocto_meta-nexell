@@ -27,7 +27,6 @@ ETC_TOOLS = " \
 	openssl \
 	curl \
 	procps \
-	dlt-daemon \
 "
 
 ETC_LIBS = " \
@@ -39,8 +38,8 @@ ETC_LIBS = " \
 	protobuf-c \
 "
 
-NX_QT_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'qtcinema-launcher', \
-                     bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'qtcinema-launcher', \
+NX_QT_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'weston-conf', \
+			bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'qtcinema-launcher', \
                      bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qtsmarthome qt5-smarthome-launcher', '', d), d), d)}"
 
 NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd support-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
@@ -58,7 +57,6 @@ NEXELL_CUSTOMIZE_INSTALL = " \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init support-nx-quickrearcam', 'nx-quickrearcam', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'support-nx-init support-svm-daemon', 'svm-daemon', '', d)} \
 	user-fonts \
-	nexell-bootanim \
 	nexell-nxreboot \
 	nexell-qt5-touchsetup \
 "

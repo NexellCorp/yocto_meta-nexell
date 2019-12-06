@@ -139,14 +139,14 @@ function copy_kernel_image()
 function copy_dtb_file()
 {
     echo -e "\033[40;33m  >>>>   copy_dtb_file            \033[0m"
-    local deployed_dtb_file_name=${KERNEL_BIN_NAME[${BOARD_SOCNAME}]}-${BOARD_SOCNAME}*.dtb
+    local deployed_dtb_file_name=*-${MACHINE_NAME}-*.dtb
 
     rm -rf ${RESULT_PATH}/*.dtb
 
     for i in `ls ${TMP_DEPLOY_PATH}/$deployed_dtb_file_name`
     do
        filenameOnly="${i##*/}"
-       dtbName=${filenameOnly#*-}
+       dtbName=${filenameOnly%%--*}.dtb
        cp $i ${RESULT_PATH}/$dtbName
     done
 }
