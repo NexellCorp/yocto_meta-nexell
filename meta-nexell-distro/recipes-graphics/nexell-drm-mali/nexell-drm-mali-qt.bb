@@ -12,7 +12,9 @@ SRC_URI = "file://src \
 
 S = "${WORKDIR}"
 
-DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "nexell-mali-qt", " mesa", " ", d)}"
+DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "nexell-mali-qt", " mesa", " ", d)} \
+			patchelf-native \
+			"
 PROVIDES += "virtual/egl virtual/libgles1 virtual/libgles2 virtual/libopencl virtual/libwayland-egl"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -31,10 +33,16 @@ do_install () {
     install -m 0755 ${S}/library/change32LibMaliToFB.sh ${D}${bindir}
     install -m 0755 ${S}/library/change32LibMaliToWAYLAND.sh ${D}${bindir}
 
+	patchelf --set-soname ${D}${libdir}/nexell/libMali-${ARCH_TYPE_NUM}-WAYLAND.so ${D}${libdir}/nexell/libMali-${ARCH_TYPE_NUM}-WAYLAND.so
+
     ln ${D}${libdir}/nexell/libMali-${ARCH_TYPE_NUM}-WAYLAND.so ${D}${libdir}/libMali.so
+
 
     # Create MALI manifest
     cd ${D}${libdir}
+
+	patchelf --set-soname libMali.so libMali.so
+
 
     if [ "${ARCH_TYPE_NUM}" -eq "64" ];then
         ln -f libMali.so libEGL.so
@@ -42,14 +50,14 @@ do_install () {
         ln -f libMali.so libGLESv2.so
         ln -f libMali.so libOpenCL.so
         ln -f libMali.so libgbm.so
-        ln -f libMali.so libwayland-egl.so
+        #ln -f libMali.so libwayland-egl.so
     else
         ln -sf libMali.so libEGL.so
         ln -sf libMali.so libGLESv1_CM.so
         ln -sf libMali.so libGLESv2.so
         ln -sf libMali.so libOpenCL.so
         ln -sf libMali.so libgbm.so
-        ln -sf libMali.so libwayland-egl.so
+        #ln -sf libMali.so libwayland-egl.so
     fi
 }
 

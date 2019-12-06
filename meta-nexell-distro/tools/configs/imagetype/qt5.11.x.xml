@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<imagetype_config>
+    <common>
+        <feature text='PACKAGECONFIG_FB_pn-qtbase = "kms"'/>
+        <feature text='PACKAGECONFIG_DISTRO_pn-qtbase = "accessibility linuxfb eglfs fontconfig alsa tslib gles2 glib examples tools openssl"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-qt5.11"'/>
+        <feature text='DISTRO_FEATURES_append = " nexell-mali-qt"'/>
+        <feature text='DISTRO_FEATURES_append = " qt-default-platform-eglfs"'/>
+		<!--feature text='DISTRO_FEATURES_append = " wayland"'/-->
+        <feature text='BBMASK = " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.4.x "'/>
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.6.x "'/>
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.8.x "'/>
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.10.x "'/>
+        <feature text='DISTRO_FEATURES_append = " zeroconf"'/>
+        <feature text='PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"'/>
+        <feature text=''/>
+        <feature text='DISTRO_FEATURES_remove = " x11"'/>
+        <feature text='DISTRO_FEATURES_append = " systemd opengl"'/>
+        <feature text='VIRTUAL-RUNTIME_init_manager = "systemd"'/>
+        <feature text='VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"'/>
+		<feature text='CORE_IMAGE_EXTRA_INSTALL += "weston weston-init"'/>
+		<feature text='CORE_IMAGE_EXTRA_INSTALL += "wayland iputils"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles1 = "nexell-drm-mali-qt"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libgles2 = "nexell-drm-mali-qt"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/egl = "nexell-drm-mali-qt"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/libopencl = "nexell-drm-mali-qt"'/>
+        <!--feature text='PREFERRED_PROVIDER_virtual/libgl = "mesa"'/-->
+        <feature text='PREFERRED_PROVIDER_virtual/libgl = "mesa"'/>
+        <feature text='PREFERRED_PROVIDER_virtual/mesa = "mesa"'/>
+        <feature text=''/>
+        <feature text='PREFERRED_PROVIDER_libgbm = "nexell-drm-mali-qt"'/>
+        <feature text='PREFERRED_PROVIDER_libgbm-dev = "nexell-drm-mali-qt"'/>
+        <!--feature text='PREFERRED_PROVIDER_libgstgl = "nexell-drm-mali-qt"'/>
+        <feature text='PREFERRED_PROVIDER_libgstgl-dev = "nexell-drm-mali-qt"'/>
+        <feature text='PREFERRED_PROVIDER_libweston-5 = "nexell-drm-mali-qt"'/>
+        <feature text='PREFERRED_PROVIDER_libweston-5-dev = "nexell-drm-mali-qt"'/-->
+        <feature text=''/>
+        <feature text='LICENSE_FLAGS_WHITELIST = "commercial"'/>
+        <feature text='GLIBC_GENERATE_LOCALES = "ko_KR.EUC-KR ko_KR.UTF-8 en_GB.UTF-8 en_US.UTF-8"'/>
+        <feature text='IMAGE_LINGUAS = " ko-kr en-us en-gb"'/>
+    </common>
+</imagetype_config>
+

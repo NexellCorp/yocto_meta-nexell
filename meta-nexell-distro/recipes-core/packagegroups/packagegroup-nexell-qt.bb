@@ -76,6 +76,19 @@ QT5_6_ESSENTIAL_IMAGES = " \
     qtquickcontrols-examples \
     qt3d-examples \
     cinematicexperience \
+	qtdeclarative \
+	qtdeclarative-qmlplugins \
+	qtdeclarative-tools \
+	qtdeclarative-examples \
+    qtlocation-plugins \
+    qtlocation-qmlplugins \
+    qtmultimedia-plugins \
+    qtmultimedia-qmlplugins \
+    qt3d-qmlplugins \
+    qtwebkit-qmlplugins \
+    qtquickcontrols-qmlplugins \
+    qtquickcontrols2-qmlplugins \
+    qtgraphicaleffects-qmlplugins \
 "
 QT5_8_ESSENTIAL_IMAGES = " \
     qtbase \
@@ -107,6 +120,31 @@ QT5_10_ESSENTIAL_IMAGES = " \
     qtvirtualkeyboard-qmlplugins \
     liberation-fonts \
 "
+QT5_11_ESSENTIAL_IMAGES = " \
+    qtscript \
+    liberation-fonts \
+    qtbase-examples \
+    qtsystems-examples \
+    qtmultimedia-examples \
+    qtscript-examples \
+    qtquickcontrols-examples \
+    qt3d-examples \
+    cinematicexperience \
+	qtdeclarative \
+	qtdeclarative-qmlplugins \
+	qtdeclarative-tools \
+	qtdeclarative-examples \
+    qtlocation-plugins \
+    qtlocation-qmlplugins \
+    qtmultimedia-plugins \
+    qtmultimedia-qmlplugins \
+    qt3d-qmlplugins \
+    qtwebkit-qmlplugins \
+    qtquickcontrols-qmlplugins \
+    qtquickcontrols2-qmlplugins \
+    qtgraphicaleffects-qmlplugins \
+"
+
 
 QT_ALSA_LIB_IMAGE_INSTALL = " \
 "
@@ -143,14 +181,7 @@ NEXELL_LIBS = " \
     nx-renderer \
     nx-scaler \
     nx-v4l2 \
-    nx-video-api \
     nx-uds \
-    nx-config \
-    nx-gl-tools \
-"
-
-NEXELL_APPS = "\
-    nx-video-api-test \
 "
 
 UTILS_INSTALL = " \
@@ -162,7 +193,6 @@ UTILS_INSTALL = " \
     glibc-gconv-iso8859-1 \
     glibc-gconv-iso8859-15 \
     glibc-gconv-euc-kr \
-    lsof \
 "
 
 RDEPENDS_${PN} = " \
@@ -178,8 +208,8 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', '${QT5_6_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.10', '${QT5_10_ESSENTIAL_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.11', '${QT5_11_ESSENTIAL_IMAGES}', '', d)}  \
     ${NEXELL_LIBS} \
-    ${NEXELL_APPS} \
     ${UTILS_INSTALL} \
     ${QT_ALSA_UTILS_IMAGE_INSTALL} \
     ${QT_V4L_UTILS_IMAGE_INSTALL} \

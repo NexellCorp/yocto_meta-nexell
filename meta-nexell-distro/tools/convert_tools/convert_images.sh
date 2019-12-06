@@ -90,7 +90,7 @@ declare -a mem_2G_addrs=( $MEM_2G_LOAD_ADDR \
 # dev_portnum define
 declare -A user_partition_size
 user_partition_size["avn-ref"]="6G"
-user_partition_size["navi-ref"]="6G"
+user_partition_size["navi-ref"]="4G"
 user_partition_size["zh-dragon"]="1G"
 user_partition_size["daudio-ref"]="6G"
 user_partition_size["daudio-covi"]="0"
@@ -392,8 +392,15 @@ function make_sparse_rootfs_img()
             $result_dir/extra-rootfs-support
     fi
 
-    pushd $result_dir
-    ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 rootfs.img
+	pushd $result_dir
+#    ${META_NEXELL_CONVERT_TOOLS_PATH}/ext2simg nexell-${IMAGE_TYPE}-${MACHINE_NAME}.ext4 rootfs.img
+
+	rm -rf root
+    mkdir -p root
+    if [ ${BOARD_NAME} == 'navi-ref' ]; then
+        tar xjf nexell-qt-s5p4418-navi-ref.tar.bz2 -C root
+    fi
+    ${META_NEXELL_CONVERT_TOOLS_PATH}/make_ext4fs -s -l 3221225472 rootfs.img ./root
 
     local partition_size=
 
