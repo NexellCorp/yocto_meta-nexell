@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "028b26be_7c738050",
+        "filename": "meta-nxp3220/configs/machines/nxp3220-daudio.conf",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1015645
+      },
+      "writtenOn": "2019-12-10T07:24:55Z",
+      "side": 1,
+      "message": "remove this, this macro is maked by build_yotco.sh",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3ae49464ad98472b33b6cd994125d01bcbae25c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
