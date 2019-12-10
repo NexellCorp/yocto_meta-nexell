@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d5831987_e1a55186",
+        "filename": "meta-nxp3220/configs/machines/nxp3220-evb2.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1015511
+      },
+      "writtenOn": "2019-12-10T07:39:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd214941_45939448",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 35
+      },
+      "revId": "16d810f0dc6a25290e7b2f430bdef86d8166e570",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7027a093_8453e868",
         "filename": "meta-nxp3220/configs/machines/nxp3220-evb2.conf",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "16d810f0dc6a25290e7b2f430bdef86d8166e570",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc214657_ec7b220b",
+        "filename": "meta-nxp3220/configs/machines/nxp3220-evb2.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1015511
+      },
+      "writtenOn": "2019-12-10T07:39:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7027a093_8453e868",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 26
+      },
+      "revId": "16d810f0dc6a25290e7b2f430bdef86d8166e570",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
