@@ -104,7 +104,8 @@ function swu_make_hash () {
 		value="@"$(echo $value | cut -d'"' -f 2)
 
 		# get hash value
-		sha256="$($SWU_RESULT_DIR/$SWU_SIGN_HASH_TOOL $file 2>&1 >/dev/null)"
+		# sha256="$($SWU_RESULT_DIR/$SWU_SIGN_HASH_TOOL $file 2>&1 >/dev/null)"
+		sha256="$(openssl dgst -sha256 $file | grep -o '[[:xdigit:]][[:xdigit:]]*$')"
 
 		# replace hash: sha256 = "@file" to sha256 = "<sha256 value>"
 		sed -i "s,$value,$sha256," $swdesc
