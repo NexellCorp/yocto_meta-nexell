@@ -12,7 +12,6 @@ SRC_URI = " \
 
 SRC_URI_append = " \
 	file://${SWU_TOOL_IMAGE_GEN} \
-	file://${SWU_TOOL_HASH_GEN} \
 	"
 
 # remove package 'swupdate-services'
@@ -49,7 +48,6 @@ do_install () {
 
 do_deploy() {
 	install -m 0755 ${WORKDIR}/${SWU_TOOL_IMAGE_GEN} ${DEPLOY_DIR_IMAGE}
-	install -m 0755 ${WORKDIR}/${SWU_TOOL_HASH_GEN} ${DEPLOY_DIR_IMAGE}
 }
 addtask deploy before do_build after do_compile
 

@@ -108,8 +108,6 @@ FLASH_DEVICE_SIZE ?= ""
 
 # Generate swu image (SWU_UPDATE_SWU_IMAGE) with sw-descriptioin
 SWU_TOOL_IMAGE_GEN = "swu_image.sh"
-# Generate sha256 key with sha256 = "@<name>" in sw-descriptioin's
-SWU_TOOL_HASH_GEN = "swu_hash.py"
 
 PREFERRED_VERSION_swupdate ?= "2019.11"
 SWU_RECOVERY_ROOTFS_IMAGE ?= "nexell-recoveryimg-${MACHINE_ARCH}.cpio.gz.u-boot"
