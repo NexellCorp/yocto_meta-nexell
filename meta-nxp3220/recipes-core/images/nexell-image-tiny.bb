@@ -1,6 +1,6 @@
 inherit core-image
 inherit nexell-rootfs
-include classes/nexell_image.inc
+inherit nexell-image
 
 PACKAGE_INSTALL = " \
     initramfs-boot \
