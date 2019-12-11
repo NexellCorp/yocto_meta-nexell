@@ -1,0 +1,13 @@
+diff --git a/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp b/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp
+index 6e48659..6e1a446 100644
+--- a/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp
++++ b/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp
+@@ -412,7 +412,7 @@ bool QWaylandGLContext::makeCurrent(QPlatformSurface *surface)
+         window->createDecoration();
+ 
+     if (eglSurface == EGL_NO_SURFACE) {
+-        window->updateSurface(window->isExposed());
++        window->updateSurface(/*window->isExposed()*/ true);
+         eglSurface = window->eglSurface();
+     }
+ 
