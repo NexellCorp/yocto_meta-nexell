@@ -1,9 +1,8 @@
 inherit core-image
 inherit nexell-rootfs
 inherit nexell-rootfs-qt
+inherit nexell-image
 inherit ${@bb.utils.contains('DISTRO_FEATURES', 'append-sdk', 'populate_sdk_qt5', '', d)}
-
-include classes/nexell_image.inc
 
 DESCRIPTION ?= "Nexell Qt images"
 LICENSE = "MIT"
