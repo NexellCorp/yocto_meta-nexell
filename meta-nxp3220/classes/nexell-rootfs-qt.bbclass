@@ -1,6 +1,7 @@
 DEFAULT_QT_PLATFORM ?= "${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-linuxfb', 'LINUXFB', '', d)}"
 TSLIB_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', 'false', 'true', d)}"
 TSLIB_INVERTX ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-invertx-tslib', 'false', 'true', d)}"
+AUTOMOUNT_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-automount', 'false', 'true', d)}"
 
 postprocess_qt_function() {
 	cd ${IMAGE_ROOTFS}
@@ -35,6 +36,11 @@ postprocess_qt_function() {
 	echo "export QT_PLUGIN_PATH=/usr/lib/qt5/plugins" >> usr/bin/nexell-qt5-touchsetup.sh
 	echo "export QT_QPA_FONTDIR=/usr/share/fonts/ttf" >> usr/bin/nexell-qt5-touchsetup.sh
 	echo "export QT_LOGGING_RULES=qt.qpa.*=false" >> usr/bin/nexell-qt5-touchsetup.sh
+
+	if [ "${AUTOMOUNT_ENABLED}" = "false" ]; then
+		rm etc/udev/rules.d/local.rules
+		rm etc/udev/rules.d/automount.rules
+	fi
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "postprocess_qt_function;"
