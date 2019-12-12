@@ -42,34 +42,49 @@ IMAGE_INSTALL_append = " \
 IMAGE_INSTALL_append = " android-tools"
 
 agetty_autologin_inittab () {
-        sed -e 's/^S2:12345.*/S2:12345:respawn:\/sbin\/agetty ${AGETTY_AUTOLOGIN_INITTAB_ARGUMENTS}/' \
-                "${IMAGE_ROOTFS}${sysconfdir}/inittab" > "${IMAGE_ROOTFS}${sysconfdir}/inittab.swupdate.autologin"
+	local rootdir=${IMAGE_ROOTFS}
 
-        rm ${IMAGE_ROOTFS}${sysconfdir}/inittab
-        mv ${IMAGE_ROOTFS}${sysconfdir}/inittab.swupdate.autologin ${IMAGE_ROOTFS}${sysconfdir}/inittab
+        sed -e 's/^S2:12345.*/S2:12345:respawn:\/sbin\/agetty ${AGETTY_AUTOLOGIN_INITTAB_ARGUMENTS}/' \
+                "${rootdir}${sysconfdir}/inittab" > "${rootdir}${sysconfdir}/inittab.swupdate.autologin"
+
+        rm ${rootdir}${sysconfdir}/inittab
+        mv ${rootdir}${sysconfdir}/inittab.swupdate.autologin ${rootdir}${sysconfdir}/inittab
 }
 
 postprocess_recovery_image () {
-	mkdir -p ${IMAGE_ROOTFS}/misc
+	local rootdir=${IMAGE_ROOTFS}
+
+	mkdir -p ${rootdir}/misc
 
 	# mount /tmp with tmpfs : recovery image is initrd so this is not necessary.
-	# echo "tmpfs /tmp tmpfs mode=1777,nosuid,nodev 0 0" >> ${IMAGE_ROOTFS}${sysconfdir}/fstab
+	# echo "tmpfs /tmp tmpfs mode=1777,nosuid,nodev 0 0" >> ${rootdir}${sysconfdir}/fstab
 
 	# misc partition add to /etc/fstab for ext4
 	if [ ! -z "${PART_MISC_SIZE}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
 		echo "${PART_MISC_NODE} /misc ext4 noatime,nosuid,nodev,nomblk_io_submit,errors=panic wait,check" \
-			>> ${IMAGE_ROOTFS}${sysconfdir}/fstab
+			>> ${rootdir}${sysconfdir}/fstab
 	fi
 
 	# misc partition add to /etc/fstab for ubi
 	if [ ! -z "${MKUBIFS_ARGS_misc}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
 		echo "${PART_MISC_NODE} /misc ubifs defaults,auto 0 0" \
-			>> ${IMAGE_ROOTFS}${sysconfdir}/fstab
+			>> ${rootdir}${sysconfdir}/fstab
 	fi
 
 	# remove not necessary services
 	#
-	update-rc.d -r ${IMAGE_ROOTFS} -f psplash.sh remove
+	update-rc.d -r ${rootdir} -f psplash.sh remove
+
+	# remove not necessary udev rules
+	#
+	rm ${rootdir}/lib/udev/rules.d/*
+
+	if [ -f ${rootdir}${sysconfdir}/udev/rules.d/local.rules ]; then
+		rm ${rootdir}${sysconfdir}/udev/rules.d/local.rules
+	fi
+	if [ -f ${rootdir}${sysconfdir}/udev/rules.d/touchscreen.rules ]; then
+		rm ${rootdir}${sysconfdir}/udev/rules.d/touchscreen.rules
+	fi
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "agetty_autologin_inittab;"
