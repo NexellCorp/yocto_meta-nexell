@@ -4,13 +4,13 @@ DEPENDS += "${@bb.utils.contains('IMAGE_FSTYPES', 'ext4', 'android-tools-native'
 DEPENDS += "${@bb.utils.contains('IMAGE_FSTYPES', 'multiubi2', 'mtd-utils-native', '', d)}"
 
 make_ext4_image() {
-	local PART_LABEL=$1 PART_SIZE=$2 PART_DIR=$3
-	local OUTPUT_IMAGE=$4
+	local label=$1 size=$2 dir=$3
+	local output=$4
 
-	echo "NOTE: MAKE EXT4: $PART_LABEL ($PART_SIZE) $PART_DIR -> $OUTPUT_IMAGE"
+	echo "NOTE: MAKE EXT4: $label ($size) $dir -> $output"
 
 	# change to sparse image "-s" optioin
-	make_ext4fs -L $PART_LABEL -s -b 4k -l $PART_SIZE $OUTPUT_IMAGE $PART_DIR
+	make_ext4fs -L ${label} -s -b 4k -l ${size} ${output} ${dir}
 }
 
 PART_BOOT_LABEL ?= "boot"
@@ -19,25 +19,26 @@ PART_BOOT_IMAGE ?= "boot.img"
 UBOOT_LOGO_BMP ?= ""
 
 make_boot_image() {
-	local S_DIR=$1
-	local D_DIR=${DEPLOY_DIR_IMAGE}/${PART_BOOT_LABEL}
-	local KERNEL=${S_DIR}/${KERNEL_IMAGETYPE}
-	local IMAGE=${DEPLOY_DIR_IMAGE}/${PART_BOOT_IMAGE}
-	local LOGO=${UBOOT_LOGO_BMP}
+	local deplaydir=$1
+	local bootdir=${deplaydir}/${PART_BOOT_LABEL}
+	local bootimg=${deplaydir}/${PART_BOOT_IMAGE}
+	local kernelimg=${deplaydir}/${KERNEL_IMAGETYPE}
+	local logobmp=${UBOOT_LOGO_BMP}
+	local dtbfile
 
-	mkdir -p ${D_DIR}
+	mkdir -p ${bootdir}
 
-	if [ -e ${S_DIR}/${KERNEL_DEVICETREE} ]; then
-		DTB=${S_DIR}/${KERNEL_DEVICETREE}
+	if [ -e ${deplaydir}/${KERNEL_DEVICETREE} ]; then
+		dtbfile=${deplaydir}/${KERNEL_DEVICETREE}
 	else
-		DTB=${S_DIR}/${KERNEL_IMAGETYPE}-${KERNEL_DEVICETREE}
+		dtbfile=${deplaydir}/${KERNEL_IMAGETYPE}-${KERNEL_DEVICETREE}
 	fi
 
-	cp ${KERNEL} ${D_DIR}
-	cp ${DTB} ${D_DIR}/${KERNEL_DEVICETREE}
+	cp ${kernelimg} ${bootdir}
+	cp ${dtbfile} ${bootdir}/${KERNEL_DEVICETREE}
 
 	if [ -f "${UBOOT_LOGO_BMP}" ]; then
-		install -m 0644 ${LOGO} ${D_DIR};
+		install -m 0644 ${logobmp} ${bootdir};
 	fi
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
@@ -46,7 +47,7 @@ make_boot_image() {
 			return
 		fi
 
-		make_ext4_image ${PART_BOOT_LABEL} ${PART_BOOT_SIZE} ${D_DIR} ${IMAGE}
+		make_ext4_image ${PART_BOOT_LABEL} ${PART_BOOT_SIZE} ${bootdir} ${bootimg}
 	fi
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','multiubi2','true','false',d)}; then
@@ -71,30 +72,30 @@ make_boot_image() {
 }
 
 make_rootfs_image() {
-	local ROOT=$1
-	local IMAGE=${DEPLOY_DIR_IMAGE}/$2
-	local SIZE=$3
+	local root=$1
+	local rootimg=${DEPLOY_DIR_IMAGE}/$2
+	local rootsize=$3
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
-		if [ -z ${SIZE} ]; then
+		if [ -z ${rootsize} ]; then
 			echo "WARNING: NOT DEFINED 'SIZE'"
 			return
 		fi
 
-		if [ ! -e "${ROOT}.ext4" ]; then
-			echo "WARNING: NOT FOUND EXT4 ROOT FS: ${ROOT}"
+		if [ ! -e "${root}.ext4" ]; then
+			echo "WARNING: NOT FOUND EXT4 ROOT FS: ${root}"
 			return
 		fi
 
-		local fsname=$(readlink -f ${ROOT}.ext4)
+		local fsname=$(readlink -f ${root}.ext4)
 		local fssize=$(wc -c < ${fsname})
 		echo "DEBUG: Resize ROOTS minimun size : ${fssize}:${fsname}"
 
-		resize2fs ${ROOT}.ext4 ${SIZE};
-		e2fsck -y -f ${ROOT}.ext4;
+		resize2fs ${root}.ext4 ${rootsize};
+		e2fsck -y -f ${root}.ext4;
 
 		# change to sparse image
-		ext2simg ${ROOT}.ext4 ${IMAGE}
+		ext2simg ${root}.ext4 ${rootimg}
 	fi
 }
 
@@ -103,10 +104,11 @@ PART_DATA_SIZE ?= ""
 PART_DATA_IMAGE ?= "userdata.img"
 
 make_data_image() {
-	local S_DIR=$1 D_DIR=${DEPLOY_DIR_IMAGE}/${PART_DATA_LABEL}
-	local IMAGE=${DEPLOY_DIR_IMAGE}/${PART_DATA_IMAGE}
+	local deplaydir=$1
+	local datadir=${deplaydir}/${PART_DATA_LABEL}
+	local dataimg=${deplaydir}/${PART_DATA_IMAGE}
 
-	mkdir -p ${D_DIR}
+	mkdir -p ${datadir}
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','ext4','true','false',d)}; then
 		if [ -z ${PART_DATA_SIZE} ]; then
@@ -114,7 +116,7 @@ make_data_image() {
 			return
 		fi
 
-		make_ext4_image ${PART_DATA_LABEL} ${PART_DATA_SIZE} ${D_DIR} ${IMAGE}
+		make_ext4_image ${PART_DATA_LABEL} ${PART_DATA_SIZE} ${datadir} ${dataimg}
 	fi
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','multiubi2','true','false',d)}; then
@@ -143,27 +145,33 @@ PART_MISC_SIZE ?= ""
 PART_MISC_IMAGE ?= "misc.img"
 
 make_misc_image() {
-	local S_DIR=$1 D_DIR=${DEPLOY_DIR_IMAGE}/${PART_MISC_LABEL}
-	local IMAGE=${DEPLOY_DIR_IMAGE}/${PART_MISC_IMAGE}
-	local ETCDIR=${D_DIR}/etc
+	local deplaydir=$1
+	local miscimg=${deplaydir}/${PART_MISC_IMAGE}
+	local miscdir=${deplaydir}/${PART_MISC_LABEL}
+	local etcdir=${miscdir}/etc
 
-	mkdir -p ${D_DIR}
-	mkdir -p ${ETCDIR}
+	# remove old misc directory
+	if [ -d ${miscdir} ]; then
+		rm -rf ${miscdir}
+	fi
+
+	mkdir -p ${miscdir}
+	mkdir -p ${etcdir}
 
         # install swupdate signing key file
         #
         if [ ! -z ${SWU_SIGN_PUBLIC_KEY} ] && [ -f ${SWU_SIGN_PUBLIC_KEY} ]; then
-                install -m 644 ${SWU_SIGN_PUBLIC_KEY} ${ETCDIR}/swu.public.key
+                install -m 644 ${SWU_SIGN_PUBLIC_KEY} ${etcdir}/swu.public.key
         fi
 
         # install swupdate version
         #
         if [ ! -z "${SWU_HW_REVISION_TARGET}" ]; then
-                echo ${SWU_HW_REVISION_TARGET} > ${ETCDIR}/hwrevision
+                echo ${SWU_HW_REVISION_TARGET} > ${etcdir}/hwrevision
         fi
 
         if [ ! -z ${SWU_SW_VERSION_FILE} ] && [ -f ${SWU_SW_VERSION_FILE} ]; then
-                install -m 644 ${SWU_SW_VERSION_FILE} ${ETCDIR}/sw-versions
+                install -m 644 ${SWU_SW_VERSION_FILE} ${etcdir}/sw-versions
         fi
 
 	# generate misc.img
@@ -174,7 +182,7 @@ make_misc_image() {
 			return
 		fi
 
-		make_ext4_image ${PART_MISC_LABEL} ${PART_MISC_SIZE} ${D_DIR} ${IMAGE}
+		make_ext4_image ${PART_MISC_LABEL} ${PART_MISC_SIZE} ${miscdir} ${miscimg}
 	fi
 
 	if ${@bb.utils.contains('IMAGE_FSTYPES','multiubi2','true','false',d)}; then
