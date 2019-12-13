@@ -4,7 +4,7 @@ LICENSE = "GPLv2+"
 inherit nexell-mkimage
 
 do_deploy() {
-	make_data_image ${DEPLOY_DIR_IMAGE}
+	make_data_image
 }
 addtask deploy after do_package
 
