@@ -9,28 +9,28 @@ DEPENDS += "${@ 'openssl-native' if d.getVar('SWU_SIGN_PASSWORD') else ''}"
 RECOVERY_IMAGE ?= "recovery.uinitrd"
 
 make_recovery_boot_image() {
-	local S_DIR=$1 RECOVERY_ROOT=$2
-	local D_DIR=${DEPLOY_DIR_IMAGE}/${PART_BOOT_LABEL}
-	local IMAGE=${DEPLOY_DIR_IMAGE}/${PART_BOOT_IMAGE}
+	local deploy_dir=$1 recovery_img=$2
+	local boot_dir=${deploy_dir}/${PART_BOOT_LABEL}
+	local boot_img=${deploy_dir}/${PART_BOOT_IMAGE}
 
-	if [ -z "${RECOVERY_ROOT}" ] || [ ! -f "${S_DIR}/${RECOVERY_ROOT}" ]; then
-		echo "WARNING: NOT FOUND '${S_DIR}/${RECOVERY_ROOT}'"
+	if [ -z "${recovery_img}" ] || [ ! -f "${deploy_dir}/${recovery_img}" ]; then
+		echo "WARNING: NOT FOUND '${deploy_dir}/${recovery_img}'"
 		return
 	fi
 
-	mkdir -p ${D_DIR}
-	cp ${S_DIR}/${RECOVERY_ROOT} ${D_DIR}/${RECOVERY_IMAGE}
+	mkdir -p ${boot_dir}
+	cp ${deploy_dir}/${recovery_img} ${boot_dir}/${RECOVERY_IMAGE}
 
-	if echo "$(file -b ${IMAGE})" | grep -q -iE "android|ext4"; then
+	if echo "$(file -b ${boot_img})" | grep -q -iE "android|ext4"; then
 		if [ -z ${PART_BOOT_SIZE} ]; then
 			echo "WARNING: NOT DEFINED 'PART_BOOT_SIZE'"
 			return
 		fi
 
-		make_ext4_image ${PART_BOOT_LABEL} ${PART_BOOT_SIZE} ${D_DIR} ${IMAGE}
+		make_ext4_image ${PART_BOOT_LABEL} ${PART_BOOT_SIZE} ${boot_dir} ${boot_img}
 	fi
 
-	if echo "$(file -b ${IMAGE})" | grep -q -iE "UBI"; then
+	if echo "$(file -b ${boot_img})" | grep -q -iE "UBI"; then
 		if [ -z ${FLASH_PAGE_SIZE} ] || [ -z ${FLASH_BLOCK_SIZE} ] ||
 		   [ -z ${FLASH_DEVICE_SIZE} ]; then
 			bbfatal "Not defined 'FLASH_PAGE_SIZE or FLASH_BLOCK_SIZE or FLASH_DEVICE_SIZE'"
@@ -57,9 +57,9 @@ SWU_SIGN_PRIVATE_KEY ?= ""
 SWU_SIGN_PUBLIC_KEY ?= ""
 
 make_swupdate_image() {
-	local name=$1
-	local SWUDESC=$(basename ${SWU_SWDESCRIPTION})
-	local SWUTOOL=${DEPLOY_DIR_IMAGE}/${SWU_TOOL_IMAGE_GEN}
+	local swuname=$1
+	local swudesc=$(basename ${SWU_SWDESCRIPTION})
+	local swutool=${DEPLOY_DIR_IMAGE}/${SWU_TOOL_IMAGE_GEN}
 	local option=""
 
 	if [ ! -e "${SWU_SWDESCRIPTION}" ]; then
@@ -79,7 +79,7 @@ make_swupdate_image() {
 
 	# set build options
 	#
-	[ ! -z "${name}" ] && option="${option} -o ${name}";
+	[ ! -z "${swuname}" ] && option="${option} -o ${swuname}";
 
 	# set signing options
 	#
@@ -98,12 +98,12 @@ make_swupdate_image() {
 		install -m 644 ${SWU_SIGN_PUBLIC_KEY} ${DEPLOY_DIR_IMAGE}/swu.public.key
 	fi
 
-	SWUDESC=${DEPLOY_DIR_IMAGE}/${SWUDESC}
+	swudesc=${DEPLOY_DIR_IMAGE}/${swudesc}
 
 	# swupdate build command
-	echo "SWU: ${SWUTOOL} -f ${SWUDESC} -d ${DEPLOY_DIR_IMAGE} ${option}"
+	echo "SWU: ${swutool} -f ${swudesc} -d ${DEPLOY_DIR_IMAGE} ${option}"
 
-	${SWUTOOL} -f ${SWUDESC} -d ${DEPLOY_DIR_IMAGE} ${option}
+	${swutool} -f ${swudesc} -d ${DEPLOY_DIR_IMAGE} ${option}
 }
 
 make_recovery_image() {
@@ -111,5 +111,6 @@ make_recovery_image() {
 	make_recovery_boot_image "${DEPLOY_DIR_IMAGE}" "${SWU_RECOVERY_ROOTFS_IMAGE}"
 
 	# make recovery image with swupdate
+	# $1: output swu image name
 	make_swupdate_image "$1"
 }
