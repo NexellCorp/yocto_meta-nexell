@@ -1,43 +1,43 @@
 # BIN -> BIN.raw (Binary + NSIH)
 do_bingen_raw () {
-        local INDEX=$1 BIN=$2 NSIH=$3
-	local BOOTKEY=$4 USERKEY=$5 LOADADDR=$6
+        local index=$1 binary=$2 nsih=$3
+	local bootkey=$4 userkey=$5 loadaddr=$6
 
-	if [ ! -f $BIN ]; then
-		echo "WARNING: NOT exist '$BIN' for raw"
+	if [ ! -f $binary ]; then
+		echo "WARNING: NOT exist '$binary' for raw"
 		return
 	fi
 
-        ${TOOL_BINGEN} -k $INDEX -n $NSIH -i $BIN \
-		-b $BOOTKEY -u $USERKEY -l $LOADADDR -s $LOADADDR -t;
+        ${TOOL_BINGEN} -k $index -n $nsih -i $binary \
+		-b $bootkey -u $userkey -l $loadaddr -s $loadaddr -t;
 }
 
 # BIN -> BIN.enc (Encrypted Binary)
 do_bingen_enc () {
-	local BIN=$1 AESKEY=$2 AESVECTOR=$3 BLOCK_BIT=$4
+	local binary=$1 aeskey=$2 aesvector=$3 block_bit=$4
 
-	if [ ! -f $BIN ]; then
-		echo "WARNING: NOT exist '$BIN' for encrypt"
+	if [ ! -f $binary ]; then
+		echo "WARNING: NOT exist '$binary' for encrypt"
 		return
 	fi
 
-        ${TOOL_BINENC} -n $BIN -k $(cat $AESKEY) -v $(cat $AESVECTOR) \
-		-m enc -b $BLOCK_BIT;
+        ${TOOL_BINENC} -n $binary -k $(cat $aeskey) -v $(cat $aesvector) \
+		-m enc -b $block_bit;
 }
 
 # BIN -> BIN.ecc (Binary + ECC per PAGE_SIZE))
 do_bingen_ecc () {
-	local BIN=$1 PAGE_SIZE=$2
-	local PSIZE=$PAGE_SIZE
+	local binary=$1 page_size=$2
+	local psize=$page_size
 
-	if [ ! -f $BIN ]; then
-		echo "WARNING: NOT exist '$BIN' for ECC"
+	if [ ! -f $binary ]; then
+		echo "WARNING: NOT exist '$binary' for ECC"
 		return
 	fi
 
-	if [ $PAGE_SIZE -gt 512 ]; then
-		PSIZE=1024
+	if [ $page_size -gt 512 ]; then
+		psize=1024
 	fi
 
-        ${TOOL_BINECC} -p $PSIZE -i $BIN;
+        ${TOOL_BINECC} -p $psize -i $binary;
 }
