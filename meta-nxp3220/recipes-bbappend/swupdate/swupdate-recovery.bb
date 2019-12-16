@@ -29,6 +29,10 @@ do_install () {
 		# NOTE>
 		#	swupdate.rules only detect '/dev/sd*' and 'dev/mmcblk1~9'
 		install -m 644 ${WORKDIR}/swupdate.rules ${D}${sysconfdir}/udev/rules.d/
+		if [ ! -z "${SWU_UDEV_RULES_MMC_DEVICE}" ]; then
+			sed -i -e "s,\<mmcblk1p\[0-9\],${SWU_UDEV_RULES_MMC_DEVICE},g" \
+				${D}${sysconfdir}/udev/rules.d/swupdate.rules
+		fi
 
 		# Install swupdae daemon.
 		# excuted by the 'swupdate.rules'. swupdate daemon will be mount external card,

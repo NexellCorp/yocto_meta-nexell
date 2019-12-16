@@ -95,6 +95,7 @@ FLASH_DEVICE_SIZE ?= ""
 #  -udev-rules : /etc/udev/rules.d/swupdate.rules
 #  -swupdate-daemon : /etc/init.d/swupdate.sh
 #  -swupdate progress service : /etc/init.d/swupdate.sh
+#  SWU_UDEV_RULES_MMC_DEVICE = "mmcblk1p[0-9]"
 #  SWU_SERVICE_SWUPDATE_ROOT = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /mnt/*.swu -v -l6 -n"
 #  SWU_SERVICE_PROGRESS_ROOT = "/usr/bin/swupdate-progress -r -w -m recovery"
 # -Register swupdate udev rules and daemon, progress service and for recovery root:
