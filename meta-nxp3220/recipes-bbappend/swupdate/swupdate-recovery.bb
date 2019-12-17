@@ -11,7 +11,7 @@ SRC_URI = " \
 	"
 
 SRC_URI_append = " \
-	file://${SWU_TOOL_IMAGE_GEN} \
+	${@ 'file://${SWU_TOOL_IMAGE_GEN}' if d.getVar('SWU_SUPPORT_MAKE_SWU_IMAGE') else ''} \
 	"
 
 # remove package 'swupdate-services'
@@ -51,7 +51,9 @@ do_install () {
 }
 
 do_deploy() {
-	install -m 0755 ${WORKDIR}/${SWU_TOOL_IMAGE_GEN} ${DEPLOY_DIR_IMAGE}
+	if [ ! -z "${SWU_SUPPORT_MAKE_SWU_IMAGE}" ] && [ "${SWU_SUPPORT_MAKE_SWU_IMAGE}" = "true" ]; then
+		install -m 0755 ${WORKDIR}/${SWU_TOOL_IMAGE_GEN} ${DEPLOY_DIR_IMAGE}
+	fi
 }
 addtask deploy before do_build after do_compile
 
