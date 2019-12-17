@@ -28,10 +28,10 @@ postprocess_rootfs() {
     # data/misc partition add to fstab for ubi
     if ${@bb.utils.contains('IMAGE_FSTYPES','multiubi2','true','false',d)}; then
 	if [ ! -z "${MKUBIFS_ARGS_data}" ] && [ ! -z "${PART_DATA_NODE}" ]; then
-	    echo "${PART_DATA_NODE} /data ubifs defaults,auto 0 0" >> etc/fstab
+	    echo "${PART_DATA_NODE} /data ubifs defaults,noatime,rw 0 0" >> etc/fstab
         fi
 	if [ ! -z "${MKUBIFS_ARGS_misc}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
-	    echo "${PART_MISC_NODE} /misc ubifs defaults,auto 0 0" >> etc/fstab
+	    echo "${PART_MISC_NODE} /misc ubifs defaults,noatime,rw 0 0" >> etc/fstab
         fi
     fi
 

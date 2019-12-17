@@ -67,7 +67,7 @@ postprocess_recovery_image () {
 
 	# misc partition add to /etc/fstab for ubi
 	if [ ! -z "${MKUBIFS_ARGS_misc}" ] && [ ! -z "${PART_MISC_NODE}" ]; then
-		echo "${PART_MISC_NODE} /misc ubifs defaults,auto 0 0" \
+		echo "${PART_MISC_NODE} /misc ubifs defaults,noatime,rw 0 0" \
 			>> ${rootdir}${sysconfdir}/fstab
 	fi
 
