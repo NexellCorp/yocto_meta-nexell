@@ -87,6 +87,8 @@ FLASH_DEVICE_SIZE ?= ""
 # -Install public key file to /etc/swu.public.key
 #  SWU_SIGN_PUBLIC_KEY = "${BSP_ROOT_DIR}/tools/files/swu.public.key"
 #
+# Replace services with 'recipes-bbappend/swupdate/files/swupdate, ...'
+#  SWU_DAEMON_SERVICES_REPLACE = "true"
 # Service options:
 # swupdate options : -k <key>: public key file, -v: verbose, -n: not install -l <num>: log level
 # progress options : -r: reboot, -m recovery: reboot recovery, -w: wait -p: psplash progress
@@ -107,10 +109,12 @@ FLASH_DEVICE_SIZE ?= ""
 # -Install psplash to show update progress
 #  SWU_PROGRESS_PSPLASH ?= true
 
-# Generate swu image (SWU_UPDATE_SWU_IMAGE) with sw-descriptioin
+# Generate swu image (SWU_UPDATE_SWU_IMAGE) with 'swu_image.sh' script and sw-description
 SWU_TOOL_IMAGE_GEN = "swu_image.sh"
+SWU_SUPPORT_MAKE_SWU_IMAGE ?= "true"
 
 PREFERRED_VERSION_swupdate ?= "2019.11"
+SWU_DAEMON_SERVICES_REPLACE ?= "true"
 SWU_RECOVERY_ROOTFS_IMAGE ?= "nexell-recoveryimg-${MACHINE_ARCH}.cpio.gz.u-boot"
 
 SWU_UPDATE_SWU_IMAGE ?= "nxp3220-image-2.0.swu"

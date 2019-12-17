@@ -13,4 +13,4 @@ do_patch_sources() {
 }
 
 # Replace swupdate services
-require swupdate-services.inc
+require ${@ 'swupdate-services.inc' if d.getVar('SWU_DAEMON_SERVICES_REPLACE') else ''}
