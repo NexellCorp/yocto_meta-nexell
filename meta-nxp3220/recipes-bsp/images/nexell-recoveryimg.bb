@@ -33,7 +33,7 @@ DEPENDS_append = " update-rc.d-native"
 IMAGE_INSTALL_append = " \
 	swupdate \
 	swupdate-tools \
-	swupdate-recovery \
+	${@ 'swupdate-recovery' if d.getVar('SWU_DAEMON_SERVICES_REPLACE') else ''} \
 	udev \
 	util-linux-agetty \
 	"
@@ -71,19 +71,21 @@ postprocess_recovery_image () {
 			>> ${rootdir}${sysconfdir}/fstab
 	fi
 
-	# remove not necessary services
-	#
-	update-rc.d -r ${rootdir} -f psplash.sh remove
+	if [ ! -z "${SWU_DAEMON_SERVICES_REPLACE}" ] && [ "${SWU_DAEMON_SERVICES_REPLACE}" = "true" ]; then
+		# remove not necessary services
+		#
+		update-rc.d -r ${rootdir} -f psplash.sh remove
 
-	# remove not necessary udev rules
-	#
-	rm ${rootdir}/lib/udev/rules.d/*
+		# remove not necessary udev rules
+		#
+		rm ${rootdir}/lib/udev/rules.d/*
 
-	if [ -f ${rootdir}${sysconfdir}/udev/rules.d/local.rules ]; then
-		rm ${rootdir}${sysconfdir}/udev/rules.d/local.rules
-	fi
-	if [ -f ${rootdir}${sysconfdir}/udev/rules.d/touchscreen.rules ]; then
-		rm ${rootdir}${sysconfdir}/udev/rules.d/touchscreen.rules
+		if [ -f ${rootdir}${sysconfdir}/udev/rules.d/local.rules ]; then
+			rm ${rootdir}${sysconfdir}/udev/rules.d/local.rules
+		fi
+		if [ -f ${rootdir}${sysconfdir}/udev/rules.d/touchscreen.rules ]; then
+			rm ${rootdir}${sysconfdir}/udev/rules.d/touchscreen.rules
+		fi
 	fi
 }
 

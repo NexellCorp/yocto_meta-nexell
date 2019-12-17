@@ -117,5 +117,7 @@ make_recovery_image() {
 
 	# make recovery image with swupdate
 	# $1: output swu image name
-	make_swupdate_image "$1"
+	if [ ! -z "${SWU_SUPPORT_MAKE_SWU_IMAGE}" ] && [ "${SWU_SUPPORT_MAKE_SWU_IMAGE}" = "true" ]; then
+		make_swupdate_image "$1"
+	fi
 }
