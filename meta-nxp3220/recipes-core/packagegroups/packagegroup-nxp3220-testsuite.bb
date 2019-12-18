@@ -29,7 +29,8 @@ PACKAGE_TESTSUITE_TOOLS = " \
     tslib tslib-conf tslib-tests tslib-calibrate \
     iperf3 iproute2 can-utils \
     mtd-utils mtd-utils-ubifs \
-    lmbench iozone3 \
+    lmbench iozone3 memtester \
+    rtc-test watchdog-test \
 "
 
 PACKAGE_TESTSUITE = " \
