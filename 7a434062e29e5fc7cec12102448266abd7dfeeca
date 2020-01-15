@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72e1f14c_d3df8f92",
+        "filename": "meta-nexell-distro/recipes-application/nx-quickrearcam/nx-quickrearcam_git.bb",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1015509
+      },
+      "writtenOn": "2020-01-15T10:45:23Z",
+      "side": 1,
+      "message": "please delete this line.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "7a434062e29e5fc7cec12102448266abd7dfeeca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
