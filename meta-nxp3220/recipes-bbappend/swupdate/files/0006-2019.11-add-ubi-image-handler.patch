@@ -1,0 +1,31 @@
+diff --git a/handlers/Config.in b/handlers/Config.in
+index 41eac1c..21038d9 100644
+--- a/handlers/Config.in
++++ b/handlers/Config.in
+@@ -67,6 +67,16 @@ config UBIVIDOFFSET
+ 	  if your NAND driver incorrectly reports that it can handle
+ 	  sub-page accesses when it should not.
+ 
++config UBI_IMAGE
++	bool "ubi-img"
++	default n
++	depends on HAVE_LIBUBI
++	depends on MTD
++	help
++	  ubi is the default format for NAND device.
++	  Say Y if you have NAND or you use UBI on
++	  your system.
++
+ config CFI
+ 	bool "cfi"
+ 	depends on MTD
+diff --git a/handlers/Makefile b/handlers/Makefile
+index 61e4f76..8c71080 100644
+--- a/handlers/Makefile
++++ b/handlers/Makefile
+@@ -20,4 +20,5 @@ obj-$(CONFIG_SHELLSCRIPTHANDLER) += shell_scripthandler.o
+ obj-$(CONFIG_SSBLSWITCH) += ssbl_handler.o
+ obj-$(CONFIG_SWUFORWARDER_HANDLER) += swuforward_handler.o swuforward-ws.o
+ obj-$(CONFIG_UBIVOL)	+= ubivol_handler.o
++obj-$(CONFIG_UBI_IMAGE)	+= libmtd/ ubi_image_handler.o
+ obj-$(CONFIG_UCFWHANDLER)	+= ucfw_handler.o
