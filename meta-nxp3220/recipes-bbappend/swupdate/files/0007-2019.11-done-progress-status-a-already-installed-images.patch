@@ -1,0 +1,28 @@
+diff --git a/core/swupdate.c b/core/swupdate.c
+index 38e5a56..501a80d 100644
+--- a/core/swupdate.c
++++ b/core/swupdate.c
+@@ -385,7 +385,10 @@ static int install_from_file(char *fname, int check)
+ 
+ 	ret = install_images(&swcfg, fdsw, 1);
+ 
+-	swupdate_progress_end(ret == 0 ? SUCCESS : FAILURE);
++	if (LIST_EMPTY(&swcfg.images))
++		swupdate_progress_done(NULL);
++	else
++		swupdate_progress_end(ret == 0 ? SUCCESS : FAILURE);
+ 
+ 	close(fdsw);
+ 
+@@ -397,8 +400,10 @@ static int install_from_file(char *fname, int check)
+ 	if (swcfg.bootloader_transaction_marker) {
+ 		reset_state((char*)BOOTVAR_TRANSACTION);
+ 	}
++
+ 	fprintf(stdout, "Software updated successfully\n");
+-	fprintf(stdout, "Please reboot the device to start the new software\n");
++	if (!LIST_EMPTY(&swcfg.images))
++		fprintf(stdout, "Please reboot the device to start the new software\n");
+ 
+ 	return EXIT_SUCCESS;
+ }
