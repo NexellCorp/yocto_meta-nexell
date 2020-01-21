@@ -34,6 +34,7 @@ IMAGE_INSTALL_append = " \
 	swupdate \
 	swupdate-tools \
 	${@ 'swupdate-recovery' if d.getVar('SWU_DAEMON_SERVICES_REPLACE') else ''} \
+	${@ 'psplash' if d.getVar('SWU_PROGRESS_PSPLASH') else ''} \
 	udev \
 	util-linux-agetty \
 	"
