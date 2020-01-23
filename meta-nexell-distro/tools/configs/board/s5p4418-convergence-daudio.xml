@@ -11,5 +11,6 @@
 						support-azurewave-bt
 						support-allgo-connectivity
 						support-nx-init
+						support-nx-quickrearcam
 						no-use-tslib"'/>
 </boardconfig>
