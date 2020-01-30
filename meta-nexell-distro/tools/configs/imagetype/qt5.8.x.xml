@@ -7,7 +7,8 @@
         <feature text='DISTRO_FEATURES_append = " nexell-mali-qt"'/>
         <feature text='DISTRO_FEATURES_append = " qt-default-platform-eglfs"'/>
         <feature text='BBMASK = " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.4.x "'/>
-        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.6.x "'/>        
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.6.x "'/>
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.9.x "'/>
         <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.10.x "'/>
         <feature text='DISTRO_FEATURES_append = " zeroconf"'/>
         <feature text='PACKAGECONFIG_append_pn-qtmultimedia  = " gstreamer"'/>
