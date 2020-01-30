@@ -11,6 +11,7 @@
         <feature text='BBMASK = "/meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.10.x"'/>
         <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.6.x "'/>
         <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.8.x "'/>
+        <feature text='BBMASK += " /meta-nexell/meta-nexell-distro/recipes-qt/qt5_5.9.x "'/>
         <feature text=''/>
         <feature text='DISTRO_FEATURES_remove = " x11"'/>
         <feature text='DISTRO_FEATURES_append = " systemd wayland opengl"'/>
