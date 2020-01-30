@@ -41,7 +41,8 @@ ETC_LIBS = " \
 
 NX_QT_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'qtcinema-launcher', \
                      bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'qtcinema-launcher', \
-                     bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qtsmarthome qt5-smarthome-launcher', '', d), d), d)}"
+                     bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', 'qtcinema-launcher', \
+                     bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', 'qtsmarthome qt5-smarthome-launcher', '', d), d), d), d)}"
 
 NX_LAUNCHER = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd support-daudio', 'nexell-qtbootlauncher', '${NX_QT_LAUNCHER}', d)}"
 

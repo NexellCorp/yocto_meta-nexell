@@ -50,6 +50,10 @@ QT5_8_ESSENTIAL_IMAGES = " \
     nothing \
 "
 
+QT5_9_ESSENTIAL_IMAGES = " \
+    nothing \
+"
+
 QT_ALSA_LIB_IMAGE_INSTALL = " \
     alsa-lib \
 "
@@ -99,6 +103,7 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${X11_QT5_4_ESSENTIAL_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.4', '${X11_QT5_4_EXAMPLE_IMAGES}', '', d)}  \
     ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', '${QT5_8_ESSENTIAL_IMAGES}', '', d)}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', '${QT5_9_ESSENTIAL_IMAGES}', '', d)}  \
     ${X11_INPUT_IMAGE_INSTALL} \
     ${X11_VIDEO_ARMSOC} \
     ${X11_EXTENSION} \

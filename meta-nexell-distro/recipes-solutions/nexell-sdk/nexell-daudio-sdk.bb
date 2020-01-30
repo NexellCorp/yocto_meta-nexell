@@ -28,7 +28,8 @@ DEPENDS = " \
 "
 
 inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.6.x-env', \
-           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'nexell-sdk-qt5.8.x-env', '', d), d)}
+		   bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.8', 'nexell-sdk-qt5.8.x-env', \
+           bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.9', 'nexell-sdk-qt5.9.x-env', '', d), d), d) }
 
 PV = "1.3.0"
 PR = "r0"
