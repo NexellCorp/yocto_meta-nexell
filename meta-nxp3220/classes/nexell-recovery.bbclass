@@ -5,6 +5,10 @@ inherit nexell-mkimage
 DEPENDS += "android-tools-native"
 DEPENDS += "mtd-utils-native"
 DEPENDS += "${@ 'openssl-native' if d.getVar('SWU_SIGN_PASSWORD') else ''}"
+DEPENDS_append_class-native = " file-replacement-native"
+
+# add recipe-sysroot-native/usr/bin/file-native to 'PATH'
+EXTRANATIVEPATH += "file-native"
 
 RECOVERY_IMAGE ?= "recovery.uinitrd"
 
