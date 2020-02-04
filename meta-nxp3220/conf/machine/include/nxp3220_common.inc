@@ -98,13 +98,13 @@ FLASH_DEVICE_SIZE ?= ""
 #  -swupdate-daemon : /etc/init.d/swupdate
 #  -swupdate progress service : /etc/init.d/swupdate
 #  SWU_UDEV_RULES_MMC_DEVICE = "mmcblk1p[0-9]"
-#  SWU_SERVICE_SWUPDATE_ROOT = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /mnt/*.swu -v -l6 -n"
+#  SWU_SERVICE_SWUPDATE_ROOT = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /swu/*.swu -v -l6 -n"
 #  SWU_SERVICE_PROGRESS_ROOT = "/usr/bin/swupdate-progress -r -w -m recovery"
 # -Register swupdate udev rules and daemon, progress service and for recovery root:
 #  -udev-rules : /etc/udev/rules.d/swupdate.rules
 #  -swupdate-daemon : /etc/init.d/swupdate
 #  -swupdate progress service : /etc/init.d/swupdate-progress <- /etc/rcS.d/S03swupdate-progress
-#  SWU_SERVICE_SWUPDATE_RECOVERY = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /mnt/*.swu -v -l6"
+#  SWU_SERVICE_SWUPDATE_RECOVERY = "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /swu/*.swu -v -l6"
 #  SWU_SERVICE_PROGRESS_RECOVERY = "/usr/bin/swupdate-progress -w -r"
 # -Install psplash to show update progress
 #  SWU_PROGRESS_PSPLASH ?= true
@@ -126,7 +126,7 @@ SWU_SIGN_PASSWORD ?= "nxp3220"
 SWU_SIGN_PRIVATE_KEY ?= "${BSP_ROOT_DIR}/tools/files/swu.private.key"
 SWU_SIGN_PUBLIC_KEY ?= "${BSP_ROOT_DIR}/tools/files/swu.public.key"
 
-SWU_SERVICE_SWUPDATE_RECOVERY ?= "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /mnt/*.swu -v -l6"
+SWU_SERVICE_SWUPDATE_RECOVERY ?= "/usr/bin/swupdate -k /misc/etc/swu.public.key -i /swu/*.swu -v -l6"
 SWU_SERVICE_PROGRESS_RECOVERY ?= "/usr/bin/swupdate-progress -r -w"
 
 SWU_PROGRESS_PSPLASH ?= "false"

@@ -40,7 +40,7 @@ LOGFILE=/dev/console	# /var/log/swupdate.log
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
-MOUNT_PATH="/mnt"
+MOUNT_PATH="/swu"
 SIGN_KEY="/misc/etc/swu.public.key"
 EXEC_COMMAND="$PROG -k $SIGN_KEY -i $MOUNT_PATH/*.swu -v $SWUPDATE_EXTRA_ARGS"
 
@@ -57,6 +57,8 @@ do_start() {
 	fi
 
 	echo "SWU mount dev/$device -> $MOUNT_PATH" > $LOGFILE
+
+	mkdir -p $MOUNT_PATH
 	mount /dev/$device -o rw $MOUNT_PATH
 	wait;
 
@@ -83,7 +85,7 @@ do_stop() {
 	local device=$1
 
 	if [ ! -z "$device" ]; then
-		mount | grep mnt | grep $device
+		mount | grep $MOUNT_PATH | grep $device
 		if [ $? -eq 0 ]; then
 			echo "SWU umount $MOUNT_PATH" > $LOGFILE
 			umount $MOUNT_PATH
