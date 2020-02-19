@@ -1,3 +1,4 @@
+### For BL32
 DESCRIPTION = "Nexell BL32(Fake secure OS) for NXP3220"
 SECTION = "bootloaders"
 LICENSE = "CLOSED"
@@ -19,15 +20,15 @@ do_deploy () {
 
 	# Encrypt binary : $BIN.enc
         do_bingen_enc ${DEPLOYDIR}/${BL32_BIN} \
-		${BL32_AESKEY} ${BL32_VECTOR} "128";
+		${SECURE_BL32_ENCKEY} ${SECURE_BL32_IVECTOR} "128";
 
 	# (Encrypted binary) + NSIH : $BIN.enc.raw
         do_bingen_raw bl32 ${DEPLOYDIR}/${BL32_BIN}.enc \
-		${BL32_NSIH} ${BL32_BOOTKEY} ${BL32_USERKEY} ${BL32_LOADADDR};
+		${BL32_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL32_LOADADDR} "-e";
 
 	# Binary + NSIH : $BIN.raw
         do_bingen_raw bl32 ${DEPLOYDIR}/${BL32_BIN} \
-		${BL32_NSIH} ${BL32_BOOTKEY} ${BL32_USERKEY} ${BL32_LOADADDR};
+		${BL32_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL32_LOADADDR};
 
 	if ${@bb.utils.contains('BINARY_FEATURES','nand.ecc','true','false',d)}; then
 		if [ -z ${FLASH_PAGE_SIZE} ]; then

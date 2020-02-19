@@ -1,7 +1,10 @@
+DEPENDS += "openssl-native"
+
 # BIN -> BIN.raw (Binary + NSIH)
 do_bingen_raw () {
         local index=$1 binary=$2 nsih=$3
 	local bootkey=$4 userkey=$5 loadaddr=$6
+	local opt=$7
 
 	if [ ! -f $binary ]; then
 		echo "WARNING: NOT exist '$binary' for raw"
@@ -9,20 +12,20 @@ do_bingen_raw () {
 	fi
 
         ${TOOL_BINGEN} -k $index -n $nsih -i $binary \
-		-b $bootkey -u $userkey -l $loadaddr -s $loadaddr -t;
+		-b $bootkey -u $userkey -l $loadaddr -s $loadaddr -t $opt;
 }
 
 # BIN -> BIN.enc (Encrypted Binary)
 do_bingen_enc () {
-	local binary=$1 aeskey=$2 aesvector=$3 block_bit=$4
+	local binary=$1 enckey=$2 ivector=$3
 
 	if [ ! -f $binary ]; then
 		echo "WARNING: NOT exist '$binary' for encrypt"
 		return
 	fi
 
-        ${TOOL_BINENC} -n $binary -k $(cat $aeskey) -v $(cat $aesvector) \
-		-m enc -b $block_bit;
+	${TOOL_BINENC} enc -e -nosalt -aes-128-cbc -in ${binary} -out ${binary}.enc \
+                -K $(cat ${enckey}) -iv $(cat $ivector)
 }
 
 # BIN -> BIN.ecc (Binary + ECC per PAGE_SIZE))
