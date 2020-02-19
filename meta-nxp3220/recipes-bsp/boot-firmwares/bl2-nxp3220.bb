@@ -1,3 +1,4 @@
+### For BL2
 DESCRIPTION = "Nexell BL2(bootloader) for NXP3220"
 SECTION = "bootloaders"
 LICENSE = "CLOSED"
@@ -19,7 +20,7 @@ do_deploy () {
 
 	# Binary + NSIH : $BIN.raw
 	do_bingen_raw bl2 ${DEPLOYDIR}/${BL2_BIN} \
-		${BL2_NSIH} ${BL2_BOOTKEY} ${BL2_USERKEY} ${BL2_LOADADDR};
+		${BL2_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL2_LOADADDR};
 
 	cp ${DEPLOYDIR}/${BL2_BIN}.raw ${DEPLOYDIR}/bl2.bin.raw;
 

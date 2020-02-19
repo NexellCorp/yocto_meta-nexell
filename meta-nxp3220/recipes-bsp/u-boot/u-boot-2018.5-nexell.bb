@@ -72,7 +72,7 @@ do_compile_append() {
 do_deploy_append () {
 	# Binary + NSIH : $BIN.raw
 	do_bingen_raw bl33 ${B}/${UBOOT_BIN} ${UBOOT_NSIH} \
-			${UBOOT_BOOTKEY} ${UBOOT_USERKEY} ${UBOOT_LOADADDR};
+			${SECURE_BOOTKEY} ${SECURE_USERKEY} ${UBOOT_LOADADDR};
 
 	if ${@bb.utils.contains('BINARY_FEATURES','nand.ecc','true','false',d)}; then
 		if [ -z ${FLASH_PAGE_SIZE} ]; then
