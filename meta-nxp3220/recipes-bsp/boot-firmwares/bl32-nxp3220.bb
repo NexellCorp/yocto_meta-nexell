@@ -62,6 +62,9 @@ deltask do_package_qa
 deltask do_package_write_rpm
 deltask do_populate_sysroot
 
+# for secure image
+do_deploy[nostamp] = "1"
+
 FILES_${PN}-dev = "${datadir}/${PN}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
