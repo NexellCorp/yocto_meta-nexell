@@ -108,3 +108,6 @@ do_configure[nostamp] = "1"
 do_packagedata[noexec] = "1"
 do_package_qa[noexec] = "1"
 do_package_write_rpm[noexec] = "1"
+
+# for secure image
+do_deploy[nostamp] = "1"
