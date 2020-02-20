@@ -21,18 +21,24 @@ PARALLEL_MAKE = "-j 1"
 do_deploy () {
         install -d ${DEPLOYDIR}
         install -m 0644 ${S}/out/${BL32_BIN} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_BL32_ENCKEY} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_BOOTKEY} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_USERKEY} ${DEPLOYDIR}
+
+	aeskey=${DEPLOYDIR}/$(basename ${SECURE_BL32_ENCKEY})
+	bootkey=${DEPLOYDIR}/$(basename ${SECURE_BOOTKEY})
+	userkey=${DEPLOYDIR}/$(basename ${SECURE_USERKEY})
 
 	# Encrypt binary : $BIN.enc
-        do_bingen_enc ${DEPLOYDIR}/${BL32_BIN} \
-		${SECURE_BL32_ENCKEY} ${SECURE_BL32_IVECTOR} "128";
+        do_bingen_enc ${DEPLOYDIR}/${BL32_BIN} ${aeskey} ${SECURE_BL32_IVECTOR} "128";
 
 	# (Encrypted binary) + NSIH : $BIN.enc.raw
         do_bingen_raw bl32 ${DEPLOYDIR}/${BL32_BIN}.enc \
-		${BL32_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL32_LOADADDR} "-e";
+		${BL32_NSIH} ${bootkey} ${userkey} ${BL32_LOADADDR} "-e";
 
 	# Binary + NSIH : $BIN.raw
         do_bingen_raw bl32 ${DEPLOYDIR}/${BL32_BIN} \
-		${BL32_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL32_LOADADDR};
+		${BL32_NSIH} ${bootkey} ${userkey} ${BL32_LOADADDR};
 
 	if ${@bb.utils.contains('BINARY_FEATURES','nand.ecc','true','false',d)}; then
 		if [ -z ${FLASH_PAGE_SIZE} ]; then

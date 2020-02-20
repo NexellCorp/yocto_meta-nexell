@@ -23,17 +23,24 @@ do_install() {
 do_deploy () {
 	install -d ${DEPLOYDIR}
 	install -m 0644 ${S}/${BL1_BIN} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_BL1_ENCKEY} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_BOOTKEY} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_USERKEY} ${DEPLOYDIR}
+
+	aeskey=${DEPLOYDIR}/$(basename ${SECURE_BL1_ENCKEY})
+	bootkey=${DEPLOYDIR}/$(basename ${SECURE_BOOTKEY})
+	userkey=${DEPLOYDIR}/$(basename ${SECURE_USERKEY})
 
 	# Encrypt binary : $BIN.enc
-	do_bingen_enc ${DEPLOYDIR}/${BL1_BIN} ${SECURE_BL1_ENCKEY} ${SECURE_BL1_IVECTOR} "128";
+	do_bingen_enc ${DEPLOYDIR}/${BL1_BIN} ${aeskey} ${SECURE_BL1_IVECTOR} "128";
 
 	# (Encrypted binary) + NSIH : $BIN.bin.enc.raw
 	do_bingen_raw bl1 ${DEPLOYDIR}/${BL1_BIN}.enc \
-		${BL1_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL1_LOADADDR};
+		${BL1_NSIH} ${bootkey} ${userkey} ${BL1_LOADADDR};
 
 	# Binary + NSIH : $BIN.raw
 	do_bingen_raw bl1 ${DEPLOYDIR}/${BL1_BIN} \
-		${BL1_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL1_LOADADDR};
+		${BL1_NSIH} ${bootkey} ${userkey} ${BL1_LOADADDR};
 
 	if ${@bb.utils.contains('BINARY_FEATURES','nand.ecc','true','false',d)}; then
 		if [ -z ${FLASH_PAGE_SIZE} ]; then
