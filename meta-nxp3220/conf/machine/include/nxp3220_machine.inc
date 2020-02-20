@@ -18,7 +18,6 @@ SECURE_USERKEY ?= "${BSP_FILES_PATH}/secure-userkey.pem"
 SECURE_BL1_ENCKEY ?= "${BSP_FILES_PATH}/secure-bl1-enckey.txt"
 SECURE_BL1_IVECTOR = "${BSP_FILES_PATH}/secure-bl1-ivector.txt"
 SECURE_BL32_ENCKEY ?= "${BSP_FILES_PATH}/secure-bl32-enckey.txt"
-SECURE_BL32_IVECTOR ?= "${BSP_FILES_PATH}/secure-bl32-ivector.txt"
 
 # for u-boot
 # set BINARY_FEATURES_pn-u-boot-2018.5-nexell = "nand.ecc" for ecc image
