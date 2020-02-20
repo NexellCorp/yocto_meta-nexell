@@ -16,11 +16,16 @@ PARALLEL_MAKE = "-j 1"
 
 do_deploy () {
 	install -d ${DEPLOYDIR}
-	install -m 0644 ${S}/out/${BL2_BIN} ${DEPLOYDIR};
+	install -m 0644 ${S}/out/${BL2_BIN} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_BOOTKEY} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_USERKEY} ${DEPLOYDIR}
+
+	bootkey=${DEPLOYDIR}/$(basename ${SECURE_BOOTKEY})
+	userkey=${DEPLOYDIR}/$(basename ${SECURE_USERKEY})
 
 	# Binary + NSIH : $BIN.raw
 	do_bingen_raw bl2 ${DEPLOYDIR}/${BL2_BIN} \
-		${BL2_NSIH} ${SECURE_BOOTKEY} ${SECURE_USERKEY} ${BL2_LOADADDR};
+		${BL2_NSIH} ${bootkey} ${userkey} ${BL2_LOADADDR};
 
 	cp ${DEPLOYDIR}/${BL2_BIN}.raw ${DEPLOYDIR}/bl2.bin.raw;
 

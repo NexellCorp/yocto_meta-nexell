@@ -1,3 +1,4 @@
+### For U-BOOT
 inherit nexell-u-boot
 inherit nexell-bingen
 
@@ -70,9 +71,15 @@ do_compile_append() {
 }
 
 do_deploy_append () {
+	install -m 0644 ${SECURE_BOOTKEY} ${DEPLOYDIR}
+	install -m 0644 ${SECURE_USERKEY} ${DEPLOYDIR}
+
+	bootkey=${DEPLOYDIR}/$(basename ${SECURE_BOOTKEY})
+	userkey=${DEPLOYDIR}/$(basename ${SECURE_USERKEY})
+
 	# Binary + NSIH : $BIN.raw
 	do_bingen_raw bl33 ${B}/${UBOOT_BIN} ${UBOOT_NSIH} \
-			${SECURE_BOOTKEY} ${SECURE_USERKEY} ${UBOOT_LOADADDR};
+		${bootkey} ${userkey} ${UBOOT_LOADADDR};
 
 	if ${@bb.utils.contains('BINARY_FEATURES','nand.ecc','true','false',d)}; then
 		if [ -z ${FLASH_PAGE_SIZE} ]; then
