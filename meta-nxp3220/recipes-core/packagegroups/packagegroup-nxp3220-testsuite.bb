@@ -17,6 +17,7 @@ PACKAGE_TESTSUITE_NEXELL = " \
     nx-vip-test \
     nx-video-api-test \
     hwio \
+    iso7816-test \
     disk-test \
     rtc-alarm \
 "
