@@ -17,6 +17,7 @@ PACKAGE_NEXELL_APPS = " \
     nx-vip-test \
     nx-video-api-test \
     hwio \
+    iso7816-test \
 "
 
 RDEPENDS_${PN} = " \
