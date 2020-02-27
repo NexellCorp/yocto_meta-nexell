@@ -33,6 +33,7 @@ inherit ${@bb.utils.contains('DISTRO_FEATURES', 'nexell-qt5.6', 'nexell-sdk-qt5.
 
 PV = "1.4.0"
 PR = "r0"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/sdk"
 SDK_RESULT = "${S}/result"
