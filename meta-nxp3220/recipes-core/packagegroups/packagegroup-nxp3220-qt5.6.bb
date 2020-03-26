@@ -32,15 +32,21 @@ PACKAGE_QT5_6_ESSENTIAL = " \
     qtserialport \
     qtsvg \
     qtsvg-plugins \
-    qtsystems \
     qtquick1 \
     qtquick1-plugins \
     qtwebkit \
     qtwebsockets \
     qtwebchannel \
     qtxmlpatterns \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'qt-examples', '', 'qtsystems', d)} \
+"
+
+PACKAGE_QT5_6_EXAMPLES = " \
+    qtbase-examples \
+    qtdeclarative-examples \
 "
 
 RDEPENDS_${PN} = " \
     ${PACKAGE_QT5_6_ESSENTIAL}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'qt-examples', '${PACKAGE_QT5_6_EXAMPLES}', '', d)} \
 "
