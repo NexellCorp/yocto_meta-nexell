@@ -25,4 +25,5 @@ PACKAGE_DIRECTFB_EXAMPLES = " \
 
 RDEPENDS_${PN} = " \
     ${PACKAGE_DIRECTFB_ESSENTIAL}  \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'dfb-examples', '${PACKAGE_DIRECTFB_EXAMPLES}', '', d)} \
 "
