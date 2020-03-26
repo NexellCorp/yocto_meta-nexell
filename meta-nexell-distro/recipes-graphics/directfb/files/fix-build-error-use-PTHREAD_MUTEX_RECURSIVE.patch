@@ -1,0 +1,11 @@
+--- a/lib/direct/trace.c	2020-03-06 14:15:56.934369260 +0900
++++ b/lib/direct/trace.c	2020-03-06 14:17:48.496706378 +0900
+@@ -152,7 +152,7 @@
+ static void
+ tables_lock_init( void )
+ {
+-     direct_recursive_mutex_init(&tabless_lock);
++     direct_recursive_mutex_init(&tables_lock);
+ }
+ 
+ __dfb_no_instrument_function__
