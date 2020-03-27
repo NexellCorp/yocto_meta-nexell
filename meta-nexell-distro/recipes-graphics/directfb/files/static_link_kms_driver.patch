@@ -1,0 +1,35 @@
+diff --git a/systems/drmkms/Makefile.am b/systems/drmkms/Makefile.am
+index 197384749..f8ff1cc8d 100644
+--- a/systems/drmkms/Makefile.am
++++ b/systems/drmkms/Makefile.am
+@@ -32,6 +32,7 @@ libdirectfb_drmkms_system_la_SOURCES = \
+ 	drmkms_screen.c		\
+ 	drmkms_system.c		\
+ 	drmkms_surface_pool.c     \
++	drmkms_dumb.c		\
+ 	vt.c			\
+ 	vt.h
+ 
+diff --git a/systems/drmkms/drmkms_surface_pool.c b/systems/drmkms/drmkms_surface_pool.c
+index 8ea182224..188766459 100644
+--- a/systems/drmkms/drmkms_surface_pool.c
++++ b/systems/drmkms/drmkms_surface_pool.c
+@@ -129,6 +129,8 @@ typedef struct {
+ #endif
+ } DRMKMSAllocationLocalData;
+ 
++extern int kms_bo_sync(struct kms_bo *bo);
++
+ /**********************************************************************************************************************/
+ 
+ static int
+@@ -854,6 +856,9 @@ drmkmsUnlock( CoreSurfacePool       *pool,
+                break;
+      }
+ 
++     if (alloc->addr)
++          kms_bo_sync( alloc->bo );
++
+      return DFB_OK;
+ }
+ 
