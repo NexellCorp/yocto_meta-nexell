@@ -5,6 +5,7 @@ SRC_URI += " \
 	file://fix-tslib-1.15-ts_config.patch \
 	file://combine-drmkms_system-vt-header.patch \
 	file://fix-build-error-use-PTHREAD_MUTEX_RECURSIVE.patch \
+	file://support_argb_blend_smooth_scale.patch \
 "
 
 SRC_URI += " \
