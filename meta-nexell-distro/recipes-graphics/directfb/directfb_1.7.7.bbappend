@@ -24,9 +24,11 @@ do_install_append () {
 	install -m 644 ${WORKDIR}/directfbrc ${D}${sysconfdir}
 
 	if [ ! -z "${DIRECTFB_TSLIB_DEVICES}" ]; then
-		echo "" >> ${D}${sysconfdir}/directfbrc
-		echo "## tslib devices" >> ${D}${sysconfdir}/directfbrc
 		echo "tslib-devices = ${DIRECTFB_TSLIB_DEVICES}" \
+			>> ${D}${sysconfdir}/directfbrc
+	fi
+	if [ ! -z "${DIRECTFB_PIXEL_FORMAT}" ]; then
+		echo "pixelformat = ${DIRECTFB_PIXEL_FORMAT}" \
 			>> ${D}${sysconfdir}/directfbrc
 	fi
 }
