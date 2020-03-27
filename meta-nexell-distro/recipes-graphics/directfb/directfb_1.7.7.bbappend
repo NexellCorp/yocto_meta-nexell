@@ -6,6 +6,7 @@ SRC_URI += " \
 	file://combine-drmkms_system-vt-header.patch \
 	file://fix-build-error-use-PTHREAD_MUTEX_RECURSIVE.patch \
 	file://support_argb_blend_smooth_scale.patch \
+	file://drmkms_surface_pool_priority.patch \
 "
 
 SRC_URI += " \
