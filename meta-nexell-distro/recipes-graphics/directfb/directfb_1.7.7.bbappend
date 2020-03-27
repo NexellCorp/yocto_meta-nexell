@@ -7,6 +7,9 @@ SRC_URI += " \
 	file://fix-build-error-use-PTHREAD_MUTEX_RECURSIVE.patch \
 	file://support_argb_blend_smooth_scale.patch \
 	file://drmkms_surface_pool_priority.patch \
+	file://static_link_kms_driver.patch \
+	file://drmkms_dumb.c \
+	file://libdrm_macros.h \
 "
 
 SRC_URI += " \
@@ -19,6 +22,12 @@ DFB_PACKAGE_CONFIGURE ??= ",,"
 PACKAGECONFIG[configure] = "${DFB_PACKAGE_CONFIGURE}"
 PACKAGECONFIG[debug] = "--enable-debug-support --enable-debug,,"
 PACKAGECONFIG[trace] = "--enable-trace,,"
+
+do_patch[postfuncs] += "do_patch_files"
+do_patch_files() {
+	install -m 644 ${WORKDIR}/drmkms_dumb.c ${S}/systems/drmkms/
+	install -m 644 ${WORKDIR}/libdrm_macros.h ${S}/systems/drmkms/
+}
 
 do_install_append () {
 	install -d ${D}${sysconfdir}
