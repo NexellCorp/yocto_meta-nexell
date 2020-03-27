@@ -22,6 +22,13 @@ PACKAGECONFIG[trace] = "--enable-trace,,"
 do_install_append () {
 	install -d ${D}${sysconfdir}
 	install -m 644 ${WORKDIR}/directfbrc ${D}${sysconfdir}
+
+	if [ ! -z "${DIRECTFB_TSLIB_DEVICES}" ]; then
+		echo "" >> ${D}${sysconfdir}/directfbrc
+		echo "## tslib devices" >> ${D}${sysconfdir}/directfbrc
+		echo "tslib-devices = ${DIRECTFB_TSLIB_DEVICES}" \
+			>> ${D}${sysconfdir}/directfbrc
+	fi
 }
 
 FILES_${PN} += " \
