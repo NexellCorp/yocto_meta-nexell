@@ -1,0 +1,44 @@
+diff --git a/systems/drmkms/drmkms_surface_pool.c b/systems/drmkms/drmkms_surface_pool.c
+index 8ea182224..69cc911cd 100644
+--- a/systems/drmkms/drmkms_surface_pool.c
++++ b/systems/drmkms/drmkms_surface_pool.c
+@@ -192,7 +192,10 @@ drmkmsInitPool( CoreDFB                    *core,
+      ret_desc->access[CSAID_CPU] = CSAF_READ | CSAF_WRITE | CSAF_SHARED;
+      ret_desc->access[CSAID_GPU] = CSAF_READ | CSAF_WRITE | CSAF_SHARED;
+      ret_desc->types             = CSTF_LAYER | CSTF_WINDOW | CSTF_CURSOR | CSTF_FONT | CSTF_SHARED | CSTF_EXTERNAL;
+-     ret_desc->priority          = CSPP_ULTIMATE;
++     if (drmkms->shared->surface_pool_prio_default) 
++         ret_desc->priority      = CSPP_DEFAULT;
++     else
++         ret_desc->priority      = CSPP_ULTIMATE;
+      ret_desc->size              = dfb_config->video_length;
+ 
+      /* For hardware layers */
+diff --git a/systems/drmkms/drmkms_system.c b/systems/drmkms/drmkms_system.c
+index 0e4f8a863..869eb1276 100644
+--- a/systems/drmkms/drmkms_system.c
++++ b/systems/drmkms/drmkms_system.c
+@@ -270,6 +269,11 @@ system_initialize( CoreDFB *core, void **ret_data )
+           D_INFO("DRMKMS/Init: using device %s (default)\n", shared->device_name);
+      }
+ 
++     if (direct_config_get("drmkms-surface-pool-priority-default", &optionbuffer, 1, &ret_num) == DR_OK) {
++          shared->surface_pool_prio_default = true;
++          D_INFO("DRMKMS/Init: surface pool priority default\n");
++     }
++
+      ret = InitLocal( drmkms );
+ 
+      if (ret) {
+diff --git a/systems/drmkms/drmkms_system.h b/systems/drmkms/drmkms_system.h
+index 142ec6845..8bd4a6a9c 100644
+--- a/systems/drmkms/drmkms_system.h
++++ b/systems/drmkms/drmkms_system.h
+@@ -98,6 +147,7 @@ typedef struct {
+      bool                 clone_outputs;
+      bool                 multihead;
+      int                  plane_limit;
++     bool		  surface_pool_prio_default;
+ 
+      char                 device_name[256];
+ 
