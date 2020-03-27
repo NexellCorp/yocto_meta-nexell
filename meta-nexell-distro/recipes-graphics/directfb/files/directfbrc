@@ -1,11 +1,23 @@
-system = drmkms
+### system property ###
+system = fbdev
+#system = drmkms
 accelerator = 12832
 
+### Common property ###
+smooth-upscale
+smooth-downscale
 no-cursor-updates
-
-# back buffer mode : uto|triple|backvideo|backsystem|frontonly|windows
-desktop-buffer-mode = triple
-
 vsync-none
 no-vt
 no-trace
+
+### system = /dev/fb0 ###
+# desktop-buffer-mode
+# "uto|triple|backvideo|backsystem|frontonly|windows"
+# - backvideo = support double buffer for the fbdev
+desktop-buffer-mode = backvideo
+
+### system = drmkms ###
+drmkms-surface-pool-priority-default
+
+### ADDs ###
