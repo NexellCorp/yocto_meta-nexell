@@ -1,0 +1,164 @@
+diff --git a/src/gfx/generic/generic_stretch_blit.c b/src/gfx/generic/generic_stretch_blit.c
+index d69cef723..d758c1067 100644
+--- a/src/gfx/generic/generic_stretch_blit.c
++++ b/src/gfx/generic/generic_stretch_blit.c
+@@ -83,7 +83,8 @@ typedef struct {
+      ulong       key;
+ } StretchCtx;
+ 
+-typedef void (*StretchHVx)( void             *dst,
++typedef void (*StretchHVx)( CardState *state,
++			    void             *dst,
+                             int               dpitch,
+                             const void       *src,
+                             int               spitch,
+@@ -201,6 +202,7 @@ typedef struct {
+ #define X_FF00FF00              0xff00ff00
+ #define MASK_RGB                0x00ffffff
+ #define HAS_ALPHA
++#define BLEND_ALPHA
+ 
+ #include "stretch_up_down_32.h"
+ 
+@@ -213,6 +215,7 @@ typedef struct {
+ #undef X_FF00FF00
+ #undef MASK_RGB
+ #undef HAS_ALPHA
++#undef BLEND_ALPHA
+ 
+ /**********************************************************************************************************************/
+ /*** 32 bit RGB 888 scalers *******************************************************************************************/
+@@ -409,7 +412,7 @@ stretch_hvx( CardState *state, DFBRectangle *srect, DFBRectangle *drect )
+                break;
+      }
+ 
+-     if (state->blittingflags & ~(DSBLIT_COLORKEY_PROTECT | DSBLIT_SRC_COLORKEY | DSBLIT_SRC_PREMULTIPLY))
++     if (state->blittingflags & ~(DSBLIT_COLORKEY_PROTECT | DSBLIT_SRC_COLORKEY | DSBLIT_SRC_PREMULTIPLY | DSBLIT_BLEND_ALPHACHANNEL))
+           return false;
+ 
+      if (state->blittingflags & DSBLIT_SRC_PREMULTIPLY && !DFB_PIXELFORMAT_IS_INDEXED( gfxs->src_format ))
+@@ -436,6 +439,13 @@ stretch_hvx( CardState *state, DFBRectangle *srect, DFBRectangle *drect )
+      else
+           stretch = table->f[DFB_PIXELFORMAT_INDEX(gfxs->src_format)].up[idx];
+ 
++     if (state->blittingflags & DSBLIT_BLEND_ALPHACHANNEL) {
++	  if (state->src_blend != DSBF_ONE)
++		stretch = stretch_hvx_ARGB_blend_srcalpha_updown;
++	  else
++		stretch = stretch_hvx_ARGB_blend_one_updown;
++     }
++
+      if (!stretch)
+           return false;
+ 
+@@ -667,7 +677,7 @@ stretch_hvx( CardState *state, DFBRectangle *srect, DFBRectangle *drect )
+      dst = gfxs->dst_org[0] + drect->y * gfxs->dst_pitch + DFB_BYTES_PER_LINE( gfxs->dst_format, drect->x );
+      src = gfxs->src_org[0] + srect->y * gfxs->src_pitch + DFB_BYTES_PER_LINE( gfxs->src_format, srect->x );
+ 
+-     stretch( dst, gfxs->dst_pitch, src, gfxs->src_pitch,
++     stretch( state, dst, gfxs->dst_pitch, src, gfxs->src_pitch,
+               srect->w, srect->h, drect->w, drect->h, &ctx );
+ 
+ #if 0     /* FIXME: repair */
+diff --git a/src/gfx/generic/stretch_hvx_32.h b/src/gfx/generic/stretch_hvx_32.h
+index 289ff2c76..da83bde11 100644
+--- a/src/gfx/generic/stretch_hvx_32.h
++++ b/src/gfx/generic/stretch_hvx_32.h
+@@ -8,13 +8,25 @@
+ #define SOURCE_TYPE_AUTO
+ #endif
+ 
++#define ALPHA(a, s, d, p)	\
++	((((a + 1) * ((s >> p) & 0xff)) >> 8) + (((256 - a) * ((d >> p) & 0xff)) >> 8))
++
++#define ALPHA_ONE(a, s, d, p)	\
++	(((s >> p) & 0xff) + (((256 - a) * ((d >> p) & 0xff)) >> 8))
++
++#define PIXEL( s ) PIXEL_ARGB(((s).RGB.a & 0xFF00) ? 0xFF : (s).RGB.a, \
++                              ((s).RGB.r & 0xFF00) ? 0xFF : (s).RGB.r, \
++                              ((s).RGB.g & 0xFF00) ? 0xFF : (s).RGB.g, \
++                              ((s).RGB.b & 0xFF00) ? 0xFF : (s).RGB.b )
++
+ #if 0
+ #define HVX_DEBUG(x...)  direct_log_printf( NULL, x )
+ #else
+ #define HVX_DEBUG(x...)  do {} while (0)
+ #endif
+ 
+-/* stretch_hvx_up/down_32_KPI */( void             *dst,
++/* stretch_hvx_up/down_32_KPI */( CardState *state,
++				  void             *dst,
+                                   int               dpitch,
+                                   const void       *src,
+                                   int               spitch,
+@@ -150,11 +162,35 @@
+                     /* Write to destination without color key protection */
+                     dst32[x] = dt;
+ #endif
++#else /* COLOR_KEY || KEY_PROTECT */
++
++#if defined (BLEND_SRCALPHA) || defined (BLEND_ONE)
++               u32 color = ((((((lbB[x] & X_00FF00FF) - (lbT[x] & X_00FF00FF))*X) >> SHIFT_R8) + (lbT[x] & X_00FF00FF)) & X_00FF00FF) +
++                           ((((((lbB[x]>>SHIFT_R8) & X_00FF00FF) - ((lbT[x]>>SHIFT_R8) & X_00FF00FF))*X) + (lbT[x] & X_FF00FF00)) & X_FF00FF00);
++	       u32 bg = dst32[x];
++	       int alpha = (color >> 24);
++	       GenefxAccumulator Acc;
++
++	#ifdef BLEND_SRCALPHA
++		Acc.RGB.a = ALPHA(alpha, color, bg, 24);
++		Acc.RGB.r = ALPHA(alpha, color, bg, 16);
++		Acc.RGB.g = ALPHA(alpha, color, bg, 8);
++		Acc.RGB.b = ALPHA(alpha, color, bg, 0);
++	#else
++		Acc.RGB.a = ALPHA_ONE(alpha, color, bg, 24);
++		Acc.RGB.r = ALPHA_ONE(alpha, color, bg, 16);
++		Acc.RGB.g = ALPHA_ONE(alpha, color, bg, 8);
++		Acc.RGB.b = ALPHA_ONE(alpha, color, bg, 0);
++	#endif
++		dst32[x] = PIXEL(Acc);
++
+ #else
++
+                /* Write to destination without color key protection */
+                dst32[x] = ((((((lbB[x] & X_00FF00FF) - (lbT[x] & X_00FF00FF))*X) >> SHIFT_R8) + (lbT[x] & X_00FF00FF)) & X_00FF00FF) +
+                           ((((((lbB[x]>>SHIFT_R8) & X_00FF00FF) - ((lbT[x]>>SHIFT_R8) & X_00FF00FF))*X) + (lbT[x] & X_FF00FF00)) & X_FF00FF00);
+-#endif
++#endif /* BLEND_SRCALPHA || BLEND_ONE */
++#endif /* COLOR_KEY || KEY_PROTECT */
+           }
+ 
+           dst32 += dp4;
+@@ -162,6 +198,9 @@
+      }
+ }
+ 
++#undef ALPHA
++#undef ALPHA_ONE
++
+ #ifdef SOURCE_LOOKUP_AUTO
+ #undef SOURCE_LOOKUP_AUTO
+ #undef SOURCE_LOOKUP
+diff --git a/src/gfx/generic/stretch_hvx_N.h b/src/gfx/generic/stretch_hvx_N.h
+index c4922e17e..7726bbb9d 100644
+--- a/src/gfx/generic/stretch_hvx_N.h
++++ b/src/gfx/generic/stretch_hvx_N.h
+@@ -27,6 +27,19 @@ static void FUNC_NAME_(K,P,DST_FORMAT)
+ #undef COLOR_KEY
+ #undef KEY_PROTECT
+ 
++#ifdef BLEND_ALPHA
++#if UPDOWN == 1
++#define BLEND_SRCALPHA
++static void stretch_hvx_ARGB_blend_srcalpha_updown
++#include STRETCH_HVX_N_H
++#undef BLEND_SRCALPHA
++
++#define BLEND_ONE
++static void stretch_hvx_ARGB_blend_one_updown
++#include STRETCH_HVX_N_H
++#undef BLEND_ONE
++#endif
++#endif
+ 
+ /* INDEXED */
+ #define SOURCE_LOOKUP(x) ((const uN*)ctx->colors)[x]
