@@ -29,12 +29,25 @@ do_patch_files() {
 	install -m 644 ${WORKDIR}/libdrm_macros.h ${S}/systems/drmkms/
 }
 
+# DIRECTFB_HW_ACCELEATOR = "12832"
 do_install_append () {
 	install -d ${D}${sysconfdir}
 	install -m 644 ${WORKDIR}/directfbrc ${D}${sysconfdir}
 
-	if [ ! -z "${DIRECTFB_TSLIB_DEVICES}" ]; then
-		echo "tslib-devices = ${DIRECTFB_TSLIB_DEVICES}" \
+	# Set properties
+	if [ ! -z "${DIRECTFB_SYSTEM_DEVICE}" ]; then
+		sed -i -e "s/^system.*/system = ${DIRECTFB_SYSTEM_DEVICE}/" \
+			${D}${sysconfdir}/directfbrc
+	fi
+
+	if [ ! -z "${DIRECTFB_HW_ACCELEATOR}" ]; then
+		sed -i -e "s/^accelerator.*/accelerator= ${DIRECTFB_HW_ACCELEATOR}/" \
+			${D}${sysconfdir}/directfbrc
+	fi
+
+	# Adds properties
+	if [ ! -z "${DIRECTFB_TSLIB_DEVICE}" ]; then
+		echo "tslib-devices = ${DIRECTFB_TSLIB_DEVICE}" \
 			>> ${D}${sysconfdir}/directfbrc
 	fi
 	if [ ! -z "${DIRECTFB_PIXEL_FORMAT}" ]; then
