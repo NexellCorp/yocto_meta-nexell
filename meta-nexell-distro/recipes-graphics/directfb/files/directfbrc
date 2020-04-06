@@ -1,7 +1,6 @@
 ### system property ###
-system = fbdev
-#system = drmkms
-#accelerator = 12832
+system =
+accelerator =
 
 ### Common property ###
 smooth-upscale
@@ -11,13 +10,34 @@ vsync-none
 no-vt
 no-trace
 
+### debug property
+###
+#software-warn
+#software-trace
+
 ### system = /dev/fb0 ###
 # desktop-buffer-mode
 # "uto|triple|backvideo|backsystem|frontonly|windows"
 # - backvideo = support double buffer for the fbdev
 desktop-buffer-mode = backvideo
 
-### system = drmkms ###
+### system = drmkms
+###
+# allocated first in 'system memory'.
+# must be disabled if set 'accelerator'
 drmkms-surface-pool-priority-default
 
-### ADDs ###
+# drmkms-buffer-
+# must be disabled if set 'accelerator'
+# video        : memory = video , non-cachable
+# video-cache  : memory = video , cachable
+# system       : memory = system, non-cachable
+# system-cache : memory = system, cachable
+drmkms-buffer-system  = video-cache
+drmkms-buffer-primary = video
+
+### acceleator: 12832 ###
+###
+
+### Adds properties ###
+###
