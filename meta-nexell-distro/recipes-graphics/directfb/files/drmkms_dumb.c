@@ -33,60 +33,63 @@
 #include <misc/conf.h>
 #include <xf86drm.h>
 #include <libkms/libkms.h>
+#include <core/core.h>
 
 #include "libdrm_macros.h"
 
-enum drmkms_bo_type {
+enum dumb_bo_type {
 	/*
 	 * DMA continuous memory
 	 * user   : non-cacheable
 	 * kernel : non-cacheable
 	 */
-	DRMKMS_BO_DMA,
+	DUMB_BO_DMA,
 
 	/*
 	 * DMA continuous memory, allocate from DMA,
 	 * user   : cacheable
 	 * kernel : non-cacheable
 	 */
-	DRMKMS_BO_DMA_CACHEABLE,
+	DUMB_BO_DMA_CACHEABLE,
 
 	/*
 	 * System continuous memory, allocate from system
 	 * user   : non-cacheable
 	 * kernel : non-cacheable
 	 */
-	DRMKMS_BO_SYSTEM,
+	DUMB_BO_SYSTEM,
 
 	/*
 	 * System continuous memory, allocate from system
 	 * user   : cacheable
 	 * kernel : cacheable
 	 */
-	DRMKMS_BO_SYSTEM_CACHEABLE,
+	DUMB_BO_SYSTEM_CACHEABLE,
 
 	/*
 	 * System non-continuous memory, allocate from system
 	 * user   : non-cacheable
 	 * kernel : non-cacheable
 	 */
-	DRMKMS_BO_SYSTEM_NONCONTIG,
+	DUMB_BO_SYSTEM_NONCONTIG,
 
 	/*
 	 * System non-continuous memory, allocate from system
 	 * user   : cacheable
 	 * kernel : cacheable
 	 */
-	DRMKMS_BO_SYSTEM_NONCONTIG_CACHEABLE,
+	DUMB_BO_SYSTEM_NONCONTIG_CACHEABLE,
 
-	DRMKMS_BO_MAX,
+	DUMB_BO_MAX,
 };
 
-static const char * const drmkms_bo_type_name[] = {
-	[DRMKMS_BO_DMA] = "DMA, NON-Cachable",
-        [DRMKMS_BO_DMA_CACHEABLE] = "DMA, Cachable",
-        [DRMKMS_BO_SYSTEM] = "SYSTEM, NON-Cachable",
-        [DRMKMS_BO_SYSTEM_CACHEABLE] = "SYSTEM, Cachable",
+static const char * const dumb_bo_type_name[] = {
+	[DUMB_BO_DMA] = "DMA,nocachae",
+        [DUMB_BO_DMA_CACHEABLE] = "DMA,cache",
+        [DUMB_BO_SYSTEM] = "SYS,nocache",
+        [DUMB_BO_SYSTEM_CACHEABLE] = "SYS,cache",
+        [DUMB_BO_SYSTEM_NONCONTIG] = "SYS,nocache,nocontig",
+        [DUMB_BO_SYSTEM_NONCONTIG_CACHEABLE] = "SYS,cache,nocontig",
 };
 
 struct drm_mode_user_dumb {
@@ -99,7 +102,7 @@ struct drm_mode_user_dumb {
 #define DRM_IOCTL_USER_DUMB_SYNC \
 	DRM_IOWR(DRM_COMMAND_BASE + 0x05, struct drm_mode_user_dumb)
 
-int kms_bo_sync(struct kms_bo *bo);
+int kms_bo_sync(struct kms_bo *bo, unsigned int flags);
 
 struct kms_driver
 {
@@ -117,7 +120,7 @@ struct kms_driver
 			   unsigned *out);
 	int (*bo_map)(struct kms_bo *bo, void **out);
 	int (*bo_unmap)(struct kms_bo *bo);
-	int (*bo_sync)(struct kms_bo *bo);
+	int (*bo_sync)(struct kms_bo *bo, unsigned int flags);
 	int (*bo_destroy)(struct kms_bo *bo);
 
 	int fd;
@@ -131,6 +134,7 @@ struct kms_bo
 	size_t offset;
 	size_t pitch;
 	unsigned handle;
+	unsigned surface_type;
 };
 
 struct dumb_bo
@@ -139,7 +143,35 @@ struct dumb_bo
 	unsigned map_count;
 };
 
-static enum drmkms_bo_type drmkms_bo_type = DRMKMS_BO_DMA; 
+static enum dumb_bo_type dumb_bo_system = DUMB_BO_DMA;
+static enum dumb_bo_type dumb_bo_primary = DUMB_BO_DMA;
+
+static inline bool dumb_bo_is_cachead(enum dumb_bo_type type)
+{
+	if (type == DUMB_BO_DMA_CACHEABLE ||
+	    type == DUMB_BO_SYSTEM_CACHEABLE ||
+	    type == DUMB_BO_SYSTEM_NONCONTIG_CACHEABLE)
+		return true;
+
+	return false;
+}
+
+static unsigned int dumb_bo_get_type(const char *option)
+{
+	if (strcmp( option, "video" ) == 0)
+		return DUMB_BO_DMA;
+	else
+	if (strcmp( option, "video-cache" ) == 0)
+		return DUMB_BO_DMA_CACHEABLE;
+	else
+	if (strcmp( option, "system" ) == 0)
+		return DUMB_BO_SYSTEM;
+	else
+	if (strcmp( option, "system-cache" ) == 0)
+		return DUMB_BO_SYSTEM_CACHEABLE;
+
+	return DUMB_BO_DMA;
+}
 
 static int
 dumb_get_prop(struct kms_driver *kms, unsigned key, unsigned *out)
@@ -193,8 +225,8 @@ dumb_bo_create(struct kms_driver *kms,
 	arg.bpp = 32;
 	arg.width = width;
 	arg.height = height;
-	arg.flags = drmkms_bo_type;
- 
+	arg.flags = type &  CSTF_EXTERNAL ? dumb_bo_primary : dumb_bo_system;
+
 	ret = drmIoctl(kms->fd, DRM_IOCTL_MODE_CREATE_DUMB, &arg);
 	if (ret)
 		goto err_free;
@@ -203,6 +235,7 @@ dumb_bo_create(struct kms_driver *kms,
 	bo->base.handle = arg.handle;
 	bo->base.size = arg.size;
 	bo->base.pitch = arg.pitch;
+	bo->base.surface_type = arg.flags;
 
 	*out = &bo->base;
 
@@ -264,14 +297,17 @@ dumb_bo_unmap(struct kms_bo *_bo)
 }
 
 static int
-dumb_bo_sync(struct kms_bo *_bo)
+dumb_bo_sync(struct kms_bo *_bo, unsigned int flags)
 {
 	struct dumb_bo *bo = (struct dumb_bo *)_bo;
 	struct drm_mode_user_dumb arg;
 
-	if (drmkms_bo_type == DRMKMS_BO_DMA || drmkms_bo_type == DRMKMS_BO_SYSTEM)
+	if (!dumb_bo_is_cachead(bo->base.surface_type))
 		return 0;
-
+/*
+	if (flags != CSAID_CPU)
+		return 0;
+*/
 	arg.handle = bo->base.handle;
 
 	return drmIoctl(bo->base.kms->fd, DRM_IOCTL_USER_DUMB_SYNC, &arg);
@@ -329,18 +365,14 @@ dumb_create(int fd, struct kms_driver **out)
 	kms->destroy = dumb_destroy;
 	*out = kms;
 
-	if (direct_config_get("drmkms-buffer-mode", &option, 1, &ret) == DR_OK) {
-		if (strcmp( option, "dma-cache" ) == 0)
-			drmkms_bo_type = DRMKMS_BO_DMA_CACHEABLE;
-		else
-		if (strcmp( option, "system" ) == 0)
-			drmkms_bo_type = DRMKMS_BO_SYSTEM;
-		else
-		if (strcmp( option, "system-cache" ) == 0)
-			drmkms_bo_type = DRMKMS_BO_SYSTEM_CACHEABLE;
-	}
+	if (direct_config_get("drmkms-buffer-system", &option, 1, &ret) == DR_OK)
+		dumb_bo_system = dumb_bo_get_type(option);
 
-	D_INFO("DRMKMS/Dumb: %s\n", drmkms_bo_type_name[drmkms_bo_type]);
+	if (direct_config_get("drmkms-buffer-primary", &option, 1, &ret) == DR_OK)
+		dumb_bo_primary = dumb_bo_get_type(option);
+
+	D_INFO("DRMKMS/Dumb: primary:%s, system:%s\n",
+		dumb_bo_type_name[dumb_bo_primary], dumb_bo_type_name[dumb_bo_system]);
 
 	return 0;
 }
@@ -400,12 +432,6 @@ drm_public int kms_bo_create(struct kms_driver *kms, const unsigned *attr, struc
 	if (width == 0 || height == 0)
 		return -EINVAL;
 
-	/* XXX sanity check type */
-
-	if (type == KMS_BO_TYPE_CURSOR_64X64_A8R8G8B8 &&
-	    (width != 64 || height != 64))
-		return -EINVAL;
-
 	return kms->bo_create(kms, width, height, type, attr, out);
 }
 
@@ -435,9 +461,9 @@ drm_public int kms_bo_unmap(struct kms_bo *bo)
 	return bo->kms->bo_unmap(bo);
 }
 
-drm_public int kms_bo_sync(struct kms_bo *bo)
+drm_public int kms_bo_sync(struct kms_bo *bo, unsigned int flags)
 {
-	return bo->kms->bo_sync(bo);
+	return bo->kms->bo_sync(bo, flags);
 }
 
 drm_public int kms_bo_destroy(struct kms_bo **bo)
