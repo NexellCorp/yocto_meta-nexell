@@ -11,24 +11,36 @@ index 197384749..f8ff1cc8d 100644
  	vt.h
  
 diff --git a/systems/drmkms/drmkms_surface_pool.c b/systems/drmkms/drmkms_surface_pool.c
-index 8ea182224..188766459 100644
+index 8ea182224..774002990 100644
 --- a/systems/drmkms/drmkms_surface_pool.c
 +++ b/systems/drmkms/drmkms_surface_pool.c
 @@ -129,6 +129,8 @@ typedef struct {
  #endif
  } DRMKMSAllocationLocalData;
  
-+extern int kms_bo_sync(struct kms_bo *bo);
++extern int kms_bo_sync(struct kms_bo *bo, unsigned int flags);
 +
  /**********************************************************************************************************************/
  
  static int
-@@ -854,6 +856,9 @@ drmkmsUnlock( CoreSurfacePool       *pool,
+@@ -453,7 +455,10 @@ drmkmsAllocateBuffer( CoreSurfacePool       *pool,
+      alloc->handle = gbm_bo_get_handle( alloc->bo ).u32;
+      alloc->pitch  = gbm_bo_get_stride( alloc->bo );
+ #else
+-     unsigned attr[] = { KMS_BO_TYPE, KMS_BO_TYPE_SCANOUT_X8R8G8B8, KMS_WIDTH, drm_fake_width, KMS_HEIGHT, drm_fake_height, KMS_TERMINATE_PROP_LIST };
++     unsigned attr[] = { KMS_BO_TYPE, surface->type,
++			 KMS_WIDTH, drm_fake_width,
++			 KMS_HEIGHT, drm_fake_height,
++			 KMS_TERMINATE_PROP_LIST };
+ 
+      ret = kms_bo_create(drmkms->kms, attr, &alloc->bo);
+      if (ret) {
+@@ -854,6 +859,9 @@ drmkmsUnlock( CoreSurfacePool       *pool,
                 break;
       }
  
 +     if (alloc->addr)
-+          kms_bo_sync( alloc->bo );
++          kms_bo_sync( alloc->bo, lock->accessor );
 +
       return DFB_OK;
  }
