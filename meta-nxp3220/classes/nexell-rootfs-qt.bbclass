@@ -1,43 +1,44 @@
-DEFAULT_QT_PLATFORM ?= "${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-linuxfb', 'LINUXFB', '', d)}"
-TSLIB_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', 'false', 'true', d)}"
-TSLIB_INVERTX ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-invertx-tslib', 'false', 'true', d)}"
-AUTOMOUNT_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'no-use-automount', 'false', 'true', d)}"
+# nexell rootfs for Qt
+
+QT_TOUCHSETUP_PLATFORM = \
+	"${@bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-eglfs', 'eglfs', \
+            bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-linuxfb', 'linuxfb', \
+	    bb.utils.contains('DISTRO_FEATURES', 'qt-default-platform-directfb', 'directfb', 'not_supported', \
+            d), d), d)}"
 
 postprocess_qt_function() {
+
 	cd ${IMAGE_ROOTFS}
 
-	if [ "${DEFAULT_QT_PLATFORM}" = "LINUXFB" ]; then
-		echo "export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb0:nographicsmodeswitch" >> usr/bin/nexell-qt5-touchsetup.sh
-			echo "export QT_QPA_FB_NO_LIBINPUT=1" >> usr/bin/nexell-qt5-touchsetup.sh
+	output="usr/bin/nexell-qt5-touchsetup.sh"
+	platform="${QT_TOUCHSETUP_PLATFORM}"
+	[ "${QT_TOUCHSETUP_PLATFORM}" = "linuxfb" ] && platform="linuxfb:fb=/dev/fb0:nographicsmodeswitch";
 
-		if [ "${TSLIB_ENABLED}" = "false" ]; then
-			echo "export QT_QPA_FB_TSLIB=0" >> usr/bin/nexell-qt5-touchsetup.sh
-		else
-			echo "export QT_QPA_FB_TSLIB=1" >> usr/bin/nexell-qt5-touchsetup.sh
-		fi
+	echo "export QT_QPA_PLATFORM=${platform}" >> ${output}
+	echo "export QT_PLUGIN_PATH=/usr/lib/qt5/plugins" >> ${output}
+	echo "export QT_QPA_FONTDIR=/usr/share/fonts/ttf" >> ${output}
+	echo "export QT_LOGGING_RULES=qt.qpa.*=false" >> ${output}
+
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'no-use-tslib', 'true', 'false', d)}; then
+		echo "export QT_QPA_FB_TSLIB=0" >> ${output}
+		echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/touchscreen0" >> ${output}
 	else
-		echo "Can't find supported Qt platform"
+		echo "export QT_QPA_FB_NO_LIBINPUT=1" >> ${output}
+		echo "export QT_QPA_FB_TSLIB=1" >> ${output}
+
+		if ${@bb.utils.contains('DISTRO_FEATURES', 'no-invertx-tslib', 'true', 'false', d)}; then
+			echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0" >> ${output}
+		else
+			echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0:invertx:rotate=180" >> ${output}
+		fi
+
+		echo "export TSLIB_CALIBFILE=/etc/pointercal" >> ${output}
+		echo "export TSLIB_PLUGINDIR=/usr/lib/ts" >> ${output}
+		echo "export POINTERCAL_FILE=/etc/pointercal" >> ${output}
 	fi
 
-	if [ "${TSLIB_ENABLED}" = "false" ]; then
-		echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/touchscreen0" >> usr/bin/nexell-qt5-touchsetup.sh
-	else
-		if [ "${TSLIB_INVERTX}" = "false" ]; then
-			echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0" >> usr/bin/nexell-qt5-touchsetup.sh
-		else
-			echo "export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=tslib:/dev/input/touchscreen0:invertx:rotate=180" >> usr/bin/nexell-qt5-touchsetup.sh
-		fi
-
-		echo "export TSLIB_CALIBFILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
-		echo "export TSLIB_PLUGINDIR=/usr/lib/ts" >> usr/bin/nexell-qt5-touchsetup.sh
-		echo "export POINTERCAL_FILE=/etc/pointercal" >> usr/bin/nexell-qt5-touchsetup.sh
-	fi
-
-	echo "export QT_PLUGIN_PATH=/usr/lib/qt5/plugins" >> usr/bin/nexell-qt5-touchsetup.sh
-	echo "export QT_QPA_FONTDIR=/usr/share/fonts/ttf" >> usr/bin/nexell-qt5-touchsetup.sh
-	echo "export QT_LOGGING_RULES=qt.qpa.*=false" >> usr/bin/nexell-qt5-touchsetup.sh
-
-	if [ "${AUTOMOUNT_ENABLED}" = "false" ]; then
+	# disable auto mount rules
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'no-use-automount', 'true', 'false', d)}; then
 		rm etc/udev/rules.d/local.rules
 		rm etc/udev/rules.d/automount.rules
 	fi
