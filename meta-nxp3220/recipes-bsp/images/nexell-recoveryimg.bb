@@ -16,12 +16,6 @@ do_recovery_image() {
 }
 addtask recovery_image after do_image_complete before do_build
 
-# depends to generate swu image
-do_recovery_image[depends] += " virtual/kernel:do_deploy"
-do_recovery_image[depends] += " ${INITRAMFS_IMAGE}:do_rootfs_image"
-do_recovery_image[depends] += " ${INITRAMFS_IMAGE}:do_data_image"
-do_recovery_image[depends] += " ${INITRAMFS_IMAGE}:do_misc_image"
-
 # always run task
 do_recovery_image[nostamp] = "1"
 

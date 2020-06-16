@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
 DEPENDS += "dtc-native"
 DEPENDS += "bl1-nxp3220 bl2-nxp3220 bl32-nxp3220"
-PROVIDES += "u-boot"
+PROVIDES += "u-boot u-boot-native"
 
 # externalsrc
 # EXTERNALSRC_BUILD = "${WORKDIR}/build"
@@ -103,11 +103,6 @@ do_deploy_append () {
 
 # To ensure that the board config has changed, always run the config command
 do_configure[nostamp] = "1"
-
-# not execute tasks
-do_packagedata[noexec] = "1"
-do_package_qa[noexec] = "1"
-do_package_write_rpm[noexec] = "1"
 
 # for secure image
 do_deploy[nostamp] = "1"
